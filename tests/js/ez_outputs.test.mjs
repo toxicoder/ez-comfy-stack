@@ -19,6 +19,11 @@ const PANEL_JS = path.join(
   "ez_outputs.js",
 );
 
+// The wait registerTabWithRetry takes between attempts (ez_outputs.js:215
+// REGISTER_GAP_MS). Tests read the timer queue for this one delay to tell a
+// vueAppReady wait apart from a retry, which no other timing can do.
+const REGISTER_GAP_MS = 100;
+
 /**
  * Minimal element the explorer's DOM calls actually need.
  * @param {string} tag Element tag name.
@@ -411,6 +416,30 @@ function fallbackDock() {
   );
 }
 
+/**
+ * Record every timer the panel schedules while it is installed.
+ * @param {((ms: number) => void)=} onTimer Called with each delay as it is asked for.
+ * @returns {{delays: Array<number>, stop: () => void}} Recorded delays and the restore.
+ */
+function watchTimers(onTimer) {
+  const delays = [];
+  const real = globalThis.setTimeout;
+  globalThis.setTimeout = (fn, ms) => {
+    const delay = Number(ms);
+    delays.push(delay);
+    if (onTimer) {
+      onTimer(delay);
+    }
+    return real(fn, ms);
+  };
+  return {
+    delays,
+    stop: () => {
+      globalThis.setTimeout = real;
+    },
+  };
+}
+
 describe("ez_outputs tab", () => {
   test("registers the sidebar tab the frontend asks for", async () => {
     const { tab } = await mountOutputs();
@@ -422,9 +451,13 @@ describe("ez_outputs tab", () => {
 
   test("a frontend without the sidebar API is not an error", async () => {
     installDom();
+    stubFetch();
     const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
     app.extensionManager = {};
-    await ext.setup();
+    await assert.doesNotReject(ext.setup(), "a frontend with no registerSidebarTab is survivable");
+    const dock = fallbackDock();
+    assert.ok(dock, "the operator is left with a reachable pane, not silence");
+    assert.ok(dock.querySelector(".ez-out"), "the pane left behind is the real explorer");
   });
 
   test("waits for vueAppReady before asking for the tab", async () => {
@@ -432,16 +465,62 @@ describe("ez_outputs tab", () => {
     const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
     const tabs = [];
     app.extensionManager = {};
+    // Asked is stamped inside the registration so the timer log can be cut at
+    // the first ask: the retry loop registers on a later attempt all by
+    // itself, so only a registration-gap wait before the first ask proves the
+    // setup() went to the retry instead of to vueAppReady.
+    let askedAt = -1;
+    const timers = watchTimers();
     app.vueAppReady = Promise.resolve().then(() => {
-      app.extensionManager = { registerSidebarTab: (tab) => tabs.push(tab) };
+      app.extensionManager = {
+        registerSidebarTab: (tab) => {
+          if (askedAt < 0) {
+            askedAt = timers.delays.length;
+          }
+          tabs.push(tab);
+        },
+      };
     });
     try {
       await ext.setup();
       assert.equal(tabs.length, 1, "the tab registers once the API has appeared");
       assert.equal(fallbackDock(), null, "a late API needs no docked panel");
+      const beforeFirstAsk = askedAt < 0 ? timers.delays.length : askedAt;
+      assert.ok(
+        !timers.delays.slice(0, beforeFirstAsk).includes(REGISTER_GAP_MS),
+        `asking before vueAppReady resolved, so it retried instead: ${timers.delays.join(",")}`,
+      );
     } finally {
+      timers.stop();
       app.vueAppReady = undefined;
     }
+  });
+
+  test("a manager that appears between attempts still registers the tab", async () => {
+    installDom();
+    stubFetch();
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    const tabs = [];
+    app.extensionManager = {};
+    // The frontend grows the API only after the second gap has been asked
+    // for, so the tab can land on a later attempt and nothing without a retry
+    // loop (or a shorter REGISTER_ATTEMPTS) can register it at all.
+    const timers = watchTimers((ms) => {
+      if (ms === REGISTER_GAP_MS && timers.delays.length >= 2) {
+        app.extensionManager = { registerSidebarTab: (tab) => tabs.push(tab) };
+      }
+    });
+    try {
+      await ext.setup();
+    } finally {
+      timers.stop();
+    }
+    assert.equal(tabs.length, 1, "a late extensionManager still gets the tab");
+    assert.ok(
+      timers.delays.includes(REGISTER_GAP_MS),
+      `the tab must have taken more than one attempt, timers: ${timers.delays.join(",")}`,
+    );
+    assert.equal(fallbackDock(), null, "a tab that lands needs no docked panel");
   });
 
   // Bounded so a regression in the vueAppReady ceiling fails instead of hanging.
@@ -528,6 +607,118 @@ describe("ez_outputs tab", () => {
     } finally {
       console.warn = warn;
     }
+  });
+
+  test("the dock carries a dismiss control the operator can use", async () => {
+    installDom();
+    stubFetch();
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {};
+    await ext.setup();
+    const dock = fallbackDock();
+    assert.ok(dock, "the explorer docks when the API never appears");
+    const note = dock.querySelector(".ez-out-fallback-note");
+    assert.ok(note, "the dock header names why the pane is there");
+    const dismiss = note.querySelector("button");
+    assert.ok(dismiss, "the dock header offers a control that takes it away");
+    assert.equal(dismiss.tagName, "BUTTON", "the control is focusable by keyboard");
+    assert.equal(dismiss.tabIndex, 0, "the control is in the tab order");
+    assert.match(String(dismiss.getAttribute("aria-label")), /Outputs/, "an accessible name");
+    assert.ok(dismiss.textContent.trim(), "the control carries a visible label");
+    dismiss.click();
+    assert.equal(fallbackDock(), null, "dismissing removes the dock from the page");
+    await ext.setup();
+    assert.ok(fallbackDock(), "a later failure can dock again once it was dismissed");
+  });
+
+  test("the tab taking over takes the docked panel down", async () => {
+    installDom();
+    stubFetch();
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {};
+    await ext.setup();
+    assert.ok(fallbackDock(), "the explorer docks while there is no tab");
+    // The frontend hands the tab a host after the fact: two live panes means
+    // two selections and one Queue listener that only feeds the last mount.
+    const tabs = [];
+    app.extensionManager = { registerSidebarTab: (tab) => tabs.push(tab) };
+    await ext.setup();
+    assert.equal(tabs.length, 1, "the tab registers on the second pass");
+    const el = makeElement("div");
+    tabs[0].render(el);
+    await settle();
+    assert.ok(el.classList.contains("ez-out"), "the tab host carries the live panel");
+    assert.ok(el.querySelector(".ez-out-toolbar"), "the tab pane built its chrome");
+    assert.equal(fallbackDock(), null, "the dock comes down before the tab mounts");
+    assert.equal(
+      globalThis.document.body.querySelectorAll(".ez-out").length,
+      0,
+      "no docked copy of the pane is left in the page beside the tab",
+    );
+  });
+
+  test("a dock that cannot attach does not claim it docked", async () => {
+    installDom();
+    stubFetch();
+    const warnings = [];
+    const toasts = [];
+    const warn = console.warn;
+    console.warn = (...args) => warnings.push(args.map(String).join(" "));
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = { toast: { addToast: (t) => toasts.push(t) } };
+    const body = globalThis.document.body;
+    const realAppend = body.appendChild;
+    body.appendChild = () => {
+      throw new Error("the page refused the dock");
+    };
+    try {
+      await ext.setup();
+    } finally {
+      body.appendChild = realAppend;
+      console.warn = warn;
+    }
+    assert.equal(fallbackDock(), null, "a dock that never attached is not in the page");
+    assert.ok(
+      warnings.some((w) => /ez_outputs/.test(w) && /the page refused the dock/.test(w)),
+      `the dock failure itself must reach the console, got: ${warnings.join(" | ")}`,
+    );
+    assert.ok(
+      toasts.every((t) => !/Docked the panel instead/.test(String(t.detail))),
+      `no toast may promise a pane that is not there: ${toasts.map((t) => t.detail).join(" | ")}`,
+    );
+    await ext.setup();
+    assert.ok(fallbackDock(), "a refused dock does not block the next attempt");
+  });
+
+  test("a harness with no window still reaches the fallback", async () => {
+    installDom();
+    stubFetch();
+    const warnings = [];
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {};
+    const warn = console.warn;
+    console.warn = (...args) => warnings.push(args.map(String).join(" "));
+    const windowSlot = Object.getOwnPropertyDescriptor(globalThis, "window");
+    // A thenable vueAppReady as well, so the windowless run crosses both waits
+    // the setup makes, not just the one between registration attempts.
+    app.vueAppReady = Promise.resolve();
+    try {
+      // notifyOperator already treats a windowless host as possible; the two
+      // waits have to read their timer the same way or setup() dies first.
+      globalThis.window = undefined;
+      await assert.doesNotReject(ext.setup(), "no window must not reject setup()");
+    } finally {
+      if (windowSlot) {
+        Object.defineProperty(globalThis, "window", windowSlot);
+      }
+      app.vueAppReady = undefined;
+      console.warn = warn;
+    }
+    assert.ok(
+      warnings.some((w) => /ez_outputs/.test(w) && /registerSidebarTab/.test(w)),
+      `the missing API must still be named, got: ${warnings.join(" | ")}`,
+    );
+    assert.ok(fallbackDock(), "the fallback is still reached without a window");
   });
 });
 

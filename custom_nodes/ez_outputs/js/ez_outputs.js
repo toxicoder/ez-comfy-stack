@@ -3383,8 +3383,8 @@ function mount(el) {
   refresh();
 }
 
-/** Set once the docked fallback panel is in the page, so two failures dock once. */
-let dockedFallback = false;
+/** The docked fallback panel while it is in the page, else null. One at a time. */
+let dockedHolder = /** @type {HTMLDivElement|null} */ (null);
 
 /**
  * One-line text for a caught value, matching how this pane reports elsewhere.
@@ -3393,6 +3393,23 @@ let dockedFallback = false;
  */
 function errLine(err) {
   return String(err && err.message ? err.message : err);
+}
+
+/**
+ * Where this file reads its timers. A browser has them on window; a harness
+ * that loads this module with no window at all has them on the global object,
+ * and setup() must still reach the dock instead of dying on a wait.
+ * @typedef {Object} EzTimerHost
+ * @property {(fn: () => void, ms: number) => number} setTimeout Schedules fn.
+ * @property {(id: number) => void} clearTimeout Cancels a scheduled fn.
+ */
+
+/**
+ * The timer host this environment offers, window first.
+ * @returns {EzTimerHost} window where there is one, else the global object.
+ */
+function timerHost() {
+  return /** @type {EzTimerHost} */ (typeof window === "undefined" ? globalThis : window);
 }
 
 /**
@@ -3413,10 +3430,11 @@ async function awaitFrontendReady() {
   if (!ready || typeof ready.then !== "function") {
     return;
   }
+  const timers = timerHost();
   let timer = 0;
   /** @type {(resolve: (value: unknown) => void) => void} */
   const hold = (resolve) => {
-    timer = window.setTimeout(() => resolve(null), FRONTEND_READY_MS);
+    timer = timers.setTimeout(() => resolve(null), FRONTEND_READY_MS);
   };
   const ceiling = new Promise(hold);
   try {
@@ -3424,7 +3442,7 @@ async function awaitFrontendReady() {
   } catch (err) {
     console.warn("ez_outputs: vueAppReady rejected (" + errLine(err) + "); asking anyway");
   } finally {
-    window.clearTimeout(timer);
+    timers.clearTimeout(timer);
   }
 }
 
@@ -3446,8 +3464,9 @@ function managerOrNull() {
  * @returns {Promise<void>} Resolves when the timer fires.
  */
 function waitMs(ms) {
+  const timers = timerHost();
   return new Promise((resolve) => {
-    window.setTimeout(() => resolve(), ms);
+    timers.setTimeout(() => resolve(), ms);
   });
 }
 
@@ -3518,18 +3537,47 @@ function notifyOperator(detail) {
 }
 
 /**
+ * Take a node this file put in the page back out of it.
+ * @param {HTMLElement} node Node to remove.
+ * @returns {void}
+ */
+function detachFromPage(node) {
+  const parent = node.parentNode;
+  if (parent && typeof parent.removeChild === "function") {
+    parent.removeChild(node);
+  }
+}
+
+/**
+ * Take the docked panel down and clear the dock so a later failure can dock
+ * again. The tab taking over and the operator's dismiss both route here.
+ * @returns {void}
+ */
+function undock() {
+  const holder = dockedHolder;
+  dockedHolder = null;
+  if (holder) {
+    detachFromPage(holder);
+  }
+}
+
+/**
  * Dock the explorer in a page-level container so it is never unreachable.
  * The container carries inline styles because it has to stay visible when
  * ez_outputs.css never loaded; the panel inside is the same mount() the
  * sidebar tab renders, so there is only one file manager.
  * @param {string} reason Why no sidebar tab exists.
- * @returns {void}
+ * @returns {boolean} True only when the panel is actually in the page.
  */
 function dockFallback(reason) {
-  if (dockedFallback) {
-    return;
+  if (dockedHolder) {
+    return true;
   }
-  dockedFallback = true;
+  const host = document.body || document.documentElement;
+  if (!host) {
+    console.warn("ez_outputs: no page to dock into; the Outputs panel is not on screen");
+    return false;
+  }
   const holder = document.createElement("div");
   holder.className = FALLBACK_CLASS;
   holder.setAttribute("role", "complementary");
@@ -3555,6 +3603,17 @@ function dockFallback(reason) {
   note.style.setProperty("padding", "6px 8px");
   note.style.setProperty("font", "11px/1.4 ui-sans-serif, system-ui, sans-serif");
   note.style.setProperty("border-bottom", "1px solid var(--border-color, rgba(255,255,255,0.18))");
+  note.style.setProperty("display", "flex");
+  note.style.setProperty("align-items", "center");
+  note.style.setProperty("justify-content", "space-between");
+  note.style.setProperty("gap", "8px");
+
+  const dismiss = makeButton("Close", FALLBACK_CLASS + "-close", () => {
+    undock();
+  });
+  dismiss.setAttribute("aria-label", "Dismiss the docked Outputs panel");
+  dismiss.tabIndex = 0;
+  note.appendChild(dismiss);
 
   const panel = document.createElement("div");
   panel.className = FALLBACK_CLASS + "-panel";
@@ -3564,11 +3623,41 @@ function dockFallback(reason) {
 
   holder.appendChild(note);
   holder.appendChild(panel);
-  const host = document.body || document.documentElement;
-  if (host) {
+  try {
     host.appendChild(holder);
+    mount(panel);
+  } catch (err) {
+    console.warn(
+      "ez_outputs: docked panel failed: " + errLine(err) + "; the panel is not on screen",
+    );
+    detachFromPage(holder);
+    return false;
   }
-  mount(panel);
+  // Set only now: a dock that never attached or never mounted must not hold
+  // the flag, or every later attempt is skipped and the operator is told
+  // about a pane that is not there.
+  dockedHolder = holder;
+  return true;
+}
+
+/**
+ * Dock the explorer, then tell the operator what is actually on screen.
+ * The toast is written after the dock precisely so it can promise a pane the
+ * page never received: it only says "Docked the panel instead." when dockFallback
+ * reports one.
+ * @param {string} reason Why no sidebar tab exists.
+ * @returns {void}
+ */
+function dockAndReport(reason) {
+  let docked = false;
+  try {
+    docked = dockFallback(reason);
+  } catch (err) {
+    console.warn("ez_outputs: docked panel failed: " + errLine(err));
+  }
+  notifyOperator(
+    "Outputs sidebar: " + reason + (docked ? ". Docked the panel instead." : "."),
+  );
 }
 
 /**
@@ -3579,17 +3668,19 @@ function dockFallback(reason) {
  * @returns {void}
  */
 function renderTab(el) {
+  // Invariant: at most one live pane. The Queue "executed" listener is hung
+  // off the shared mount function and deduped there, so a second mount
+  // unregisters the first one's handler and leaves that pane looking live
+  // while it goes stale, each with its own selection Set driving bulk delete
+  // and Copy to input. The sidebar tab is the canonical home, so the dock
+  // comes down before the tab mounts rather than the other way round.
+  undock();
   try {
     mount(el);
   } catch (err) {
     const reason = "panel render threw: " + errLine(err);
     console.warn("ez_outputs: " + reason + "; docking the panel");
-    notifyOperator("Outputs sidebar: " + reason + ". Docked the panel instead.");
-    try {
-      dockFallback(reason);
-    } catch (dockErr) {
-      console.warn("ez_outputs: docked panel failed: " + errLine(dockErr));
-    }
+    dockAndReport(reason);
   }
 }
 
@@ -3606,11 +3697,6 @@ app.registerExtension({
       return;
     }
     console.warn("ez_outputs: no sidebar tab - " + reason + "; docking the panel");
-    notifyOperator("Outputs sidebar: " + reason + ". Docked the panel instead.");
-    try {
-      dockFallback(reason);
-    } catch (err) {
-      console.warn("ez_outputs: docked panel failed: " + errLine(err));
-    }
+    dockAndReport(reason);
   },
 });
