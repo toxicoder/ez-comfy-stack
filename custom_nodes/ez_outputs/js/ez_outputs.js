@@ -150,6 +150,49 @@ import { app } from "../../scripts/app.js";
  * @typedef {Error & {endpoint?: string, status?: number}} EzHttpError
  */
 
+/**
+ * The tab descriptor registerSidebarTab takes. Frontend 1.58.5 still accepts
+ * exactly these keys for a tab this file renders.
+ * @typedef {Object} EzTabDescriptor
+ * @property {string} id Stable tab id.
+ * @property {string} icon PrimeIcons class the sidebar shows.
+ * @property {string} title Label the sidebar shows.
+ * @property {string} tooltip Hover text.
+ * @property {string} type "custom" for a pane this file renders.
+ * @property {((el: EzOwnedElement) => void)} render Draw the pane into el.
+ */
+
+/**
+ * One frontend toast; only the fields this pane sets are named.
+ * @typedef {Object} EzToast
+ * @property {string} title Toast heading.
+ * @property {string} detail The line the operator reads.
+ * @property {string} type Severity the toast is painted with.
+ * @property {number} timeout Milliseconds before it dismisses.
+ */
+
+/**
+ * A toast handle: extensionManager's own toast, or window.comfyAPI.toastStore.
+ * Both spellings are optional because the two frontends differ on the name.
+ * @typedef {Object} EzToastHost
+ * @property {((t: EzToast) => void)=} add Older spelling of addToast.
+ * @property {((t: EzToast) => void)=} addToast Show one toast.
+ */
+
+/**
+ * The frontend slice this pane registers with. Both members stay optional:
+ * extensionManager can be absent, not yet mounted, or missing either API.
+ * @typedef {Object} EzFrontendHost
+ * @property {((tab: EzTabDescriptor) => void)=} registerSidebarTab Add a tab.
+ * @property {EzToastHost=} toast Toast handle.
+ */
+
+/**
+ * The browser global, read for the handle ComfyUI hangs on window when the
+ * extension manager itself never appeared.
+ * @typedef {Window & {comfyAPI?: {toastStore?: EzToastHost}}} EzWindow
+ */
+
 const TAB_ID = "ez-outputs";
 const STYLE_ID = "ez-outputs-css";
 const PREFS_VIEW = "ez-comfy.outputs.view";
@@ -164,6 +207,16 @@ const THUMB_MAX = 280;
 const THUMB_DEFAULT = 128;
 const SEARCH_MS = 150;
 const EXECUTED_MS = 1000;
+// The frontend hangs registerSidebarTab off extensionManager inside the Vue
+// root component's setup, not in the ComfyApp constructor, so this setup() can
+// run first. Retry a few short times, then dock the panel by hand: a missing
+// tab with no trace is worse than a tab in an unusual place.
+const REGISTER_ATTEMPTS = 3;
+const REGISTER_GAP_MS = 100;
+// Ceiling on the vueAppReady wait. A Vue root that never mounts must not be
+// able to hold setup() open forever and leave the operator with no tab.
+const FRONTEND_READY_MS = 2000;
+const FALLBACK_CLASS = "ez-out-fallback";
 const ROOT_FOLDER = "__root__";
 // Progressive page sizes: the list route caps itself, so the pane starts small
 // and grows in place instead of pulling the whole tree on first paint.
@@ -3330,24 +3383,234 @@ function mount(el) {
   refresh();
 }
 
+/** Set once the docked fallback panel is in the page, so two failures dock once. */
+let dockedFallback = false;
+
+/**
+ * One-line text for a caught value, matching how this pane reports elsewhere.
+ * @param {{message?: string}=} err The caught value; its message wins.
+ * @returns {string} Its message, or the value itself.
+ */
+function errLine(err) {
+  return String(err && err.message ? err.message : err);
+}
+
+/**
+ * Wait for the Vue app the frontend builds extensionManager inside.
+ * That field is assigned in the Vue root component's setup, not the ComfyApp
+ * constructor, so this extension can run first. A frontend with no such field,
+ * or one that is not a thenable, is treated as ready so registration cannot
+ * hang on it.
+ * @returns {Promise<void>} Resolves once the frontend is ready or skipped.
+ */
+async function awaitFrontendReady() {
+  let ready = null;
+  try {
+    ready = app && app.vueAppReady;
+  } catch (_err) {
+    ready = null;
+  }
+  if (!ready || typeof ready.then !== "function") {
+    return;
+  }
+  let timer = 0;
+  /** @type {(resolve: (value: unknown) => void) => void} */
+  const hold = (resolve) => {
+    timer = window.setTimeout(() => resolve(null), FRONTEND_READY_MS);
+  };
+  const ceiling = new Promise(hold);
+  try {
+    await Promise.race([ready, ceiling]);
+  } catch (err) {
+    console.warn("ez_outputs: vueAppReady rejected (" + errLine(err) + "); asking anyway");
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+/**
+ * Read extensionManager without letting a throwing getter escape setup().
+ * @returns {EzFrontendHost|null} The manager, or null when it is absent.
+ */
+function managerOrNull() {
+  try {
+    return (app && app.extensionManager) || null;
+  } catch (_err) {
+    return null;
+  }
+}
+
+/**
+ * Wait between registration attempts.
+ * @param {number} ms Milliseconds to wait.
+ * @returns {Promise<void>} Resolves when the timer fires.
+ */
+function waitMs(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(() => resolve(), ms);
+  });
+}
+
+/**
+ * Ask the frontend for the Outputs sidebar tab, retrying briefly.
+ * A missing handle can mean "the Vue root has not mounted yet" as easily as
+ * "this frontend has none", so the retry is bounded and short.
+ * @returns {Promise<string>} "" once the tab is registered, else the reason it
+ *   was not, which the caller hands the operator.
+ */
+async function registerTabWithRetry() {
+  let reason = "extensionManager is absent";
+  for (let attempt = 1; attempt <= REGISTER_ATTEMPTS; attempt += 1) {
+    const mgr = managerOrNull();
+    if (!mgr || typeof mgr.registerSidebarTab !== "function") {
+      reason = "extensionManager.registerSidebarTab is unavailable";
+    } else {
+      try {
+        mgr.registerSidebarTab({
+          id: TAB_ID,
+          icon: "pi pi-images",
+          title: "Outputs",
+          tooltip: "Browse saved generations",
+          type: "custom",
+          render: renderTab,
+        });
+        return "";
+      } catch (err) {
+        reason = "registerSidebarTab threw: " + errLine(err);
+      }
+    }
+    if (attempt < REGISTER_ATTEMPTS) {
+      await waitMs(REGISTER_GAP_MS);
+    }
+  }
+  return reason;
+}
+
+/**
+ * Raise a toast through whichever toast API the frontend exposes.
+ * Same call the ez_feedback and ez_image packs make; the global handle is the
+ * route left when extensionManager itself is what is missing.
+ * @param {string} detail One line naming the failure.
+ * @returns {void}
+ */
+function notifyOperator(detail) {
+  const mgr = managerOrNull();
+  const toast = mgr && mgr.toast;
+  if (toast && typeof toast.addToast === "function") {
+    try {
+      toast.addToast({ title: "ez-comfy", detail: detail, type: "error", timeout: 6000 });
+      return;
+    } catch (_err) {
+      /* fall through to the global handle */
+    }
+  }
+  const api = typeof window === "undefined" ? null : /** @type {EzWindow} */ (window);
+  const store = api && api.comfyAPI && api.comfyAPI.toastStore;
+  const add = store && (store.add || store.addToast);
+  if (typeof add !== "function") {
+    return;
+  }
+  try {
+    add.call(store, { title: "ez-comfy", detail: detail, type: "error", timeout: 6000 });
+  } catch (_err) {
+    /* the console warning already named the failure */
+  }
+}
+
+/**
+ * Dock the explorer in a page-level container so it is never unreachable.
+ * The container carries inline styles because it has to stay visible when
+ * ez_outputs.css never loaded; the panel inside is the same mount() the
+ * sidebar tab renders, so there is only one file manager.
+ * @param {string} reason Why no sidebar tab exists.
+ * @returns {void}
+ */
+function dockFallback(reason) {
+  if (dockedFallback) {
+    return;
+  }
+  dockedFallback = true;
+  const holder = document.createElement("div");
+  holder.className = FALLBACK_CLASS;
+  holder.setAttribute("role", "complementary");
+  holder.setAttribute("aria-label", "Outputs");
+  holder.style.setProperty("position", "fixed");
+  holder.style.setProperty("right", "16px");
+  holder.style.setProperty("bottom", "16px");
+  holder.style.setProperty("width", "min(560px, calc(100vw - 32px))");
+  holder.style.setProperty("max-height", "min(80vh, 720px)");
+  holder.style.setProperty("z-index", "1200");
+  holder.style.setProperty("display", "flex");
+  holder.style.setProperty("flex-direction", "column");
+  holder.style.setProperty("background", "var(--comfy-menu-bg, #1e1e1e)");
+  holder.style.setProperty("color", "var(--fg-color, #e8e8e8)");
+  holder.style.setProperty("border", "1px solid var(--border-color, rgba(255,255,255,0.18))");
+  holder.style.setProperty("border-radius", "8px");
+  holder.style.setProperty("box-shadow", "0 8px 28px rgba(0,0,0,0.45)");
+  holder.style.setProperty("overflow", "hidden");
+
+  const note = document.createElement("div");
+  note.className = FALLBACK_CLASS + "-note";
+  note.textContent = "Outputs - docked by ez_outputs: " + reason;
+  note.style.setProperty("padding", "6px 8px");
+  note.style.setProperty("font", "11px/1.4 ui-sans-serif, system-ui, sans-serif");
+  note.style.setProperty("border-bottom", "1px solid var(--border-color, rgba(255,255,255,0.18))");
+
+  const panel = document.createElement("div");
+  panel.className = FALLBACK_CLASS + "-panel";
+  panel.style.setProperty("flex", "1");
+  panel.style.setProperty("min-height", "240px");
+  panel.style.setProperty("overflow", "auto");
+
+  holder.appendChild(note);
+  holder.appendChild(panel);
+  const host = document.body || document.documentElement;
+  if (host) {
+    host.appendChild(holder);
+  }
+  mount(panel);
+}
+
+/**
+ * Render the tab, docking the explorer by hand if the render throws.
+ * A blank tab tells the operator nothing, so a failed render warns, toasts,
+ * and puts the same panel where they can still reach it.
+ * @param {EzOwnedElement} el Host element the frontend hands the tab.
+ * @returns {void}
+ */
+function renderTab(el) {
+  try {
+    mount(el);
+  } catch (err) {
+    const reason = "panel render threw: " + errLine(err);
+    console.warn("ez_outputs: " + reason + "; docking the panel");
+    notifyOperator("Outputs sidebar: " + reason + ". Docked the panel instead.");
+    try {
+      dockFallback(reason);
+    } catch (dockErr) {
+      console.warn("ez_outputs: docked panel failed: " + errLine(dockErr));
+    }
+  }
+}
+
 app.registerExtension({
   name: "ez.outputs",
   /**
-   * Register the Outputs sidebar tab when the frontend supports it.
+   * Register the Outputs sidebar tab, or dock the explorer and say why.
    * @returns {Promise<void>}
    */
   async setup() {
-    const mgr = app.extensionManager;
-    if (!mgr || typeof mgr.registerSidebarTab !== "function") {
+    await awaitFrontendReady();
+    const reason = await registerTabWithRetry();
+    if (!reason) {
       return;
     }
-    mgr.registerSidebarTab({
-      id: TAB_ID,
-      icon: "pi pi-images",
-      title: "Outputs",
-      tooltip: "Browse saved generations",
-      type: "custom",
-      render: mount,
-    });
+    console.warn("ez_outputs: no sidebar tab - " + reason + "; docking the panel");
+    notifyOperator("Outputs sidebar: " + reason + ". Docked the panel instead.");
+    try {
+      dockFallback(reason);
+    } catch (err) {
+      console.warn("ez_outputs: docked panel failed: " + errLine(err));
+    }
   },
 });

@@ -391,6 +391,26 @@ function cards(el) {
     : el.querySelectorAll(".ez-out-row-item");
 }
 
+/** Answer every route call with an empty page so a docked panel stays quiet. */
+function stubFetch() {
+  globalThis.fetch = async () => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ items: [], count: 0, truncated: false, output_root: "/outputs" }),
+  });
+}
+
+/**
+ * The page-level container the extension docks into when it gets no tab.
+ * @returns {object|null} The container, or null when nothing was docked.
+ */
+function fallbackDock() {
+  return (
+    globalThis.document.body.children.find((n) => n.classList.contains("ez-out-fallback")) ||
+    null
+  );
+}
+
 describe("ez_outputs tab", () => {
   test("registers the sidebar tab the frontend asks for", async () => {
     const { tab } = await mountOutputs();
@@ -405,6 +425,109 @@ describe("ez_outputs tab", () => {
     const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
     app.extensionManager = {};
     await ext.setup();
+  });
+
+  test("waits for vueAppReady before asking for the tab", async () => {
+    installDom();
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    const tabs = [];
+    app.extensionManager = {};
+    app.vueAppReady = Promise.resolve().then(() => {
+      app.extensionManager = { registerSidebarTab: (tab) => tabs.push(tab) };
+    });
+    try {
+      await ext.setup();
+      assert.equal(tabs.length, 1, "the tab registers once the API has appeared");
+      assert.equal(fallbackDock(), null, "a late API needs no docked panel");
+    } finally {
+      app.vueAppReady = undefined;
+    }
+  });
+
+  // Bounded so a regression in the vueAppReady ceiling fails instead of hanging.
+  test("a vueAppReady that never settles still docks the panel", { timeout: 10000 }, async () => {
+    installDom();
+    stubFetch();
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {};
+    app.vueAppReady = new Promise(() => {});
+    try {
+      await ext.setup();
+      assert.ok(fallbackDock(), "a Vue root that never mounts still leaves a reachable panel");
+    } finally {
+      app.vueAppReady = undefined;
+    }
+  });
+
+  test("a registerSidebarTab that throws docks the panel and toasts", async () => {
+    installDom();
+    stubFetch();
+    const toasts = [];
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {
+      toast: { addToast: (t) => toasts.push(t) },
+      registerSidebarTab: () => {
+        throw new Error("sidebar registry is sealed");
+      },
+    };
+    await ext.setup();
+    const dock = fallbackDock();
+    assert.ok(dock, "the explorer docks when registration throws");
+    assert.ok(dock.querySelector(".ez-out"), "the docked panel is the same mount");
+    assert.equal(toasts.length, 1, "the operator is told in a toast");
+    assert.match(String(toasts[0].detail), /sidebar registry is sealed/);
+  });
+
+  test("a missing sidebar API docks the panel and warns on the console", async () => {
+    installDom();
+    stubFetch();
+    const warnings = [];
+    const warn = console.warn;
+    console.warn = (...args) => warnings.push(args.map(String).join(" "));
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {};
+    try {
+      await ext.setup();
+    } finally {
+      console.warn = warn;
+    }
+    const dock = fallbackDock();
+    assert.ok(dock, "the explorer docks when the API never appears");
+    assert.ok(dock.querySelector(".ez-out"), "the docked panel is the same mount");
+    assert.ok(
+      warnings.some((w) => /ez_outputs/.test(w) && /registerSidebarTab/.test(w)),
+      `a warning must name the pack and the reason, got: ${warnings.join(" | ")}`,
+    );
+  });
+
+  test("a render that throws docks the panel instead of a blank tab", async () => {
+    installDom();
+    stubFetch();
+    const warnings = [];
+    const warn = console.warn;
+    console.warn = (...args) => warnings.push(args.map(String).join(" "));
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    const tabs = [];
+    app.extensionManager = {
+      registerSidebarTab: (tab) => tabs.push(tab),
+      toast: { addToast: () => {} },
+    };
+    try {
+      await ext.setup();
+      assert.equal(tabs.length, 1, "the tab still registers");
+      const el = makeElement("div");
+      el.appendChild = () => {
+        throw new Error("host refused the panel");
+      };
+      tabs[0].render(el);
+      assert.ok(fallbackDock(), "a failed render docks the panel");
+      assert.ok(
+        warnings.some((w) => /ez_outputs/.test(w) && /host refused the panel/.test(w)),
+        `a warning must name the render failure, got: ${warnings.join(" | ")}`,
+      );
+    } finally {
+      console.warn = warn;
+    }
   });
 });
 

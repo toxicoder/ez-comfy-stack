@@ -1515,3 +1515,28 @@
     outline: 2px solid Highlight;
   }
 }
+
+/* Docked fallback pane.
+
+ * When the frontend never gives us a sidebar tab (no extensionManager, a
+ * registerSidebarTab that throws, or a render that throws) the JS docks the
+ * same mount() here so the file manager is always reachable. The JS also
+ * carries these properties inline, because this sheet 404s in the exact
+ * failure that makes the dock matter; the inline copy wins when both are
+ * present, and this rule is what keeps the class from shipping unstyled. */
+.ez-out-fallback {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(80vh, 720px);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  background: var(--comfy-menu-bg, #1e1e1e);
+  color: var(--fg-color, #e8e8e8);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.18));
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}

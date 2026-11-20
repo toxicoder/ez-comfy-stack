@@ -294,6 +294,8 @@ This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget cata
 
 Comfy History is in-memory and empty after `start`; these files persist. Routes: `GET /ez_outputs/list` (`truncated` when the page cap clips; `limit` sets the page), `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Bodies accept a single `rel` or a `rels` list. Path traversal and non-media files are refused.
 
+**The tab never disappears quietly.** `setup()` waits on `app.vueAppReady` before asking for the tab (the frontend builds `extensionManager` inside its Vue root, so ordering is not guaranteed), then retries registration three times. If the tab still cannot be registered - or the tab's `render` throws - the pack docks the same explorer in a fixed bottom-right pane (`.ez-out-fallback`), raises a toast, and logs one `ez_outputs:` warning naming the reason. A file manager you cannot find is the failure this path exists to prevent.
+
 **Adaptive layout.** The panel measures its own inline size and names one of three tiers: **compact** (under 380px), **cozy** (380-559px), **wide** (560px and up). The head and the status footer stay pinned and only the file pane scrolls, so tiles get the full height of the panel.
 
 - **Wide** puts a folder rail with a file count per folder on the left; **compact** and **cozy** hide the rail and keep the folder control as chips
