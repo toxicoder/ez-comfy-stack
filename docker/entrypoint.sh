@@ -1310,8 +1310,10 @@ comfy_exec_args() {
     --bf16-vae \
     --bf16-text-enc \
     --disable-mmap
-  # v0.45.0 defaults both True; this self-hosted single-box studio must not offer Cloud sign-in
-  # or partner-node API calls; no env var exists, so --feature-flag is the only kill switch
+  # Upstream flipped both to True after v0.43.0. The server only publishes them to
+  # the browser, so pinning them off here is what stops the UI offering Cloud sign-in
+  # and queueing partner-node API calls on this self-hosted single-box studio. There
+  # is no environment variable for either key; --feature-flag is the only way to set them.
   printf '%s\n' \
     --feature-flag \
     local_web_sso=false \
