@@ -1149,7 +1149,7 @@ PY
   echo stamp >"${STAMP}"
   echo v0.29.0 >"${COMFY_HOME}/.lab-comfyui-ref"
   echo fromimg >"${pre}/marker_pin.txt"
-  export COMFYUI_REF="v0.43.0"
+  export COMFYUI_REF="v0.45.0"
   export LAB_ENTRYPOINT_INSTALL_CMD="true"
   export LAB_ENTRYPOINT_NO_EXEC=1
   unset LAB_FORCE_COLD_INSTALL
@@ -1311,11 +1311,11 @@ PY
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
   mkdir -p "${COMFY_HOME}"
-  COMFYUI_REF="v0.43.0"
+  COMFYUI_REF="v0.45.0"
   run write_comfy_pin
   [ "${status}" -eq 0 ]
   run read_comfy_pin
-  [ "${output}" = "v0.43.0" ]
+  [ "${output}" = "v0.45.0" ]
   run comfy_pin_matches
   [ "${status}" -eq 0 ]
   COMFYUI_REF="v0.29.0"
@@ -1330,7 +1330,7 @@ PY
   source "${REPO_ROOT}/docker/install-comfy.sh"
   mkdir -p "${COMFY_HOME}" "${VENV}/bin"
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
-  COMFYUI_REF="v0.43.0"
+  COMFYUI_REF="v0.45.0"
   write_comfy_pin
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
@@ -1349,12 +1349,12 @@ PY
   mkdir -p "${LAB_PREBUILT_ROOT}"
   install_mock_bin pip 'echo pip; exit 0'
   install_mock_bin git 'echo "git $*"; dest="${@: -1}"; mkdir -p "${dest}" "${COMFY_HOME}/.git" 2>/dev/null || true; echo ok >"${COMFY_HOME}/requirements.txt"; exit 0'
-  COMFYUI_REF="v0.43.0"
+  COMFYUI_REF="v0.45.0"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
   [[ ${output} == *"cloning"* || ${output} == *"Syncing"* ]]
   run read_comfy_pin
-  [ "${output}" = "v0.43.0" ]
+  [ "${output}" = "v0.45.0" ]
 }
 
 @test "refresh_comfy_pin_if_needed reseeds from prebuilt when pin lags" {
@@ -1375,7 +1375,7 @@ PY
   echo oldstart >"${COMFY_HOME}/input/start.png"
   echo poison >"${pre}/custom_nodes/_user/poison.py"
   echo keep >"${COMFY_HOME}/custom_nodes/_user/mine.py"
-  COMFYUI_REF="v0.43.0"
+  COMFYUI_REF="v0.45.0"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
   [[ -f ${COMFY_HOME}/from_image.txt ]]
@@ -1392,7 +1392,7 @@ PY
   source "${REPO_ROOT}/docker/install-comfy.sh"
   mkdir -p "${VENV}/bin"
   printf 'export VIRTUAL_ENV=1\n' >"${VENV}/bin/activate"
-  COMFYUI_REF="v0.43.0"
+  COMFYUI_REF="v0.45.0"
   write_comfy_pin
   local pre="${TEST_TMP_DIR}/pre_heal"
   export LAB_PREBUILT_ROOT="${pre}"
@@ -1423,7 +1423,7 @@ PY
   : >"${STAMP}"
   install_mock_bin git 'echo "git $*"; exit 0'
   install_mock_bin pip 'echo "pip $*"; exit 0'
-  COMFYUI_REF="v0.43.0"
+  COMFYUI_REF="v0.45.0"
   write_comfy_pin
   run main
   [ "${status}" -eq 0 ]
@@ -1697,6 +1697,25 @@ PY
   [ "${status}" -ne 0 ]
   run grep -Fx -- '--normalvram' <<<"${args}"
   [ "${status}" -ne 0 ]
+}
+
+@test "comfy_exec_args pins the web SSO and partner node flags off" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  run comfy_exec_args
+  [ "${status}" -eq 0 ]
+  local args="${output}"
+  # No environment variable exists for either key, so the CLI flag is the only
+  # kill switch. One argv token per line from comfy_exec_args; grep -Fx.
+  run grep -Fx -- '--feature-flag' <<<"${args}"
+  [ "${status}" -eq 0 ]
+  run grep -Fx -- 'local_web_sso=false' <<<"${args}"
+  [ "${status}" -eq 0 ]
+  run grep -Fx -- 'partner_node_token=false' <<<"${args}"
+  [ "${status}" -eq 0 ]
+  # Each key carries its own --feature-flag token.
+  run grep -c -Fx -- '--feature-flag' <<<"${args}"
+  [ "${output}" = "2" ]
 }
 
 @test "install_sage_wheel_if_pinned skips without URL and refuses URL without sha" {

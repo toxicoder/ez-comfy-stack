@@ -36,7 +36,7 @@ LOADER_TYPES = frozenset({"CLIPVisionLoader", "UNETLoader", "VAELoader"})
 SOURCE_TYPES = frozenset({"LoadImage", "EZDCCLoadStillPack", "EZDCCLoadGuideStill"})
 MODEL_FILE_SUFFIXES = (".safetensors", ".ckpt", ".pt", ".bin")
 
-# ComfyUI v0.43.0 Trellis2UpsampleStage: target_resolution is an INT bounded
+# Trellis2UpsampleStage: target_resolution is an INT bounded
 # 1024-2048 in steps of 128; these apps run the 1024 floor.
 UPSAMPLE_TARGET_RESOLUTION = 1024
 

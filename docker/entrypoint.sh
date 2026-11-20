@@ -1310,6 +1310,13 @@ comfy_exec_args() {
     --bf16-vae \
     --bf16-text-enc \
     --disable-mmap
+  # v0.45.0 defaults both True; this self-hosted single-box studio must not offer Cloud sign-in
+  # or partner-node API calls; no env var exists, so --feature-flag is the only kill switch
+  printf '%s\n' \
+    --feature-flag \
+    local_web_sso=false \
+    --feature-flag \
+    partner_node_token=false
 }
 
 #######################################
@@ -1784,7 +1791,7 @@ main() {
     ${install_cmd}
   elif [[ -f ${stamp} && -x ${venv}/bin/python ]]; then
     vol_pin="$(tr -d '\n' <"${comfy_home}/.lab-comfyui-ref" 2>/dev/null || true)"
-    want="${COMFYUI_REF:-v0.43.0}"
+    want="${COMFYUI_REF:-v0.45.0}"
     if [[ ${vol_pin} != "${want}" ]]; then
       ep_log "Comfy pin needs sync (${vol_pin:-unset} -> ${want})"
       if prebuilt_ready; then

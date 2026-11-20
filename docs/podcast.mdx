@@ -104,7 +104,7 @@ This lab does **not** git-clone, pip-require, or default to:
 - **ComfyUI-OldTimeRadio** - opt-in graphs that pull US-excluded or non-commercial video models
 - Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS
 
-Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.43.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest - do not download it twice.
+Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.45.0` (`TextEncodeAceStepAudio1.5`, `EmptyAceStep1.5LatentAudio`). Beds stay **instrumental** (`instrumental`, `no vocals` in tags; empty lyrics). Rap vocals with original lyrics live on [Local music](music.md) and reuse this same AIO dest - do not download it twice.
 
 ---
 
@@ -120,7 +120,7 @@ Native ACE-Step 1.5 already ships in `COMFYUI_REF=v0.43.0` (`TextEncodeAceStepAu
 
 Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.
 
-Qwen3-TTS is an **honest opt-in**: its wheel and its weights are separate installs. The entrypoint does **not** pip-install `qwen-tts` on start, because the official wheel pins `transformers==4.57.3` and would fight Comfy 0.43.0 + torch 2.14+cu130. Run `download-podcast --tier qwen3tts` with compose **up** and it installs the extras (`einops`, `soundfile`) first, then `qwen-tts --no-deps`. Never run an unconstrained `pip install qwen-tts`. A weights-only snapshot (`model.safetensors` alone) is **incomplete** - Base needs `config.json`, the text tokenizer files, and the nested `speech_tokenizer/`. The dub lane offers this engine as an alternate clone voice: [Local dub - Engines](dub.md#engines).
+Qwen3-TTS is an **honest opt-in**: its wheel and its weights are separate installs. The entrypoint does **not** pip-install `qwen-tts` on start, because the official wheel pins `transformers==4.57.3` and would fight Comfy 0.45.0 + torch 2.14+cu130. Run `download-podcast --tier qwen3tts` with compose **up** and it installs the extras (`einops`, `soundfile`) first, then `qwen-tts --no-deps`. Never run an unconstrained `pip install qwen-tts`. A weights-only snapshot (`model.safetensors` alone) is **incomplete** - Base needs `config.json`, the text tokenizer files, and the nested `speech_tokenizer/`. The dub lane offers this engine as an alternate clone voice: [Local dub - Engines](dub.md#engines).
 
 `kokoro-onnx` / `onnxruntime` are **optional runtime** installs inside the container venv. They are **not** baked in `phase-nodes.sh` (a new pip would invalidate **venv-extra**, not the multi-GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and `download-podcast --tier analog`.
 
