@@ -10,6 +10,7 @@ import shutil
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import pytest
 
@@ -39,6 +40,10 @@ from ez_dcc.nodes import (  # noqa: E402
 )
 from ez_dcc.occupancy_gate import OccupancyError  # noqa: E402
 from ez_dcc.qc import GuidePackError  # noqa: E402
+from ez_dcc.scene import (  # noqa: E402
+    NODE_CLASS_MAPPINGS as SCENE_NODE_CLASS_MAPPINGS,
+    EZSceneLayout,
+)
 
 DUMMY_IMAGE = object()
 DUMMY_MASK = object()
@@ -574,3 +579,193 @@ def test_qc_guide_pack_import_fallbacks(monkeypatch: pytest.MonkeyPatch) -> None
     monkeypatch.setattr(Path, "is_file", hide_both)
     with pytest.raises(ImportError, match="unavailable"):
         dcc_qc._load_guide_pack()
+
+
+# Every knob the two DCC files register, pinned by name and in INPUT_TYPES
+# order, so a widget dropped from a spec cannot pass the tooltip invariant by
+# not existing.
+DCC_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZDCCLoadGuideStill": ("slug", "shot_id", "layer"),
+    "EZDCCLoadGuideVideo": ("slug", "shot_id", "layer"),
+    "EZDCCLoadStillPack": ("slug", "plate", "layer"),
+    "EZDCCCameraJson": ("slug", "shot_id"),
+    "EZDCCPreviewGuideLayer": ("label",),
+    "EZDCCOccupancyGate": ("required_mode",),
+    "EZSceneLayout": (
+        "scene_id",
+        "assets",
+        "camera_pos",
+        "camera_look",
+        "camera_fov",
+        "hdri",
+        "filename",
+        "overwrite",
+    ),
+}
+"""Widget names the DCC specs must keep exposing, in INPUT_TYPES order."""
+
+# Connection-only sockets: the 722 shipped graphs wire these names, so they
+# stay bare 1-tuples and owe no tooltip (no options dict carries one).
+DCC_SOCKETS: dict[str, tuple[str, ...]] = {
+    "EZDCCLoadGuideStill": (),
+    "EZDCCLoadGuideVideo": (),
+    "EZDCCLoadStillPack": (),
+    "EZDCCCameraJson": (),
+    "EZDCCPreviewGuideLayer": ("image",),
+    "EZDCCOccupancyGate": ("image",),
+    "EZSceneLayout": (),
+}
+"""Wires the DCC graphs join by name, so they must never gain an options dict."""
+
+# Every widget that names a folder or a listing verb pins the exact wording,
+# so a tooltip that points the operator at the wrong place still fails.
+DCC_TOOLTIP_POINTERS: dict[str, tuple[str, ...]] = {
+    "EZDCCLoadGuideStill.slug": ("<output>/guides/", "export-guides"),
+    "EZDCCLoadGuideStill.shot_id": ("<output>/guides/", "export-guides --shot"),
+    "EZDCCLoadGuideStill.layer": ("first and last", "mist 0-1"),
+    "EZDCCLoadGuideVideo.slug": ("<output>/guides/", "export-guides"),
+    "EZDCCLoadGuideVideo.shot_id": ("<output>/guides/", "export-guides --shot"),
+    "EZDCCLoadGuideVideo.layer": ("clay.mp4", "24 fps"),
+    "EZDCCLoadStillPack.slug": ("<output>/guides/<slug>/stills/", "blender-stills"),
+    "EZDCCLoadStillPack.plate": (
+        "<output>/guides/<slug>/stills/",
+        "blender-stills --plate",
+    ),
+    "EZDCCLoadStillPack.layer": ("clay render", "mist 0-1"),
+    "EZDCCCameraJson.slug": ("<output>/guides/", "export-guides"),
+    "EZDCCCameraJson.shot_id": ("camera.json", "12"),
+    "EZDCCPreviewGuideLayer.label": ("canvas",),
+    "EZDCCOccupancyGate.required_mode": (
+        "klein, trellis, wan, or ltx",
+        "occupancy verb",
+    ),
+    "EZSceneLayout.scene_id": ("dawn-rooftop",),
+    "EZSceneLayout.assets": ("<output>/assets/", "asset-ls"),
+    "EZSceneLayout.camera_pos": ("metres", "2.1, 1.6, 3.4"),
+    "EZSceneLayout.camera_look": ("metres", "0, 1.2, 0"),
+    "EZSceneLayout.camera_fov": ("degrees", "35"),
+    "EZSceneLayout.hdri": ("polyhaven:", "none"),
+    "EZSceneLayout.filename": ("<output>/scenes/",),
+    "EZSceneLayout.overwrite": ("<output>/scenes/",),
+}
+"""Folder or verb each tooltip must name, keyed by Class.widget."""
+
+# The seven classes ez_dcc/__init__.py merges out of nodes.py and scene.py.
+DCC_NODE_CLASSES = (
+    EZDCCLoadGuideStill,
+    EZDCCLoadGuideVideo,
+    EZDCCLoadStillPack,
+    EZDCCCameraJson,
+    EZDCCPreviewGuideLayer,
+    EZDCCOccupancyGate,
+    EZSceneLayout,
+)
+"""Every class the two DCC registries register, in canvas-menu order."""
+
+
+def _tooltip(cls: Any, section: str, widget: str) -> str:
+    """Return the operator tooltip one widget spec carries.
+
+    Args:
+        cls: The registered node class.
+        section: ``required`` or ``optional``.
+        widget: Widget name inside that section.
+
+    Returns:
+        The tooltip string the options dict carries.
+    """
+    spec = cls.INPUT_TYPES()
+    field = spec.get(section, {})[widget]
+    assert len(field) == 2, f"{cls.__name__}.{widget} has no options dict"
+    options = field[1]
+    assert isinstance(options, dict), f"{cls.__name__}.{widget} has no options dict"
+    tooltip = options.get("tooltip")
+    assert isinstance(tooltip, str), f"{cls.__name__}.{widget} has no tooltip"
+    return tooltip
+
+
+def test_dcc_registries_merge_into_the_pack_registry() -> None:
+    """Both files export a registry and __init__ merges all seven classes."""
+    merged = set(ez_dcc.NODE_CLASS_MAPPINGS)
+    assert merged == set(NODE_CLASS_MAPPINGS) | set(SCENE_NODE_CLASS_MAPPINGS)
+    assert {cls.__name__ for cls in DCC_NODE_CLASSES} == merged
+    assert merged, "the DCC registries registered nothing"
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every DCC knob says what to type, in what unit, and where it lives."""
+    assert set(DCC_WIDGETS) == set(ez_dcc.NODE_CLASS_MAPPINGS)
+    seen: set[str] = set()
+    for cls in DCC_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        sockets = DCC_SOCKETS[cls.__name__]
+        widgets: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                if widget in sockets:
+                    assert field == (field[0],), f"{where} socket is not bare"
+                    continue
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip == tooltip.strip(), f"{where} tooltip is padded"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip is not a sentence"
+                widgets.append(widget)
+                seen.add(f"{cls.__name__}.{widget}")
+        assert tuple(widgets) == DCC_WIDGETS[cls.__name__], cls.__name__
+        names = list(spec.get("required", {})) + list(spec.get("optional", {}))
+        pinned = DCC_WIDGETS[cls.__name__]
+        extras = tuple(name for name in names if name not in pinned)
+        assert extras == sockets, cls.__name__
+        assert len(names) == len(widgets) + len(sockets), cls.__name__
+    assert seen, "the tooltip sweep saw no widget"
+    assert seen == {
+        f"{name}.{widget}" for name, widgets in DCC_WIDGETS.items() for widget in widgets
+    }
+
+
+def test_dcc_widget_and_socket_counts_are_pinned() -> None:
+    """A spec that quietly lost a widget or gained a socket fails here."""
+    assert sum(len(widgets) for widgets in DCC_WIDGETS.values()) == 21
+    assert sum(len(sockets) for sockets in DCC_SOCKETS.values()) == 2
+
+
+def test_image_sockets_stay_bare_tuples() -> None:
+    """The two IMAGE wires keep the bare form the graphs and joins expect."""
+    preview = EZDCCPreviewGuideLayer.INPUT_TYPES()["required"]["image"]
+    assert preview == ("IMAGE",)
+    gate = EZDCCOccupancyGate.INPUT_TYPES()["required"]["image"]
+    assert gate == ("IMAGE",)
+
+
+def test_tooltips_name_the_right_folder_and_listing_verb() -> None:
+    """A typed value says which folder holds it and which verb lists it."""
+    assert set(DCC_TOOLTIP_POINTERS) == {
+        f"{name}.{widget}"
+        for name, widgets in DCC_WIDGETS.items()
+        for widget in widgets
+    }
+    for where, needles in DCC_TOOLTIP_POINTERS.items():
+        cls_name, widget = where.split(".")
+        cls = next(c for c in DCC_NODE_CLASSES if c.__name__ == cls_name)
+        spec = cls.INPUT_TYPES()
+        section = "required" if widget in spec.get("required", {}) else "optional"
+        tooltip = _tooltip(cls, section, widget)
+        for needle in needles:
+            assert needle in tooltip, f"{where} tooltip does not name {needle!r}"
+
+
+def test_scene_tooltips_carry_their_units() -> None:
+    """Camera numbers read in metres and the field of view in degrees."""
+    optional = EZSceneLayout.INPUT_TYPES()["optional"]
+    assert optional["camera_fov"][1]["step"] == 1
+    assert optional["camera_fov"][1]["min"] == 10
+    assert optional["camera_fov"][1]["max"] == 120
+    assert "degrees" in _tooltip(EZSceneLayout, "optional", "camera_fov")
+    for widget in ("camera_pos", "camera_look"):
+        assert "metres" in _tooltip(EZSceneLayout, "optional", widget), widget

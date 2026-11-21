@@ -46,9 +46,36 @@ class EZDCCLoadGuideStill:
         """
         return {
             "required": {
-                "slug": ("STRING", {"default": "go-see"}),
-                "shot_id": ("STRING", {"default": "12"}),
-                "layer": (list(SHOT_STILL_LAYERS), {"default": "first"}),
+                "slug": (
+                    "STRING",
+                    {
+                        "default": "go-see",
+                        "tooltip": "Film slug of the guide pack, the folder "
+                        "name under <output>/guides/; go-see is the shipped "
+                        "example. export-guides dumps one folder per film, so "
+                        "that folder lists the slugs you have.",
+                    },
+                ),
+                "shot_id": (
+                    "STRING",
+                    {
+                        "default": "12",
+                        "tooltip": "Shot folder inside the pack, so the node "
+                        "reads <output>/guides/<slug>/<shot_id>/; 12 is the "
+                        "shipped example. The shot ids are the numbers you "
+                        "passed to export-guides --shot.",
+                    },
+                ),
+                "layer": (
+                    list(SHOT_STILL_LAYERS),
+                    {
+                        "default": "first",
+                        "tooltip": "Which pass of the shot pack to decode: "
+                        "first and last are the hero stills, clay is the "
+                        "unshaded blockout, depth is mist 0-1, canny is the "
+                        "line-art pass.",
+                    },
+                ),
             }
         }
 
@@ -93,9 +120,35 @@ class EZDCCLoadGuideVideo:
         """
         return {
             "required": {
-                "slug": ("STRING", {"default": "go-see"}),
-                "shot_id": ("STRING", {"default": "12"}),
-                "layer": (list(SHOT_VIDEO_LAYERS), {"default": "clay"}),
+                "slug": (
+                    "STRING",
+                    {
+                        "default": "go-see",
+                        "tooltip": "Film slug of the guide pack, the folder "
+                        "name under <output>/guides/; go-see is the shipped "
+                        "example. export-guides dumps one folder per film, so "
+                        "that folder lists the slugs you have.",
+                    },
+                ),
+                "shot_id": (
+                    "STRING",
+                    {
+                        "default": "12",
+                        "tooltip": "Shot folder inside the pack, so the mp4 "
+                        "comes out of <output>/guides/<slug>/<shot_id>/; 12 "
+                        "is the shipped example. The shot ids are the numbers "
+                        "you passed to export-guides --shot.",
+                    },
+                ),
+                "layer": (
+                    list(SHOT_VIDEO_LAYERS),
+                    {
+                        "default": "clay",
+                        "tooltip": "Which 120-frame 24 fps pass to hand on as "
+                        "a path: clay.mp4, depth.mp4, or canny.mp4. The node "
+                        "prints the path and decodes no frames.",
+                    },
+                ),
             }
         }
 
@@ -138,9 +191,35 @@ class EZDCCLoadStillPack:
         """
         return {
             "required": {
-                "slug": ("STRING", {"default": "go-see"}),
-                "plate": ("STRING", {"default": "mug"}),
-                "layer": (list(STILL_PACK_LAYERS), {"default": "first"}),
+                "slug": (
+                    "STRING",
+                    {
+                        "default": "go-see",
+                        "tooltip": "Film slug that owns the plate: still "
+                        "packs live under <output>/guides/<slug>/stills/. Use "
+                        "the same slug you passed to blender-stills --film.",
+                    },
+                ),
+                "plate": (
+                    "STRING",
+                    {
+                        "default": "mug",
+                        "tooltip": "Plate folder to read, the name under "
+                        "<output>/guides/<slug>/stills/; mug is the shipped "
+                        "example. blender-stills --plate dumps one folder per "
+                        "plate, so that folder lists the plates you have.",
+                    },
+                ),
+                "layer": (
+                    list(STILL_PACK_LAYERS),
+                    {
+                        "default": "first",
+                        "tooltip": "Which pass of the plate to decode: first "
+                        "and rgb are the clay render, depth is mist 0-1, "
+                        "canny is line art, normal is the optional normal "
+                        "map.",
+                    },
+                ),
             }
         }
 
@@ -184,8 +263,26 @@ class EZDCCCameraJson:
         """
         return {
             "required": {
-                "slug": ("STRING", {"default": "go-see"}),
-                "shot_id": ("STRING", {"default": "12"}),
+                "slug": (
+                    "STRING",
+                    {
+                        "default": "go-see",
+                        "tooltip": "Film slug of the guide pack, the folder "
+                        "name under <output>/guides/; go-see is the shipped "
+                        "example. export-guides dumps one folder per film, so "
+                        "that folder lists the slugs you have.",
+                    },
+                ),
+                "shot_id": (
+                    "STRING",
+                    {
+                        "default": "12",
+                        "tooltip": "Shot folder whose camera.json to read, so "
+                        "the node opens <output>/guides/<slug>/<shot_id>/"
+                        "camera.json; 12 is the shipped example. A missing "
+                        "file returns an empty string rather than failing.",
+                    },
+                ),
             }
         }
 
@@ -225,7 +322,15 @@ class EZDCCPreviewGuideLayer:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "label": ("STRING", {"default": "guide"}),
+                "label": (
+                    "STRING",
+                    {
+                        "default": "guide",
+                        "tooltip": "Name written on the node so two previews "
+                        "read differently on the canvas; guide is the "
+                        "default. It changes no pixels.",
+                    },
+                ),
             }
         }
 
@@ -263,7 +368,16 @@ class EZDCCOccupancyGate:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "required_mode": (list(HEAVY_MODES), {"default": "klein"}),
+                "required_mode": (
+                    list(HEAVY_MODES),
+                    {
+                        "default": "klein",
+                        "tooltip": "Which heavy GPU job this graph claims: "
+                        "klein, trellis, wan, or ltx. Queue fails while "
+                        "another mode or a parked desk holds the GPU, so free "
+                        "the desk with the occupancy verb first.",
+                    },
+                ),
             }
         }
 
@@ -275,7 +389,8 @@ class EZDCCOccupancyGate:
     DESCRIPTION = (
         "Read .occupancy.json. Missing file passes. A live blender-desk or "
         "llm-desk, or a different heavy mode, fails; a desk whose sidecar died "
-        "releases. Does not start Compose or spawn Blender."
+        "releases. Does not start Compose or spawn Blender. Free the desk with "
+        "the occupancy verb before you Queue."
     )
 
     def run(self, image: object, required_mode: str) -> tuple[object]:
