@@ -307,7 +307,11 @@ def _action(
 
 _STATUS = _action("stack.status", "Show status", c.Group.STACK, fixed=("status",))
 _STOP = _action(
-    "stack.stop", "Stop the stack", c.Group.STACK, tier=c.RiskTier.WRITE, fixed=("stop",)
+    "stack.stop",
+    "Stop the stack",
+    c.Group.STACK,
+    tier=c.RiskTier.WRITE,
+    fixed=("stop",),
 )
 _START = _action(
     "stack.start",
@@ -409,7 +413,9 @@ def _text(name: str, *, default: str = "") -> c.ParamSpec:
     )
 
 
-def _int(name: str, *, low: int = 0, high: int = 1_000, default: str = "") -> c.ParamSpec:
+def _int(
+    name: str, *, low: int = 0, high: int = 1_000, default: str = ""
+) -> c.ParamSpec:
     """Build an INT parameter.
 
     Args:
@@ -554,7 +560,8 @@ def _titles(screen: _FakeScreen) -> list[str]:
         One title per frame.
     """
     return [
-        next((text for row, text, _style in frame if row == 1), "") for frame in screen.frames
+        next((text for row, text, _style in frame if row == 1), "")
+        for frame in screen.frames
     ]
 
 
@@ -568,7 +575,10 @@ def _notices(screen: _FakeScreen) -> list[str]:
         The alert-styled row of each frame that had one.
     """
     return [
-        text for frame in screen.frames for _row, text, style in frame if style is c.Style.ALERT
+        text
+        for frame in screen.frames
+        for _row, text, style in frame
+        if style is c.Style.ALERT
     ]
 
 
@@ -723,7 +733,9 @@ def test_cursor_and_pager_keys_move_the_focus() -> None:
     """j, k, the arrows, and the pager keys all move the focused row."""
     screen, _backend = _run([_STACK_KEY, "j", "j", "j", "k"], _STACK_ACTIONS)
     assert _focused(screen).startswith("Stop the stack")
-    screen, _backend = _run([_STACK_KEY, c.Key.DOWN, c.Key.DOWN, c.Key.UP], _STACK_ACTIONS)
+    screen, _backend = _run(
+        [_STACK_KEY, c.Key.DOWN, c.Key.DOWN, c.Key.UP], _STACK_ACTIONS
+    )
     assert _focused(screen).startswith("Stop the stack")
     screen, _backend = _run([_STACK_KEY, c.Key.PGDN], _STACK_ACTIONS)
     assert _focused(screen).startswith("Start the stack")
@@ -746,7 +758,9 @@ def test_cursor_keys_bell_on_a_pane_without_rows() -> None:
 
 def test_the_landing_screen_focuses_the_first_runnable_quick_action() -> None:
     """Before the operator moves, the view picks the focus; after, the loop does."""
-    quick = _action("dashboard.doctor", "Run doctor", c.Group.DASHBOARD, fixed=("doctor",))
+    quick = _action(
+        "dashboard.doctor", "Run doctor", c.Group.DASHBOARD, fixed=("doctor",)
+    )
     screen, _backend = _run([], (_STATUS, quick))
     assert _focused(screen).startswith("Run doctor")
     screen, _backend = _run(["k"], (_STATUS, quick))
@@ -882,14 +896,27 @@ def test_a_destructive_action_needs_the_exact_delete_token() -> None:
 
 def test_backspace_edits_the_typed_token() -> None:
     """A mistyped token can be corrected without abandoning the gate."""
-    keys = [_STACK_KEY, "j", "j", c.Key.ENTER, "y", "e", "s", "x", c.Key.BACKSPACE, c.Key.ENTER]
+    keys = [
+        _STACK_KEY,
+        "j",
+        "j",
+        c.Key.ENTER,
+        "y",
+        "e",
+        "s",
+        "x",
+        c.Key.BACKSPACE,
+        c.Key.ENTER,
+    ]
     _screen, backend = _run(keys, _STACK_ACTIONS)
     assert backend.dispatched == [("stack.start", {}, "yes")]
 
 
 def test_a_modifier_key_at_the_token_gate_bells() -> None:
     """A pager key at the gate is not a character and rings."""
-    screen, backend = _run([_STACK_KEY, "j", "j", c.Key.ENTER, c.Key.PGUP], _STACK_ACTIONS)
+    screen, backend = _run(
+        [_STACK_KEY, "j", "j", c.Key.ENTER, c.Key.PGUP], _STACK_ACTIONS
+    )
     assert backend.dispatched == []
     assert screen.bells == 1
     assert "press enter to run" in _notice(screen)
@@ -951,7 +978,9 @@ def test_text_and_int_fields_take_characters_and_validate_on_enter() -> None:
     add = _download(slug=_text("slug"), count=_int("count", high=10))
     keys = [_MODELS_KEY, c.Key.ENTER, "w", "a", "n", c.Key.DOWN, "3", c.Key.ENTER]
     screen, backend = _run(keys, (add,))
-    assert backend.dispatched == [("models.download", {"slug": "wan", "count": "3"}, "")]
+    assert backend.dispatched == [
+        ("models.download", {"slug": "wan", "count": "3"}, "")
+    ]
     assert "argv download-models wan --count 3" in _all_body(screen)
 
 
@@ -964,9 +993,19 @@ def test_a_bad_integer_answer_is_shown_and_the_form_stays_open() -> None:
     assert screen.bells == 1
     assert "outside 0..10" in _notice(screen)
     assert _title(screen) == "Parameters: Download a pack"
-    fixed = [_MODELS_KEY, c.Key.ENTER, c.Key.DOWN, "9", "9", c.Key.BACKSPACE, c.Key.ENTER]
+    fixed = [
+        _MODELS_KEY,
+        c.Key.ENTER,
+        c.Key.DOWN,
+        "9",
+        "9",
+        c.Key.BACKSPACE,
+        c.Key.ENTER,
+    ]
     _screen, backend = _run(fixed, (add,))
-    assert backend.dispatched == [("models.download", {"slug": "wan", "count": "9"}, "")]
+    assert backend.dispatched == [
+        ("models.download", {"slug": "wan", "count": "9"}, "")
+    ]
 
 
 def test_backspace_empties_a_typed_answer_and_the_preview_says_so() -> None:
@@ -976,7 +1015,7 @@ def test_backspace_empties_a_typed_answer_and_the_preview_says_so() -> None:
     keys += [c.Key.BACKSPACE, c.Key.BACKSPACE, c.Key.BACKSPACE, c.Key.ENTER]
     screen, backend = _run(keys, (add,))
     assert backend.dispatched == []
-    assert "slug: Slug is required" in _notice(screen)
+    assert "Slug is required" in _notice(screen)
 
 
 def test_the_form_moves_between_fields_with_the_arrow_and_pager_keys() -> None:
@@ -1001,7 +1040,11 @@ def test_the_form_moves_between_fields_with_the_arrow_and_pager_keys() -> None:
 def test_an_unbound_key_on_the_form_bells() -> None:
     """A stray key on the form rings instead of editing an answer."""
     wide = _action(
-        "film.render", "Render a shot", c.Group.FILM, fixed=("render",), params=(_text("shot"),)
+        "film.render",
+        "Render a shot",
+        c.Group.FILM,
+        fixed=("render",),
+        params=(_text("shot"),),
     )
     screen, backend = _run([_FILM_KEY, c.Key.ENTER, c.Key.LEFT], (wide,))
     assert screen.bells == 1
@@ -1038,12 +1081,16 @@ def test_the_palette_filters_as_the_operator_types() -> None:
 
 def test_the_palette_edits_navigates_and_rings_for_junk() -> None:
     """Editing the query, moving the focus, and junk keys all behave."""
-    screen, _backend = _run(["/", "s", "t", "a", "t", "u", "s", c.Key.BACKSPACE], _STACK_ACTIONS)
+    screen, _backend = _run(
+        ["/", "s", "t", "a", "t", "u", "s", c.Key.BACKSPACE], _STACK_ACTIONS
+    )
     assert "query 'statu'" in _body(screen)
     screen, _backend = _run(["/", c.Key.BACKSPACE], _STACK_ACTIONS)
     assert screen.bells == 1
     assert "already empty" in _notice(screen)
-    screen, _backend = _run(["/", c.Key.DOWN, c.Key.PGDN, c.Key.PGUP, c.Key.UP], _STACK_ACTIONS)
+    screen, _backend = _run(
+        ["/", c.Key.DOWN, c.Key.PGDN, c.Key.PGUP, c.Key.UP], _STACK_ACTIONS
+    )
     assert _focused(screen).startswith("Show status")
     screen, _backend = _run(["/", c.Key.HOME, c.Key.END], _STACK_ACTIONS)
     assert _focused(screen).startswith("Start the stack")
@@ -1121,7 +1168,11 @@ def test_the_lane_browser_walks_down_and_back() -> None:
     """Lanes, graphs, and the detail pane each open and give way in turn."""
     lanes = [
         lane_lib.Lane(
-            lane_id="photos", order=10, title="Photos", description="Stills.", graph_count=1
+            lane_id="photos",
+            order=10,
+            title="Photos",
+            description="Stills.",
+            graph_count=1,
         )
     ]
     graphs = [
@@ -1155,9 +1206,13 @@ def test_an_empty_lane_list_bells() -> None:
 
 def test_an_empty_graph_list_bells() -> None:
     """A lane with no promoted graphs says so."""
-    lane = lane_lib.Lane(lane_id="photos", order=10, title="Photos", description="Stills.")
+    lane = lane_lib.Lane(
+        lane_id="photos", order=10, title="Photos", description="Stills."
+    )
     screen, _backend = _run(
-        [_LANES_KEY, c.Key.ENTER, c.Key.ENTER], _STACK_ACTIONS, backend=_Backend(lanes=[lane])
+        [_LANES_KEY, c.Key.ENTER, c.Key.ENTER],
+        _STACK_ACTIONS,
+        backend=_Backend(lanes=[lane]),
     )
     assert screen.bells == 1
     assert "no promoted graphs" in _notice(screen)

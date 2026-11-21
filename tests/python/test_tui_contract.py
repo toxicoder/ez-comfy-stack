@@ -245,7 +245,11 @@ def test_every_style_member_has_a_value() -> None:
 
 def test_argv_styles_and_param_kinds_are_distinct() -> None:
     """The two argv spellings and the four param kinds do not overlap."""
-    assert {member.value for member in c.ArgvStyle} == {"spaced", "equals", "positional"}
+    assert {member.value for member in c.ArgvStyle} == {
+        "spaced",
+        "equals",
+        "positional",
+    }
     assert {member.value for member in c.ParamKind} == {
         "choice",
         "text",
@@ -279,7 +283,11 @@ def test_param_spec_bounds_and_defaults() -> None:
 
 def test_runner_kinds_cover_the_three_dispatch_shapes() -> None:
     """Every action targets the CLI, a bare utility, or the console itself."""
-    assert {member.value for member in c.RunnerKind} == {"manage", "utility", "internal"}
+    assert {member.value for member in c.RunnerKind} == {
+        "manage",
+        "utility",
+        "internal",
+    }
 
 
 def _action(**overrides: object) -> c.ActionSpec:
@@ -362,15 +370,47 @@ def test_build_argv_keeps_positional_answers_in_order() -> None:
 
 
 def test_build_argv_rejects_a_missing_required_answer() -> None:
-    """An operator cannot dispatch without answering a required prompt."""
-    with pytest.raises(ValueError, match="tier: Tier is required"):
+    """An operator cannot dispatch without answering a required prompt.
+
+    The refusal names the field the way the console displayed it. The catalog
+    key is snake_case and never appears on screen, so printing it would send
+    the operator hunting for a label that does not exist.
+    """
+    with pytest.raises(ValueError, match="Tier is required") as caught:
         c.build_argv(_action(), {})
+    assert "tier:" not in str(caught.value)
+
+
+def test_a_refusal_repeats_the_hint_the_operator_skipped() -> None:
+    """A field that carries help gets it back in the message that refuses it."""
+    action = _action(
+        params=(
+            c.ParamSpec(
+                name="slug",
+                label="Film slug",
+                kind=c.ParamKind.TEXT,
+                required=True,
+                help_text="lowercase, e.g. breakwater",
+            ),
+        )
+    )
+    with pytest.raises(ValueError, match="Film slug is required - lowercase"):
+        c.build_argv(action, {})
 
 
 def test_build_argv_rejects_an_answer_outside_the_offered_choices() -> None:
-    """Free text cannot smuggle itself into a parameter with a fixed menu."""
-    with pytest.raises(ValueError, match="not one of"):
+    """Free text cannot smuggle itself into a parameter with a fixed menu.
+
+    The menu the refusal offers is the menu the operator was shown: choice
+    labels, not the argv values behind them, and never a container repr.
+    """
+    with pytest.raises(ValueError) as caught:
         c.build_argv(_action(), {"tier": "../etc"})
+    message = str(caught.value)
+    assert "Tier is not one of: Turbo, XL" in message
+    assert "you typed ../etc" in message
+    assert "('turbo'" not in message
+    assert "tier:" not in message
 
 
 def test_build_argv_bounds_an_integer_answer() -> None:
@@ -395,11 +435,11 @@ def test_build_argv_refuses_newlines_in_free_text() -> None:
 def test_build_argv_reports_a_misconfigured_catalog_entry() -> None:
     """A flag parameter with no flag, or a choice with no flag, is a defect."""
     bad_flag = _action(
-        params=(
-            c.ParamSpec(name="d", label="D", kind=c.ParamKind.FLAG, flag=""),
-        )
+        params=(c.ParamSpec(name="d", label="D", kind=c.ParamKind.FLAG, flag=""),)
     )
-    with pytest.raises(ValueError, match="needs a flag"):
+    with pytest.raises(
+        ValueError, match="D: the console catalog gives this switch no flag"
+    ):
         c.build_argv(bad_flag, {"d": "on"})
     bad_choice = _action(
         params=(
@@ -412,7 +452,9 @@ def test_build_argv_reports_a_misconfigured_catalog_entry() -> None:
             ),
         )
     )
-    with pytest.raises(ValueError, match="choice parameter needs a flag"):
+    with pytest.raises(
+        ValueError, match="T: the console catalog gives this menu no flag"
+    ):
         c.build_argv(bad_choice, {"t": "a"})
 
 
@@ -440,4 +482,3 @@ def test_every_screen_id_is_unique_and_named() -> None:
     values = [member.value for member in c.ScreenId]
     assert len(values) == len(set(values))
     assert "confirm" in values and "palette" in values
-
