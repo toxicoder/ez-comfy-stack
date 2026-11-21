@@ -524,11 +524,43 @@ class EZCubicCondition:
         """
         return {
             "required": {
-                "conditioning": ("CONDITIONING",),
-                "latent": ("LATENT",),
-                "image": ("IMAGE",),
-                "vae": ("VAE",),
-                "prompt": ("STRING", {"forceInput": True, "dynamicPrompts": False}),
+                "conditioning": (
+                    "CONDITIONING",
+                    {
+                        "tooltip": "Wire the positive prompt conditioning here; "
+                        "this node hands it back with one reference attached.",
+                    },
+                ),
+                "latent": (
+                    "LATENT",
+                    {
+                        "tooltip": "Wire the empty Flux.2 latent built from the "
+                        "snapped photo; an ordinary background swap attaches it.",
+                    },
+                ),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the snapped photo; a cube, voxel, or "
+                        "block-world prompt attaches a block study of it instead.",
+                    },
+                ),
+                "vae": (
+                    "VAE",
+                    {
+                        "tooltip": "Wire the Flux.2 VAE from your Checkpoint "
+                        "Loader; it encodes the block study before it attaches.",
+                    },
+                ),
+                "prompt": (
+                    "STRING",
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the enhanced prompt string here; its "
+                        "wording picks the photo or the block study.",
+                    },
+                ),
             }
         }
 

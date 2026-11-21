@@ -261,7 +261,16 @@ class EZOptionalImage:
             "required": {
                 # Slot 0 and the frozen name: ez_outputs.js and 98 graphs
                 # address "filename" directly.
-                "filename": (list(choices), {"default": "", "image_upload": True}),
+                "filename": (
+                    list(choices),
+                    {
+                        "default": "",
+                        "image_upload": True,
+                        "tooltip": "Pick a still from your input folder; it "
+                        "reaches the model as a reference image, and empty is "
+                        "fine.",
+                    },
+                ),
             },
             "optional": {
                 "use_references": (
@@ -270,11 +279,35 @@ class EZOptionalImage:
                         "default": True,
                         "label_on": "Use references",
                         "label_off": "References off",
+                        "tooltip": "Turn off to ignore every pick without "
+                        "clearing it, then Queue for a run with no references.",
                     },
                 ),
-                "filename_2": (list(choices), {"default": "", "image_upload": True}),
-                "filename_3": (list(choices), {"default": "", "image_upload": True}),
-                "image": ("IMAGE",),
+                "filename_2": (
+                    list(choices),
+                    {
+                        "default": "",
+                        "image_upload": True,
+                        "tooltip": "Optional second still; its frames join the "
+                        "first as extra references.",
+                    },
+                ),
+                "filename_3": (
+                    list(choices),
+                    {
+                        "default": "",
+                        "image_upload": True,
+                        "tooltip": "Optional third still; its frames join the "
+                        "same reference set.",
+                    },
+                ),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "A wired image batch used instead of the "
+                        "pickers; every frame in it counts as a reference.",
+                    },
+                ),
             },
         }
 
@@ -287,8 +320,9 @@ class EZOptionalImage:
     DESCRIPTION = (
         "Optional example or reference stills. Empty is valid - Queue without "
         "a file. Up to three upload pickers plus one wired image batch, all of "
-        "which reach the model as reference latents. use_references mutes them "
-        "without clearing your picks. Klein graphs attach a present still via "
+        "which reach the model as reference latents: leave every picker empty "
+        "for a run with no references. use_references mutes them without "
+        "clearing your picks. Klein graphs attach a present still via "
         "EZKleinRefCanvas."
     )
 
@@ -355,12 +389,39 @@ class EZKleinRefCanvas:
         """
         return {
             "required": {
-                "latent": ("LATENT",),
-                "vae": ("VAE",),
+                "latent": (
+                    "LATENT",
+                    {
+                        "tooltip": "Wire the empty Flux.2 latent from Empty "
+                        "Flux.2 from image; it passes through untouched when no "
+                        "still is present.",
+                    },
+                ),
+                "vae": (
+                    "VAE",
+                    {
+                        "tooltip": "Wire the Flux.2 VAE from your Checkpoint "
+                        "Loader; it encodes the still into references.",
+                    },
+                ),
             },
             "optional": {
-                "image": ("IMAGE",),
-                "has_image": ("BOOLEAN", {"default": False}),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the start still from Optional image "
+                        "together with its has_image flag below.",
+                    },
+                ),
+                "has_image": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Copy the has_image output of Optional "
+                        "image; off passes the latent through with no "
+                        "references.",
+                    },
+                ),
                 "max_refs": (
                     "INT",
                     {
@@ -368,6 +429,8 @@ class EZKleinRefCanvas:
                         "min": MIN_MAX_REFS,
                         "max": MAX_MAX_REFS,
                         "step": 1,
+                        "tooltip": "Most still frames attached as references; "
+                        "keep 3 unless the references look crowded.",
                     },
                 ),
             },
@@ -381,7 +444,10 @@ class EZKleinRefCanvas:
     DESCRIPTION = (
         "When has_image is set, snap div16, VAE-encode once, and attach at "
         "most max_refs frames as ReferenceLatent. Otherwise pass the empty "
-        "Flux2 latent through. Never errors if empty."
+        "Flux2 latent through. Never errors if empty. Wire the still and its "
+        "has_image flag from Optional image, keep the latent from Empty Flux.2 "
+        "from image, and leave max_refs at 3 unless the references look "
+        "crowded."
     )
 
     def run(
@@ -425,10 +491,23 @@ class EZDescribeImage:
         """
         return {
             "required": {
-                "has_image": ("BOOLEAN", {"default": False}),
+                "has_image": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Copy the has_image output of Optional "
+                        "image; off returns an empty caption.",
+                    },
+                ),
             },
             "optional": {
-                "image": ("IMAGE",),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the still to caption; without VL "
+                        "weights the caption stays empty.",
+                    },
+                ),
             },
         }
 
@@ -440,7 +519,9 @@ class EZDescribeImage:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Describe a reference still for models that are not multimodal. "
-        "Fail-soft: empty string when no image or no VL GGUF is installed."
+        "Fail-soft: empty string when no image or no VL GGUF is installed. "
+        "Set has_image and wire the still here; when the caption comes back "
+        "empty, install the VL GGUF or leave this node unwired."
     )
 
     def run(

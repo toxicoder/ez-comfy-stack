@@ -11,6 +11,7 @@ import sys
 import types
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -42,6 +43,8 @@ from ez_image.formats import (  # noqa: E402
     resolve_canvas,
     splice_look,
 )
+from ez_image import cubic as cubic_mod  # noqa: E402
+from ez_image import refs as refs_mod  # noqa: E402
 from ez_image import video_formats as vfmt  # noqa: E402
 from ez_image.nodes import (  # noqa: E402
     FLUX2_LATENT_CHANNELS,
@@ -993,3 +996,252 @@ def test_video_format_input_types_fallback_default(
     )
     monkeypatch.setattr(vfmt, "get_family", lambda _value: ghost)
     assert default_video_format_id("ghost") == CUSTOM_ID
+
+
+_SOCKET_TYPES = frozenset(
+    {"IMAGE", "LATENT", "VAE", "MASK", "CONDITIONING", "MODEL", "CLIP", "AUDIO"}
+)
+"""Types that arrive over a link, so the operator never types into them."""
+
+_PACK_REGISTRIES: tuple[tuple[str, dict[str, Any]], ...] = (
+    ("ez_image.nodes", NODE_CLASS_MAPPINGS),
+    ("ez_image.refs", refs_mod.NODE_CLASS_MAPPINGS),
+    ("ez_image.cubic", cubic_mod.NODE_CLASS_MAPPINGS),
+)
+"""The three registries this lane ships; cutout, modes, and person_mask are others."""
+
+_PACK_CLASSES: dict[str, str] = {
+    "EZSnapImage": "ez_image.nodes",
+    "EZEmptyFlux2FromImage": "ez_image.nodes",
+    "EZMatchImageSize": "ez_image.nodes",
+    "EZImageFormat": "ez_image.nodes",
+    "EZVideoFormat": "ez_image.nodes",
+    "EZImageUpscale": "ez_image.nodes",
+    "EZOptionalImage": "ez_image.refs",
+    "EZKleinRefCanvas": "ez_image.refs",
+    "EZDescribeImage": "ez_image.refs",
+    "EZCubicCondition": "ez_image.cubic",
+}
+"""Every class the three files register, and the module that registers it."""
+
+_PACK_SECTIONS: dict[str, dict[str, list[str]]] = {
+    "EZSnapImage": {"required": ["image"], "optional": []},
+    "EZEmptyFlux2FromImage": {"required": ["image"], "optional": []},
+    "EZMatchImageSize": {"required": ["image", "size_src"], "optional": []},
+    "EZImageFormat": {
+        "required": ["format", "look", "width", "height", "batch_size", "size_mode"],
+        "optional": ["image"],
+    },
+    "EZVideoFormat": {
+        "required": [
+            "family",
+            "format",
+            "width",
+            "height",
+            "size_mode",
+            "duration_s",
+        ],
+        "optional": ["image"],
+    },
+    "EZImageUpscale": {"required": ["image", "upscale"], "optional": []},
+    "EZOptionalImage": {
+        "required": ["filename"],
+        "optional": ["use_references", "filename_2", "filename_3", "image"],
+    },
+    "EZKleinRefCanvas": {
+        "required": ["latent", "vae"],
+        "optional": ["image", "has_image", "max_refs"],
+    },
+    "EZDescribeImage": {"required": ["has_image"], "optional": ["image"]},
+    "EZCubicCondition": {
+        "required": ["conditioning", "latent", "image", "vae", "prompt"],
+        "optional": [],
+    },
+}
+"""Exact socket and widget keys per class, in the order a saved graph stores them."""
+
+_PACK_WIDGETS: dict[str, list[str]] = {
+    "EZSnapImage": [],
+    "EZEmptyFlux2FromImage": [],
+    "EZMatchImageSize": [],
+    "EZImageFormat": ["format", "look", "width", "height", "batch_size", "size_mode"],
+    "EZVideoFormat": [
+        "family",
+        "format",
+        "width",
+        "height",
+        "size_mode",
+        "duration_s",
+    ],
+    "EZImageUpscale": ["upscale"],
+    "EZOptionalImage": ["filename", "use_references", "filename_2", "filename_3"],
+    "EZKleinRefCanvas": ["has_image", "max_refs"],
+    "EZDescribeImage": ["has_image"],
+    "EZCubicCondition": [],
+}
+"""The knobs an operator edits per class; sockets and forced inputs are left out."""
+
+
+def _sections(node: Any) -> list[tuple[str, str, Any]]:
+    """Return every spec an INPUT_TYPES carries, with its section and key.
+
+    Args:
+        node: Registered node class.
+
+    Returns:
+        ``(section, key, spec)`` for each required entry, then each optional one.
+    """
+    spec: dict[str, dict[str, Any]] = node.INPUT_TYPES()
+    return [
+        (section, key, spec[section][key])
+        for section in ("required", "optional")
+        for key in spec.get(section, {})
+    ]
+
+
+def _widget_names(node: Any) -> list[str]:
+    """Return the positional widget names a saved graph stores for ``node``.
+
+    Args:
+        node: Registered node class.
+
+    Returns:
+        Keys in INPUT_TYPES order, with link-only sockets and forced inputs out.
+    """
+    names: list[str] = []
+    for _section, key, spec in _sections(node):
+        kind = spec[0]
+        options = spec[1]
+        if isinstance(kind, str) and kind in _SOCKET_TYPES:
+            continue
+        if options.get("forceInput") is True:
+            continue
+        names.append(key)
+    return names
+
+
+def _spec_for(node: Any, key: str) -> Any:
+    """Return the raw spec one INPUT_TYPES key carries.
+
+    Args:
+        node: Registered node class.
+        key: Socket or widget name.
+
+    Returns:
+        The ``(type, options)`` tuple stored under that key.
+    """
+    spec: dict[str, dict[str, Any]] = node.INPUT_TYPES()
+    for section in ("required", "optional"):
+        if key in spec.get(section, {}):
+            return spec[section][key]
+    raise KeyError(f"{node.__name__}.{key}")
+
+
+def _assert_tooltip(where: str, spec: Any) -> None:
+    """Fail unless one widget spec carries a usable operator tooltip.
+
+    Args:
+        where: Dotted name of the spec, used for the failure message.
+        spec: The legacy ``(type, options)`` tuple an INPUT_TYPES key carries.
+    """
+    assert isinstance(spec, tuple), where
+    assert len(spec) == 2, where
+    options = spec[1]
+    assert isinstance(options, dict), where
+    tooltip = options.get("tooltip")
+    assert isinstance(tooltip, str), where
+    assert tooltip.strip() == tooltip, where
+    assert tooltip, where
+    assert tooltip.isascii(), where
+    assert tooltip.endswith("."), where
+
+
+def test_pack_registers_exactly_the_pinned_classes() -> None:
+    """A class dropped from a registry would empty the tooltip sweep."""
+    registered = {
+        name: module_name
+        for module_name, mapping in _PACK_REGISTRIES
+        for name in mapping
+    }
+    assert registered == _PACK_CLASSES
+
+
+def test_pack_socket_and_widget_keys_are_pinned() -> None:
+    """No socket or knob may be renamed, reordered, or dropped silently."""
+    for module_name, mapping in _PACK_REGISTRIES:
+        for name, node in mapping.items():
+            got: dict[str, list[str]] = {"required": [], "optional": []}
+            for section, key, _spec in _sections(node):
+                got[section].append(key)
+            assert got == _PACK_SECTIONS[name], f"{module_name}.{name}"
+            assert _widget_names(node) == _PACK_WIDGETS[name], f"{module_name}.{name}"
+
+
+def test_every_registered_widget_spec_carries_a_tooltip() -> None:
+    """Pack invariant: every socket and knob explains itself to the operator."""
+    for module_name, mapping in _PACK_REGISTRIES:
+        for name, node in mapping.items():
+            for _section, key, spec in _sections(node):
+                _assert_tooltip(f"{module_name}.{name}.{key}", spec)
+
+
+def test_tooltip_invariant_is_not_vacuous() -> None:
+    """Each shape the invariant rejects must actually trip it."""
+    no_options: Any = ("INT",)
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.no_options", no_options)
+    bare_socket: Any = ("IMAGE",)
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.bare_socket", bare_socket)
+    no_tooltip: Any = ("INT", {"default": 3, "min": 1, "max": 4, "step": 1})
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.no_tooltip", no_tooltip)
+    blank: Any = ("INT", {"default": 3, "tooltip": "   "})
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.blank", blank)
+    no_period: Any = ("INT", {"default": 3, "tooltip": "no full stop"})
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.no_period", no_period)
+    em_dash = chr(0x2014)
+    curly: Any = ("STRING", {"default": "", "tooltip": f"a curly {em_dash} here."})
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.curly", curly)
+    padded: Any = ("STRING", {"default": "", "tooltip": " padded. "})
+    with pytest.raises(AssertionError):
+        _assert_tooltip("pinned.padded", padded)
+
+
+def test_jargon_sockets_say_what_flows_through_them() -> None:
+    """Frozen socket names stay jargon; the tooltip carries the plain meaning."""
+    canvas = refs_mod.NODE_CLASS_MAPPINGS["EZKleinRefCanvas"]
+    cubic_node = cubic_mod.NODE_CLASS_MAPPINGS["EZCubicCondition"]
+    expected: list[tuple[Any, str, str]] = [
+        (cubic_node, "conditioning", "conditioning"),
+        (cubic_node, "latent", "latent"),
+        (cubic_node, "image", "photo"),
+        (cubic_node, "vae", "checkpoint"),
+        (cubic_node, "prompt", "prompt"),
+        (canvas, "latent", "latent"),
+        (canvas, "vae", "checkpoint"),
+        (canvas, "has_image", "optional image"),
+        (EZEmptyFlux2FromImage, "image", "latent_image"),
+        (EZSnapImage, "image", "loadimage"),
+    ]
+    for node, key, needle in expected:
+        assert needle in _spec_for(node, key)[1]["tooltip"].lower(), key
+    with pytest.raises(KeyError):
+        _spec_for(EZSnapImage, "not-a-socket")
+
+
+def test_descriptions_that_keep_an_engine_word_add_an_action() -> None:
+    """An engine word stays in hover text only beside what the operator does."""
+    engine_words = ("vae", "latent", "gguf", "clip")
+    actions = ("wire", "queue", "pick", "leave", "set ", "keep")
+    checked = 0
+    for _module_name, mapping in _PACK_REGISTRIES:
+        for name, node in mapping.items():
+            text = node.DESCRIPTION.lower()
+            if any(word in text for word in engine_words):
+                checked += 1
+                assert any(action in text for action in actions), name
+    assert checked >= 5
