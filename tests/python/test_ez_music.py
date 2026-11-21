@@ -96,9 +96,11 @@ from ez_music.naming import (  # noqa: E402
     music_output_prefix,
     title_case_song,
 )
+from ez_music.join import MAX_JOIN_SEGMENTS  # noqa: E402
 from ez_music.nodes import (  # noqa: E402
     DRAFT_LYRICS,
     EZAlbumPack,
+    EZAudioBeatJoin,
     EZAudioMetadata,
     EZRapLyrics,
     FULL_LYRICS,
@@ -1437,3 +1439,111 @@ def test_metadata_nodes_expose_art_mode() -> None:
     assert pack["required"]["album"][0] == "STRING"
     assert NODE_CLASS_MAPPINGS["EZAudioMetadata"].CATEGORY == "ez-comfy/music"  # type: ignore[attr-defined]
     assert NODE_DISPLAY_NAME_MAPPINGS["EZAlbumPack"] == "Pack album zip"
+
+
+# --------------------------------------------------------------------------- #
+# Operator-facing widget surfaces
+# --------------------------------------------------------------------------- #
+
+# Every widget the four registered classes expose, pinned by name so a widget
+# dropped from INPUT_TYPES cannot pass the tooltip invariant by not existing.
+MUSIC_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZRapLyrics": ("sample", "lyrics", "enhance", "catalog", "context"),
+    "EZAudioMetadata": (
+        "artist",
+        "album",
+        "title",
+        "track",
+        "tracktotal",
+        "year",
+        "art_mode",
+        "prefix",
+    ),
+    "EZAlbumPack": ("artist", "album"),
+    "EZAudioBeatJoin": ("bpm", "overlap_bars", "crossover_hz"),
+}
+
+# Connection-only sockets: the graphs wire these names, so they stay bare
+# tuples and owe no tooltip (no options dict exists to carry one).
+MUSIC_SOCKETS: dict[str, tuple[str, ...]] = {
+    "EZRapLyrics": (),
+    "EZAudioMetadata": ("audio", "cover"),
+    "EZAlbumPack": (),
+    "EZAudioBeatJoin": (
+        "audio_01",
+        *(f"audio_{index:02d}" for index in range(2, MAX_JOIN_SEGMENTS + 1)),
+    ),
+}
+
+MUSIC_NODE_CLASSES = (EZRapLyrics, EZAudioMetadata, EZAlbumPack, EZAudioBeatJoin)
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every knob says what to put there and what happens."""
+    assert set(MUSIC_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    for cls in MUSIC_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        sockets = MUSIC_SOCKETS[cls.__name__]
+        seen: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                if widget in sockets:
+                    assert field == (field[0],), f"{where} socket is not bare"
+                    continue
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip is not a sentence"
+                seen.append(widget)
+        assert tuple(seen) == MUSIC_WIDGETS[cls.__name__], cls.__name__
+
+
+def test_sockets_stay_bare_tuples() -> None:
+    """Sockets keep the bare form the graphs and the join tests pin."""
+    beat = EZAudioBeatJoin.INPUT_TYPES()
+    assert beat["required"]["audio_01"] == ("AUDIO",)
+    assert beat["optional"][f"audio_{MAX_JOIN_SEGMENTS:02d}"] == ("AUDIO",)
+    assert EZAudioMetadata.INPUT_TYPES()["optional"]["cover"] == ("IMAGE",)
+
+
+def test_whole_number_widgets_carry_a_step() -> None:
+    """Track and tempo fields the operator drags in whole numbers say so."""
+    bpm = EZAudioBeatJoin.INPUT_TYPES()["required"]["bpm"][1]
+    assert bpm["step"] == 1
+    assert bpm["default"] == 172
+    assert bpm["min"] == 40 and bpm["max"] == 300
+    required = EZAudioMetadata.INPUT_TYPES()["required"]
+    for widget in ("track", "tracktotal", "year"):
+        assert required[widget][1]["step"] == 1, widget
+    assert required["track"][1]["min"] == 1 and required["track"][1]["max"] == 99
+    assert required["tracktotal"][1]["min"] == 1
+    assert required["tracktotal"][1]["max"] == 99
+    assert required["year"][1]["min"] == 1900 and required["year"][1]["max"] == 2100
+
+
+def test_tempo_and_crossover_tooltips_carry_their_units() -> None:
+    """A tempo reads in BPM and the crossover in hertz."""
+    required = EZAudioBeatJoin.INPUT_TYPES()["required"]
+    assert "BPM" in required["bpm"][1]["tooltip"]
+    assert "hertz" in required["crossover_hz"][1]["tooltip"]
+
+
+def test_overlap_bars_keeps_the_pattern_tooltip() -> None:
+    """The one tooltip the pack already shipped is the form the rest copy."""
+    tooltip = EZAudioBeatJoin.INPUT_TYPES()["required"]["overlap_bars"][1]["tooltip"]
+    assert tooltip == (
+        "Whole bars per seam: one number for all seams, or comma-separated per seam."
+    )
+
+
+def test_rap_lyrics_catalog_widget_names_the_sample_folder() -> None:
+    """The hidden stem field says which file it picks and who lists it."""
+    tooltip = EZRapLyrics.INPUT_TYPES()["required"]["catalog"][1]["tooltip"]
+    assert "custom_nodes/ez_prompt_enhance/js/samples/" in tooltip
+    assert "ez_prompt_enhance/samples.py lists" in tooltip
+    assert "rap_draft" in tooltip

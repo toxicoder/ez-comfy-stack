@@ -146,7 +146,14 @@ def _sample_combo(preferred: str = "podcast_two_host") -> ComboSpec:
     _ensure_lab_custom_nodes_path()
     from ez_prompt_enhance.samples import CUSTOM, sample_combo_labels
 
-    return (sample_combo_labels(preferred), {"default": CUSTOM})
+    return (
+        sample_combo_labels(preferred),
+        {
+            "default": CUSTOM,
+            "tooltip": "Pick a shipped lab recipe to fill the text box below "
+            "from the sample catalog, or custom to write your own script.",
+        },
+    )
 
 
 def _ensure_lab_custom_nodes_path() -> None:
@@ -426,19 +433,52 @@ class EZPodcastScript:
                         "multiline": True,
                         "default": SEED_SCRIPT,
                         "dynamicPrompts": False,
+                        "tooltip": "Type or paste the script the writer "
+                        "rewrites; keep every line tagged Speaker A: or "
+                        "Speaker B: so the two hosts stay split.",
                     },
                 ),
                 "enhance": (
                     "BOOLEAN",
-                    {"default": True, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "Turn off to Queue the script exactly as "
+                        "typed, with no writer pass and no GGUF load.",
+                    },
                 ),
-                "flavor": ([FLAVOR_PODCAST, FLAVOR_RADIO], {"default": FLAVOR_PODCAST}),
-                "catalog": ("STRING", {"default": "", "multiline": False}),
+                "flavor": (
+                    [FLAVOR_PODCAST, FLAVOR_RADIO],
+                    {
+                        "default": FLAVOR_PODCAST,
+                        "tooltip": "podcast_two_host writes two hosts trading "
+                        "lines; radio_drama adds Announcer turns for a cast.",
+                    },
+                ),
+                "catalog": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Leave empty for the catalog that matches "
+                        "the flavor, or name a catalog stem such as "
+                        "podcast_radio to read that file from "
+                        "custom_nodes/ez_prompt_enhance/js/samples/, which "
+                        "ez_prompt_enhance/samples.py lists.",
+                    },
+                ),
             },
             "optional": {
                 "context": (
                     "STRING",
-                    {"forceInput": True, "dynamicPrompts": False},
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire an extra context STRING here and the "
+                        "writer folds it into the system prompt beside the "
+                        "script.",
+                    },
                 ),
             },
         }
@@ -452,8 +492,9 @@ class EZPodcastScript:
     DESCRIPTION = (
         "Rewrites a two-host or radio-drama script with the on-box "
         "Qwen3-4B-Instruct GGUF. Enhance defaults on. Missing GGUF passes "
-        "the widget text through. Unloads the writer after a rewrite so TTS "
-        "can run in the same Queue."
+        "the widget text through, so Queue anyway or fetch the writer with "
+        "bazelisk run //:manage -- download-models. Unloads the writer after "
+        "a rewrite so TTS can run in the same Queue."
     )
 
     def run(
@@ -528,7 +569,13 @@ class EZPodcastDisclosure:
             "required": {
                 "script": (
                     "STRING",
-                    {"multiline": True, "forceInput": True, "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the finished script in; this node "
+                        "only puts the fixed disclosure bumper in front of it.",
+                    },
                 ),
             }
         }
@@ -572,24 +619,87 @@ class EZKokoroTTS:
             "required": {
                 "script": (
                     "STRING",
-                    {"multiline": True, "forceInput": True, "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the script in here; every spoken line "
+                        "must start with Speaker A:, Speaker B:, or Announcer:.",
+                    },
                 ),
-                "speaker_a_voice": (voices, {"default": DEFAULT_VOICE_A}),
-                "speaker_b_voice": (voices, {"default": DEFAULT_VOICE_B}),
-                "announcer_voice": (voices, {"default": DEFAULT_ANNOUNCER}),
-                "include_announcer": ("BOOLEAN", {"default": False}),
-                "backend": (list(BACKENDS), {"default": BACKEND_KOKORO}),
+                "speaker_a_voice": (
+                    voices,
+                    {
+                        "default": DEFAULT_VOICE_A,
+                        "tooltip": "Kokoro built-in voice for Speaker A, used "
+                        "whenever the reference field below stays empty.",
+                    },
+                ),
+                "speaker_b_voice": (
+                    voices,
+                    {
+                        "default": DEFAULT_VOICE_B,
+                        "tooltip": "Kokoro built-in voice for Speaker B, used "
+                        "whenever the reference field below stays empty.",
+                    },
+                ),
+                "announcer_voice": (
+                    voices,
+                    {
+                        "default": DEFAULT_ANNOUNCER,
+                        "tooltip": "Kokoro built-in voice for Announcer turns, "
+                        "spoken only when Include announcer is on.",
+                    },
+                ),
+                "include_announcer": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Turn on for a radio-drama script so "
+                        "Announcer lines are spoken; off drops them.",
+                    },
+                ),
+                "backend": (
+                    list(BACKENDS),
+                    {
+                        "default": BACKEND_KOKORO,
+                        "tooltip": "Leave kokoro, the on-box Apache ONNX "
+                        "default; chatterbox and qwen3tts speak only with the "
+                        "reference WAVs below.",
+                    },
+                ),
                 "speaker_a_ref": (
                     "STRING",
-                    {"default": "", "dynamicPrompts": False},
+                    {
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "Optional operator-owned reference WAV that "
+                        "clones Speaker A: put it under "
+                        "COMFY_OUTPUT_DIR/input (container /inputs) and type "
+                        "its path; empty keeps the built-in Kokoro voice.",
+                    },
                 ),
                 "speaker_b_ref": (
                     "STRING",
-                    {"default": "", "dynamicPrompts": False},
+                    {
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "Optional operator-owned reference WAV that "
+                        "clones Speaker B: put it under "
+                        "COMFY_OUTPUT_DIR/input (container /inputs) and type "
+                        "its path; empty keeps the built-in Kokoro voice.",
+                    },
                 ),
                 "speed": (
                     "FLOAT",
-                    {"default": 1.0, "min": 0.5, "max": 1.5, "step": 0.05},
+                    {
+                        "default": 1.0,
+                        "min": 0.5,
+                        "max": 1.5,
+                        "step": 0.05,
+                        "tooltip": "Speaking-rate multiplier, not seconds: 1.0 "
+                        "is the natural Kokoro pace and higher talks faster.",
+                    },
                 ),
             }
         }
@@ -603,7 +713,9 @@ class EZKokoroTTS:
     DESCRIPTION = (
         "Kokoro-82M ONNX/CPU built-in voices (Apache 2.0). Optional "
         "Chatterbox or Qwen3-TTS only with operator-owned refs; empty refs "
-        "fall back to Kokoro. Never ships celebrity WAVs."
+        "fall back to Kokoro. Never ships celebrity WAVs. Missing ONNX "
+        "weights print the fix: bazelisk run //:manage -- download-podcast "
+        "--tier analog."
     )
 
     def run(
@@ -808,19 +920,60 @@ class EZPodcastLearn:
                         "multiline": True,
                         "default": SEED_SOURCES,
                         "dynamicPrompts": False,
+                        "tooltip": "Paste your notes, HTTPS links, and "
+                        "captioned video URLs; the node dedupes them into the "
+                        "digest the script is written from.",
                     },
                 ),
-                "format": (list(FORMATS), {"default": DEFAULT_FORMAT}),
-                "duration": (list(DURATIONS), {"default": DEFAULT_DURATION}),
+                "format": (
+                    list(FORMATS),
+                    {
+                        "default": DEFAULT_FORMAT,
+                        "tooltip": "Shape of the episode, such as explainer or "
+                        "quiz; it decides how the digest is spoken.",
+                    },
+                ),
+                "duration": (
+                    list(DURATIONS),
+                    {
+                        "default": DEFAULT_DURATION,
+                        "tooltip": "Target spoken length in minutes; the script "
+                        "is written to fit, so pick what you can listen to.",
+                    },
+                ),
                 "fetch_links": (
                     "BOOLEAN",
-                    {"default": True, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "Turn off to stay offline: your paste alone "
+                        "becomes the digest and no page or caption is fetched.",
+                    },
                 ),
                 "enhance": (
                     "BOOLEAN",
-                    {"default": True, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "Turn off to skip the GGUF writer; the "
+                        "digest is your sources concatenated and every line "
+                        "becomes a Speaker A turn.",
+                    },
                 ),
-                "catalog": ("STRING", {"default": "", "multiline": False}),
+                "catalog": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Leave empty for the podcast_learn recipes, "
+                        "or name a catalog stem such as podcast_radio to read "
+                        "that file from "
+                        "custom_nodes/ez_prompt_enhance/js/samples/, which "
+                        "ez_prompt_enhance/samples.py lists.",
+                    },
+                ),
             }
         }
 
