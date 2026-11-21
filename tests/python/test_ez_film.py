@@ -1068,3 +1068,116 @@ def test_accept_master_scripts_ffprobe(tmp_path: Path) -> None:
     assert accept_master(
         master, ffprobe="ffprobe", ffmpeg="ffmpeg", run=clean_run
     ) == []
+
+
+# --------------------------------------------------------------------------- #
+# Operator-facing widget surfaces
+# --------------------------------------------------------------------------- #
+
+FILM_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZUnloadModels": (),
+    "EZFilmConcat": (
+        "film",
+        "cap_seconds",
+        "xfade_cs",
+        "act",
+        "disclosure",
+    ),
+    "EZFilmDisclosure": ("text",),
+    "EZClipLastFrame": (),
+    "EZClipConcat": (
+        "prefix",
+        "cap_seconds",
+        "xfade_cs",
+        "disclosure",
+    ),
+}
+"""Every knob the five registered classes expose, in INPUT_TYPES order.
+
+Pinned so a widget dropped from ``INPUT_TYPES`` cannot pass the tooltip
+sweep by not existing.
+"""
+
+FILM_SOCKETS: dict[str, tuple[str, ...]] = {
+    "EZUnloadModels": ("image",),
+    "EZFilmConcat": (
+        *(f"shot_{index:02d}" for index in range(1, SHOT_COUNT + 1)),
+    ),
+    "EZFilmDisclosure": (),
+    "EZClipLastFrame": ("image",),
+    "EZClipConcat": (
+        "clip_01",
+        *(f"clip_{index:02d}" for index in range(2, CLIP_COUNT_MAX + 1)),
+    ),
+}
+"""Connection-only sockets: the graphs wire these names, so they stay bare
+tuples and owe no tooltip (no options dict exists to carry one).
+"""
+
+FILM_NODE_CLASSES = (
+    EZUnloadModels,
+    EZFilmConcat,
+    EZFilmDisclosure,
+    EZClipLastFrame,
+    EZClipConcat,
+)
+"""The five classes ``NODE_CLASS_MAPPINGS`` registers, in pack order."""
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every knob says what to put there and what happens."""
+    assert set(FILM_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    assert set(FILM_SOCKETS) == set(NODE_CLASS_MAPPINGS)
+    swept: list[str] = []
+    for cls in FILM_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        sockets = FILM_SOCKETS[cls.__name__]
+        widgets: list[str] = []
+        wired: list[str] = []
+        for section in ("required", "optional"):
+            for name, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{name}"
+                assert isinstance(field, tuple), where
+                if name in sockets:
+                    assert field == (field[0],), f"{where} socket is not bare"
+                    wired.append(name)
+                    continue
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip == tooltip.strip(), f"{where} tooltip is padded"
+                assert tooltip.endswith("."), f"{where} tooltip has no period"
+                widgets.append(name)
+        assert tuple(widgets) == FILM_WIDGETS[cls.__name__], cls.__name__
+        assert tuple(wired) == sockets, cls.__name__
+        swept.extend(widgets)
+    assert swept, "the tooltip sweep saw no widgets at all"
+    pinned = sum(len(names) for names in FILM_WIDGETS.values())
+    assert len(swept) == pinned, "the sweep did not cover every widget"
+
+
+def test_sockets_stay_bare_tuples() -> None:
+    """Connection-only inputs keep the bare form the shipped graphs wire."""
+    assert EZUnloadModels.INPUT_TYPES()["required"]["image"] == ("IMAGE",)
+    assert EZClipLastFrame.INPUT_TYPES()["required"]["image"] == ("IMAGE",)
+    film = EZFilmConcat.INPUT_TYPES()
+    assert film["required"]["shot_01"] == ("VHS_FILENAMES",)
+    assert film["required"][f"shot_{SHOT_COUNT:02d}"] == ("VHS_FILENAMES",)
+    clip = EZClipConcat.INPUT_TYPES()
+    assert clip["required"]["clip_01"] == ("VHS_FILENAMES",)
+    assert clip["optional"][f"clip_{CLIP_COUNT_MAX:02d}"] == ("VHS_FILENAMES",)
+
+
+def test_film_widget_tooltips_carry_their_units_and_the_catalog_verb() -> None:
+    """The stitch knobs name seconds, and the title knob names its catalog."""
+    film = EZFilmConcat.INPUT_TYPES()["required"]
+    assert "seconds" in film["cap_seconds"][1]["tooltip"]
+    assert "centiseconds" in film["xfade_cs"][1]["tooltip"]
+    assert "custom_nodes/ez_film/catalog.py" in film["film"][1]["tooltip"]
+    assert "ez_film.catalog ids" in film["film"][1]["tooltip"]
+    clip = EZClipConcat.INPUT_TYPES()["required"]
+    assert "seconds" in clip["cap_seconds"][1]["tooltip"]
+    assert "ez_clip_chain" in clip["prefix"][1]["tooltip"]

@@ -101,7 +101,17 @@ class EZFilmConcat:
             Film, cap, xfade, act, 18 VHS shots, and optional disclosure.
         """
         required: dict[str, Any] = {
-            "film": (list(FILM_CHOICES), {"default": "go-see"}),
+            "film": (
+                list(FILM_CHOICES),
+                {
+                    "default": "go-see",
+                    "tooltip": "Pick the shipped title these shots belong "
+                    "to; it names the master file, so go-see writes "
+                    "ez_gosee_90s.mp4. The catalog is "
+                    "custom_nodes/ez_film/catalog.py and "
+                    "python3 -m ez_film.catalog ids prints every id.",
+                },
+            ),
             "cap_seconds": (
                 "FLOAT",
                 {
@@ -109,6 +119,10 @@ class EZFilmConcat:
                     "min": 1.0,
                     "max": DEFAULT_CAP_SECONDS,
                     "step": 0.05,
+                    "tooltip": "Runtime the master must land on in seconds: "
+                    "ffmpeg pads or trims to it and the Queue fails if the "
+                    "file lands more than 0.10 s off. Leave 90, which is a "
+                    "whole one-click film or one act.",
                 },
             ),
             "xfade_cs": (
@@ -118,6 +132,10 @@ class EZFilmConcat:
                     "min": 0,
                     "max": 50,
                     "step": 1,
+                    "tooltip": "Audio crossfade at each join in "
+                    "centiseconds, so 10 is 0.10 s; picture stays a hard cut "
+                    "and the runtime does not shrink. Leave 0 unless you "
+                    "want the audio to bleed across a join.",
                 },
             ),
             "act": (
@@ -127,6 +145,9 @@ class EZFilmConcat:
                     "min": 0,
                     "max": 5,
                     "step": 1,
+                    "tooltip": "0 stitches the whole film; 1-5 stitch one "
+                    "90s act instead and write ez_<slug>_actN_90s.mp4 for a "
+                    "festival short. Leave 0 for a 90s one-click title.",
                 },
             ),
         }
@@ -135,7 +156,17 @@ class EZFilmConcat:
         return {
             "required": required,
             "optional": {
-                "disclosure": ("STRING", {"forceInput": True, "default": ""}),
+                "disclosure": (
+                    "STRING",
+                    {
+                        "forceInput": True,
+                        "default": "",
+                        "tooltip": "Wire the text out of the LTX AI-media "
+                        "disclosure node; it writes the master's "
+                        ".disclosure.txt sidecar beside the MP4. Leave it "
+                        "unwired for no sidecar.",
+                    },
+                ),
             },
         }
 
@@ -230,7 +261,17 @@ class EZFilmDisclosure:
         """
         return {
             "required": {
-                "text": ("STRING", {"default": "", "multiline": True}),
+                "text": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": True,
+                        "tooltip": "End-card wording you want under the "
+                        "AI-media notice; keep it plain text because the "
+                        "sidecar it lands in is a .txt file. Leave it empty "
+                        "for the notice on its own.",
+                    },
+                ),
             }
         }
 
@@ -325,7 +366,16 @@ class EZClipConcat:
             Prefix, cap, xfade, required ``clip_01``, optional ``clip_02``...24.
         """
         required: dict[str, Any] = {
-            "prefix": ("STRING", {"default": CLIP_PREFIX_DEFAULT}),
+            "prefix": (
+                "STRING",
+                {
+                    "default": CLIP_PREFIX_DEFAULT,
+                    "tooltip": "Filename stem for the chain: it writes "
+                    "<prefix>.mp4 into your Comfy output folder beside the "
+                    "film masters. Leave ez_clip_chain, or name the beat you "
+                    "are saving.",
+                },
+            ),
             "cap_seconds": (
                 "FLOAT",
                 {
@@ -333,16 +383,36 @@ class EZClipConcat:
                     "min": 1.0,
                     "max": CLIP_CAP_MAX_S,
                     "step": 0.05,
+                    "tooltip": "Ceiling for the whole chain in seconds: the "
+                    "master is the sum of its stems and a chain that runs "
+                    "past this fails the Queue instead of being trimmed. "
+                    "600 covers a two-minute beat; 1800 is the most here.",
                 },
             ),
             "xfade_cs": (
                 "INT",
-                {"default": 0, "min": 0, "max": 50, "step": 1},
+                {
+                    "default": 0,
+                    "min": 0,
+                    "max": 50,
+                    "step": 1,
+                    "tooltip": "Leave 0: v1 cuts every join hard and any "
+                    "other value fails the Queue with a hard-cut message.",
+                },
             ),
             "clip_01": ("VHS_FILENAMES",),
         }
         optional: dict[str, Any] = {
-            "disclosure": ("STRING", {"forceInput": True, "default": ""}),
+            "disclosure": (
+                "STRING",
+                {
+                    "forceInput": True,
+                    "default": "",
+                    "tooltip": "Wire the text out of the LTX AI-media "
+                    "disclosure node; it writes <prefix>.disclosure.txt "
+                    "beside the chain. Leave it unwired for no sidecar.",
+                },
+            ),
         }
         for index in range(2, CLIP_COUNT_MAX + 1):
             optional[f"clip_{index:02d}"] = ("VHS_FILENAMES",)
