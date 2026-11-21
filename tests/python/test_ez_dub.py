@@ -4035,3 +4035,248 @@ def test_chatterbox_local_only_does_not_call_hub(
         raise AssertionError("expected explode after context")
     except AssertionError as exc:
         assert "hub download must not run" in str(exc)
+
+
+# Every knob the three dub classes expose, pinned by name and in INPUT_TYPES
+# order, so a widget dropped from a spec, or quietly turned into a bare socket,
+# cannot pass the tooltip sweep by not existing.
+DUB_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZDubIngest": ("source", "have_rights", "job_slug", "source_url"),
+    "EZDubScript": (
+        "prompt",
+        "enhance",
+        "target_language",
+        "source_language",
+        "max_speakers",
+        "stage",
+        "job_id",
+    ),
+    "EZDubRender": (
+        "script",
+        "engine",
+        "keep_bed",
+        "spoken_disclosure",
+        "speed",
+        "cfg_weight",
+        "exaggeration",
+        "job_id",
+    ),
+}
+"""Widget names the dub specs must keep exposing, in INPUT_TYPES order."""
+
+# Connection-only sockets: this pack has none. Both ``job_id`` wires and the
+# ``script`` wire already carried an options dict (``forceInput`` plus
+# ``dynamicPrompts``), so each one owes a tooltip like any other knob.
+DUB_SOCKETS: dict[str, tuple[str, ...]] = {
+    "EZDubIngest": (),
+    "EZDubScript": (),
+    "EZDubRender": (),
+}
+"""Wires that must stay bare 1-tuples; empty here, and the sweep enforces it."""
+
+# Every tooltip that points the operator at a folder, a listing verb, or the
+# node that feeds a socket pins its exact wording, so a sentence that sends
+# them to the wrong place still fails.
+DUB_TOOLTIP_POINTERS: dict[str, tuple[str, ...]] = {
+    "EZDubIngest.source": (
+        "COMFY_OUTPUT_DIR/input",
+        "/inputs",
+        "dub-fetch run --url",
+    ),
+    "EZDubIngest.job_slug": (
+        "COMFY_OUTPUT_DIR/dubs",
+        "ls $COMFY_OUTPUT_DIR/dubs",
+        "episode",
+    ),
+    "EZDubIngest.source_url": ("http(s)", "Source file"),
+    "EZDubScript.job_id": ("dubs/<slug>/", "Dub ingest"),
+    "EZDubRender.script": ("Dub transcript",),
+    "EZDubRender.engine": (
+        "download-dub --tier clone",
+        "download-podcast --tier qwen3tts",
+    ),
+    "EZDubRender.job_id": ("dubs/<slug>/", "dubs/episode/", "Dub ingest"),
+}
+"""Folder, verb, or feeding node each tooltip must name, keyed by Class.widget."""
+
+DUB_OPTIONS_SHAPES: dict[str, dict[str, Any]] = {
+    "EZDubIngest.source": {"default": pipeline.SOURCE_NONE},
+    "EZDubIngest.have_rights": {"default": False},
+    "EZDubIngest.job_slug": {"default": "episode", "dynamicPrompts": False},
+    "EZDubIngest.source_url": {
+        "default": "",
+        "multiline": False,
+        "dynamicPrompts": False,
+    },
+    "EZDubScript.prompt": {
+        "multiline": True,
+        "default": SEED_SCRIPT,
+        "dynamicPrompts": False,
+    },
+    "EZDubScript.enhance": {"default": True, "label_on": "On", "label_off": "Off"},
+    "EZDubScript.target_language": {"default": "es"},
+    "EZDubScript.source_language": {"default": "auto"},
+    "EZDubScript.max_speakers": {"default": 0, "min": 0, "max": 12, "step": 1},
+    "EZDubScript.stage": {"default": pipeline.STAGE_ALL},
+    "EZDubScript.job_id": {"forceInput": True, "dynamicPrompts": False},
+    "EZDubRender.script": {
+        "multiline": True,
+        "forceInput": True,
+        "dynamicPrompts": False,
+    },
+    "EZDubRender.engine": {"default": ENGINE_CHATTERBOX},
+    "EZDubRender.keep_bed": {"default": True},
+    "EZDubRender.spoken_disclosure": {"default": False},
+    "EZDubRender.speed": {"default": 1.0, "min": 0.5, "max": 1.5, "step": 0.05},
+    "EZDubRender.cfg_weight": {
+        "default": -1.0,
+        "min": -1.0,
+        "max": 1.0,
+        "step": 0.05,
+    },
+    "EZDubRender.exaggeration": {
+        "default": 0.5,
+        "min": 0.25,
+        "max": 2.0,
+        "step": 0.05,
+    },
+    "EZDubRender.job_id": {"forceInput": True, "dynamicPrompts": False},
+}
+"""Every dub options dict minus its tooltip: this change may only add prose."""
+
+DUB_NODE_CLASSES = (EZDubIngest, EZDubScript, EZDubRender)
+"""The three classes the dub pack registers, in canvas-menu order."""
+
+
+def _dub_field(cls: Any, widget: str) -> tuple[Any, ...]:
+    """Return one dub widget's legacy tuple spec.
+
+    Args:
+        cls: The registered node class.
+        widget: Widget name, looked up in ``required`` then ``optional``.
+
+    Returns:
+        The ``(type, options)`` tuple the spec carries.
+    """
+    spec = cls.INPUT_TYPES()
+    for section in ("required", "optional"):
+        if widget in spec.get(section, {}):
+            field = spec[section][widget]
+            assert isinstance(field, tuple), f"{cls.__name__}.{widget}"
+            return field
+    raise AssertionError(f"{cls.__name__}.{widget} is not in INPUT_TYPES")
+
+
+def _dub_tooltip(cls: Any, widget: str) -> str:
+    """Return the operator tooltip one dub widget carries.
+
+    Args:
+        cls: The registered node class.
+        widget: Widget name, looked up in ``required`` then ``optional``.
+
+    Returns:
+        The tooltip string its options dict carries.
+    """
+    field = _dub_field(cls, widget)
+    assert len(field) == 2, f"{cls.__name__}.{widget} has no options dict"
+    tooltip = field[1]["tooltip"]
+    assert isinstance(tooltip, str), f"{cls.__name__}.{widget} tooltip is not str"
+    return tooltip
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every dub knob says what to type, in what unit, and where it lives."""
+    assert set(DUB_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    seen: set[str] = set()
+    for cls in DUB_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        sockets = DUB_SOCKETS[cls.__name__]
+        widgets: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                if widget in sockets:
+                    assert field == (field[0],), f"{where} socket is not bare"
+                    continue
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip == tooltip.strip(), f"{where} tooltip is padded"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip has no period"
+                widgets.append(widget)
+                seen.add(f"{cls.__name__}.{widget}")
+        assert tuple(widgets) == DUB_WIDGETS[cls.__name__], cls.__name__
+        names = list(spec.get("required", {})) + list(spec.get("optional", {}))
+        assert tuple(names) == DUB_WIDGETS[cls.__name__] + sockets, cls.__name__
+    assert seen, "the tooltip sweep saw no widget"
+    assert seen == {
+        f"{name}.{widget}"
+        for name, widgets in DUB_WIDGETS.items()
+        for widget in widgets
+    }
+
+
+def test_dub_widget_and_socket_counts_are_pinned() -> None:
+    """A spec that quietly lost a widget or gained a socket fails here."""
+    assert sum(len(widgets) for widgets in DUB_WIDGETS.values()) == 19
+    assert sum(len(sockets) for sockets in DUB_SOCKETS.values()) == 0
+    assert set(DUB_OPTIONS_SHAPES) == {
+        f"{name}.{widget}"
+        for name, widgets in DUB_WIDGETS.items()
+        for widget in widgets
+    }
+
+
+def test_widget_options_keep_their_contract() -> None:
+    """Strip the prose and every options dict is byte-for-byte the old one."""
+    for where, expected in DUB_OPTIONS_SHAPES.items():
+        cls_name, widget = where.split(".")
+        cls = next(c for c in DUB_NODE_CLASSES if c.__name__ == cls_name)
+        options = dict(_dub_field(cls, widget)[1])
+        options.pop("tooltip", None)
+        assert options == expected, where
+
+
+def test_combo_option_lists_keep_their_order() -> None:
+    """The five menus still offer the same values in the same order."""
+    assert EZDubIngest.INPUT_TYPES()["required"]["source"][0] == (
+        pipeline.source_combo_options()
+    )
+    script = EZDubScript.INPUT_TYPES()["required"]
+    assert script["target_language"][0] == list(pipeline.TARGET_LANG_WIDGET)
+    assert script["source_language"][0] == list(pipeline.SOURCE_LANG_WIDGET)
+    assert script["stage"][0] == list(pipeline.STAGES)
+    assert EZDubRender.INPUT_TYPES()["required"]["engine"][0] == list(
+        pipeline.ENGINES
+    )
+
+
+def test_tooltips_name_the_right_folder_and_listing_verb() -> None:
+    """A typed value says which folder holds it and which verb lists it."""
+    assert set(DUB_TOOLTIP_POINTERS) <= set(DUB_OPTIONS_SHAPES)
+    for where, needles in DUB_TOOLTIP_POINTERS.items():
+        cls_name, widget = where.split(".")
+        cls = next(c for c in DUB_NODE_CLASSES if c.__name__ == cls_name)
+        tooltip = _dub_tooltip(cls, widget)
+        for needle in needles:
+            assert needle in tooltip, f"{where} tooltip does not name {needle!r}"
+
+
+def test_dub_tooltips_carry_their_units_and_defaults() -> None:
+    """Turn times read in seconds and the clone knobs name their own numbers."""
+    assert "seconds" in _dub_tooltip(EZDubScript, "prompt")
+    assert "whole people" in _dub_tooltip(EZDubScript, "max_speakers")
+    assert "caps at 8" in _dub_tooltip(EZDubScript, "max_speakers")
+    assert "ISO" in _dub_tooltip(EZDubScript, "target_language")
+    assert "analyze" in _dub_tooltip(EZDubScript, "stage")
+    speed = _dub_tooltip(EZDubRender, "speed")
+    assert "not a length in seconds" in speed
+    assert "1.25x" in speed
+    cfg = _dub_tooltip(EZDubRender, "cfg_weight")
+    assert "0.3" in cfg and "0.5" in cfg
+    exag = _dub_tooltip(EZDubRender, "exaggeration")
+    assert "0.25" in exag and "2.0" in exag

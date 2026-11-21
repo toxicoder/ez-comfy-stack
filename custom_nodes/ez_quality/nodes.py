@@ -26,7 +26,17 @@ class EZQuality:
         """
         return {
             "required": {
-                "quality": (list(QUALITY_CHOICES), {"default": QUALITY_DEFAULT}),
+                "quality": (
+                    list(QUALITY_CHOICES),
+                    {
+                        "default": QUALITY_DEFAULT,
+                        "tooltip": "Pick the detail rung: draft is the quick "
+                        "look, standard writes nothing so the graph keeps what "
+                        "it was authored with, and final is the best this "
+                        "App's own stack can do. A rung is not the download "
+                        "tier.",
+                    },
+                ),
             }
         }
 
@@ -90,6 +100,11 @@ class EZModelCheck:
                         "default": STATUS_DEFAULT,
                         "multiline": True,
                         "dynamicPrompts": False,
+                        "tooltip": "Leave this text as shipped: the Check "
+                        "models button writes it after scanning the disk for "
+                        "occupancy and Quality weights, and Queue never runs "
+                        "this node. For a file it calls missing, run "
+                        "bazelisk run //:manage -- download-models.",
                     },
                 ),
             }

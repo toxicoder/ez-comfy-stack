@@ -20,7 +20,13 @@ if TYPE_CHECKING:
 # Default as_app BOOLEAN widget and seed brief.
 _BOOL = (
     "BOOLEAN",
-    {"default": True, "label_on": "On", "label_off": "Off"},
+    {
+        "default": True,
+        "label_on": "On",
+        "label_off": "Off",
+        "tooltip": "On writes <slug>.app.json so the Apps sidebar lists the "
+        "clone; off writes a plain .json workflow you open on the canvas.",
+    },
 )
 
 _DEFAULT_BRIEF = (
@@ -84,23 +90,75 @@ class EZAppForge:
             templates = [AUTO, *templates]
         return {
             "required": {
-                "sample": (sample_combo_labels("app_forge"), {"default": CUSTOM}),
+                "sample": (
+                    sample_combo_labels("app_forge"),
+                    {
+                        "default": CUSTOM,
+                        "tooltip": "Pick a shipped brief such as Mug IG square "
+                        "to fill the Brief box, or custom to write your own. "
+                        "The labels live in app_forge.json under "
+                        "custom_nodes/ez_prompt_enhance/js/samples/, which "
+                        "ez_prompt_enhance/samples.py lists.",
+                    },
+                ),
                 "prompt": (
                     "STRING",
                     {
                         "multiline": True,
                         "default": _DEFAULT_BRIEF,
                         "dynamicPrompts": False,
+                        "tooltip": "Say in plain words what the new App should "
+                        "make, for example 1:1 IG still of a chipped cobalt "
+                        "mug on pale stone. Template auto reads this brief to "
+                        "pick the lab graph and its widget values.",
                     },
                 ),
-                "template": (templates, {"default": AUTO}),
-                "slug": ("STRING", {"default": "mug-ig", "multiline": False}),
+                "template": (
+                    templates,
+                    {
+                        "default": AUTO,
+                        "tooltip": "Leave auto to clone the closest shipped "
+                        "graph, or pin a lab id such as "
+                        "photos/instagram-square. The combo lists every id "
+                        "under workflows/_lab/, which the search_templates "
+                        "tool also lists.",
+                    },
+                ),
+                "slug": (
+                    "STRING",
+                    {
+                        "default": "mug-ig",
+                        "multiline": False,
+                        "tooltip": "File stem for the clone, so mug-ig writes "
+                        "_user/mug-ig.app.json under "
+                        "COMFY_OUTPUT_DIR/comfy-user/default/workflows. Blank "
+                        "lets the planner name it from the brief.",
+                    },
+                ),
                 "as_app": _BOOL,
                 "overwrite": (
                     "BOOLEAN",
-                    {"default": False, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": False,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "On replaces an existing _user graph of the "
+                        "same slug; off refuses the Queue and leaves that file "
+                        "alone.",
+                    },
                 ),
-                "catalog": ("STRING", {"default": "", "multiline": False}),
+                "catalog": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Leave empty for the app_forge catalog, or "
+                        "name another catalog stem such as forge_lazy to read "
+                        "that file from "
+                        "custom_nodes/ez_prompt_enhance/js/samples/, which "
+                        "ez_prompt_enhance/samples.py lists.",
+                    },
+                ),
             }
         }
 

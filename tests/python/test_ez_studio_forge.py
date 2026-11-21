@@ -580,3 +580,189 @@ def test_remaining_branches(
     monkeypatch.setattr(forge, "describe_template", lambda _s: {"ok": False})
     with pytest.raises(ForgeError, match="unknown"):
         clone_template("ghost")
+
+
+# Every knob the one registered class exposes, pinned by name and in
+# INPUT_TYPES order, so a widget dropped from the spec, or quietly turned into
+# a bare socket, cannot pass the tooltip sweep by not existing.
+FORGE_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZAppForge": (
+        "sample",
+        "prompt",
+        "template",
+        "slug",
+        "as_app",
+        "overwrite",
+        "catalog",
+    ),
+}
+"""Widget names the App Forge spec must keep exposing, in INPUT_TYPES order."""
+
+# Connection-only sockets: App Forge has none. Every entry is a knob the
+# operator types or clicks, so each one owes a tooltip.
+FORGE_SOCKETS: dict[str, tuple[str, ...]] = {"EZAppForge": ()}
+"""Wires that must stay bare 1-tuples; empty here, and the sweep enforces it."""
+
+# Each tooltip that points at a folder, a listing tool, or a worked example
+# pins its exact wording, so a sentence that sends the operator somewhere else
+# still fails.
+FORGE_TOOLTIP_POINTERS: dict[str, tuple[str, ...]] = {
+    "EZAppForge.sample": (
+        "Mug IG square",
+        "app_forge.json",
+        "custom_nodes/ez_prompt_enhance/js/samples/",
+        "ez_prompt_enhance/samples.py lists",
+    ),
+    "EZAppForge.prompt": ("1:1 IG still of a chipped cobalt mug",),
+    "EZAppForge.template": (
+        "photos/instagram-square",
+        "workflows/_lab/",
+        "search_templates",
+    ),
+    "EZAppForge.slug": (
+        "mug-ig",
+        "_user/mug-ig.app.json",
+        "COMFY_OUTPUT_DIR/comfy-user/default/workflows",
+    ),
+    "EZAppForge.as_app": (".app.json", "Apps sidebar"),
+    "EZAppForge.overwrite": ("_user",),
+    "EZAppForge.catalog": (
+        "app_forge",
+        "forge_lazy",
+        "custom_nodes/ez_prompt_enhance/js/samples/",
+        "ez_prompt_enhance/samples.py lists",
+    ),
+}
+"""Folder, tool, or example each tooltip must name, keyed by Class.widget."""
+
+FORGE_OPTIONS_SHAPES: dict[str, dict[str, object]] = {
+    "EZAppForge.sample": {"default": forge_nodes.CUSTOM},
+    "EZAppForge.prompt": {
+        "multiline": True,
+        "default": forge_nodes._DEFAULT_BRIEF,
+        "dynamicPrompts": False,
+    },
+    "EZAppForge.template": {"default": forge_nodes.AUTO},
+    "EZAppForge.slug": {"default": "mug-ig", "multiline": False},
+    "EZAppForge.as_app": {"default": True, "label_on": "On", "label_off": "Off"},
+    "EZAppForge.overwrite": {
+        "default": False,
+        "label_on": "On",
+        "label_off": "Off",
+    },
+    "EZAppForge.catalog": {"default": "", "multiline": False},
+}
+"""The App Forge options dicts minus their tooltips: prose was all we added."""
+
+FORGE_NODE_CLASSES: tuple[type[EZAppForge], ...] = (EZAppForge,)
+"""Every class the App Forge pack registers."""
+
+
+def _forge_options(widget: str) -> dict[str, object]:
+    """Return one App Forge widget's options dict.
+
+    Args:
+        widget: Widget name, looked up in ``required`` then ``optional``.
+
+    Returns:
+        The options dict the legacy tuple spec carries.
+    """
+    spec = EZAppForge.INPUT_TYPES()
+    for section in ("required", "optional"):
+        if widget in spec.get(section, {}):
+            field = spec[section][widget]
+            assert isinstance(field, tuple), widget
+            assert len(field) == 2, f"{widget} has no options dict"
+            options = field[1]
+            assert isinstance(options, dict), widget
+            return options
+    raise AssertionError(f"EZAppForge.{widget} is not in INPUT_TYPES")
+
+
+def _forge_tooltip(widget: str) -> str:
+    """Return the operator tooltip one App Forge widget carries.
+
+    Args:
+        widget: Widget name, looked up in ``required`` then ``optional``.
+
+    Returns:
+        The tooltip string its options dict carries.
+    """
+    tooltip = _forge_options(widget)["tooltip"]
+    assert isinstance(tooltip, str), f"{widget} tooltip is not a str"
+    return tooltip
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every App Forge knob says what to type and where its values come from."""
+    assert set(FORGE_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    seen: set[str] = set()
+    for cls in FORGE_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        sockets = FORGE_SOCKETS[cls.__name__]
+        widgets: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                if widget in sockets:
+                    assert field == (field[0],), f"{where} socket is not bare"
+                    continue
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip == tooltip.strip(), f"{where} tooltip is padded"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip has no period"
+                widgets.append(widget)
+                seen.add(f"{cls.__name__}.{widget}")
+        assert tuple(widgets) == FORGE_WIDGETS[cls.__name__], cls.__name__
+        names = list(spec.get("required", {})) + list(spec.get("optional", {}))
+        assert tuple(names) == FORGE_WIDGETS[cls.__name__] + sockets, cls.__name__
+    assert seen, "the tooltip sweep saw no widget"
+    assert seen == {
+        f"{name}.{widget}"
+        for name, widgets in FORGE_WIDGETS.items()
+        for widget in widgets
+    }
+
+
+def test_forge_widget_and_socket_counts_are_pinned() -> None:
+    """A spec that quietly lost a widget or gained a socket fails here."""
+    assert sum(len(widgets) for widgets in FORGE_WIDGETS.values()) == 7
+    assert sum(len(sockets) for sockets in FORGE_SOCKETS.values()) == 0
+    assert set(FORGE_OPTIONS_SHAPES) == {
+        f"{name}.{widget}"
+        for name, widgets in FORGE_WIDGETS.items()
+        for widget in widgets
+    }
+
+
+def test_widget_options_keep_their_contract() -> None:
+    """Strip the prose and every options dict is the one the graph was cut on."""
+    for where, expected in FORGE_OPTIONS_SHAPES.items():
+        widget = where.split(".")[1]
+        options = dict(_forge_options(widget))
+        options.pop("tooltip", None)
+        assert options == expected, where
+
+
+def test_combo_option_lists_keep_their_order() -> None:
+    """The sample and template menus still offer the same values in order."""
+    required = EZAppForge.INPUT_TYPES()["required"]
+    assert required["sample"][0] == forge_nodes.sample_combo_labels("app_forge")
+    assert required["sample"][0][-1] == forge_nodes.CUSTOM
+    assert required["template"][0] == forge_nodes.template_combo_labels()
+    assert required["template"][0][0] == forge_nodes.AUTO
+
+
+def test_tooltips_name_the_right_folder_and_listing_tool() -> None:
+    """A typed value says which folder holds it and which tool lists it."""
+    assert set(FORGE_TOOLTIP_POINTERS) <= set(FORGE_OPTIONS_SHAPES)
+    for where, needles in FORGE_TOOLTIP_POINTERS.items():
+        widget = where.split(".")[1]
+        tooltip = _forge_tooltip(widget)
+        for needle in needles:
+            assert needle in tooltip, f"{where} tooltip does not name {needle!r}"
