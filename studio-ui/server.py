@@ -289,7 +289,7 @@ def _light_chip(state: str | None, label: str, hint: str) -> str:
         ``<span>`` markup with the class, label, and tooltip escaped.
     """
     return '<span class="{state}" title="{hint}">{label}</span>'.format(
-        state=html.escape(state or "off", quote=True),
+        state=html.escape(str(state or "off"), quote=True),
         hint=html.escape(hint, quote=True),
         label=html.escape(label, quote=True),
     )
@@ -729,11 +729,9 @@ def _page() -> bytes:
                 shot_link = report_link(
                     "bug", SURFACE_BOARD, _shot_context(slug, sid, thumb)
                 )
-                classes = (
-                    {k: v for k, v in shot.items() if isinstance(v, str)}
-                    if isinstance(shot, dict)
-                    else {}
-                )
+                # A light class is a string; the screening keeps a row that
+                # stored a number or a list under this key out of the class.
+                classes = {k: v for k, v in shot.items() if isinstance(v, str)}
                 chips = " ".join(
                     _light_chip(classes.get(key), label, hint)
                     for key, (label, hint) in SHOT_LIGHT_WORDS.items()

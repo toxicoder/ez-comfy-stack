@@ -1135,6 +1135,32 @@ def test_page_gives_each_light_a_plain_label_and_a_tooltip(
     assert "mixed from separate dialogue, background, and effects stems." in page
 
 
+def test_page_reads_a_non_string_light_as_off(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    monkeypatch.setattr(
+        server,
+        "_rows",
+        lambda: [
+            {
+                "slug": "gosee",
+                "film": "go-see",
+                "ok": "0",
+                "total": "1",
+                "audio_policy": "world-only",
+                "shots": [{"id": "01", "clay": 3, "print": ["on"], "audio": None}],
+            }
+        ],
+    )
+    page = server._page().decode("utf-8")
+    assert '<span class="off" title="Greybox pass landed' in page
+    assert '<span class="off" title="The 5.00 s take is printed' in page
+    assert '<span class="off" title="This shot&#x27;s mix has landed' in page
+    assert 'class="3"' not in page
+
+
 def test_page_gives_thumbs_real_alt_text(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
