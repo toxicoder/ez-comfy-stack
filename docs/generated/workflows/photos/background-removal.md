@@ -234,7 +234,7 @@ Matte a photo so one character or object can be reused: painted onto a backdrop,
 | `image` | in | `IMAGE` | Photo to matte - the original, not a crop. |
 | `image` | out | `IMAGE` | Subject on the chosen backdrop, ready for LoadImage in a 3d App. |
 | `matte` | out | `IMAGE` | Grey alpha copy so SaveImage can write the matte. |
-| `mask` | out | `MASK` | Raw grown subject mask for anything that composites. |
+| `mask` | out | `MASK` | Raw grown subject mask for anything that composites. (B, H, W) with one frame - the rank a Comfy MASK means. |
 | `save_mask` | out | `MASK` | Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painte... |
 
 #### `backdrop`
@@ -290,7 +290,7 @@ Flip a MASK: out = 1.0 - mask. No widgets.
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `mask` | in | `MASK` | MASK to flip - 1 means keep. |
-| `MASK` | out | `MASK` | 1.0 - mask at the same HxW. |
+| `MASK` | out | `MASK` | 1.0 - mask at the same rank and the same HxW. It is arithmetic, so it never repairs a rank the input arrived with. |
 
 No widgets. Sockets only.
 
@@ -300,12 +300,12 @@ Attach a MASK as the alpha channel of an IMAGE, returning a 4-channel tensor. No
 
 !!! warning "Lab notes"
 
-    photos/background-removal, ahead of the EZImageUpscale rung so one Upscale pick scales RGB and alpha together. It computes alpha = 1.0 - mask, so feed it an InvertMask output, not the matte directly, and it bilinear-resizes the mask to the image's own size, so a matte can never arrive at the wrong HxW. Stock SaveImage has no mask input at the pinned tag - the (H, W, 4) tensor is what makes Pillow write RGBA.
+    photos/background-removal, ahead of the EZImageUpscale rung so one Upscale pick scales RGB and alpha together. It computes alpha = 1.0 - mask, so feed it an InvertMask output, not the matte directly, and it bilinear-resizes the mask to the image's own size, so a matte can never arrive at the wrong HxW. Stock SaveImage has no mask input at the pinned tag - the (H, W, 4) tensor is what makes Pillow write RGBA. At that same tag it opens with batch_size = max(len(image), len(alpha)) and repeats both inputs up to that batch, so an alpha without a frame dim inflates the batch and the file count: a (H, W) grid is read as H frames, the one cut tiles H times, and SaveImage writes a PNG per entry. Hand it a (B, H, W) MASK with one frame - which is what EZCutout's sockets are.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | RGB still that carries the alpha. |
-| `alpha` | in | `MASK` | Inverted matte (1 = transparent). Resized to image HxW by this node. |
+| `alpha` | in | `MASK` | Inverted matte (1 = transparent) as (B, H, W) with one frame. Resized to image HxW by this node. |
 | `IMAGE` | out | `IMAGE` | 4-channel tensor. SaveImage writes it as RGBA. |
 
 No widgets. Sockets only.
