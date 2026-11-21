@@ -44,6 +44,9 @@ from ez_image.formats import (  # noqa: E402
     splice_look,
 )
 from ez_image import cubic as cubic_mod  # noqa: E402
+from ez_image import cutout as cutout_mod  # noqa: E402
+from ez_image import modes as modes_mod  # noqa: E402
+from ez_image import person_mask as person_mask_mod  # noqa: E402
 from ez_image import refs as refs_mod  # noqa: E402
 from ez_image import video_formats as vfmt  # noqa: E402
 from ez_image.nodes import (  # noqa: E402
@@ -126,7 +129,9 @@ def test_pack_mappings_and_category() -> None:
     assert "EZImageMode" in ez_image.NODE_CLASS_MAPPINGS
     assert ez_image.WEB_DIRECTORY == "./js"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZSnapImage"] == "Snap image (div 16)"
-    assert NODE_DISPLAY_NAME_MAPPINGS["EZEmptyFlux2FromImage"] == "Empty Flux.2 from image"
+    assert (
+        NODE_DISPLAY_NAME_MAPPINGS["EZEmptyFlux2FromImage"] == "Empty Flux.2 from image"
+    )
     assert NODE_DISPLAY_NAME_MAPPINGS["EZMatchImageSize"] == "Match image size"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZImageFormat"] == "Format / platform"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZVideoFormat"] == "Format / platform (video)"
@@ -232,7 +237,9 @@ def test_resize_fails_without_comfy_or_torch(monkeypatch: pytest.MonkeyPatch) ->
         _resize_bhwc(_FakeImg(8, 8), 16, 16)
 
 
-def test_upscale_keeps_the_joined_alpha_channel(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_upscale_keeps_the_joined_alpha_channel(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """``photos/background-removal`` feeds the rung a 4-channel joined still.
 
     Truncating to three channels anywhere on this path would quietly throw the
@@ -349,7 +356,9 @@ def test_image_upscale_passthrough_and_2x(monkeypatch: pytest.MonkeyPatch) -> No
     assert EZImageUpscale.RETURN_NAMES == ("image", "upscale")
 
 
-def test_empty_flux2_from_image_hermetic_fallback(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_empty_flux2_from_image_hermetic_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux", None)
     monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux2", None)
     monkeypatch.setitem(sys.modules, "torch", None)
@@ -384,7 +393,14 @@ def test_empty_flux2_from_image_comfy_kwargs_and_non_tuple(
         def execute(self, *args: object, **kwargs: object) -> dict:
             if args:
                 raise TypeError("positional")
-            return {"samples": ("kw", kwargs["width"], kwargs["height"], kwargs["batch_size"])}
+            return {
+                "samples": (
+                    "kw",
+                    kwargs["width"],
+                    kwargs["height"],
+                    kwargs["batch_size"],
+                )
+            }
 
     monkeypatch.setitem(
         sys.modules,
@@ -825,9 +841,7 @@ def test_video_catalog_ids_grids_and_families() -> None:
 
 
 def test_ltx_custom_snaps_720_and_family_mismatch_falls_back() -> None:
-    custom = resolve_video_canvas(
-        FAMILY_LTX_LABEL, "Custom", width=1280, height=720
-    )
+    custom = resolve_video_canvas(FAMILY_LTX_LABEL, "Custom", width=1280, height=720)
     assert custom.format_id == CUSTOM_ID
     assert custom.width == 1280
     assert custom.height == 704
@@ -1007,8 +1021,11 @@ _PACK_REGISTRIES: tuple[tuple[str, dict[str, Any]], ...] = (
     ("ez_image.nodes", NODE_CLASS_MAPPINGS),
     ("ez_image.refs", refs_mod.NODE_CLASS_MAPPINGS),
     ("ez_image.cubic", cubic_mod.NODE_CLASS_MAPPINGS),
+    ("ez_image.cutout", cutout_mod.NODE_CLASS_MAPPINGS),
+    ("ez_image.modes", modes_mod.NODE_CLASS_MAPPINGS),
+    ("ez_image.person_mask", person_mask_mod.NODE_CLASS_MAPPINGS),
 )
-"""The three registries this lane ships; cutout, modes, and person_mask are others."""
+"""Every registry the pack ships, so a sweep over these misses no node."""
 
 _PACK_CLASSES: dict[str, str] = {
     "EZSnapImage": "ez_image.nodes",
@@ -1021,8 +1038,11 @@ _PACK_CLASSES: dict[str, str] = {
     "EZKleinRefCanvas": "ez_image.refs",
     "EZDescribeImage": "ez_image.refs",
     "EZCubicCondition": "ez_image.cubic",
+    "EZCutout": "ez_image.cutout",
+    "EZImageMode": "ez_image.modes",
+    "EZReinsertPeople": "ez_image.person_mask",
 }
-"""Every class the three files register, and the module that registers it."""
+"""Every class the pack registers, and the module that registers it."""
 
 _PACK_SECTIONS: dict[str, dict[str, list[str]]] = {
     "EZSnapImage": {"required": ["image"], "optional": []},
@@ -1057,6 +1077,18 @@ _PACK_SECTIONS: dict[str, dict[str, list[str]]] = {
         "required": ["conditioning", "latent", "image", "vae", "prompt"],
         "optional": [],
     },
+    "EZCutout": {
+        "required": ["image", "backdrop", "dilate", "feather"],
+        "optional": [],
+    },
+    "EZImageMode": {
+        "required": ["category", "mode", "iterate", "run_summary"],
+        "optional": ["context", "has_image"],
+    },
+    "EZReinsertPeople": {
+        "required": ["plate", "source", "prompt"],
+        "optional": [],
+    },
 }
 """Exact socket and widget keys per class, in the order a saved graph stores them."""
 
@@ -1078,6 +1110,9 @@ _PACK_WIDGETS: dict[str, list[str]] = {
     "EZKleinRefCanvas": ["has_image", "max_refs"],
     "EZDescribeImage": ["has_image"],
     "EZCubicCondition": [],
+    "EZCutout": ["backdrop", "dilate", "feather"],
+    "EZImageMode": ["category", "mode", "iterate", "run_summary", "context"],
+    "EZReinsertPeople": [],
 }
 """The knobs an operator edits per class; sockets and forced inputs are left out."""
 
