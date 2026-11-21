@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pytest
 
+from tui import catalog as k
 from tui import contract as c
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,6 +21,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 SAFETY_SH = ROOT / "scripts" / "lib" / "safety.sh"
 """The shell file that owns the real headroom floors."""
+
+CONSOLE_PAGE = ROOT / "docs" / "operate" / "studio-tui.mdx"
+"""The operator page that quotes the console's own field text back at them."""
 
 
 def _shell_constant(name: str) -> int:
@@ -482,3 +486,103 @@ def test_every_screen_id_is_unique_and_named() -> None:
     values = [member.value for member in c.ScreenId]
     assert len(values) == len(set(values))
     assert "confirm" in values and "palette" in values
+
+
+_PAGE_REFUSALS: tuple[tuple[str, str, dict[str, str], str], ...] = (
+    (
+        "lanes.icon_scaffold",
+        "scaffold",
+        {"scaffold": ""},
+        "Slug is required - the slug of the new app, lowercase words joined by "
+        "hyphens.",
+    ),
+    (
+        "models.download_music",
+        "tier",
+        {"tier": "Turbo"},
+        "Tier is not one of: turbo, xl, all (you typed Turbo) - which ACE-Step "
+        "pack to pull; turbo is the smaller one.",
+    ),
+    (
+        "stack.logs",
+        "tail",
+        {"tail": "abc"},
+        "Lines is not a number: you typed abc - how many log lines to print; "
+        "blank uses the default.",
+    ),
+    (
+        "stack.logs",
+        "tail",
+        {"tail": "9999999"},
+        "Lines is outside 1..100000: you typed 9999999 - how many log lines to "
+        "print; blank uses the default.",
+    ),
+)
+"""Every refusal the console page quotes, with the answer that raises it.
+
+Each row is ``action id, parameter name, the answers handed to build_argv, and
+the sentence the page prints``. The field label in the sentence is the catalog's
+``ParamSpec.label``, so a page that renames a field fails here.
+"""
+
+_REFUSAL_SHAPE = re.compile(
+    r"`([A-Z][^`]*? (?:"
+    r"is required"
+    r"|is not one of: [^`]*\(you typed [^`]*\)"
+    r"|is not a number: you typed [^`]*"
+    r"|is outside [0-9]+\.\.[0-9]+: you typed [^`]*"
+    r")(?: - [^`]*)?)`"
+)
+"""A backticked span the page offers as a refusal the console prints.
+
+Anchored to the grammar ``_refuse`` actually produces: a field label, one of the
+four predicates, and the guidance tail after a dash. Prose that merely contains
+the words is a table cell explaining a field, not a quote, and stays out.
+"""
+
+
+def _page_text() -> str:
+    """Read the operator console page with its line wrapping folded away.
+
+    Returns:
+        The page as one whitespace-normalised line, so a sentence the prose
+        wraps across two source lines still compares and still matches.
+    """
+    return " ".join(CONSOLE_PAGE.read_text(encoding="utf-8").split())
+
+
+def test_the_console_page_quotes_refusals_the_console_really_prints() -> None:
+    """A refusal the page shows is a promise the contract has to keep.
+
+    An operator reads these lines as what they will see when they mistype. A
+    quote the shipped catalog cannot raise is a documentation defect they would
+    file as a console bug, so every one is rebuilt from the catalog here and
+    compared word for word.
+    """
+    page = _page_text()
+    for action_id, param_name, answers, expected in _PAGE_REFUSALS:
+        action = k.action_by_id(action_id)
+        assert action is not None, f"{action_id} left the catalog"
+        assert any(p.name == param_name for p in action.params), (
+            f"{action_id}.{param_name} left the catalog"
+        )
+        assert expected in page, f"the page stopped quoting: {expected!r}"
+        with pytest.raises(ValueError) as caught:
+            c.build_argv(action, answers)
+        assert str(caught.value) == expected, action_id
+
+
+def test_the_console_page_invents_no_refusal_the_catalog_cannot_print() -> None:
+    """Every refusal-shaped sentence on the page is one this file backs.
+
+    The pairing test above only checks the quotes it knows about. This one
+    closes the other direction: a new backticked refusal added to the page
+    without a row in ``_PAGE_REFUSALS`` fails, which is how a field renamed in
+    the catalog and left stale in the prose gets caught.
+    """
+    quoted = set(_REFUSAL_SHAPE.findall(_page_text()))
+    authored = {expected for _, _, _, expected in _PAGE_REFUSALS}
+    assert quoted, "the page stopped quoting any refusal at all"
+    assert quoted <= authored, (
+        f"unbacked refusal quotes on the page: {sorted(quoted - authored)}"
+    )

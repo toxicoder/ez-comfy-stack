@@ -132,17 +132,22 @@ the verb that lists the valid ones.
 | The field shows | Meaning |
 | --- | --- |
 | `the shot number as the shot sheet lists it; a shipped film runs 01 through 18.` | The hint the catalog carries for this field |
-| `Turbo [Turbo, XL]` | A menu: the answer on file, then every value it accepts |
+| `turbo [turbo, xl, all]` | A menu: the answer on file, then every value it accepts |
 | `optional: leave blank to skip it` | Nothing is required here and no hint was ever authored |
 | `no hint for this field: file a bug so it gets one` | A required field the catalog shipped bare: a console defect worth reporting |
 
 A refused answer comes back in the same words the field showed, with what you
-typed inside the sentence: `Slug is required`, `Tier is not one of: Turbo, XL
-(you typed turbo)`, `Tail is not a number: you typed abc`, `Tail is outside
-1..100000: you typed 9999999`. Internal names, Python reprs, and flag spellings
-stay out of those lines, so a refusal needs nothing decoded after it.
-`tests/python/test_tui_contract.py` and `tests/python/test_tui_views.py` pin the
-hints and the refusals together.
+typed inside the sentence and the field's own guidance repeated after it:
+`Slug is required - the slug of the new app, lowercase words joined by
+hyphens.`, `Tier is not one of: turbo, xl, all (you typed Turbo) - which
+ACE-Step pack to pull; turbo is the smaller one.`, and `Lines is not a number:
+you typed abc - how many log lines to print; blank uses the default.` An answer
+that parses but lands outside the field's range says so the same way: `Lines is
+outside 1..100000: you typed 9999999 - how many log lines to print; blank uses
+the default.` Internal names, Python reprs, and flag spellings stay out of
+those lines, so a refusal needs nothing decoded after it.
+`tests/python/test_tui_contract.py` pins every sentence quoted on this page
+against the catalog the console actually ships.
 
 ## Risk tiers
 
