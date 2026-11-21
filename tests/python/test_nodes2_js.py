@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
+
+from _lab_paths import cached_lab_graph_rows
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -25,9 +28,9 @@ def test_preview_js_sets_widget_value_without_requiring_input_el() -> None:
 
 
 def test_sample_picker_js_is_nodes2_safe() -> None:
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "bindSamplePicker" in body
     assert "widget.value = text" in body
     assert "if (widget.inputEl)" in body
@@ -37,9 +40,9 @@ def test_sample_picker_js_is_nodes2_safe() -> None:
 
 def test_sample_picker_js_filters_to_graph_catalog() -> None:
     """Visible combo is this graph's catalog; Python union must not leak back."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "_ezSampleLabels" in body
     assert "Object.defineProperty" in body
     assert "refreshComboInNodes" in body
@@ -171,9 +174,9 @@ def test_quality_js_reports_hand_edits_and_keeps_the_rung_on_refusal() -> None:
 
 def test_sample_picker_js_freezes_to_custom_on_prompt_edits() -> None:
     """Typed prompt/tags/lyrics/sources select Sample custom before Queue."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "function freezeSampleToCustom" in body
     assert "function freezeSampleIfPromptDiverged" in body
     assert "function bindTextWatchers" in body
@@ -198,9 +201,9 @@ def test_queue_hooks_are_synchronous_widget_level_only() -> None:
 
 def test_sample_picker_queue_freeze_is_synchronous_with_applied_row() -> None:
     """The queue freeze must not await a fetch; it uses the row syncSample applied."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "function freezeSampleIfPromptDivergedSync" in body
     assert "sampleWidget.beforeQueued = function ()" in body
     assert "freezeSampleIfPromptDivergedSync(node)" in body
@@ -210,9 +213,9 @@ def test_sample_picker_queue_freeze_is_synchronous_with_applied_row() -> None:
 
 def test_prompt_enhance_queue_hook_resyncs_enhance_off_text() -> None:
     """Toggle Rewrite off without a callback and Queue still sends the source text."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "widget.beforeQueued = function ()" in body
     start = body.index("widget.beforeQueued = function ()")
     hook = body[start : body.index("\n}", start)]
@@ -227,9 +230,9 @@ def test_prompt_enhance_queue_hook_resyncs_enhance_off_text() -> None:
 
 def test_set_linked_clip_widget_positional_write_is_cliptextencode_only() -> None:
     """The ACE encoder restores widgets_values positionally; slot 0 is tags."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     start = body.index("function setLinkedClipWidget")
     linked = body[start : body.index("\nfunction ", start + 1)]
     assert 'widgetName === "text"' in linked
@@ -241,9 +244,9 @@ def test_set_linked_clip_widget_positional_write_is_cliptextencode_only() -> Non
 
 def test_sync_negative_family_writes_widgets_values_slot() -> None:
     """Sibling Rewrite-negative copies must reach the App Mode widget store."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "function setNodeWidgetValue" in body
     start = body.index("function syncNegativeFamily")
     family = body[start : body.index("\n}\n", start)]
@@ -428,9 +431,7 @@ def test_format_js_queue_sync_keeps_user_size_and_single_slots() -> None:
 
 def test_image_mode_queue_hook_stays_sync_and_skips_preview() -> None:
     """applyCategory moves to the category widget hook; preview never runs at Queue."""
-    body = (CUSTOM / "ez_image" / "js" / "ez_image_mode.js").read_text(
-        encoding="utf-8"
-    )
+    body = (CUSTOM / "ez_image" / "js" / "ez_image_mode.js").read_text(encoding="utf-8")
     assert "categoryWidget.beforeQueued = function ()" in body
     start = body.index("categoryWidget.beforeQueued = function ()")
     hook = body[start : body.index("\n    };", start)]
@@ -441,9 +442,7 @@ def test_image_mode_queue_hook_stays_sync_and_skips_preview() -> None:
 
 def test_image_mode_announces_a_missing_mode_catalog() -> None:
     """A Mode combo left empty by a dead modes.json says so, like preview does."""
-    body = (CUSTOM / "ez_image" / "js" / "ez_image_mode.js").read_text(
-        encoding="utf-8"
-    )
+    body = (CUSTOM / "ez_image" / "js" / "ez_image_mode.js").read_text(encoding="utf-8")
     assert "window.alert" not in body
     loader = _fn(body, "async function loadCatalog() {")
     assert loader.count("announceCatalog()") == 3
@@ -457,9 +456,9 @@ def test_image_mode_announces_a_missing_mode_catalog() -> None:
 
 def test_prompt_enhance_js_syncs_linked_clip_preview() -> None:
     """CLIPTextEncode Positive follows Prompt / Rewrite prompt and Queue."""
-    body = (
-        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js").read_text(
+        encoding="utf-8"
+    )
     assert "function linkedDestinations" in body
     assert "function setLinkedClipWidget" in body
     assert "function pushClipPreview" in body
@@ -501,7 +500,7 @@ def test_media_pick_js_is_nodes2_safe() -> None:
     assert "EZOptionalImage" in body
     assert "LoadImage" in body
     assert "LoadAudio" in body
-    assert "addWidget(\"button\"" in body
+    assert 'addWidget("button"' in body
     assert "node_widget" not in body
     assert "onResize" not in body
 
@@ -548,9 +547,9 @@ def test_media_pick_js_upload_disables_and_reports() -> None:
 
 def test_reference_input_js_is_nodes2_safe() -> None:
     """The reference card obeys the same widget-write and banned-token rules."""
-    body = (
-        CUSTOM / "ez_image" / "js" / "ez_reference_input.js"
-    ).read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_image" / "js" / "ez_reference_input.js").read_text(
+        encoding="utf-8"
+    )
     assert "function setWidgetValue(node, widget, value)" in body
     assert "node.widgets_values" in body
     assert "setDirtyCanvas" in body
@@ -562,7 +561,9 @@ def test_reference_input_js_is_nodes2_safe() -> None:
 
 
 def test_format_js_matches_input_ratio() -> None:
-    body = (CUSTOM / "ez_image" / "js" / "ez_image_format.js").read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_image" / "js" / "ez_image_format.js").read_text(
+        encoding="utf-8"
+    )
     assert "Match input" in body
     assert "size_mode" in body
     assert "applyMatchInput" in body
@@ -600,7 +601,9 @@ def test_format_js_announces_a_missing_catalog() -> None:
 
 
 def test_video_format_js_writes_ltx_duration() -> None:
-    body = (CUSTOM / "ez_image" / "js" / "ez_video_format.js").read_text(encoding="utf-8")
+    body = (CUSTOM / "ez_image" / "js" / "ez_video_format.js").read_text(
+        encoding="utf-8"
+    )
     assert "duration_s" in body
     assert "applyDuration" in body
     assert "ltxFramesForDuration" in body
@@ -688,7 +691,7 @@ def test_model_check_js_mounts_the_report_failure_button() -> None:
 def test_model_check_js_caches_the_last_verdict_for_the_report() -> None:
     """The report reads a snapshot the check cached; it never re-fetches."""
     check = _model_check_fn("runOnNode")
-    assert 'collectHints(app.graph)' in check
+    assert "collectHints(app.graph)" in check
     assert "node._ezLastHints = hints;" in check
     assert "node._ezLastCheck = payload;" in check
     assert "node._ezLastCheck = { ok: false" in check
@@ -781,7 +784,7 @@ def test_model_check_js_records_every_check_failure_into_the_ring() -> None:
     assert body.count("recordCheckError(") == 4
     assert "ts: new Date().toISOString()" in body
     posted = _model_check_fn("postCheckHints")
-    assert 'recordCheckError(empty.message, `POST ${CHECK_ENDPOINT}' in posted
+    assert "recordCheckError(empty.message, `POST ${CHECK_ENDPOINT}" in posted
     assert "fetch(apiUrl(CHECK_ENDPOINT)" in posted
     assert 'const CHECK_ENDPOINT = "/ez_quality/check";' in body
     assert body.count('"/ez_quality/check"') == 1
@@ -792,10 +795,58 @@ def test_model_check_js_ring_entries_stay_one_line_and_command_free() -> None:
     """format_report is multiline and ends with Run: commands; the ring is not."""
     line = _model_check_fn("oneLine")
     assert 'split("\\n", 1)[0]' in line
-    assert "replace(/\\s+/g, \" \")" in line
+    assert 'replace(/\\s+/g, " ")' in line
     assert "slice(0, limit - 3)" in line
     rec = _model_check_fn("recordCheckError")
     assert "oneLine(message, 160)" in rec
     assert "oneLine(detail ||" in rec
     assert "surface: REPORT_SURFACE" in rec
     assert "fb.recordError({" in rec
+
+
+APP_MODE_JS = CUSTOM / "ez_studio_app" / "js" / "ez_studio_app.js"
+"""The chrome that renders a lab graph as an App Mode panel."""
+
+_LABELLED_KEY = re.compile(r'^\s*"?([A-Za-z_][A-Za-z0-9_]*)"?\s*:\s*"', re.MULTILINE)
+"""One `name: "..."` entry of the LABELS table, quoted or bare."""
+
+
+def _generic_labels() -> set[str]:
+    """Return the widget names the App Mode chrome relabels on its own.
+
+    Returns:
+        Every key of the shipped LABELS table.
+    """
+    body = APP_MODE_JS.read_text(encoding="utf-8")
+    start = body.index("const LABELS = {")
+    block = body[start : body.index("\n};", start)]
+    return {match.group(1) for match in _LABELLED_KEY.finditer(block)}
+
+
+def test_app_mode_labels_cover_every_input_the_shipped_graphs_surface() -> None:
+    """No App Mode panel may hand the operator a raw widget name.
+
+    An entry in ``extra.linearData.inputs`` is one knob the panel shows. When
+    the graph stamps its own ``label`` the operator reads that; otherwise the
+    chrome falls back to its LABELS table, and a name missing from that table
+    reaches the screen as ``snake_case``.
+    """
+    labels = _generic_labels()
+    surfaced: set[str] = set()
+    raw: set[str] = set()
+    for _rel, _path, graph in cached_lab_graph_rows():
+        linear = (graph.get("extra") or {}).get("linearData") or {}
+        for entry in linear.get("inputs") or []:
+            if not isinstance(entry, list) or len(entry) < 2:
+                continue
+            name = entry[1]
+            if not isinstance(name, str):
+                continue
+            config = entry[2] if len(entry) > 2 and isinstance(entry[2], dict) else {}
+            if config.get("label"):
+                continue
+            surfaced.add(name)
+            if name not in labels:
+                raw.add(name)
+    assert not raw, f"App Mode shows a raw widget name: {sorted(raw)}"
+    assert surfaced, "no shipped graph surfaced an unlabelled input; sweep is vacuous"

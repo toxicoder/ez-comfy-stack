@@ -110,6 +110,8 @@ const LABELS = {
   tool_id: "Tool",
   use_references: "Use reference stills",
   xfade_cs: "Crossfade (centiseconds)",
+  upscale: "Upscale by",
+  backdrop: "Cutout backdrop",
   // Core ComfyUI and VHS widgets the graphs leave unlabelled.
   sampler_name: "Sampler",
   scheduler: "Scheduler",
