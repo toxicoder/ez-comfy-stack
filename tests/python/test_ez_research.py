@@ -389,7 +389,7 @@ def test_node_run_chat_and_research(monkeypatch: pytest.MonkeyPatch) -> None:
     research = node.run("hi", mode="research", web_search=True, subagents=2)
     assert research["result"] == ("research-reply",)
     types = node.INPUT_TYPES()
-    assert types["required"]["mode"][0] == ["chat", "research"]
+    assert types["required"]["mode"][0] == ["research", "chat"]
     assert pipeline.load_prompt("planner").startswith("You plan")
 
 
@@ -548,3 +548,49 @@ def test_complete_imports_sibling_after_path_ensure(
     text, reason = pipeline._complete("sys", "user")
     assert text == "ok"
     assert reason == ""
+
+
+# Every widget the one registered class exposes, in INPUT_TYPES order, so a
+# widget dropped from the map cannot pass the tooltip invariant by vanishing.
+PACK_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZCreativeResearch": (
+        "sample",
+        "prompt",
+        "mode",
+        "web_search",
+        "subagents",
+        "history",
+        "catalog",
+    ),
+}
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every knob on the research desk explains itself on hover."""
+    assert set(PACK_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    for cls in NODE_CLASS_MAPPINGS.values():
+        spec = cls.INPUT_TYPES()
+        seen: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                assert len(field) == 2, f"{where} is not a legacy tuple spec"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip is not a sentence"
+                seen.append(widget)
+        assert tuple(seen) == PACK_WIDGETS[cls.__name__], cls.__name__
+
+
+def test_research_mode_leads_with_the_value_it_defaults_to() -> None:
+    """The combo an operator opens must show the recommended mode first."""
+    combo, options = EZCreativeResearch.INPUT_TYPES()["required"]["mode"]
+    assert combo == ["research", "chat"]
+    assert options["default"] == "research"
+    assert combo[0] == options["default"]
+    assert "research" in options["tooltip"]
+    assert "chat" in options["tooltip"]

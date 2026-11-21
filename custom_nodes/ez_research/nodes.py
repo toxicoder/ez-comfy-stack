@@ -20,7 +20,13 @@ if TYPE_CHECKING:
 # Default web-search widget and seed research question.
 _WEB_SEARCH_BOOL = (
     "BOOLEAN",
-    {"default": True, "label_on": "On", "label_off": "Off"},
+    {
+        "default": True,
+        "label_on": "On",
+        "label_off": "Off",
+        "tooltip": "On lets the node pull public web pages for its sources; "
+        "off keeps the whole answer on-box.",
+    },
 )
 
 _DEFAULT_MESSAGE = (
@@ -101,23 +107,64 @@ class EZCreativeResearch:
         """
         return {
             "required": {
-                "sample": (sample_combo_labels("research_chat"), {"default": CUSTOM}),
+                "sample": (
+                    sample_combo_labels("research_chat"),
+                    {
+                        "default": CUSTOM,
+                        "tooltip": "Pick a lab research question to start "
+                        "from, or Custom to write your own.",
+                    },
+                ),
                 "prompt": (
                     "STRING",
                     {
                         "multiline": True,
                         "default": _DEFAULT_MESSAGE,
                         "dynamicPrompts": False,
+                        "tooltip": "Type your question here; this text is "
+                        "used when Sample is Custom.",
                     },
                 ),
-                "mode": (["chat", "research"], {"default": "research"}),
+                "mode": (
+                    ["research", "chat"],
+                    {
+                        "default": "research",
+                        "tooltip": "research plans several questions and "
+                        "writes a brief from the answers; chat is one quick "
+                        "reply.",
+                    },
+                ),
                 "web_search": _WEB_SEARCH_BOOL,
-                "subagents": ("INT", {"default": 2, "min": 1, "max": 3}),
+                "subagents": (
+                    "INT",
+                    {
+                        "default": 2,
+                        "min": 1,
+                        "max": 3,
+                        "tooltip": "How many search questions the planner may "
+                        "run, 1 to 3; more questions widen the brief.",
+                    },
+                ),
                 "history": (
                     "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "Paste the earlier turns here so the reply "
+                        "keeps the thread.",
+                    },
                 ),
-                "catalog": ("STRING", {"default": "", "multiline": False}),
+                "catalog": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Normally leave what the graph shipped: it "
+                        "names the sample file the Sample list reads, and "
+                        "blank falls back to this node's own catalog.",
+                    },
+                ),
             }
         }
 
