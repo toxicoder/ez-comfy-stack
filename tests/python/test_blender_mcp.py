@@ -147,7 +147,8 @@ def test_export_glb_refuses_models_dir(
     )
     result = mcp.call_tool("export_glb", {"path": "/mnt/models/evil.glb"})
     assert result["ok"] is False
-    assert "MODELS_DIR" in result["error"]
+    refusal = str(result["error"])
+    assert "MODELS_DIR" in refusal
 
 
 def test_occupancy_enter_requires_mode() -> None:
@@ -393,7 +394,8 @@ def test_bpy_tools_with_fake_blender(
     assert key["ok"] is True
     glb = mcp.call_tool("export_glb", {})
     assert glb["ok"] is True
-    assert "mcp-export.glb" in glb["path"]
+    written = str(glb["path"])
+    assert "mcp-export.glb" in written
 
 
 def test_utility_tools_fake_subprocess(
