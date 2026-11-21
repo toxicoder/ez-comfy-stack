@@ -27,7 +27,9 @@ if str(CUSTOM) not in sys.path:
 from ez_image import cutout  # noqa: E402
 
 
-def _image(height: int = 3, width: int = 4, channels: int = 3) -> list[list[list[float]]]:
+def _image(
+    height: int = 3, width: int = 4, channels: int = 3
+) -> list[list[list[float]]]:
     """Build a small HWC float image.
 
     Args:
@@ -109,7 +111,7 @@ def test_run_reports_status_and_four_results() -> None:
     assert out["ui"]["text"] == (cutout.REASON_NO_MODEL,)
     assert len(out["result"]) == 4
     assert out["result"][0] is image
-    assert out["result"][3] == [[1.0] * 4 for _ in range(3)]
+    assert out["result"][3] == [[[1.0] * 4 for _ in range(3)]]
 
 
 # ---------------------------------------------------------------------------
@@ -119,7 +121,14 @@ def test_run_reports_status_and_four_results() -> None:
 
 @pytest.mark.parametrize(
     ("value", "expected"),
-    [("0", True), ("off", True), ("FALSE", True), (" No ", True), ("1", False), ("", False)],
+    [
+        ("0", True),
+        ("off", True),
+        ("FALSE", True),
+        (" No ", True),
+        ("1", False),
+        ("", False),
+    ],
 )
 def test_cutout_disabled_reads_the_kill_switch(
     monkeypatch: pytest.MonkeyPatch, value: str, expected: bool
@@ -257,7 +266,9 @@ def test_ready_model_dir_returns_none_when_nothing_is_installed(
 # ---------------------------------------------------------------------------
 
 
-def test_download_writes_a_non_empty_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_download_writes_a_non_empty_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A successful fetch leaves a ready file."""
     monkeypatch.setattr(urllib.request, "urlopen", _fake_urlopen(b"payload"))
     dest = tmp_path / "sub" / "model.safetensors"
@@ -265,7 +276,9 @@ def test_download_writes_a_non_empty_file(tmp_path: Path, monkeypatch: pytest.Mo
     assert dest.read_bytes() == b"payload"
 
 
-def test_download_rejects_an_empty_body(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_download_rejects_an_empty_body(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A zero-length body is not a usable weight."""
     monkeypatch.setattr(urllib.request, "urlopen", _fake_urlopen(b""))
     dest = tmp_path / "model.safetensors"
@@ -392,7 +405,9 @@ def test_download_model_survives_an_unmakeable_root(
 # ---------------------------------------------------------------------------
 
 
-def test_cutout_tools_returns_none_without_torch(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_cutout_tools_returns_none_without_torch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """A host with no torch cannot run inference, and says so by returning None."""
     import builtins
 
@@ -502,7 +517,11 @@ def test_load_model_builds_the_remote_code_model(
     monkeypatch.setattr(cutout, "ready_model_dir", lambda: "/models/pack")
     model = cutout.load_model()
     assert isinstance(model, _Model)
-    assert built == {"path": "/models/pack", "kwargs": {"trust_remote_code": True}, "evalled": True}
+    assert built == {
+        "path": "/models/pack",
+        "kwargs": {"trust_remote_code": True},
+        "evalled": True,
+    }
     assert cutout._MODEL is model
     cutout.reset_cutout_model()
 
@@ -537,7 +556,9 @@ def test_preprocess_normalises_to_the_model_canvas() -> None:
     assert len(chw) == 3
     assert len(chw[0]) == 4 and len(chw[0][0]) == 4
     first = _image(height=2, width=2)[0][0][0]
-    assert chw[0][0][0] == pytest.approx((first - cutout.IMAGENET_MEAN[0]) / cutout.IMAGENET_STD[0])
+    assert chw[0][0][0] == pytest.approx(
+        (first - cutout.IMAGENET_MEAN[0]) / cutout.IMAGENET_STD[0]
+    )
 
 
 def test_preprocess_tolerates_an_empty_image() -> None:
@@ -650,13 +671,27 @@ class _FakeTorch:
 
 
 class _FakeTensor:
-    """Fake tensor with a ``to``."""
+    """Fake tensor with a ``to`` and a nesting-derived ``shape``."""
 
     def __init__(self, data: object, dtype: object, device: object = None) -> None:
         self.data = data
         self.dtype = dtype
         self.device = device
         self.on_device = False
+
+    @property
+    def shape(self) -> tuple[int, ...]:
+        """Report the nesting shape the way ``torch.Tensor.shape`` does.
+
+        Returns:
+            The length of each nested list level, outermost first.
+        """
+        dims: list[int] = []
+        node: object = self.data
+        while isinstance(node, list):
+            dims.append(len(node))
+            node = node[0] if node else None
+        return tuple(dims)
 
     def to(self, _device: object) -> "_FakeTensor":
         """Mark it as moved."""
@@ -667,13 +702,38 @@ class _FakeTensor:
 class _DeviceImage:
     """Stand-in for the Comfy IMAGE tensor a Queue hands the node."""
 
-    def __init__(self) -> None:
-        """Carry the device the matte should land on, plus readable pixels."""
+    def __init__(self, height: int = 3, width: int = 4) -> None:
+        """Carry the device the matte should land on, plus readable pixels.
+
+        Args:
+            height: Rows of the frame ``tolist`` hands back.
+            width: Columns of that frame.
+        """
         self.device = "cuda"
+        self._size = (height, width)
 
     def tolist(self) -> list[list[list[float]]]:
         """Return one small HWC image for the matte maths to read."""
-        return _image()
+        return _image(height=self._size[0], width=self._size[1])
+
+
+def _leading(value: object) -> int:
+    """Return the leading dim of a fake tensor or a nested pixel list.
+
+    Stock ``JoinImageWithAlpha`` asks ``len(image)`` and ``len(alpha)``, which
+    is ``shape[0]`` for a tensor, so the batch it decides on is reproducible
+    from the containers the node actually returns.
+
+    Args:
+        value: A ``_FakeTensor`` or a BHWC / HW nested list.
+
+    Returns:
+        ``shape[0]`` for a tensor, ``len`` for a list, 0 for anything else.
+    """
+    shape = getattr(value, "shape", None)
+    if isinstance(shape, tuple) and shape:
+        return int(shape[0])
+    return len(value) if isinstance(value, list) else 0
 
 
 class _FakeModel:
@@ -807,7 +867,9 @@ def test_blend_tolerates_a_short_mask_and_short_pixel() -> None:
 
 def test_matte_image_greys_the_alpha() -> None:
     """The matte is a 3-channel copy so stock SaveImage can write it."""
-    assert cutout._matte_image([[0.25, 0.75]]) == [[[0.25, 0.25, 0.25], [0.75, 0.75, 0.75]]]
+    assert cutout._matte_image([[0.25, 0.75]]) == [
+        [[0.25, 0.25, 0.25], [0.75, 0.75, 0.75]]
+    ]
 
 
 def test_save_mask_is_opaque_over_a_painted_backdrop() -> None:
@@ -836,7 +898,7 @@ def test_write_mask_moves_the_alpha_onto_the_image_device(
     monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
     out = cutout.write_mask([[0.0, 1.0]], _DeviceImage())
     assert isinstance(out, _FakeTensor)
-    assert out.data == [[0.0, 1.0]]
+    assert out.data == [[[0.0, 1.0]]]
     assert out.dtype == "float32"
 
 
@@ -846,7 +908,7 @@ def test_write_mask_keeps_lists_when_the_source_has_no_device(
     """The hermetic path hands plain lists and stays plain lists."""
     monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
     grid = [[0.0, 1.0]]
-    assert cutout.write_mask(grid, grid) is grid
+    assert cutout.write_mask(grid, grid) == [grid]
 
 
 def test_write_mask_keeps_lists_without_torch(
@@ -855,7 +917,7 @@ def test_write_mask_keeps_lists_without_torch(
     """A host without torch still gets the lists rather than a crash."""
     monkeypatch.setitem(sys.modules, "torch", None)
     grid = [[0.0, 1.0]]
-    assert cutout.write_mask(grid, _DeviceImage()) is grid
+    assert cutout.write_mask(grid, _DeviceImage()) == [grid]
 
 
 def test_run_hands_both_mask_sockets_to_the_stock_nodes_as_tensors(
@@ -870,6 +932,32 @@ def test_run_hands_both_mask_sockets_to_the_stock_nodes_as_tensors(
     out = cutout.EZCutout().run(_DeviceImage())
     for socket in out["result"][2:]:
         assert isinstance(socket, _FakeTensor)
+
+
+def test_run_masks_carry_a_batch_dim_for_the_stock_join(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Both MASK sockets leave as ``(1, H, W)``, the rank a Comfy MASK means.
+
+    Stock ``JoinImageWithAlpha`` at the pinned tag opens with
+    ``batch_size = max(len(image), len(alpha))`` and repeats *both* inputs to
+    that batch (``comfy_extras/nodes_compositing.py``, ComfyUI v0.45.0), and
+    stock ``SaveImage`` writes one PNG per entry of dim 0. A rank-2 ``(H, W)``
+    alpha is therefore read as a batch of ``H``: the lone cut still is tiled
+    ``H`` times and one Queue of ``photos/background-removal`` wrote one file
+    per photo row, over a thousand copies of the same subject.
+    """
+    monkeypatch.setitem(sys.modules, "torch", _FakeTorch())
+    monkeypatch.setattr(
+        cutout, "segment_subject", lambda _i: [[1.0] * 4 for _ in range(12)]
+    )
+    result = cutout.EZCutout().run(
+        _DeviceImage(height=12, width=4), dilate=0, feather=0
+    )["result"]
+    for socket in result[2:]:
+        assert isinstance(socket, _FakeTensor)
+        assert socket.shape == (1, 12, 4)
+    assert max(_leading(result[0]), _leading(result[3])) == 1
 
 
 def test_remove_background_passes_through_when_off(
@@ -911,7 +999,9 @@ def test_remove_background_rejects_a_vacuous_matte(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """An all-black detection is a failed run, not a fully erased photo."""
-    monkeypatch.setattr(cutout, "segment_subject", lambda _i: [[0.0] * 4 for _ in range(3)])
+    monkeypatch.setattr(
+        cutout, "segment_subject", lambda _i: [[0.0] * 4 for _ in range(3)]
+    )
     image = _image()
     cut, _matte, _mask, status = cutout.remove_background(image)
     assert cut is image
@@ -920,7 +1010,9 @@ def test_remove_background_rejects_a_vacuous_matte(
 
 def test_remove_background_cuts_the_subject(monkeypatch: pytest.MonkeyPatch) -> None:
     """A full matte over white keeps the subject and drops the room."""
-    monkeypatch.setattr(cutout, "segment_subject", lambda _i: [[1.0] * 4 for _ in range(3)])
+    monkeypatch.setattr(
+        cutout, "segment_subject", lambda _i: [[1.0] * 4 for _ in range(3)]
+    )
     image = _image()
     cut, matte, mask, status = cutout.remove_background(image, "white", 0, 0)
     assert status == cutout.REASON_CUT
@@ -947,7 +1039,9 @@ def test_remove_background_clamps_out_of_range_edges(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Ridiculous dilate/feather values are clamped, not exploded."""
-    monkeypatch.setattr(cutout, "segment_subject", lambda _i: [[1.0] * 4 for _ in range(3)])
+    monkeypatch.setattr(
+        cutout, "segment_subject", lambda _i: [[1.0] * 4 for _ in range(3)]
+    )
     _cut, _matte, mask, status = cutout.remove_background(_image(), "white", 999, -5)
     assert status == cutout.REASON_CUT
     assert len(mask) == 3
@@ -969,10 +1063,11 @@ def test_run_writes_a_real_matte_only_for_a_transparent_backdrop(
     monkeypatch.setattr(cutout, "segment_subject", lambda _i: [[1.0, 0.0], [0.0, 1.0]])
     image = _image(height=2, width=2)
     painted = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_GREEN)["result"]
-    assert painted[3] == [[1.0, 1.0], [1.0, 1.0]]
+    assert painted[3] == [[[1.0, 1.0], [1.0, 1.0]]]
     keyed = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_TRANSPARENT)["result"]
-    assert keyed[3] is keyed[2]
-    assert len(keyed[3]) == len(image) and len(keyed[3][0]) == len(image[0])
+    assert keyed[3] == keyed[2]
+    assert len(keyed[3]) == 1
+    assert len(keyed[3][0]) == len(image) and len(keyed[3][0][0]) == len(image[0])
 
 
 def test_run_keeps_save_mask_opaque_on_a_disabled_pass_through(
@@ -981,15 +1076,17 @@ def test_run_keeps_save_mask_opaque_on_a_disabled_pass_through(
     """With the kill switch off there is no matte to key on, even when asked."""
     monkeypatch.setenv("EZ_CUTOUT", "off")
     image = _image(height=2, width=3)
-    result = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_TRANSPARENT)["result"]
-    assert result[2] == [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+    result = cutout.EZCutout().run(image, backdrop=cutout.BACKDROP_TRANSPARENT)[
+        "result"
+    ]
+    assert result[2] == [[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]]
     assert result[3] == result[2]
 
 
 def test_run_on_an_empty_batch_leaves_both_masks_empty() -> None:
-    """No pixels means neither MASK socket gains a row."""
+    """No pixels still answers with the one-frame MASK shape, and nothing more."""
     result = cutout.EZCutout().run([])["result"]
-    assert result[2] == [] and result[3] == []
+    assert result[2] == [[]] and result[3] == [[]]
 
 
 def test_the_matte_never_claims_the_gpu_lane() -> None:

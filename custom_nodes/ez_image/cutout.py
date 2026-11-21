@@ -42,6 +42,9 @@ CATEGORY = "ez-comfy/image"
 MaskGrid: TypeAlias = "list[list[float]]"
 """A single HW alpha in 0..1."""
 
+MaskSocket: TypeAlias = "MaskTensor | list[MaskGrid]"
+"""One MASK socket: a ``(B, H, W)`` tensor, or the one-frame nested list of it."""
+
 Frame: TypeAlias = "list[list[list[float]]]"
 """One HWC float image in 0..1."""
 
@@ -88,7 +91,7 @@ class CutoutResult(TypedDict):
     """Comfy OUTPUT payload: status plus the four sockets."""
 
     ui: CutoutUiText
-    result: tuple[CutoutImage, CutoutImage, MaskGrid, MaskGrid]
+    result: tuple[CutoutImage, CutoutImage, MaskSocket, MaskSocket]
 
 
 REASON_DISABLED = "cutout off: image passed through"
@@ -645,8 +648,8 @@ def _save_mask(mask: MaskGrid, backdrop: str) -> MaskGrid:
     return [[1.0] * len(row) for row in mask]
 
 
-def write_mask(mask: MaskGrid, like: CutoutImage) -> MaskTensor | MaskGrid:
-    """Return ``mask`` as an HW float tensor when ``like`` is a tensor.
+def write_mask(mask: MaskGrid, like: CutoutImage) -> MaskSocket:
+    """Return ``mask`` as a one-frame BHW MASK when ``like`` is a tensor.
 
     Stock ``InvertMask`` does ``1.0 - mask`` and ``JoinImageWithAlpha`` calls
     ``alpha.to(image)``, so the nested lists this module works in would raise
@@ -654,22 +657,30 @@ def write_mask(mask: MaskGrid, like: CutoutImage) -> MaskTensor | MaskGrid:
     the node converts here the way :func:`ez_image.cubic.write_bhwc` does for
     IMAGE.
 
+    The leading frame dim is not decoration. ``JoinImageWithAlpha`` sizes its
+    batch with ``max(len(image), len(alpha))`` and repeats both inputs up to
+    that size, so a rank-2 ``HW`` alpha is read as a batch of ``H`` frames: the
+    single cut still is tiled ``H`` times and ``SaveImage`` writes one PNG per
+    photo row. ``LoadImage`` hands out ``(B, H, W)`` for the same reason, as
+    does :mod:`ez_dcc` for its decoded plates.
+
     Args:
         mask: HW alpha in 0..1.
         like: The IMAGE the node was handed; supplies the device.
 
     Returns:
-        Torch float32 tensor when torch and a device are present, otherwise the
-        lists unchanged, which is what the hermetic tests read.
+        Torch float32 ``(1, H, W)`` tensor when torch and a device are present,
+        otherwise the one-frame nested list, which is what the hermetic tests
+        read.
     """
     try:
         import torch
     except Exception:  # noqa: BLE001 - hermetic tests / missing torch
-        return mask
+        return [mask]
     device = getattr(like, "device", None)
     if device is None:
-        return mask
-    return torch.tensor(mask, dtype=torch.float32, device=device)
+        return [mask]
+    return torch.tensor([mask], dtype=torch.float32, device=device)
 
 
 def remove_background(
