@@ -1,4 +1,10 @@
-"""In-tree studio MCP: typed tools, occupancy, no execute_code."""
+"""In-tree studio MCP: typed tools, occupancy, no execute_code.
+
+Also pins the catalog invariant both MCP servers share: every inputSchema
+argument carries a description and every tool description says what a call
+returns, so a model or operator reading ``tools/list`` is never handed a
+bare ``{"type": "string"}``.
+"""
 
 from __future__ import annotations
 
@@ -6,6 +12,7 @@ import io
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -13,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 sys.path.insert(0, str(ROOT / "custom_nodes"))
 
+import research_mcp as research  # noqa: E402
 import studio_mcp as mcp  # noqa: E402
 
 
@@ -42,7 +50,9 @@ def test_unknown_tool_errors() -> None:
     assert "unknown" in result["error"]
 
 
-def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_occupancy_status_reads_state_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     payload = {
         "version": 1,
@@ -96,7 +106,9 @@ def test_generate_app_tool(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> N
     assert result["occupancy"] == "klein"
 
 
-def test_create_app_and_validate(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_create_app_and_validate(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     created = mcp.call_tool(
         "create_app",
@@ -138,7 +150,9 @@ def test_main_list_tools_and_help(capsys: pytest.CaptureFixture[str]) -> None:
     assert mcp.main(["--call"]) == 1
 
 
-def test_serve_stdio_ping(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_serve_stdio_ping(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.setattr(
         sys,
         "stdin",
@@ -151,7 +165,9 @@ def test_serve_stdio_ping(monkeypatch: pytest.MonkeyPatch, capsys: pytest.Captur
     assert payload["result"] == {}
 
 
-def test_main_call_occupancy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_main_call_occupancy(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "idle", "parked": False}),
@@ -261,7 +277,9 @@ def test_save_and_generate_errors(
     assert called is not None
 
 
-def test_serve_stdio_skips_non_object(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_serve_stdio_skips_non_object(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.setattr(
         sys,
         "stdin",
@@ -273,7 +291,9 @@ def test_serve_stdio_skips_non_object(monkeypatch: pytest.MonkeyPatch, capsys: p
     assert payload["id"] == 2
 
 
-def test_main_call_with_json_and_stdio(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_main_call_with_json_and_stdio(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.setattr(sys, "stdin", io.StringIO(""))
     assert mcp.main(["--stdio"]) == 0
     assert mcp.main(["stdio"]) == 0
@@ -283,3 +303,111 @@ def test_main_call_with_json_and_stdio(monkeypatch: pytest.MonkeyPatch, capsys: 
     )
     payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
     assert payload["ok"] is True
+
+
+_MIN_ARG_DOC = 30
+"""Shortest argument description that still reads as guidance."""
+
+_MIN_ERROR_DOC = 60
+"""Shortest error that says what to pass instead of only what broke."""
+
+
+def _argument_docs(tool_name: str, spec: Any) -> dict[str, str]:
+    """Collect the argument descriptions of one tool's ``inputSchema``.
+
+    Args:
+        tool_name: Tool id, used in failure messages.
+        spec: One row of a server's ``TOOLS`` table.
+
+    Returns:
+        ``{argument name: description}`` for every declared property.
+
+    Raises:
+        AssertionError: A property is not a mapping, or has no string
+            description.
+    """
+    properties = spec["inputSchema"].get("properties") or {}
+    assert isinstance(properties, dict), f"{tool_name} properties"
+    docs: dict[str, str] = {}
+    for prop_name, prop in properties.items():
+        assert isinstance(prop, dict), f"{tool_name}.{prop_name} shape"
+        text = prop.get("description")
+        assert isinstance(text, str), f"{tool_name}.{prop_name} has no description"
+        docs[str(prop_name)] = text
+    return docs
+
+
+def _refusal(server: Any, tool: str, args: dict[str, Any], subject: str) -> str:
+    """Call a tool that must refuse and return its operator-facing error.
+
+    Args:
+        server: The MCP module under test.
+        tool: Tool id to call.
+        args: Arguments that must make it refuse.
+        subject: Text the error has to repeat back (bad value or key).
+
+    Returns:
+        The error string.
+
+    Raises:
+        AssertionError: The call succeeded, or the error is bare text that
+            names neither the bad input nor another tool to try instead.
+    """
+    result = server.call_tool(tool, args)
+    assert result["ok"] is False, result
+    error = str(result["error"])
+    assert len(error) >= _MIN_ERROR_DOC, f"{tool}: {error!r}"
+    assert subject in error, f"{tool}: {error!r}"
+    assert any(name in error for name in server.TOOLS), f"{tool}: {error!r}"
+    return error
+
+
+@pytest.mark.parametrize("server", [mcp, research], ids=["studio", "research"])
+def test_every_tool_documents_its_arguments_and_its_return(server: Any) -> None:
+    for name, spec in server.TOOLS.items():
+        assert "Returns:" in spec["description"], f"{name} never says what it returns"
+        docs = _argument_docs(name, spec)
+        for prop_name, text in docs.items():
+            assert len(text) >= _MIN_ARG_DOC, f"{name}.{prop_name}: {text!r}"
+        required = spec["inputSchema"].get("required") or []
+        assert isinstance(required, list)
+        assert set(required) <= set(docs), f"{name} requires an undocumented argument"
+
+
+def test_studio_stem_arguments_point_at_the_listing_tool() -> None:
+    for name, spec in mcp.TOOLS.items():
+        for arg, text in _argument_docs(name, spec).items():
+            if arg in ("stem", "template"):
+                assert "search_templates" in text, f"{name}.{arg}: {text!r}"
+
+
+def test_research_app_id_argument_points_at_the_listing_tool() -> None:
+    docs = _argument_docs("describe_app", research.TOOLS["describe_app"])
+    assert "list_lab_apps" in docs["stem"], docs["stem"]
+
+
+def test_studio_refusals_say_what_to_pass_and_who_could_have_helped(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    slots = _refusal(
+        mcp, "apply_slots", {"stem": "photos/still-draft", "slots": ["prompt"]}, "slots"
+    )
+    assert "get_template" in slots, slots
+    patch = _refusal(mcp, "apply_slots", {"stem": "no-such", "slots": {}}, "no-such")
+    assert "get_template" in patch, patch
+    both = _refusal(mcp, "validate_workflow", {}, "graph")
+    assert "stem" in both, both
+    _refusal(mcp, "validate_workflow", {"stem": "no-such"}, "no-such")
+    _refusal(mcp, "get_template", {"stem": "no-such"}, "no-such")
+    _refusal(mcp, "describe_app", {"stem": "no-such"}, "no-such")
+    saved = _refusal(mcp, "save_workflow", {"stem": "no-such", "slug": "x"}, "no-such")
+    assert "search_templates" in saved, saved
+    _refusal(mcp, "create_app", {"stem": "no-such", "slug": "x"}, "no-such")
+    no_slug = _refusal(mcp, "save_workflow", {"stem": "no-such"}, "no-such")
+    assert "overwrite" in no_slug, no_slug
+
+
+def test_research_refusal_points_at_list_lab_apps() -> None:
+    error = _refusal(research, "describe_app", {"stem": "no-such-app"}, "no-such-app")
+    assert "list_lab_apps" in error, error

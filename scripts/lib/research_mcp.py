@@ -215,12 +215,21 @@ def tool_describe_app(args: ToolArgs) -> ToolResult:
         args: ``stem`` or ``id``.
 
     Returns:
-        App metadata or ``ok`` false.
+        App metadata, or ``ok`` false naming ``list_lab_apps`` as the tool
+        that lists the real ids.
     """
     stem = str(args.get("stem") or args.get("id") or "")
     loaded = _load_lab_graph(stem)
     if loaded is None:
-        return {"ok": False, "error": f"unknown app {stem}"}
+        return {
+            "ok": False,
+            "error": (
+                f"unknown app {stem!r}. Pass the id list_lab_apps returns "
+                "(its stem or id key), written <lane>/<name> such as "
+                "labs/assist/research-chat; list_lab_apps lists every id this "
+                "stack ships."
+            ),
+        }
     path, data = loaded
     extra = data.get("extra") or {}
     if not isinstance(extra, dict):
@@ -288,8 +297,7 @@ def tool_web_search(args: ToolArgs) -> ToolResult:
         "ok": True,
         "query": query,
         "hits": [
-            {"title": hit.title, "url": hit.url, "snippet": hit.snippet}
-            for hit in hits
+            {"title": hit.title, "url": hit.url, "snippet": hit.snippet} for hit in hits
         ],
         "sources": format_sources(hits),
     }
@@ -328,41 +336,93 @@ def tool_research(args: ToolArgs) -> ToolResult:
     }
 
 
+# Shared argument docs: the same value means the same thing in every tool.
+_APP_ID_DOC = (
+    "Lab App id relative to workflows/_lab, written <lane>/<name> with no "
+    ".json suffix, for example labs/assist/research-chat or "
+    "photos/still-draft. A unique bare file stem such as research-chat "
+    "resolves too. Run list_lab_apps for the ids this stack ships."
+)
+_MESSAGE_DOC = (
+    "What to answer, in plain words, as one text string, for example how "
+    "should I light a chipped cobalt mug on linen. prompt and message are "
+    "accepted as synonyms; an empty string comes back with status empty "
+    "message."
+)
+_HISTORY_DOC = (
+    "Earlier turns of this same conversation, pasted as one plain-text block "
+    "and replayed before the message. Leave it out for a fresh one-turn call."
+)
+_WEB_SEARCH_DOC = (
+    "True lets the answer pull Wikipedia and DuckDuckGo hits first (slower, "
+    "and it needs the box to reach the network); false, the default, answers "
+    "from the on-box CPU model alone."
+)
+_BRIEF_RETURNS = (
+    "Returns: {ok, text, sources, status, queries, brief} where text is the "
+    "reply, sources is its citation block, status is ok, empty message, or "
+    "the reason the local model path reported, queries lists the search "
+    "strings that ran, and brief is the markdown file written under "
+    "COMFY_OUTPUT_DIR/research (empty when nothing was written)."
+)
+
 # Typed MCP tool table (names are the public tool ids).
 TOOLS: dict[str, ToolSpec] = {
     "occupancy_status": {
-        "description": "Read GB10 occupancy mode, parked flag, and PIDs.",
+        "description": (
+            "Read GB10 occupancy mode, parked flag, and PIDs. "
+            "Returns: {ok, occupancy}, where occupancy is the host record: "
+            "mode (idle, klein, wan, ltx, trellis, blender-desk, or "
+            "llm-desk), compose, parked, and the blender/mcp/llm pids. An "
+            "all-idle record is returned when no state file exists yet."
+        ),
         "inputSchema": {"type": "object", "properties": {}},
         "handler": tool_occupancy_status,
     },
     "list_lab_apps": {
         "description": (
-            "List shipped lab Apps (id, lane, occupancy, handoff)."
+            "List shipped lab Apps (id, lane, occupancy, handoff). This is "
+            "the listing tool: run it before describe_app. "
+            "Returns: {ok, apps, count}; each app row carries id (the "
+            "<lane>/<name> to pass to describe_app), lane, occupancy, handoff "
+            "(the lab App ids this one feeds), and description."
         ),
         "inputSchema": {"type": "object", "properties": {}},
         "handler": tool_list_lab_apps,
     },
     "describe_app": {
         "description": (
-            "Describe one lab App: occupancy, widgets, handoff, lab_mcp."
+            "Describe one lab App: occupancy, widgets, handoff, lab_mcp. "
+            "Returns: {ok, id, path, lab_note, description, occupancy, lane, "
+            "handoff, widgets, lab_mcp}, or {ok: false, error} that points at "
+            "list_lab_apps when no id matches."
         ),
         "inputSchema": {
             "type": "object",
-            "properties": {"stem": {"type": "string"}},
+            "properties": {
+                "stem": {
+                    "type": "string",
+                    "description": _APP_ID_DOC,
+                },
+            },
             "required": ["stem"],
         },
         "handler": tool_describe_app,
     },
     "chat": {
         "description": (
-            "One-turn creative-process chat (CPU Qwen3-4B). Optional web_search."
+            "One-turn creative-process chat (CPU Qwen3-4B). Optional "
+            "web_search. " + _BRIEF_RETURNS
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "message": {"type": "string"},
-                "history": {"type": "string"},
-                "web_search": {"type": "boolean"},
+                "message": {"type": "string", "description": _MESSAGE_DOC},
+                "history": {"type": "string", "description": _HISTORY_DOC},
+                "web_search": {
+                    "type": "boolean",
+                    "description": _WEB_SEARCH_DOC,
+                },
             },
             "required": ["message"],
         },
@@ -370,26 +430,52 @@ TOOLS: dict[str, ToolSpec] = {
     },
     "web_search": {
         "description": (
-            "SSRF-safe HTTPS search (Wikipedia + DuckDuckGo). Titles, snippets, URLs."
+            "SSRF-safe HTTPS search (Wikipedia + DuckDuckGo). Titles, "
+            "snippets, URLs. "
+            "Returns: {ok, query, hits, sources} where hits is up to five "
+            "{title, url, snippet} rows and sources is the same rows as one "
+            "citation block, ready to paste into a brief."
         ),
         "inputSchema": {
             "type": "object",
-            "properties": {"query": {"type": "string"}},
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": (
+                        "What to look up, as one plain-text search string, "
+                        "for example three-point lighting for a product "
+                        "still. Up to five hits come back; private and "
+                        "link-local addresses are refused."
+                    ),
+                },
+            },
             "required": ["query"],
         },
         "handler": tool_web_search,
     },
     "research": {
         "description": (
-            "Planner + sequential search subagents + synthesizer. Creative brief."
+            "Planner + sequential search subagents + synthesizer. Creative "
+            "brief. " + _BRIEF_RETURNS
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "message": {"type": "string"},
-                "history": {"type": "string"},
-                "web_search": {"type": "boolean"},
-                "subagents": {"type": "integer"},
+                "message": {"type": "string", "description": _MESSAGE_DOC},
+                "history": {"type": "string", "description": _HISTORY_DOC},
+                "web_search": {
+                    "type": "boolean",
+                    "description": _WEB_SEARCH_DOC,
+                },
+                "subagents": {
+                    "type": "integer",
+                    "description": (
+                        "How many search subagents the planner runs, as a "
+                        "whole number from 1 to 3; anything outside that is "
+                        "clamped, and omitting it means 2. More subagents "
+                        "means more queries and more time."
+                    ),
+                },
             },
             "required": ["message"],
         },
@@ -456,9 +542,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         tools=TOOLS,
         prog="research_mcp.py",
-        usage_extra=(
-            "Occupancy-aware research MCP. No execute_code. No telemetry."
-        ),
+        usage_extra=("Occupancy-aware research MCP. No execute_code. No telemetry."),
         handle=handle_rpc,
     )
 
