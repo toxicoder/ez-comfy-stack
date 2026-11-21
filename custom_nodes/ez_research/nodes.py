@@ -126,7 +126,7 @@ class EZCreativeResearch:
                     },
                 ),
                 "mode": (
-                    ["research", "chat"],
+                    ["chat", "research"],
                     {
                         "default": "research",
                         "tooltip": "research plans several questions and "
