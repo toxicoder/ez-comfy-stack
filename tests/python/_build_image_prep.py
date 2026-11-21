@@ -53,7 +53,10 @@ DENOISE = 1.0
 
 # EZCutout sockets, read out of custom_nodes/ez_image/cutout.py: image,
 # backdrop, dilate, feather in; image (cut still over the backdrop), matte
-# (grey IMAGE, made for SaveImage), and mask (HW MASK) out.
+# (grey IMAGE, made for SaveImage), and the two MASK sockets (mask, save_mask)
+# out. A Comfy MASK is (B, H, W), so the cutter hands over one frame; the stock
+# alpha join sizes its batch off len(alpha) and would read a bare (H, W) grid
+# as H frames.
 BACKDROP = "white"
 DILATE = 6
 FEATHER = 4

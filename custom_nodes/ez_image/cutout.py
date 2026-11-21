@@ -669,9 +669,12 @@ def write_mask(mask: MaskGrid, like: CutoutImage) -> MaskSocket:
         like: The IMAGE the node was handed; supplies the device.
 
     Returns:
-        Torch float32 ``(1, H, W)`` tensor when torch and a device are present,
+        Torch float32 MASK whose dim 0 is the single frame the join counts,
+        ``(1, H, W)`` for a real alpha, when torch and a device are present;
         otherwise the one-frame nested list, which is what the hermetic tests
-        read.
+        read. A zero-row grid from an empty batch stays as degenerate as the
+        image that produced it. What neither branch may regain is a leading dim
+        that is the photo height.
     """
     try:
         import torch
