@@ -11,6 +11,12 @@ bind-mount and the install excludes ``/input/`` from the prebuilt sync, so a
 fresh box has no ``example.png`` at all. 293 of the 577 ``LoadImage`` widgets
 across the lab Apps sit on that default, and Queue fails on a missing file.
 
+The same applies to every other bare filename a shipped graph defaults to
+(``cover.png``, the clip frames ``first.png`` / ``last.png`` / ``canny.png``,
+and the film lane's ``ez_<film>_plate.png`` shots). Nothing in ``docker/``,
+``scripts/``, or ``tools/`` writes those, so each one is seeded here as a
+color-bar placeholder an operator swaps out for a real plate.
+
 Typical invocation
 ------------------
     python3 /opt/ez-comfy/seed_clay_inputs.py /inputs
@@ -22,6 +28,7 @@ import os
 import struct
 import sys
 import zlib
+from dataclasses import dataclass
 from pathlib import Path
 
 # LoadImage plate size, camera count, and ez_house_clay filename prefix.
@@ -39,6 +46,116 @@ EXAMPLE_BOTTOM = (96, 108, 126)
 EXAMPLE_SUBJECT = (228, 228, 228)
 EXAMPLE_INSET = 0.18
 """Fraction of each edge left as backdrop around the subject block."""
+
+# Every other bare filename a shipped graph names as its LoadImage default.
+# Derived from ``widgets_values[0]`` of each ``LoadImage`` node under
+# ``workflows/_lab``; test_placeholder_table_matches_shipped_graphs fails when
+# a graph starts naming one that is not listed here. Sizes follow the lane the
+# plate belongs to: square album art, the clip frames the guides and video
+# lanes render at, and the film lane's 1280x704 shots.
+PLACEHOLDER_HUE_STEP = 53
+PLACEHOLDER_BARS_MIN = 3
+PLACEHOLDER_BARS_RANGE = 6
+PLACEHOLDER_HIGHLIGHT = 0.72
+PLACEHOLDER_SHADOW = 0.55
+PLACEHOLDER_TOP = (18, 20, 26)
+PLACEHOLDER_BAND_DIVISOR = 3
+"""The stripe band covers the bottom 1/PLACEHOLDER_BAND_DIVISOR of a plate."""
+
+
+@dataclass(frozen=True)
+class PlaceholderPlate:
+    """One placeholder plate a shipped graph points at before an operator does."""
+
+    name: str
+    width: int
+    height: int
+
+
+PLACEHOLDER_PLATES: tuple[PlaceholderPlate, ...] = (
+    PlaceholderPlate("cover.png", 1024, 1024),
+    PlaceholderPlate("first.png", 1280, 704),
+    PlaceholderPlate("last.png", 832, 480),
+    PlaceholderPlate("canny.png", 1280, 704),
+    PlaceholderPlate("ez_breakwater_plate.png", 1280, 704),
+    PlaceholderPlate("ez_breakwater_b6_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_breakwater_b12_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_breakwater_b18_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_breakwater_b24_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_glasshouse_plate.png", 1280, 704),
+    PlaceholderPlate("ez_glasshouse_b6_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_glasshouse_b12_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_glasshouse_b18_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_glasshouse_b24_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_gosee_plate.png", 1280, 704),
+    PlaceholderPlate("ez_lastlane_plate.png", 1280, 704),
+    PlaceholderPlate("ez_lastlane_b6_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_lastlane_b12_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_lastlane_b18_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_lastlane_b24_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_nightoven_plate.png", 1280, 704),
+    PlaceholderPlate("ez_nightoven_b6_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_nightoven_b12_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_nightoven_b18_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_nightoven_b24_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_stillhere_plate.png", 1280, 704),
+    PlaceholderPlate("ez_switchyard_plate.png", 1280, 704),
+    PlaceholderPlate("ez_tidetable_plate.png", 1280, 704),
+    PlaceholderPlate("ez_tidetable_b6_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_tidetable_b12_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_tidetable_b18_s3_last.png", 1280, 704),
+    PlaceholderPlate("ez_tidetable_b24_s3_last.png", 1280, 704),
+)
+
+
+def placeholder_rgb(index: int) -> tuple[int, int, int]:
+    """Distinct plate tint for a placeholder index so plates are not alike.
+
+    Args:
+        index: 0-based position in ``PLACEHOLDER_PLATES``.
+
+    Returns:
+        RGB triple in 0..255; the red channel alone is unique per index.
+    """
+    return (
+        (PLACEHOLDER_HUE_STEP * index + 24) % 256,
+        (PLACEHOLDER_HUE_STEP * 2 * index + 70) % 256,
+        (PLACEHOLDER_HUE_STEP * 4 * index + 130) % 256,
+    )
+
+
+def placeholder_pixels(width: int, height: int, index: int) -> bytes:
+    """Deterministic color-bar backdrop for one placeholder plate.
+
+    The vertical gradient gives the sampler something with tonal range and the
+    bottom stripe band gives the operator a count and a tint to read, so two
+    plates at the same size still look nothing alike.
+
+    Args:
+        width: Pixel width.
+        height: Pixel height.
+        index: 0-based position in ``PLACEHOLDER_PLATES``.
+
+    Returns:
+        ``width * height * 3`` bytes of RGB.
+    """
+    tint = placeholder_rgb(index)
+    light = _blend(tint, (255, 255, 255), PLACEHOLDER_HIGHLIGHT)
+    dark = _blend(tint, (0, 0, 0), PLACEHOLDER_SHADOW)
+    bars = PLACEHOLDER_BARS_MIN + index % PLACEHOLDER_BARS_RANGE
+    band_top = height - max(1, height // PLACEHOLDER_BAND_DIVISOR)
+    rows = bytearray()
+    for y in range(height):
+        bg = _blend(PLACEHOLDER_TOP, tint, y / max(1, height - 1))
+        row = bytearray(bytes(bg) * width)
+        if y >= band_top:
+            for bar in range(bars):
+                x0 = bar * width // bars
+                x1 = (bar + 1) * width // bars
+                stripe = light if bar % 2 == 0 else dark
+                row[x0 * 3 : x1 * 3] = bytes(stripe) * (x1 - x0)
+        rows += row
+    return bytes(rows)
 
 
 def clay_copy_name(index: int) -> str:
@@ -207,7 +324,7 @@ def example_png_valid(path: Path) -> bool:
     """True when path already holds a readable PNG of any size.
 
     A plate the operator uploaded stays put; only a missing or corrupt
-    ``example.png`` is replaced.
+    plate is replaced.
 
     Args:
         path: Candidate default plate.
@@ -238,9 +355,48 @@ def seed_example_input(input_dir: str | Path) -> Path | None:
     if example_png_valid(dest):
         return None
     write_rgb_png(
-        dest, EXAMPLE_WIDTH, EXAMPLE_HEIGHT, example_pixels(EXAMPLE_WIDTH, EXAMPLE_HEIGHT)
+        dest,
+        EXAMPLE_WIDTH,
+        EXAMPLE_HEIGHT,
+        example_pixels(EXAMPLE_WIDTH, EXAMPLE_HEIGHT),
     )
     return dest
+
+
+def seed_placeholder_inputs(input_dir: str | Path) -> list[Path]:
+    """Ensure every other bare LoadImage default a shipped graph names exists.
+
+    Covers the names in ``PLACEHOLDER_PLATES`` that nothing else writes, so an
+    App whose plate was never shipped still Queues instead of failing on a
+    missing file. A plate the operator already uploaded is never touched.
+
+    Args:
+        input_dir: Container ``/inputs`` (host ``COMFY_OUTPUT_DIR/input``).
+
+    Returns:
+        The paths written this run, in table order; empty when every plate was
+        already a readable PNG.
+
+    Raises:
+        ValueError: Target is under MODELS_DIR.
+    """
+    target = Path(input_dir)
+    if _under_models_dir(target):
+        raise ValueError(f"refusing MODELS_DIR target {target}")
+    target.mkdir(parents=True, exist_ok=True)
+    written: list[Path] = []
+    for index, plate in enumerate(PLACEHOLDER_PLATES):
+        dest = target / plate.name
+        if example_png_valid(dest):
+            continue
+        write_rgb_png(
+            dest,
+            plate.width,
+            plate.height,
+            placeholder_pixels(plate.width, plate.height, index),
+        )
+        written.append(dest)
+    return written
 
 
 def _under_models_dir(path: Path) -> bool:
@@ -270,7 +426,9 @@ def _under_models_dir(path: Path) -> bool:
 def seed_clay_inputs(input_dir: str | Path) -> list[Path]:
     """Ensure ez_house_clay_01..10.png exist at lab LoadImage size.
 
-    Never overwrites a valid existing plate.
+    Never overwrites a valid existing plate. Also seeds the placeholder plates
+    behind ``seed_placeholder_inputs``; the returned list stays the clay pack
+    in camera order, which is what the caller counts.
 
     Args:
         input_dir: Container ``/inputs`` (host ``COMFY_OUTPUT_DIR/input``).
@@ -285,6 +443,7 @@ def seed_clay_inputs(input_dir: str | Path) -> list[Path]:
     if _under_models_dir(target):
         raise ValueError(f"refusing MODELS_DIR target {target}")
     target.mkdir(parents=True, exist_ok=True)
+    seed_placeholder_inputs(target)
     written: list[Path] = []
     for index in range(CLAY_COUNT):
         dest = target / clay_copy_name(index)
@@ -314,7 +473,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
         return 1
     seeded = f"; wrote {EXAMPLE_NAME}" if example is not None else ""
-    print(f"[seed-clay] {len(written)} plates ready in {dest}{seeded}")
+    placeholders = len(PLACEHOLDER_PLATES)
+    print(
+        f"[seed-clay] {len(written)} plates ready in {dest}{seeded}; "
+        f"{placeholders} placeholder plates in place"
+    )
     return 0
 
 
