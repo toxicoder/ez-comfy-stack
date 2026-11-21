@@ -189,6 +189,10 @@ const CHIP_STATES = new Set(["open", "min", "closed"]);
  *   stamped label.
  * @property {string=} type Node class as LiteGraph names it.
  * @property {string=} comfyClass Nodes 2.0 alias for type.
+ * @property {string=} title Title on the node; absent or equal to type means
+ *   nobody has titled it, which is what relabelTitle tests before writing.
+ * @property {((string) => void)=} setTitle LiteGraph repaint hook; present
+ *   on a real node, absent on the plain object the tests hand in.
  * @property {EzWidget[]=} widgets Widgets on the node, in graph order.
  */
 
