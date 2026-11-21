@@ -106,6 +106,10 @@ PLACEHOLDER_PLATES: tuple[PlaceholderPlate, ...] = (
     PlaceholderPlate("ez_tidetable_b18_s3_last.png", 1280, 704),
     PlaceholderPlate("ez_tidetable_b24_s3_last.png", 1280, 704),
 )
+"""Every bare filename a shipped graph defaults a LoadImage to, and the size the
+lane that renders it works at. Derived from the graphs, not chosen: the drift test
+in tests/python/test_seed_clay_inputs.py fails when a graph names a plate missing
+here."""
 
 
 def placeholder_rgb(index: int) -> tuple[int, int, int]:

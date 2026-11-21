@@ -1758,7 +1758,7 @@ seed_clay_inputs_if_missing() {
     ep_log "input plates ready in ${dest}"
     return 0
   fi
-  ep_log "WARN: input seed backstop failed - LoadImage defaults (example.png, clay plates) may be empty"
+  ep_log "WARN: input seed backstop failed - LoadImage defaults (example.png, clay plates, placeholder plates) may be empty"
   return 0
 }
 

@@ -980,3 +980,242 @@ def test_report_builder_matches_context_py_constants() -> None:
         assert f'"{lead}' in text or f"'{lead}" in text or f"{lead} " in text
     for surface in _CANON_SURFACES:
         assert surface in text
+
+
+def _broken_films(tmp_path: Path, names: list[str]) -> None:
+    """Give one film directory an unparseable ``state.json``.
+
+    Args:
+        tmp_path: pytest temp root that holds ``films/``.
+        names: Film directory names to create with a corrupt state file.
+    """
+    for name in names:
+        dest = tmp_path / "films" / name
+        dest.mkdir(parents=True)
+        (dest / "state.json").write_text("{not-json", encoding="utf-8")
+
+
+def _point_at_films(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> ModuleType:
+    """Board server pointed at ``tmp_path/films`` and ``tmp_path/guides``.
+
+    Args:
+        tmp_path: pytest temp root.
+        monkeypatch: pytest monkeypatch for the module path globals.
+
+    Returns:
+        The loaded server module.
+    """
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "films")
+    monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
+    return server
+
+
+def test_unreadable_films_names_every_broken_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    _broken_films(tmp_path, ["zz-bad", "aa-bad"])
+    server = _point_at_films(tmp_path, monkeypatch)
+    assert server._unreadable_films() == ["aa-bad", "zz-bad"]
+    assert [row["slug"] for row in server._rows()] == ["gosee"]
+
+
+def test_unreadable_films_when_films_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    server = _load_server()
+    monkeypatch.setattr(server, "FILMS", tmp_path / "no-such-films")
+    assert server._unreadable_films() == []
+
+
+def test_page_shows_the_film_it_could_not_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    _broken_films(tmp_path, ["bad"])
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server._page().decode("utf-8")
+    assert "1 film could not be read: <code>bad</code>." in page
+    assert "No lights show for those films." in page
+    repair = "<code>bazelisk run //:manage -- print-shot &lt;film&gt; &lt;id&gt;</code>"
+    assert repair in page
+    assert "go-see / gosee" in page
+
+
+def test_page_counts_every_film_it_could_not_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    _broken_films(tmp_path, ["bad-1", "bad-2"])
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server._page().decode("utf-8")
+    assert "2 films could not be read" in page
+    assert "<code>bad-1</code>, <code>bad-2</code>" in page
+
+
+def test_empty_board_names_the_repair_as_a_bazel_target(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _broken_films(tmp_path, ["bad"])
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server._page().decode("utf-8")
+    assert "No films yet." in page
+    assert "1 film could not be read" in page
+    compile_cmd = "<code>bazelisk run //scripts:run-utility -- compile-film go-see</code>"
+    assert compile_cmd in page
+    assert "<code>bazelisk run //:manage -- print-shot go-see 1</code>" in page
+    assert "./scripts/utilities/compile-film.sh" not in page
+
+
+def test_page_labels_the_audio_policy_with_a_tooltip(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server._page().decode("utf-8")
+    assert "audio policy world-only" in page
+    assert "The film keeps the world sound the video model generated." in page
+    assert "audio_policy in the film&#x27;s state.json." in page
+
+
+def test_page_explains_a_policy_the_shot_cards_do_not_ship(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    dest = tmp_path / "films" / "gosee"
+    dest.mkdir(parents=True)
+    (dest / "state.json").write_text(
+        json.dumps({"slug": "gosee", "film": "go-see", "audio_policy": "quiet"}),
+        encoding="utf-8",
+    )
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server._page().decode("utf-8")
+    assert "audio policy quiet" in page
+    assert "Audio policy this film records for its shots." in page
+
+
+def test_page_gives_each_light_a_plain_label_and_a_tooltip(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    monkeypatch.setattr(
+        server,
+        "_rows",
+        lambda: [
+            {
+                "slug": "gosee",
+                "film": "go-see",
+                "ok": "1",
+                "total": "1",
+                "audio_policy": "stems",
+                "shots": [
+                    {
+                        "id": "01",
+                        "clay": "on",
+                        "look": "on",
+                        "overlay": "on",
+                        "print": "on",
+                        "audio": "on",
+                        "thumb": "",
+                    }
+                ],
+            }
+        ],
+    )
+    page = server._page().decode("utf-8")
+    assert ">ov</span>" not in page
+    assert ">overlay</span>" in page
+    assert '<span class="on" title="Greybox pass landed' in page
+    look = 'title="Klein look plate is in the guide pack for this shot.">look</span>'
+    assert look in page
+    printed = 'title="The 5.00 s take is printed and marked ok in the jobstore.">'
+    assert printed in page
+    assert "audio policy stems" in page
+    assert "mixed from separate dialogue, background, and effects stems." in page
+
+
+def test_page_gives_thumbs_real_alt_text(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _server, page = _board(tmp_path, monkeypatch)
+    assert 'alt="clay still for go-see shot 01"' in page
+    assert 'alt="look plate for go-see shot 02"' in page
+    assert 'alt=""' not in page
+
+
+def test_unknown_path_gets_the_not_found_page(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+
+    handler, captured = _bind_handler(server, "/board")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 404
+    page = handler.wfile.getvalue().decode("utf-8")
+    assert "<h1>Nothing at /board</h1>" in page
+    assert '<a href="/">/</a> lists every film this studio has printed.' in page
+    assert "ez-comfy film board" not in page
+
+    handler, captured = _bind_handler(server, "/watch")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 404
+
+    handler, captured = _bind_handler(server, "/")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 200
+    assert "ez-comfy film board" in handler.wfile.getvalue().decode("utf-8")
+
+
+def test_not_found_page_suggests_the_closest_film(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server.not_found_page("/watch/gose").decode("utf-8")
+    assert "<h1>Nothing at /watch/gose</h1>" in page
+    assert "Closest film: <code>gosee</code>." in page
+
+    (tmp_path / "ez_gosee_90s.mp4").write_bytes(b"mp4")
+    page = server.not_found_page("/watch/gose").decode("utf-8")
+    assert 'Closest film: <a href="/watch/gosee">gosee</a>.' in page
+
+
+def test_not_found_page_without_a_close_film(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    page = server.not_found_page("/zzzzzzzz").decode("utf-8")
+    assert "Nothing here is spelled close to that." in page
+    assert '<a href="/">/</a> lists every film this studio has printed.' in page
+
+
+def test_not_found_page_escapes_and_clips_what_was_asked_for(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    hostile = '/watch/<img src=x onerror="alert(1)">'
+    page = server.not_found_page(hostile).decode("utf-8")
+    assert "<img" not in page
+    assert '&lt;img src=x onerror="alert(1)"&gt;' in page
+
+    page = server.not_found_page("/" + "a" * 300).decode("utf-8")
+    assert "a" * 200 not in page
+    assert "..." in page
+
+
+def test_send_404_writes_headers_and_a_body(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _write_board(tmp_path)
+    server = _point_at_films(tmp_path, monkeypatch)
+    handler, captured = _bind_handler(server, "/nope")
+    server.Handler._send_404(handler, "/nope")
+    assert captured["status"] == 404
+    body = handler.wfile.getvalue()
+    assert _header_value(captured, "Content-Type") == "text/html; charset=utf-8"
+    assert _header_value(captured, "Content-Length") == str(len(body))
+    assert b"Nothing at /nope" in body
