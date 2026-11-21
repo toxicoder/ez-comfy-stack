@@ -111,6 +111,19 @@ describe("node titles", () => {
     assert.equal(loader.title, "Klein 4B distilled FP8");
   });
 
+  test("an authored title wins even on a class this chrome has a fallback for", async () => {
+    // The case above uses a class with no fallback, so it still passes when the
+    // authored-title check is deleted: nothing would have been written anyway.
+    // KSampler is in NODE_TITLES, so a graph that titled one keeps its words
+    // only because relabelTitle looks before it writes.
+    const sampler = makeNode("KSampler", [makeWidget("seed", 0)], {
+      title: "Pass A - 30 steps",
+    });
+    const { ext } = await chrome([sampler]);
+    await ext.nodeCreated(sampler);
+    assert.equal(sampler.title, "Pass A - 30 steps");
+  });
+
   test("repainting never escalates a fallback into pass 2", async () => {
     const sampler = makeNode("KSampler", [makeWidget("seed", 0)]);
     const { ext } = await chrome([sampler]);

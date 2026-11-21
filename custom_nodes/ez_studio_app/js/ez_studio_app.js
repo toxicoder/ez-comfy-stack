@@ -92,7 +92,7 @@ const LABELS = {
   overlap_bars: "Beat overlap (bars)",
   overwrite: "Overwrite existing",
   params_json: "Parameters (JSON)",
-  plate: "Plate still",
+  plate: "Plate folder",
   positive: "Positive prompt",
   prefix: "Filename prefix",
   run_summary: "Run summary",
@@ -132,10 +132,11 @@ const LABELS = {
 /**
  * Fallback titles for node classes the shipped graphs leave unnamed or name
  * with the raw class name. Measured over workflows/_lab: `KSampler` is the only
- * type that wears its class name (880 nodes), and `VAEDecode` plus
- * `LTXVConditioning` are the only types with no title at all. A title a graph
- * already carries always wins, so a type listed here stays untouched in any
- * graph that authors one, and an entry here is only a fallback.
+ * type that wears its class name (880 of its 1552 nodes), while `VAEDecode` and
+ * `LTXVConditioning` are the only types any graph leaves with no title at all
+ * (31 nodes each). A title a graph already carries always wins, so a type
+ * listed here stays untouched in every graph that authors one, and an entry
+ * here is only a fallback.
  */
 const NODE_TITLES = {
   KSampler: "Sampling",
