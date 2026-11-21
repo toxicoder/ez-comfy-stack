@@ -30,6 +30,21 @@ HERO = "hero-olive-jacket"
 MUG = "mug-cobalt-chipped"
 
 
+def _knob_options(field: tuple[Any, ...]) -> dict[str, Any]:
+    """Return one widget's options with the operator tooltip lifted out.
+
+    Args:
+        field: The ``(type, options)`` tuple an INPUT_TYPES key carries.
+
+    Returns:
+        The options minus ``tooltip``, so the exact-shape pins below check the
+        widget contract while the pack sweep owns the sentence.
+    """
+    options = field[1] if len(field) > 1 else {}
+    assert isinstance(options, dict), field
+    return {key: value for key, value in options.items() if key != "tooltip"}
+
+
 @pytest.fixture
 def out_root(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """Point the pack output dir at a temp tree (no Comfy, no /outputs bind).
@@ -147,19 +162,28 @@ def test_input_types_sections() -> None:
         "filename",
         "overwrite",
     }
-    assert optional["camera_pos"] == ("STRING", {"default": scene.DEFAULT_CAMERA_POS})
-    assert optional["camera_look"] == ("STRING", {"default": scene.DEFAULT_CAMERA_LOOK})
-    fov_type, fov_opts = optional["camera_fov"]
+    assert optional["camera_pos"][0] == "STRING"
+    assert _knob_options(optional["camera_pos"]) == {
+        "default": scene.DEFAULT_CAMERA_POS
+    }
+    assert optional["camera_look"][0] == "STRING"
+    assert _knob_options(optional["camera_look"]) == {
+        "default": scene.DEFAULT_CAMERA_LOOK
+    }
+    fov_type, _fov_opts = optional["camera_fov"]
     assert fov_type == "INT"
-    assert fov_opts == {
+    assert _knob_options(optional["camera_fov"]) == {
         "default": scene.DEFAULT_FOV,
         "min": scene.FOV_MIN,
         "max": scene.FOV_MAX,
         "step": 1,
     }
-    assert optional["hdri"] == ("STRING", {"default": "none"})
-    assert optional["filename"] == ("STRING", {"default": "scene"})
-    assert optional["overwrite"] == ("BOOLEAN", {"default": False})
+    assert optional["hdri"][0] == "STRING"
+    assert _knob_options(optional["hdri"]) == {"default": "none"}
+    assert optional["filename"][0] == "STRING"
+    assert _knob_options(optional["filename"]) == {"default": "scene"}
+    assert optional["overwrite"][0] == "BOOLEAN"
+    assert _knob_options(optional["overwrite"]) == {"default": False}
 
 
 def test_scene_output_dir_uses_pack_output_dir(

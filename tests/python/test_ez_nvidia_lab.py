@@ -76,6 +76,26 @@ FORBIDDEN_CODEPOINTS: frozenset[int] = frozenset(
     }
 )
 
+# Every widget the four registered classes expose, pinned by name so a widget
+# dropped from INPUT_TYPES cannot pass the tooltip invariant by not existing.
+PACK_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZNvidiaLabCatalog": ("detail",),
+    "EZNvidiaLabPreflight": ("tool_id",),
+    "EZNvidiaLabJob": ("tool_id", "input_path", "params_json"),
+    "EZNvidiaLabVerdict": ("tool_id",),
+}
+
+PACK_NODE_CLASSES = (
+    EZNvidiaLabCatalog,
+    EZNvidiaLabPreflight,
+    EZNvidiaLabJob,
+    EZNvidiaLabVerdict,
+)
+
+# Widgets the operator hand-types, so each one owes a worked example and the
+# name of the node that lists the valid catalog ids.
+HAND_TYPED_WIDGETS: frozenset[str] = frozenset({"tool_id", "input_path", "params_json"})
+
 LONG_LICENSE = (
     "NVIDIA Internal Scientific Research and Development Model License with a "
     "long tail that the table view has to clip"
@@ -363,6 +383,38 @@ def test_output_nodes_are_the_catalog_and_the_verdict() -> None:
     assert EZNvidiaLabVerdict.OUTPUT_NODE is True
     assert not hasattr(NODE_CLASS_MAPPINGS["EZNvidiaLabPreflight"], "OUTPUT_NODE")
     assert not hasattr(NODE_CLASS_MAPPINGS["EZNvidiaLabJob"], "OUTPUT_NODE")
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    assert set(PACK_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    for cls in PACK_NODE_CLASSES:
+        widgets = PACK_WIDGETS[cls.__name__]
+        spec = cls.INPUT_TYPES()
+        seen: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip is not a sentence"
+                seen.append(widget)
+        assert tuple(seen) == widgets, cls.__name__
+
+
+def test_hand_typed_widgets_show_an_example_and_the_catalog_node() -> None:
+    for cls in PACK_NODE_CLASSES:
+        for widget in PACK_WIDGETS[cls.__name__]:
+            if widget not in HAND_TYPED_WIDGETS:
+                continue
+            tooltip = cls.INPUT_TYPES()["required"][widget][1]["tooltip"]
+            where = f"{cls.__name__}.{widget}"
+            assert "for example" in tooltip, f"{where} shows no worked example"
+            assert "EZNvidiaLabCatalog" in tooltip, f"{where} names no id source"
 
 
 def test_module_scope_imports_are_stdlib_only() -> None:

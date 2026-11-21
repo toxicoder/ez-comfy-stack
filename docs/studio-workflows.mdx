@@ -265,6 +265,19 @@ Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler,
 
 Every Klein T2I graph also carries the optional reference pair: **Optional reference stills** (`EZOptionalImage`) plus **Klein canvas (optional ref)** (`EZKleinRefCanvas`). Both ship inert - the picker node saves `[""]`, so a fresh Queue is text-to-image. Pick up to three stills (drag-and-drop, upload, or a name from `input/`) and they reach Klein / Flux.2 as real reference latents, along with any wired IMAGE batch; the node's **Use reference stills** / **References off** mute stops them without clearing your picks, and **max_refs** on the canvas node caps how many attach (1-4, default 3). Widgets: [ComfyUI Apps](studio-apps.md#reference-stills-optional). Nodes: [Custom nodes](reference/custom-nodes.md#ez_image).
 
+A knob your graph surfaces in App Mode reaches the operator with a label, and the label is the graph's
+job before it is the chrome's. The App panel writes a word onto any widget whose raw name its own table
+knows (`custom_nodes/ez_studio_app/js/ez_studio_app.js`: `upscale` -> **Upscale by**, `params_json` ->
+**Parameters (JSON)**, `filename_prefix` -> **Output filename**), so an unlabelled graph still reads as
+English - but a widget name that table has never seen prints on the row as `snake_case`. The fix is in
+the graph, not the shared table: give that widget's `extra.linearData.inputs` entry a label in its
+config tuple (`[nodeId, widgetName, {"label": "..."}]`), which is what the shipped builders do, so the
+wording can be specific to this graph instead of generic for every graph that ever uses the widget. The
+gate is `bazelisk test //tests:pytest`, which runs
+`tests/python/test_nodes2_js.py::test_app_mode_labels_cover_every_input_the_shipped_graphs_surface` and
+fails the moment a shipped graph surfaces an unlabelled input the chrome's table does not cover. Labels,
+their precedence, and what an operator can rename: [App panel labels](studio-apps.md#app-panel-labels).
+
 Optional Wan A14B is a Queue graph (`workflows/_lab/labs/opt-in/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 
 ---

@@ -1,6 +1,7 @@
 """Unit tests for docker/seed_clay_inputs.py (container LoadImage backstop).
 
-Hermetic: stdlib PNG writer only. No Blender, Comfy, or network.
+Hermetic: stdlib PNG writer only. No Blender, Comfy, or network. The drift test
+reads the committed lab graphs, the same tree the other suites walk.
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ from pathlib import Path
 
 import pytest
 import seed_clay_inputs as seed
+from _lab_paths import cached_lab_graph_rows
 
 
 def test_seed_writes_ten_distinct_valid_plates(tmp_path: Path) -> None:
@@ -69,9 +71,7 @@ def test_seed_ok_when_models_dir_is_elsewhere(
     assert seed.clay_plate_valid(dest / "ez_house_clay_01.png")
 
 
-def test_refuses_models_dir(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_refuses_models_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     models = tmp_path / "models"
     models.mkdir()
     monkeypatch.setenv("MODELS_DIR", str(models))
@@ -124,9 +124,7 @@ def test_module_main_entrypoint(
     )
     with pytest.raises(SystemExit) as exc:
         runpy.run_path(
-            str(
-                Path(__file__).resolve().parents[2] / "docker" / "seed_clay_inputs.py"
-            ),
+            str(Path(__file__).resolve().parents[2] / "docker" / "seed_clay_inputs.py"),
             run_name="__main__",
         )
     assert exc.value.code == 0
@@ -190,3 +188,142 @@ def test_example_pixels_are_deterministic_gradient() -> None:
     bottom = data[(height - 1) * width * 3 : (height - 1) * width * 3 + 3]
     assert top != bottom
     assert seed.example_pixels(width, height) == data  # noqa: SLF001
+
+
+def _bare_load_image_defaults() -> set[str]:
+    """Every bare ``*.png`` LoadImage default across the shipped lab graphs."""
+    names: set[str] = set()
+    for _lab_rel, _path, data in cached_lab_graph_rows():
+        pending: list[object] = [data]
+        while pending:
+            node = pending.pop()
+            if isinstance(node, dict):
+                if node.get("type") == "LoadImage":
+                    widgets = node.get("widgets_values")
+                    if isinstance(widgets, list) and widgets:
+                        first = widgets[0]
+                        if (
+                            isinstance(first, str)
+                            and first.lower().endswith(".png")
+                            and "/" not in first
+                            and "\\" not in first
+                        ):
+                            names.add(first)
+                pending.extend(node.values())
+            elif isinstance(node, list):
+                pending.extend(node)
+    return names
+
+
+def test_placeholder_writes_every_table_plate(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    written = seed.seed_placeholder_inputs(dest)
+    assert [path.name for path in written] == [
+        plate.name for plate in seed.PLACEHOLDER_PLATES
+    ]
+    blobs = set()
+    for plate in seed.PLACEHOLDER_PLATES:
+        path = dest / plate.name
+        assert seed.png_size(path) == (plate.width, plate.height)
+        assert seed.example_png_valid(path)
+        blobs.add(path.read_bytes())
+    assert len(blobs) == len(seed.PLACEHOLDER_PLATES)
+
+
+def test_placeholder_table_is_unique_disjoint_and_varied() -> None:
+    table = {plate.name for plate in seed.PLACEHOLDER_PLATES}
+    owned = {seed.EXAMPLE_NAME} | {
+        seed.clay_copy_name(index) for index in range(seed.CLAY_COUNT)
+    }
+    assert table.isdisjoint(owned)
+    assert len(table) == len(seed.PLACEHOLDER_PLATES)
+    assert len({(plate.width, plate.height) for plate in seed.PLACEHOLDER_PLATES}) > 1
+
+
+def test_placeholder_keeps_operator_plate(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    dest.mkdir()
+    plate = dest / "cover.png"
+    seed.write_solid_png(plate, 64, 64, (7, 8, 9))
+    before = plate.read_bytes()
+    written = seed.seed_placeholder_inputs(dest)
+    assert plate.read_bytes() == before
+    assert seed.png_size(plate) == (64, 64)
+    assert "cover.png" not in [path.name for path in written]
+
+
+def test_placeholder_replaces_corrupt_file(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    seed.seed_placeholder_inputs(dest)
+    (dest / "first.png").write_bytes(b"not a png")
+    written = seed.seed_placeholder_inputs(dest)
+    assert [path.name for path in written] == ["first.png"]
+    assert seed.png_size(dest / "first.png") == (1280, 704)
+
+
+def test_placeholder_is_idempotent(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    assert len(seed.seed_placeholder_inputs(dest)) == len(seed.PLACEHOLDER_PLATES)
+    assert seed.seed_placeholder_inputs(dest) == []
+
+
+def test_placeholder_refuses_models_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    models = tmp_path / "models"
+    models.mkdir()
+    monkeypatch.setenv("MODELS_DIR", str(models))
+    with pytest.raises(ValueError, match="MODELS_DIR"):
+        seed.seed_placeholder_inputs(models / "blocked")
+
+
+def test_seed_clay_inputs_seeds_placeholders_too(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    written = seed.seed_clay_inputs(dest)
+    assert [path.name for path in written] == [
+        seed.clay_copy_name(index) for index in range(seed.CLAY_COUNT)
+    ]
+    for plate in seed.PLACEHOLDER_PLATES:
+        assert seed.example_png_valid(dest / plate.name)
+
+
+def test_placeholder_rgb_is_unique_per_plate() -> None:
+    colors = [
+        seed.placeholder_rgb(index) for index in range(len(seed.PLACEHOLDER_PLATES))
+    ]
+    assert len(set(colors)) == len(seed.PLACEHOLDER_PLATES)
+    assert all(all(0 <= channel <= 255 for channel in color) for color in colors)
+
+
+def test_placeholder_pixels_are_deterministic_and_distinct() -> None:
+    width, height = 13, 9
+    frames = [seed.placeholder_pixels(width, height, index) for index in range(8)]
+    assert all(len(frame) == width * height * 3 for frame in frames)
+    assert len(set(frames)) == len(frames)
+    assert seed.placeholder_pixels(width, height, 3) == frames[3]
+    stride = width * 3
+    first_row = frames[0][0:stride]
+    last_row = frames[0][(height - 1) * stride : height * stride]
+    assert first_row != last_row
+    band = {last_row[x * 3 : x * 3 + 3] for x in range(width)}
+    assert len(band) > 1
+
+
+def test_placeholder_table_matches_shipped_graphs() -> None:
+    derived = _bare_load_image_defaults()
+    already_seeded = {seed.EXAMPLE_NAME} | {
+        seed.clay_copy_name(index) for index in range(seed.CLAY_COUNT)
+    }
+    table = {plate.name for plate in seed.PLACEHOLDER_PLATES}
+    assert derived - already_seeded == table
+    assert "cover.png" in table and "example.png" in derived
+
+
+def test_main_reports_placeholder_plates(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    dest = tmp_path / "in"
+    assert seed.main([str(dest)]) == 0
+    out = capsys.readouterr().out
+    assert f"{len(seed.PLACEHOLDER_PLATES)} placeholder plates in place" in out
+    assert (dest / "cover.png").is_file()

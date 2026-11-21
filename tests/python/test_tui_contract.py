@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pytest
 
+from tui import catalog as k
 from tui import contract as c
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,6 +21,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 SAFETY_SH = ROOT / "scripts" / "lib" / "safety.sh"
 """The shell file that owns the real headroom floors."""
+
+CONSOLE_PAGE = ROOT / "docs" / "operate" / "studio-tui.mdx"
+"""The operator page that quotes the console's own field text back at them."""
 
 
 def _shell_constant(name: str) -> int:
@@ -245,7 +249,11 @@ def test_every_style_member_has_a_value() -> None:
 
 def test_argv_styles_and_param_kinds_are_distinct() -> None:
     """The two argv spellings and the four param kinds do not overlap."""
-    assert {member.value for member in c.ArgvStyle} == {"spaced", "equals", "positional"}
+    assert {member.value for member in c.ArgvStyle} == {
+        "spaced",
+        "equals",
+        "positional",
+    }
     assert {member.value for member in c.ParamKind} == {
         "choice",
         "text",
@@ -279,7 +287,11 @@ def test_param_spec_bounds_and_defaults() -> None:
 
 def test_runner_kinds_cover_the_three_dispatch_shapes() -> None:
     """Every action targets the CLI, a bare utility, or the console itself."""
-    assert {member.value for member in c.RunnerKind} == {"manage", "utility", "internal"}
+    assert {member.value for member in c.RunnerKind} == {
+        "manage",
+        "utility",
+        "internal",
+    }
 
 
 def _action(**overrides: object) -> c.ActionSpec:
@@ -362,15 +374,47 @@ def test_build_argv_keeps_positional_answers_in_order() -> None:
 
 
 def test_build_argv_rejects_a_missing_required_answer() -> None:
-    """An operator cannot dispatch without answering a required prompt."""
-    with pytest.raises(ValueError, match="tier: Tier is required"):
+    """An operator cannot dispatch without answering a required prompt.
+
+    The refusal names the field the way the console displayed it. The catalog
+    key is snake_case and never appears on screen, so printing it would send
+    the operator hunting for a label that does not exist.
+    """
+    with pytest.raises(ValueError, match="Tier is required") as caught:
         c.build_argv(_action(), {})
+    assert "tier:" not in str(caught.value)
+
+
+def test_a_refusal_repeats_the_hint_the_operator_skipped() -> None:
+    """A field that carries help gets it back in the message that refuses it."""
+    action = _action(
+        params=(
+            c.ParamSpec(
+                name="slug",
+                label="Film slug",
+                kind=c.ParamKind.TEXT,
+                required=True,
+                help_text="lowercase, e.g. breakwater",
+            ),
+        )
+    )
+    with pytest.raises(ValueError, match="Film slug is required - lowercase"):
+        c.build_argv(action, {})
 
 
 def test_build_argv_rejects_an_answer_outside_the_offered_choices() -> None:
-    """Free text cannot smuggle itself into a parameter with a fixed menu."""
-    with pytest.raises(ValueError, match="not one of"):
+    """Free text cannot smuggle itself into a parameter with a fixed menu.
+
+    The menu the refusal offers is the menu the operator was shown: choice
+    labels, not the argv values behind them, and never a container repr.
+    """
+    with pytest.raises(ValueError) as caught:
         c.build_argv(_action(), {"tier": "../etc"})
+    message = str(caught.value)
+    assert "Tier is not one of: Turbo, XL" in message
+    assert "you typed ../etc" in message
+    assert "('turbo'" not in message
+    assert "tier:" not in message
 
 
 def test_build_argv_bounds_an_integer_answer() -> None:
@@ -395,11 +439,11 @@ def test_build_argv_refuses_newlines_in_free_text() -> None:
 def test_build_argv_reports_a_misconfigured_catalog_entry() -> None:
     """A flag parameter with no flag, or a choice with no flag, is a defect."""
     bad_flag = _action(
-        params=(
-            c.ParamSpec(name="d", label="D", kind=c.ParamKind.FLAG, flag=""),
-        )
+        params=(c.ParamSpec(name="d", label="D", kind=c.ParamKind.FLAG, flag=""),)
     )
-    with pytest.raises(ValueError, match="needs a flag"):
+    with pytest.raises(
+        ValueError, match="D: the console catalog gives this switch no flag"
+    ):
         c.build_argv(bad_flag, {"d": "on"})
     bad_choice = _action(
         params=(
@@ -412,7 +456,9 @@ def test_build_argv_reports_a_misconfigured_catalog_entry() -> None:
             ),
         )
     )
-    with pytest.raises(ValueError, match="choice parameter needs a flag"):
+    with pytest.raises(
+        ValueError, match="T: the console catalog gives this menu no flag"
+    ):
         c.build_argv(bad_choice, {"t": "a"})
 
 
@@ -441,3 +487,102 @@ def test_every_screen_id_is_unique_and_named() -> None:
     assert len(values) == len(set(values))
     assert "confirm" in values and "palette" in values
 
+
+_PAGE_REFUSALS: tuple[tuple[str, str, dict[str, str], str], ...] = (
+    (
+        "lanes.icon_scaffold",
+        "scaffold",
+        {"scaffold": ""},
+        "Slug is required - the slug of the new app, lowercase words joined by "
+        "hyphens.",
+    ),
+    (
+        "models.download_music",
+        "tier",
+        {"tier": "Turbo"},
+        "Tier is not one of: turbo, xl, all (you typed Turbo) - which ACE-Step "
+        "pack to pull; turbo is the smaller one.",
+    ),
+    (
+        "stack.logs",
+        "tail",
+        {"tail": "abc"},
+        "Lines is not a number: you typed abc - how many log lines to print; "
+        "blank uses the default.",
+    ),
+    (
+        "stack.logs",
+        "tail",
+        {"tail": "9999999"},
+        "Lines is outside 1..100000: you typed 9999999 - how many log lines to "
+        "print; blank uses the default.",
+    ),
+)
+"""Every refusal the console page quotes, with the answer that raises it.
+
+Each row is ``action id, parameter name, the answers handed to build_argv, and
+the sentence the page prints``. The field label in the sentence is the catalog's
+``ParamSpec.label``, so a page that renames a field fails here.
+"""
+
+_REFUSAL_SHAPE = re.compile(
+    r"`([A-Z][^`]*? (?:"
+    r"is required"
+    r"|is not one of: [^`]*\(you typed [^`]*\)"
+    r"|is not a number: you typed [^`]*"
+    r"|is outside [0-9]+\.\.[0-9]+: you typed [^`]*"
+    r")(?: - [^`]*)?)`"
+)
+"""A backticked span the page offers as a refusal the console prints.
+
+Anchored to the grammar ``_refuse`` actually produces: a field label, one of the
+four predicates, and the guidance tail after a dash. Prose that merely contains
+the words is a table cell explaining a field, not a quote, and stays out.
+"""
+
+
+def _page_text() -> str:
+    """Read the operator console page with its line wrapping folded away.
+
+    Returns:
+        The page as one whitespace-normalised line, so a sentence the prose
+        wraps across two source lines still compares and still matches.
+    """
+    return " ".join(CONSOLE_PAGE.read_text(encoding="utf-8").split())
+
+
+def test_the_console_page_quotes_refusals_the_console_really_prints() -> None:
+    """A refusal the page shows is a promise the contract has to keep.
+
+    An operator reads these lines as what they will see when they mistype. A
+    quote the shipped catalog cannot raise is a documentation defect they would
+    file as a console bug, so every one is rebuilt from the catalog here and
+    compared word for word.
+    """
+    page = _page_text()
+    for action_id, param_name, answers, expected in _PAGE_REFUSALS:
+        action = k.action_by_id(action_id)
+        assert action is not None, f"{action_id} left the catalog"
+        assert any(p.name == param_name for p in action.params), (
+            f"{action_id}.{param_name} left the catalog"
+        )
+        assert expected in page, f"the page stopped quoting: {expected!r}"
+        with pytest.raises(ValueError) as caught:
+            c.build_argv(action, answers)
+        assert str(caught.value) == expected, action_id
+
+
+def test_the_console_page_invents_no_refusal_the_catalog_cannot_print() -> None:
+    """Every refusal-shaped sentence on the page is one this file backs.
+
+    The pairing test above only checks the quotes it knows about. This one
+    closes the other direction: a new backticked refusal added to the page
+    without a row in ``_PAGE_REFUSALS`` fails, which is how a field renamed in
+    the catalog and left stale in the prose gets caught.
+    """
+    quoted = set(_REFUSAL_SHAPE.findall(_page_text()))
+    authored = {expected for _, _, _, expected in _PAGE_REFUSALS}
+    assert quoted, "the page stopped quoting any refusal at all"
+    assert quoted <= authored, (
+        f"unbacked refusal quotes on the page: {sorted(quoted - authored)}"
+    )

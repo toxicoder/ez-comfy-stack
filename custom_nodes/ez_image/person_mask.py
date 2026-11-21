@@ -37,9 +37,7 @@ IMAGENET_STD = (0.229, 0.224, 0.225)
 """Std the COCO DeepLab weights were trained with."""
 WEIGHT_NAME = "deeplabv3_resnet50_coco-cd0a2569.pth"
 """Torchvision checkpoint filename."""
-WEIGHT_URL = (
-    "https://download.pytorch.org/models/deeplabv3_resnet50_coco-cd0a2569.pth"
-)
+WEIGHT_URL = "https://download.pytorch.org/models/deeplabv3_resnet50_coco-cd0a2569.pth"
 """Direct checkpoint URL (BSD-3). Not a default download."""
 DOWNLOAD_TIMEOUT_S = 120
 """Socket timeout for the optional first-run weight download."""
@@ -148,7 +146,9 @@ def ready_weight_path() -> str | None:
         Path, or None when no root holds a non-empty checkpoint.
     """
     override = os.environ.get("EZ_PERSON_MASK_PATH", "").strip()
-    candidates = [override] if override else [_weight_in(r) for r in person_mask_roots()]
+    candidates = (
+        [override] if override else [_weight_in(r) for r in person_mask_roots()]
+    )
     for path in candidates:
         if _file_ready(path):
             return path
@@ -191,7 +191,9 @@ def download_weight() -> str | None:
         Path after a successful download, or None.
     """
     override = os.environ.get("EZ_PERSON_MASK_PATH", "").strip()
-    candidates = [override] if override else [_weight_in(r) for r in person_mask_roots()]
+    candidates = (
+        [override] if override else [_weight_in(r) for r in person_mask_roots()]
+    )
     for path in candidates:
         folder = os.path.dirname(path)
         try:
@@ -348,7 +350,9 @@ def imagenet_normalize(batch: list[Any]) -> list[Any]:
             new_row: list[Any] = []
             for pixel in row:
                 channels: list[float] = []
-                for index, (mean, std) in enumerate(zip(IMAGENET_MEAN, IMAGENET_STD, strict=False)):
+                for index, (mean, std) in enumerate(
+                    zip(IMAGENET_MEAN, IMAGENET_STD, strict=False)
+                ):
                     value = float(pixel[index]) if index < len(pixel) else 0.0
                     channels.append((value - mean) / std)
                 new_row.append(channels)
@@ -726,9 +730,31 @@ class EZReinsertPeople:
         """
         return {
             "required": {
-                "plate": ("IMAGE",),
-                "source": ("IMAGE",),
-                "prompt": ("STRING", {"forceInput": True, "dynamicPrompts": False}),
+                "plate": (
+                    "IMAGE",
+                    {
+                        "tooltip": "The rebuilt background plate the people are "
+                        "pasted onto. Wire it from the decode that precedes this "
+                        "node.",
+                    },
+                ),
+                "source": (
+                    "IMAGE",
+                    {
+                        "tooltip": "The full-resolution original photo the people "
+                        "are detected and cut from.",
+                    },
+                ),
+                "prompt": (
+                    "STRING",
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Link the prompt text in; the words decide the "
+                        "paste. A cubic block-world prompt runs it, any other "
+                        "prompt passes the plate through untouched.",
+                    },
+                ),
             }
         }
 

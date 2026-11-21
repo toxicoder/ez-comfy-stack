@@ -11,6 +11,7 @@ tags: [tui, safety, operate, occupancy, gb10]
 - **Launch** - the Bazel target, the utility runner, and the operator escape hatch
 - **Sections** - the nine groups, from the dashboard to the disk reclaim pane
 - **Keys** - navigation, search, dispatch, and the one-key safe stop
+- **Answering the form** - what each field says before you type, and what a refusal says after
 - **Risk tiers** - what runs on a keystroke and what asks for a typed word
 - **The guard layer** - the floors and probes that grey an action out
 - **Headless check** - `--check` for CI and for a box you cannot see
@@ -120,6 +121,33 @@ blocker shown as the row's note.
 | `?` | Help |
 | `Esc` | Back one screen |
 | `q` | Quit |
+
+## Answering the form
+
+An action that takes arguments opens one field per argument, and the text beside
+the field is the whole warning before you type. Each field carries a sentence the
+catalog writes for it, so a required one names the artifact, an example value, and
+the verb that lists the valid ones.
+
+| The field shows | Meaning |
+| --- | --- |
+| `the shot number as the shot sheet lists it; a shipped film runs 01 through 18.` | The hint the catalog carries for this field |
+| `turbo [turbo, xl, all]` | A menu: the answer on file, then every value it accepts |
+| `optional: leave blank to skip it` | Nothing is required here and no hint was ever authored |
+| `no hint for this field: file a bug so it gets one` | A required field the catalog shipped bare: a console defect worth reporting |
+
+A refused answer comes back in the same words the field showed, with what you
+typed inside the sentence and the field's own guidance repeated after it:
+`Slug is required - the slug of the new app, lowercase words joined by
+hyphens.`, `Tier is not one of: turbo, xl, all (you typed Turbo) - which
+ACE-Step pack to pull; turbo is the smaller one.`, and `Lines is not a number:
+you typed abc - how many log lines to print; blank uses the default.` An answer
+that parses but lands outside the field's range says so the same way: `Lines is
+outside 1..100000: you typed 9999999 - how many log lines to print; blank uses
+the default.` Internal names, Python reprs, and flag spellings stay out of
+those lines, so a refusal needs nothing decoded after it.
+`tests/python/test_tui_contract.py` pins every sentence quoted on this page
+against the catalog the console actually ships.
 
 ## Risk tiers
 

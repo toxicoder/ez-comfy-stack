@@ -22,8 +22,12 @@ import ez_prompt_enhance  # noqa: E402
 from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
     EZAceStepPromptEnhance,
+    EZAudioRack,
+    EZBackgroundCast,
+    EZCinemaRack,
     EZContextJoin,
     EZDreamXPromptEnhance,
+    EZImageDescribe,
     EZKleinPromptEnhance,
     EZLongCatPromptEnhance,
     EZLTXPromptEnhance,
@@ -2240,3 +2244,263 @@ def test_enhance_policy_keeps_negative_on_when_positive_is_off() -> None:
     assert isinstance(neg_values, list)
     assert ltx_values[2] is False
     assert neg_values[1] is True
+
+
+# Every widget the sixteen registered classes expose, in INPUT_TYPES order, so
+# a widget dropped from the map cannot pass the tooltip invariant by vanishing.
+PACK_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZImageDescribe": ("enable", "image"),
+    "EZBackgroundCast": ("other_characters", "background_characters"),
+    "EZKleinPromptEnhance": (
+        "sample",
+        "prompt",
+        "enhance",
+        "mode",
+        "duration_hint",
+        "style",
+        "catalog",
+        "context",
+        "goal",
+        "image_desc",
+        "background_cast",
+    ),
+    "EZWanPromptEnhance": (
+        "sample",
+        "prompt",
+        "enhance",
+        "mode",
+        "duration_hint",
+        "style",
+        "catalog",
+        "context",
+        "goal",
+        "image_desc",
+    ),
+    "EZLTXPromptEnhance": (
+        "sample",
+        "prompt",
+        "enhance",
+        "mode",
+        "duration_hint",
+        "audio_notes",
+        "style",
+        "catalog",
+        "context",
+        "goal",
+        "image_desc",
+    ),
+    "EZZimagePromptEnhance": (
+        "sample",
+        "prompt",
+        "enhance",
+        "duration_hint",
+        "style",
+        "catalog",
+        "context",
+        "goal",
+        "image_desc",
+    ),
+    "EZLongCatPromptEnhance": (
+        "sample",
+        "prompt",
+        "enhance",
+        "mode",
+        "duration_hint",
+        "style",
+        "catalog",
+        "context",
+        "goal",
+        "image_desc",
+    ),
+    "EZDreamXPromptEnhance": (
+        "sample",
+        "prompt",
+        "enhance",
+        "duration_hint",
+        "audio_notes",
+        "style",
+        "catalog",
+        "context",
+        "goal",
+        "image_desc",
+    ),
+    "EZNegativePromptEnhance": ("prompt", "enhance", "family", "positive"),
+    "EZPromptBundle": tuple(f"text_{index:02d}" for index in range(1, 25)),
+    "EZPromptJoin": ("identity", "shot", "inventory", "lock"),
+    "EZContextJoin": (
+        "a",
+        "label_a",
+        "label_b",
+        "label_c",
+        "label_d",
+        "b",
+        "c",
+        "d",
+    ),
+    "EZAceStepPromptEnhance": (
+        "sample",
+        "tags",
+        "lyrics",
+        "enhance",
+        "mode",
+        "catalog",
+        "context",
+    ),
+    "EZSamplePrompt": ("sample", "prompt", "catalog"),
+    "EZCinemaRack": (
+        "subject",
+        "flavor",
+        "recipe",
+        "framing_shot_size",
+        "camera_angles",
+        "camera_movement",
+        "lenses_optics",
+        "composition",
+        "lighting",
+        "color_film_look",
+        "time_motion",
+        "in_camera_optical",
+        "editing_transitions",
+        "atmosphere_weather",
+        "genre_looks",
+        "viral_looks",
+    ),
+    "EZAudioRack": (
+        "brief",
+        "flavor",
+        "recipe",
+        "genre_style",
+        "tempo_groove",
+        "drums_rhythm",
+        "bass_low_end",
+        "harmony_mode",
+        "instruments_texture",
+        "vocal_identity",
+        "arrangement_form",
+        "mix_production",
+        "space_ambience",
+        "sound_design_fx",
+        "mood_energy",
+        "use_case",
+    ),
+}
+
+_PACK_NODE_CLASSES = (
+    EZImageDescribe,
+    EZBackgroundCast,
+    EZKleinPromptEnhance,
+    EZWanPromptEnhance,
+    EZLTXPromptEnhance,
+    EZZimagePromptEnhance,
+    EZLongCatPromptEnhance,
+    EZDreamXPromptEnhance,
+    EZNegativePromptEnhance,
+    EZPromptBundle,
+    EZPromptJoin,
+    EZContextJoin,
+    EZAceStepPromptEnhance,
+    EZSamplePrompt,
+    EZCinemaRack,
+    EZAudioRack,
+)
+
+# Widgets _visual_input_types builds for all six visual Enhance nodes.
+_FACTORY_REQUIRED = (
+    "sample",
+    "prompt",
+    "enhance",
+    "duration_hint",
+    "style",
+    "catalog",
+)
+_FACTORY_OPTIONAL = ("context", "goal", "image_desc")
+
+# A tooltip shared by six nodes that named one family would be false for five.
+_FAMILY_WORDS = ("Klein", "Wan", "LTX", "LongCat", "DreamX", "Z-Image", "iclora")
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every knob an operator can touch on this pack explains itself."""
+    assert set(PACK_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    for cls in _PACK_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        seen: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                assert len(field) == 2, f"{where} is not a legacy tuple spec"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip is not a sentence"
+                seen.append(widget)
+        assert tuple(seen) == PACK_WIDGETS[cls.__name__], cls.__name__
+
+
+def test_visual_factory_tooltips_stay_true_for_all_six_callers() -> None:
+    """One factory builds six Enhance nodes, so its text stays family-neutral."""
+    six = (
+        EZKleinPromptEnhance,
+        EZWanPromptEnhance,
+        EZLTXPromptEnhance,
+        EZZimagePromptEnhance,
+        EZLongCatPromptEnhance,
+        EZDreamXPromptEnhance,
+    )
+    first = six[0].INPUT_TYPES()
+    for widget in _FACTORY_REQUIRED:
+        shared = first["required"][widget][1]["tooltip"]
+        assert isinstance(shared, str) and shared.endswith(".")
+        for cls in six[1:]:
+            got = cls.INPUT_TYPES()["required"][widget][1]["tooltip"]
+            assert got == shared, f"{cls.__name__}.{widget}"
+    for widget in _FACTORY_OPTIONAL:
+        shared = first["optional"][widget][1]["tooltip"]
+        for cls in six[1:]:
+            got = cls.INPUT_TYPES()["optional"][widget][1]["tooltip"]
+            assert got == shared, f"{cls.__name__}.{widget}"
+    text = " ".join(
+        field[1]["tooltip"]
+        for cls in six
+        for section in ("required", "optional")
+        for field in cls.INPUT_TYPES().get(section, {}).values()
+    )
+    for family in _FAMILY_WORDS:
+        assert family not in text, family
+
+
+def test_forced_input_sockets_name_their_source_node() -> None:
+    """A socket has no label an operator can read, so the hover text must point."""
+    klein_optional = EZKleinPromptEnhance.INPUT_TYPES()["optional"]
+    assert "EZBackgroundCast" in klein_optional["background_cast"][1]["tooltip"]
+    wan_optional = EZWanPromptEnhance.INPUT_TYPES()["optional"]
+    assert "EZImageDescribe" in wan_optional["image_desc"][1]["tooltip"]
+    bundle_optional = EZPromptBundle.INPUT_TYPES()["optional"]
+    assert "skipped" in bundle_optional["text_01"][1]["tooltip"]
+
+
+def test_background_cast_flags_do_not_share_one_sentence() -> None:
+    spec = EZBackgroundCast.INPUT_TYPES()["required"]
+    other = spec["other_characters"][1]["tooltip"]
+    crowd = spec["background_characters"][1]["tooltip"]
+    assert other != crowd
+    assert "companions" in other
+    assert "extras" in crowd
+
+
+def test_engine_jargon_descriptions_carry_the_operator_action() -> None:
+    """Klein and Negative keep the GGUF word, so each owes the repair after it."""
+    for cls in (EZKleinPromptEnhance, EZNegativePromptEnhance):
+        text = cls.DESCRIPTION
+        assert "GGUF" in text, cls.__name__
+        assert "bazelisk run //:manage" in text, cls.__name__
+        assert "download-models" in text, cls.__name__
+        assert "Queue" in text, cls.__name__
+        assert "manage.sh" not in text, cls.__name__
+    klein_text = EZKleinPromptEnhance.DESCRIPTION
+    assert "read the Enhance status" in klein_text
+    negative_text = EZNegativePromptEnhance.DESCRIPTION
+    assert "Wire the finished positive into Positive" in negative_text

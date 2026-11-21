@@ -52,7 +52,7 @@ from ez_quality.check import (  # noqa: E402
     rung_family,
     rung_needs,
 )
-from ez_quality.nodes import EZQuality  # noqa: E402
+from ez_quality.nodes import EZModelCheck, EZQuality  # noqa: E402
 from ez_quality.presets import (  # noqa: E402
     AUDIO_DRAFT_STEPS,
     AUDIO_FINAL_STEPS,
@@ -1976,3 +1976,167 @@ def test_family_honors_tiers_refuses_a_wan_14b_graph() -> None:
 
     assert family_honors_tiers(_wan_graph("wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors")) is False
     assert family_honors_tiers(_wan_graph("wan2.2_ti2v_5B_fp16.safetensors")) is True
+
+
+# Every knob the two Detail classes expose, pinned by name and in INPUT_TYPES
+# order, so a widget dropped from a spec, or quietly turned into a bare socket,
+# cannot pass the tooltip sweep by not existing.
+QUALITY_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZQuality": ("quality",),
+    "EZModelCheck": ("status",),
+}
+"""Widget names the Detail specs must keep exposing, in INPUT_TYPES order."""
+
+# Connection-only sockets: this pack ships none. Both widgets are operator
+# knobs (the Detail combo and the Check models report), so each owes a tooltip.
+QUALITY_SOCKETS: dict[str, tuple[str, ...]] = {
+    "EZQuality": (),
+    "EZModelCheck": (),
+}
+"""Wires that must stay bare 1-tuples; empty here, and the sweep enforces it."""
+
+QUALITY_TOOLTIP_POINTERS: dict[str, tuple[str, ...]] = {
+    "EZQuality.quality": ("draft", "standard", "final", "rung"),
+    "EZModelCheck.status": (
+        "Check models",
+        "bazelisk run //:manage -- download-models",
+    ),
+}
+"""Rung, button, and repair verb each tooltip must name, keyed by Class.widget."""
+
+QUALITY_OPTIONS_SHAPES: dict[str, dict[str, Any]] = {
+    "EZQuality.quality": {"default": QUALITY_DEFAULT},
+    "EZModelCheck.status": {
+        "default": quality_nodes.STATUS_DEFAULT,
+        "multiline": True,
+        "dynamicPrompts": False,
+    },
+}
+"""Every Detail options dict minus its tooltip: this change may only add prose."""
+
+QualityNode = type[EZQuality] | type[EZModelCheck]
+"""The two classes the Detail pack registers."""
+
+QUALITY_NODE_CLASSES: tuple[QualityNode, ...] = (EZQuality, EZModelCheck)
+"""Every Detail class, in canvas-menu order."""
+
+
+def _quality_field(cls: QualityNode, widget: str) -> tuple[Any, ...]:
+    """Return one Detail widget's legacy tuple spec.
+
+    Args:
+        cls: The registered node class.
+        widget: Widget name, looked up in ``required`` then ``optional``.
+
+    Returns:
+        The ``(type, options)`` tuple the spec carries.
+    """
+    spec = cls.INPUT_TYPES()
+    for section in ("required", "optional"):
+        if widget in spec.get(section, {}):
+            field = spec[section][widget]
+            assert isinstance(field, tuple), f"{cls.__name__}.{widget}"
+            return field
+    raise AssertionError(f"{cls.__name__}.{widget} is not in INPUT_TYPES")
+
+
+def _quality_tooltip(cls: QualityNode, widget: str) -> str:
+    """Return the operator tooltip one Detail widget carries.
+
+    Args:
+        cls: The registered node class.
+        widget: Widget name, looked up in ``required`` then ``optional``.
+
+    Returns:
+        The tooltip string its options dict carries.
+    """
+    field = _quality_field(cls, widget)
+    assert len(field) == 2, f"{cls.__name__}.{widget} has no options dict"
+    tooltip = field[1]["tooltip"]
+    assert isinstance(tooltip, str), f"{cls.__name__}.{widget} tooltip is not str"
+    return tooltip
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every Detail knob says what it picks and what the click does."""
+    assert set(QUALITY_WIDGETS) == set(quality_nodes.NODE_CLASS_MAPPINGS)
+    seen: set[str] = set()
+    for cls in QUALITY_NODE_CLASSES:
+        spec = cls.INPUT_TYPES()
+        sockets = QUALITY_SOCKETS[cls.__name__]
+        widgets: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                if widget in sockets:
+                    assert field == (field[0],), f"{where} socket is not bare"
+                    continue
+                assert len(field) == 2, f"{where} has no options dict"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip == tooltip.strip(), f"{where} tooltip is padded"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip has no period"
+                widgets.append(widget)
+                seen.add(f"{cls.__name__}.{widget}")
+        assert tuple(widgets) == QUALITY_WIDGETS[cls.__name__], cls.__name__
+        names = list(spec.get("required", {})) + list(spec.get("optional", {}))
+        assert tuple(names) == QUALITY_WIDGETS[cls.__name__] + sockets, cls.__name__
+    assert seen, "the tooltip sweep saw no widget"
+    assert seen == {
+        f"{name}.{widget}"
+        for name, widgets in QUALITY_WIDGETS.items()
+        for widget in widgets
+    }
+
+
+def test_detail_widget_and_socket_counts_are_pinned() -> None:
+    """A spec that quietly lost a widget or gained a socket fails here."""
+    assert sum(len(widgets) for widgets in QUALITY_WIDGETS.values()) == 2
+    assert sum(len(sockets) for sockets in QUALITY_SOCKETS.values()) == 0
+    assert set(QUALITY_OPTIONS_SHAPES) == {
+        f"{name}.{widget}"
+        for name, widgets in QUALITY_WIDGETS.items()
+        for widget in widgets
+    }
+
+
+def test_widget_options_keep_their_contract() -> None:
+    """Strip the prose and every options dict is the one the graphs were cut on."""
+    for where, expected in QUALITY_OPTIONS_SHAPES.items():
+        cls_name, widget = where.split(".")
+        cls = next(c for c in QUALITY_NODE_CLASSES if c.__name__ == cls_name)
+        options = dict(_quality_field(cls, widget)[1])
+        options.pop("tooltip", None)
+        assert options == expected, where
+
+
+def test_rung_combo_keeps_its_order_and_default() -> None:
+    """The menu still offers three rungs in draft, standard, final order."""
+    combo = _quality_field(EZQuality, "quality")
+    assert list(combo[0]) == [QUALITY_DRAFT, QUALITY_STANDARD, QUALITY_FINAL]
+    assert list(combo[0]) == list(QUALITY_CHOICES)
+    assert combo[1]["default"] == QUALITY_DEFAULT == QUALITY_STANDARD
+
+
+def test_tooltips_name_the_button_and_the_repair_verb() -> None:
+    """A pointer to a button or a command pins the words the operator types."""
+    assert set(QUALITY_TOOLTIP_POINTERS) <= set(QUALITY_OPTIONS_SHAPES)
+    for where, needles in QUALITY_TOOLTIP_POINTERS.items():
+        cls_name, widget = where.split(".")
+        cls = next(c for c in QUALITY_NODE_CLASSES if c.__name__ == cls_name)
+        tooltip = _quality_tooltip(cls, widget)
+        for needle in needles:
+            assert needle in tooltip, f"{where} tooltip does not name {needle!r}"
+
+
+def test_rung_tooltip_says_what_each_rung_does() -> None:
+    """The combo hover text names all three rungs and what standard writes."""
+    tooltip = _quality_tooltip(EZQuality, "quality")
+    assert "standard writes nothing" in tooltip
+    assert "download tier" in tooltip
+    status = _quality_tooltip(EZModelCheck, "status")
+    assert "Queue never runs this node" in status

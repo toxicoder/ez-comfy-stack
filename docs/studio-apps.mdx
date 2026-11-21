@@ -15,6 +15,8 @@ type are on [Prompting](prompting.md).
 **What's on this page**
 
 - **Graph vs App** - what each surface edits, and what the Detail row owns
+- **App panel labels** - what each row reads, where those words come from, and what you cannot rename
+- **Seeded input plates** - the placeholder stills behind every LoadImage default, and the verb that re-seeds them
 - **Reference stills (optional)** - the picker, the three slots, and the mute
 - **Occupancy** - the one-heavy-job table and what must be stopped
 - **Lane A - Labs** - the explore desks
@@ -124,6 +126,79 @@ Comfy's **Apps** sidebar lists files whose name ends in `.app.json`. On `start`,
 Filenames: [Workflow catalog](studio-workflows.md). Playbook: [The still-to-motion-to-AV pipeline](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
 
 Save your own Apps under **`_user/`**. Duplicate a lab graph (App Forge, Save As `_user/`, or a new file under live `_lab/`) and it stays in `_user/`. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start` - re-open a rescued file, because `_lab/` is the shipped catalog. If `_user/_rescued/` is already full of catalog clones from older starts, delete that folder (keep the rest of `_user/`). Folder rules and the sidebar tree: [Workflow catalog](studio-workflows.md#where-the-graphs-live).
+
+---
+
+## App panel labels
+
+Every row an App shows is a widget on the graph, and the words beside it are chosen when the App
+renders, by the chrome in `custom_nodes/ez_studio_app/js/ez_studio_app.js`. A graph does not have to
+carry a label for its own knob for that knob to read as English. The chrome picks the row text in
+this order, and the first one that exists wins:
+
+| Order | The row reads | Why it wins |
+| --- | --- | --- |
+| 1 | The label the graph stamps | `extra.linearData.inputs` holds `[nodeId, widgetName, config]`, and a `config.label` is written by the graph that knows what this knob is for in this shot |
+| 2 | A word from the chrome's own table | 118 entries map a raw widget name to a label, covering the first-party knobs the shipped graphs leave in `snake_case` (`upscale` reads **Upscale by**, `params_json` reads **Parameters (JSON)**, `speaker_a_ref` reads **Speaker A reference WAV**) plus the core ComfyUI and VHS rows those graphs also leave unlabelled (`sampler_name` -> **Sampler**, `noise_seed` -> **Seed**, `filename_prefix` -> **Output filename**) |
+| 3 | The raw widget name | Neither the graph nor the table named it, so the row prints `snake_case`. That is the one case to report: [Troubleshooting](troubleshooting.md#app-chrome-input-plates-tooltips-and-mcp-arguments) |
+
+One built-in case sits between rows 1 and 2: **Rewrite negative** on `EZNegativePromptEnhance`. That
+node's `enhance` widget is the negative pass, so it never borrows the forward rewrite's label.
+
+The node card on the canvas is titled by the same kind of lookup. A title the graph authored always
+wins; a node the graph left wearing its class name gets a human one instead (`KSampler` reads
+**Sampling**, and the second `KSampler` on the same graph **Sampling - pass 2**, so a two-pass graph
+never shows two identical boxes). A title you type yourself outranks both and survives every repaint,
+because the chrome only fills a title still equal to the class name.
+
+Two limits worth knowing before you try to fix a label from the panel:
+
+- **A widget row you rename on the canvas does not keep the name.** The chrome writes the stamped or
+  table label back onto the widget when the App loads, so a hand-typed row label is gone on the next
+  open. A rename you want to keep belongs in the graph: [Workflow catalog](studio-workflows.md#notes-that-apply-to-every-lab-graph).
+- **The table is not the operator's file to widen.** When a knob reaches you as `snake_case` the
+  graph is the place that should name it, which keeps one graph's wording from becoming every
+  graph's wording.
+
+`bazelisk test //tests:pytest` runs
+`tests/python/test_nodes2_js.py::test_app_mode_labels_cover_every_input_the_shipped_graphs_surface`:
+it walks every `extra.linearData.inputs` entry in every shipped graph that carries no stamped label
+and fails if the chrome's table has no entry for that widget. A shipped App cannot hand you a
+`snake_case` row and stay green.
+
+---
+
+## Seeded input plates
+
+Several shipped Apps default a **LoadImage** to a bare filename. This stack remaps Comfy's input
+folder onto the `/inputs` bind and ships no `input/` tree of its own, so those files have to be
+created - otherwise the first **Queue** on a fresh host dies on a missing plate instead of rendering.
+The container seeds each one at start:
+
+| Plate | Size | What defaults to it |
+| --- | --- | --- |
+| `example.png` | 1024x1024 | the stock LoadImage default ComfyUI would normally ship itself, and the name more lab LoadImage widgets carry than any other |
+| `cover.png` | 1024x1024 | album art in the `audio/albums/` graphs |
+| `first.png` | 1280x704 | the guide desks (**guides/clay-hero**, **guides/clay-plates**, **guides/depth-control-shorts**, **guides/first-last-from-guide**) |
+| `last.png` | 832x480 | the closing frame of **guides/first-last-from-guide** |
+| `canny.png` | 1280x704 | **guides/canny-hero** |
+| `ez_<film>_plate.png` and `ez_<film>_b<N>_s3_last.png`, 28 files | 1280x704 | each film title's plate and the act hand-off frames |
+| `ez_house_clay_01.png` .. `ez_house_clay_10.png` | 1024x1280 | the clay desk Apps, when the host layout dump did not stage them |
+
+A placeholder is a real image, not a blank: a tonal gradient with a tinted stripe band along the
+bottom, so two plates at the same size never look alike and the sampler has something to render.
+Swap it whenever you like - **Upload media** on the picker puts your own still there.
+
+Seeding never replaces a file that is already a readable PNG, so a plate you uploaded, and the clay
+pack the host staged, survive every restart. It runs in the container's start phase, so the verb that
+re-seeds is `bazelisk run //:manage -- start` on a fresh host and `bazelisk run //:manage -- restart`
+after you deliberately delete a plate you want back. A run that worked prints one
+`input plates ready in /inputs` line in `bazelisk run //:manage -- logs`; the failure line and what
+to do about it are on [Troubleshooting](troubleshooting.md#app-chrome-input-plates-tooltips-and-mcp-arguments).
+
+`bazelisk test //tests:pytest` runs
+`tests/python/test_seed_clay_inputs.py::test_placeholder_table_matches_shipped_graphs`, which fails
+the moment a shipped graph defaults a LoadImage to a name nothing seeds.
 
 ---
 

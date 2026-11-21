@@ -83,6 +83,36 @@ def _widget_names(node: Any) -> list[str]:
     return names
 
 
+def _knob_options(field: Any) -> dict[str, Any]:
+    """Return one widget's options with the operator tooltip lifted out.
+
+    Args:
+        field: The ``(type, options)`` tuple an INPUT_TYPES key carries.
+
+    Returns:
+        The options minus ``tooltip``, so the exact-shape pins below check the
+        widget contract while the pack invariant owns the sentence.
+    """
+    options = field[1] if len(field) > 1 else {}
+    assert isinstance(options, dict), field
+    return {key: value for key, value in options.items() if key != "tooltip"}
+
+
+def _assert_sentence(field: Any, where: str) -> None:
+    """Fail unless one widget spec carries a plain-English tooltip.
+
+    Args:
+        field: The ``(type, options)`` tuple an INPUT_TYPES key carries.
+        where: Name of the widget, used for the failure message.
+    """
+    options = field[1] if len(field) > 1 else {}
+    assert isinstance(options, dict), where
+    tooltip = options.get("tooltip")
+    assert isinstance(tooltip, str), where
+    assert tooltip.strip() == tooltip, where
+    assert tooltip.endswith("."), where
+
+
 def _three_stills() -> dict[str, _FakeImg]:
     """Return one distinct still per picker name.
 
@@ -96,7 +126,9 @@ def _three_stills() -> dict[str, _FakeImg]:
     }
 
 
-def _patch_stills(monkeypatch: pytest.MonkeyPatch, stills: dict[str, _FakeImg]) -> list[str]:
+def _patch_stills(
+    monkeypatch: pytest.MonkeyPatch, stills: dict[str, _FakeImg]
+) -> list[str]:
     """Swap ``load_input_still`` for a picker lookup that records calls.
 
     Args:
@@ -255,7 +287,9 @@ def test_load_input_still_success_and_failures(
     monkeypatch.setitem(sys.modules, "PIL", fake_pil)
     monkeypatch.setitem(sys.modules, "PIL.Image", fake_image)
     if "numpy" in sys.modules:
-        monkeypatch.setattr(sys.modules["numpy"], "asarray", lambda _img: _Arr(), raising=False)
+        monkeypatch.setattr(
+            sys.modules["numpy"], "asarray", lambda _img: _Arr(), raising=False
+        )
     loaded = load_input_still("ok.png")
     assert loaded is not None
 
@@ -268,7 +302,9 @@ def test_load_input_still_success_and_failures(
         def __truediv__(self, _n: object) -> "_Flat":
             return self
 
-    monkeypatch.setattr(sys.modules["numpy"], "asarray", lambda _img: _Flat(), raising=False)
+    monkeypatch.setattr(
+        sys.modules["numpy"], "asarray", lambda _img: _Flat(), raising=False
+    )
     fake_np.asarray = lambda _img: _Flat()
     assert load_input_still("ok.png") is None
 
@@ -373,19 +409,25 @@ def test_optional_image_widget_order_is_positional() -> None:
 def test_optional_image_mute_widget_defaults_on() -> None:
     mute = EZOptionalImage.INPUT_TYPES()["optional"]["use_references"]
     assert mute[0] == "BOOLEAN"
-    assert mute[1] == {
+    assert _knob_options(mute) == {
         "default": True,
         "label_on": "Use references",
         "label_off": "References off",
     }
+    _assert_sentence(mute, "EZOptionalImage.use_references")
 
 
 def test_optional_image_extra_pickers_are_upload_combos() -> None:
     spec = EZOptionalImage.INPUT_TYPES()
     for name in ("filename", "filename_2", "filename_3"):
-        picker = spec["required"][name] if name in spec["required"] else spec["optional"][name]
+        picker = (
+            spec["required"][name]
+            if name in spec["required"]
+            else spec["optional"][name]
+        )
         assert picker[0][0] == ""
-        assert picker[1] == {"default": "", "image_upload": True}
+        assert _knob_options(picker) == {"default": "", "image_upload": True}
+        _assert_sentence(picker, f"EZOptionalImage.{name}")
 
 
 def test_optional_image_drops_the_dead_pair_widgets() -> None:
@@ -433,8 +475,12 @@ def test_use_references_accepts_a_falsy_string() -> None:
 def test_pickers_load_through_load_input_still(monkeypatch: pytest.MonkeyPatch) -> None:
     stills = _three_stills()
     calls = _patch_stills(monkeypatch, stills)
-    _patch_torch(monkeypatch, lambda frames, dim=0: SimpleNamespace(frames=list(frames)))
-    out = EZOptionalImage().run(filename="a.png", filename_2="b.png", filename_3="c.png")
+    _patch_torch(
+        monkeypatch, lambda frames, dim=0: SimpleNamespace(frames=list(frames))
+    )
+    out = EZOptionalImage().run(
+        filename="a.png", filename_2="b.png", filename_3="c.png"
+    )
     assert calls == ["a.png", "b.png", "c.png"]
     assert out["result"][1] == 3
     assert out["result"][2] is True
@@ -444,8 +490,12 @@ def test_pickers_load_through_load_input_still(monkeypatch: pytest.MonkeyPatch) 
 def test_pickers_dedupe_by_normalized_filename(monkeypatch: pytest.MonkeyPatch) -> None:
     stills = _three_stills()
     calls = _patch_stills(monkeypatch, stills)
-    _patch_torch(monkeypatch, lambda frames, dim=0: SimpleNamespace(frames=list(frames)))
-    out = EZOptionalImage().run(filename=" a.png ", filename_2="a.png", filename_3="b.png")
+    _patch_torch(
+        monkeypatch, lambda frames, dim=0: SimpleNamespace(frames=list(frames))
+    )
+    out = EZOptionalImage().run(
+        filename=" a.png ", filename_2="a.png", filename_3="b.png"
+    )
     assert calls == ["a.png", "b.png"]
     assert out["result"][1] == 2
     assert out["result"][2] is True
@@ -467,7 +517,9 @@ def test_wired_batch_counts_its_batch_dimension() -> None:
     assert out["ui"]["text"] == ("4 reference stills",)
 
 
-def test_single_still_passes_through_without_torch(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_single_still_passes_through_without_torch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _patch_no_torch(monkeypatch)
     fake = _FakeImg(64, 64)
     monkeypatch.setattr("ez_image.refs.load_input_still", lambda _name: fake)
@@ -476,7 +528,9 @@ def test_single_still_passes_through_without_torch(monkeypatch: pytest.MonkeyPat
     assert out["result"][1] == 1
 
 
-def test_multi_still_concatenates_on_batch_axis(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_multi_still_concatenates_on_batch_axis(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     stills = _three_stills()
     _patch_stills(monkeypatch, stills)
     joined: list[tuple[int, int]] = []
@@ -501,7 +555,9 @@ def test_multi_still_concatenates_on_batch_axis(monkeypatch: pytest.MonkeyPatch)
     ]
 
 
-def test_multi_still_falls_back_when_cat_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_multi_still_falls_back_when_cat_raises(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     stills = _three_stills()
     _patch_stills(monkeypatch, stills)
 
@@ -575,12 +631,17 @@ def test_ref_canvas_optional_keys_are_exact() -> None:
     spec = EZKleinRefCanvas.INPUT_TYPES()
     assert list(spec["required"]) == ["latent", "vae"]
     assert list(spec["optional"]) == ["image", "has_image", "max_refs"]
-    assert spec["optional"]["image"] == ("IMAGE",)
-    assert spec["optional"]["has_image"] == ("BOOLEAN", {"default": False})
-    assert spec["optional"]["max_refs"] == (
-        "INT",
-        {"default": 3, "min": 1, "max": 4, "step": 1},
-    )
+    assert spec["optional"]["image"][0] == "IMAGE"
+    _assert_sentence(spec["optional"]["image"], "EZKleinRefCanvas.image")
+    assert spec["optional"]["has_image"][0] == "BOOLEAN"
+    assert _knob_options(spec["optional"]["has_image"]) == {"default": False}
+    assert spec["optional"]["max_refs"][0] == "INT"
+    assert _knob_options(spec["optional"]["max_refs"]) == {
+        "default": 3,
+        "min": 1,
+        "max": 4,
+        "step": 1,
+    }
     assert _widget_names(EZKleinRefCanvas) == ["has_image", "max_refs"]
     assert EZKleinRefCanvas.RETURN_TYPES == ("LATENT", "IMAGE")
     assert EZKleinRefCanvas.RETURN_NAMES == ("latent", "image")
@@ -648,7 +709,9 @@ def test_ref_canvas_clamps_the_max_refs_widget(monkeypatch: pytest.MonkeyPatch) 
     assert len(missing) == 3
 
 
-def test_ref_canvas_slices_a_bare_encoded_batch(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ref_canvas_slices_a_bare_encoded_batch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     seen = _patch_reference_latent(monkeypatch)
     latent = {"samples": "empty"}
     encoded = _FakeBatch(["f0", "f1"])
@@ -763,7 +826,10 @@ def test_encode_ref_fail_soft_and_resize(monkeypatch: pytest.MonkeyPatch) -> Non
     latent = {"samples": "empty"}
     vae_missing = SimpleNamespace()
     image = _FakeImg(32, 32)
-    assert EZKleinRefCanvas().run(latent, vae_missing, image=image, has_image=True)[0] is latent
+    assert (
+        EZKleinRefCanvas().run(latent, vae_missing, image=image, has_image=True)[0]
+        is latent
+    )
     assert _encode_ref(image, vae_missing) is None
 
     def boom(_img: object) -> object:
@@ -783,7 +849,12 @@ def test_encode_ref_fail_soft_and_resize(monkeypatch: pytest.MonkeyPatch) -> Non
     out = _encode_ref(odd, SimpleNamespace(encode=lambda img: encoded))
     assert out is encoded
     assert seen == [(16, 16)]
-    assert EZKleinRefCanvas().run(latent, SimpleNamespace(encode=boom), image=image, has_image="on")[0] is latent
+    assert (
+        EZKleinRefCanvas().run(
+            latent, SimpleNamespace(encode=boom), image=image, has_image="on"
+        )[0]
+        is latent
+    )
 
 
 def test_reference_latent_helpers(monkeypatch: pytest.MonkeyPatch) -> None:

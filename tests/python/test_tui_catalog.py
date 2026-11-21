@@ -648,3 +648,28 @@ def test_int_parameters_are_bounded() -> None:
     assert build_argv(logs, {"tail": "50"}) == ("logs", "--tail", "50")
     with pytest.raises(ValueError, match="outside 1..100000"):
         build_argv(logs, {"tail": "9999999"})
+
+
+def test_the_catalog_is_not_empty_before_any_sweep_runs() -> None:
+    """Pin the registry so a sweep over it cannot pass by walking nothing."""
+    actions = k.all_actions()
+    assert actions, "the catalog is empty, so every sweep below is vacuous"
+    assert sum(len(action.params) for action in actions) > 100
+
+
+def test_every_required_parameter_tells_the_operator_what_to_type() -> None:
+    """A required field the operator cannot guess is a catalog defect.
+
+    The placeholder the form shows before the operator types is the whole
+    warning, so a required parameter has to carry its own one-line sentence:
+    plain ASCII, long enough to name the artifact, and closed with a period.
+    """
+    for action in k.all_actions():
+        for param in action.params:
+            if not param.required:
+                continue
+            where = f"{action.action_id}.{param.name}"
+            assert param.help_text, f"{where} is required with no help text"
+            assert param.help_text.isascii(), f"{where} is not pure ASCII"
+            assert len(param.help_text) >= 20, f"{where} hint is too thin to help"
+            assert param.help_text.endswith("."), f"{where} hint is not a sentence"

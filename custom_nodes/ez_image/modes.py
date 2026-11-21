@@ -312,7 +312,9 @@ def load_categories() -> tuple[CategorySpec, ...]:
             continue
         seen.add(mode.category)
         derived.append(
-            CategorySpec(id=mode.category, label=mode.category.replace("_", " ").title())
+            CategorySpec(
+                id=mode.category, label=mode.category.replace("_", " ").title()
+            )
         )
     return tuple(derived)
 
@@ -619,17 +621,64 @@ class EZImageMode:
             mode_default = modes[0]
         return {
             "required": {
-                "category": (categories, {"default": cat_default}),
-                "mode": (modes, {"default": mode_default}),
-                "iterate": ("BOOLEAN", {"default": False}),
+                "category": (
+                    categories,
+                    {
+                        "default": cat_default,
+                        "tooltip": "Which family of creator modes the list below "
+                        "draws from. Pick this first and the mode choices follow "
+                        "it.",
+                    },
+                ),
+                "mode": (
+                    modes,
+                    {
+                        "default": mode_default,
+                        "tooltip": "What this run does to the still, such as "
+                        "background swap or change text. It also sets the Enhance "
+                        "mode and the output filename.",
+                    },
+                ),
+                "iterate": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "On: a run with no reference still goes "
+                        "text-to-image and a run with one edits that still. Leave "
+                        "off for a single straight pass.",
+                    },
+                ),
                 "run_summary": (
                     "STRING",
-                    {"default": "", "multiline": True},
+                    {
+                        "default": "",
+                        "multiline": True,
+                        "tooltip": "Note shown in the App panel only. It never "
+                        "reaches the model, so leave it alone unless you are "
+                        "annotating the graph.",
+                    },
                 ),
             },
             "optional": {
-                "context": ("STRING", {"default": "", "multiline": True}),
-                "has_image": ("BOOLEAN", {"default": False, "forceInput": True}),
+                "context": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": True,
+                        "tooltip": "Optional look or context text wired in from a "
+                        "prompt node; it is spliced into the prompt this node "
+                        "hands on.",
+                    },
+                ),
+                "has_image": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "forceInput": True,
+                        "tooltip": "Wire the has_image flag from the optional-still "
+                        "node; it tells this node whether a reference is present.",
+                    },
+                ),
             },
         }
 

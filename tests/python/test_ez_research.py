@@ -23,7 +23,9 @@ from ez_research.nodes import EZCreativeResearch, NODE_CLASS_MAPPINGS  # noqa: E
 from ez_research.search import SearchHit  # noqa: E402
 
 
-def _public_addrinfo(host: str, port: int, *_args: object, **_kwargs: object) -> list[tuple[Any, ...]]:
+def _public_addrinfo(
+    host: str, port: int, *_args: object, **_kwargs: object
+) -> list[tuple[Any, ...]]:
     return [(2, 1, 6, "", ("8.8.8.8", port))]
 
 
@@ -87,8 +89,7 @@ def test_parse_wikipedia_rejects_private_url() -> None:
 
 def test_decode_ddg_href_unwraps_uddg() -> None:
     href = (
-        "//duckduckgo.com/l/?uddg=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FKey"
-        "&rut=abc"
+        "//duckduckgo.com/l/?uddg=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FKey&rut=abc"
     )
     assert search.decode_ddg_href(href) == "https://en.wikipedia.org/wiki/Key"
 
@@ -250,7 +251,9 @@ def test_run_chat_with_search(monkeypatch: pytest.MonkeyPatch) -> None:
             SearchHit("Key", "https://en.wikipedia.org/wiki/Key", "snip")
         ],
     )
-    monkeypatch.setattr(pipeline, "_complete", lambda *_a, **_k: ("use a key light", ""))
+    monkeypatch.setattr(
+        pipeline, "_complete", lambda *_a, **_k: ("use a key light", "")
+    )
     result = pipeline.run_chat("lighting", web_search=True)
     assert result.text == "use a key light"
     assert "Key" in result.sources
@@ -378,8 +381,8 @@ def test_node_run_chat_and_research(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         research_nodes,
         "run_research",
-        lambda message, history="", web_search=True, subagents=2: pipeline.ResearchResult(
-            "research-reply", "src", "ok", ["q"]
+        lambda message, history="", web_search=True, subagents=2: (
+            pipeline.ResearchResult("research-reply", "src", "ok", ["q"])
         ),
     )
     monkeypatch.setattr(research_nodes, "write_brief", lambda *_a, **_k: None)
@@ -511,9 +514,9 @@ def test_complete_falls_back_to_4b_when_sidecar_down(
 
     monkeypatch.setattr(enhance_client, "_urlopen_sidecar", _down)
     monkeypatch.setattr(
-        pipeline, "_ensure_lab_custom_nodes_path", lambda: (_ for _ in ()).throw(
-            ModuleNotFoundError("ez_prompt_enhance")
-        )
+        pipeline,
+        "_ensure_lab_custom_nodes_path",
+        lambda: (_ for _ in ()).throw(ModuleNotFoundError("ez_prompt_enhance")),
     )
     text, reason = pipeline._complete("sys", "user")
     assert text == ""
@@ -548,3 +551,49 @@ def test_complete_imports_sibling_after_path_ensure(
     text, reason = pipeline._complete("sys", "user")
     assert text == "ok"
     assert reason == ""
+
+
+# Every widget the one registered class exposes, in INPUT_TYPES order, so a
+# widget dropped from the map cannot pass the tooltip invariant by vanishing.
+PACK_WIDGETS: dict[str, tuple[str, ...]] = {
+    "EZCreativeResearch": (
+        "sample",
+        "prompt",
+        "mode",
+        "web_search",
+        "subagents",
+        "history",
+        "catalog",
+    ),
+}
+
+
+def test_every_registered_widget_carries_an_operator_tooltip() -> None:
+    """Every knob on the research desk explains itself on hover."""
+    assert set(PACK_WIDGETS) == set(NODE_CLASS_MAPPINGS)
+    for cls in NODE_CLASS_MAPPINGS.values():
+        spec = cls.INPUT_TYPES()
+        seen: list[str] = []
+        for section in ("required", "optional"):
+            for widget, field in spec.get(section, {}).items():
+                where = f"{cls.__name__}.{section}.{widget}"
+                assert isinstance(field, tuple), where
+                assert len(field) == 2, f"{where} is not a legacy tuple spec"
+                assert isinstance(field[1], dict), where
+                tooltip = field[1].get("tooltip")
+                assert isinstance(tooltip, str), f"{where} has no tooltip"
+                assert tooltip.strip(), f"{where} tooltip is blank"
+                assert tooltip.isascii(), f"{where} tooltip is not ASCII"
+                assert tooltip.endswith("."), f"{where} tooltip is not a sentence"
+                seen.append(widget)
+        assert tuple(seen) == PACK_WIDGETS[cls.__name__], cls.__name__
+
+
+def test_research_mode_keeps_its_order_and_names_both_modes() -> None:
+    """The mode combo is a saved value: its order is pinned, and both modes
+    have to be explained to the operator who opens it."""
+    combo, options = EZCreativeResearch.INPUT_TYPES()["required"]["mode"]
+    assert combo == ["chat", "research"]
+    assert options["default"] == "research"
+    assert "research" in options["tooltip"]
+    assert "chat" in options["tooltip"]

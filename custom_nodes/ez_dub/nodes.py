@@ -120,11 +120,37 @@ class EZDubIngest:
         """
         return {
             "required": {
-                "source": (source_combo_options(), {"default": SOURCE_NONE}),
-                "have_rights": ("BOOLEAN", {"default": False}),
+                "source": (
+                    source_combo_options(),
+                    {
+                        "default": SOURCE_NONE,
+                        "tooltip": "Pick the clip to dub from the media this "
+                        "node lists out of the Comfy input folder "
+                        "(COMFY_OUTPUT_DIR/input, container /inputs), or type "
+                        "a path you own. Queue refuses while the pick stays "
+                        "(none); dub-fetch run --url drops a new file there.",
+                    },
+                ),
+                "have_rights": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Turn on to say you own or may license this "
+                        "audio; Queue is refused while it stays off.",
+                    },
+                ),
                 "job_slug": (
                     "STRING",
-                    {"default": "episode", "dynamicPrompts": False},
+                    {
+                        "default": "episode",
+                        "dynamicPrompts": False,
+                        "tooltip": "Job folder name under "
+                        "COMFY_OUTPUT_DIR/dubs, so episode writes "
+                        "dubs/episode/source.wav; ls $COMFY_OUTPUT_DIR/dubs "
+                        "lists the jobs you already have. Use the same name "
+                        "on all three Dub nodes, and blank falls back to "
+                        "episode.",
+                    },
                 ),
                 "source_url": (
                     "STRING",
@@ -132,6 +158,9 @@ class EZDubIngest:
                         "default": "",
                         "multiline": False,
                         "dynamicPrompts": False,
+                        "tooltip": "Optional http(s) address you have rights "
+                        "to, fetched with yt-dlp instead of the pick above. "
+                        "Leave empty to use Source file.",
                     },
                 ),
             }
@@ -220,24 +249,75 @@ class EZDubScript:
                         "multiline": True,
                         "default": SEED_SCRIPT,
                         "dynamicPrompts": False,
+                        "tooltip": "The transcript this node rewrites: JSON "
+                        "with one turn per spoken line, holding speaker, t0 "
+                        "and t1 in seconds, text, and text_target. Edit "
+                        "text_target between an analyze Queue and a render "
+                        "Queue.",
                     },
                 ),
                 "enhance": (
                     "BOOLEAN",
-                    {"default": True, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "Off pins the JSON exactly as you typed it "
+                        "and skips the on-box rewrite pass; on transcribes and "
+                        "rewrites each line into text_target.",
+                    },
                 ),
-                "target_language": (list(TARGET_LANG_WIDGET), {"default": "es"}),
-                "source_language": (list(SOURCE_LANG_WIDGET), {"default": "auto"}),
+                "target_language": (
+                    list(TARGET_LANG_WIDGET),
+                    {
+                        "default": "es",
+                        "tooltip": "Two-letter ISO code to dub into, es for "
+                        "Spanish; a code outside the list falls back to es.",
+                    },
+                ),
+                "source_language": (
+                    list(SOURCE_LANG_WIDGET),
+                    {
+                        "default": "auto",
+                        "tooltip": "Two-letter ISO code the source audio is "
+                        "spoken in, or auto to detect it. Pin it, such as en, "
+                        "when detection picks the wrong language.",
+                    },
+                ),
                 "max_speakers": (
                     "INT",
-                    {"default": 0, "min": 0, "max": 12, "step": 1},
+                    {
+                        "default": 0,
+                        "min": 0,
+                        "max": 12,
+                        "step": 1,
+                        "tooltip": "Cap on how many distinct speakers the "
+                        "diarizer may find, counted in whole people. 0 lets it "
+                        "choose and caps at 8, so raise it to 4 only when "
+                        "several voices blend into one.",
+                    },
                 ),
-                "stage": (list(STAGES), {"default": STAGE_ALL}),
+                "stage": (
+                    list(STAGES),
+                    {
+                        "default": STAGE_ALL,
+                        "tooltip": "all transcribes then clones, analyze stops "
+                        "after the transcript so you can edit text_target, and "
+                        "render skips transcribing and only mixes. First Queue "
+                        "is all.",
+                    },
+                ),
             },
             "optional": {
                 "job_id": (
                     "STRING",
-                    {"forceInput": True, "dynamicPrompts": False},
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the job_id out of Dub ingest so this "
+                        "node edits that same dubs/<slug>/ job; unlinked it "
+                        "uses the slug inside the JSON, else episode.",
+                    },
                 ),
             },
         }
@@ -310,14 +390,57 @@ class EZDubRender:
             "required": {
                 "script": (
                     "STRING",
-                    {"multiline": True, "forceInput": True, "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the transcript JSON out of Dub "
+                        "transcript and into here; this node only clones and "
+                        "mixes, so it never transcribes again.",
+                    },
                 ),
-                "engine": (list(ENGINES), {"default": ENGINE_CHATTERBOX}),
-                "keep_bed": ("BOOLEAN", {"default": True}),
-                "spoken_disclosure": ("BOOLEAN", {"default": False}),
+                "engine": (
+                    list(ENGINES),
+                    {
+                        "default": ENGINE_CHATTERBOX,
+                        "tooltip": "Clone voice that speaks the dub: "
+                        "chatterbox-ml is the shipped default, qwen3tts the "
+                        "opt-in alternative. download-dub --tier clone "
+                        "installs the first; the second needs download-podcast "
+                        "--tier qwen3tts.",
+                    },
+                ),
+                "keep_bed": (
+                    "BOOLEAN",
+                    {
+                        "default": True,
+                        "tooltip": "Keep the original bed under the gaps "
+                        "between lines so the room tone carries; off leaves "
+                        "those gaps silent.",
+                    },
+                ),
+                "spoken_disclosure": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Overlay a localized AI-disclosure bumper "
+                        "on the mix wav only; the written sidecar is there "
+                        "either way. Off, and the mix starts on the first "
+                        "spoken word.",
+                    },
+                ),
                 "speed": (
                     "FLOAT",
-                    {"default": 1.0, "min": 0.5, "max": 1.5, "step": 0.05},
+                    {
+                        "default": 1.0,
+                        "min": 0.5,
+                        "max": 1.5,
+                        "step": 0.05,
+                        "tooltip": "Multiplier on the speaking rate, not a "
+                        "length in seconds. 1.0 keeps the lab 1.25x "
+                        "pitch-preserving lock, and a value above 1.0 is still "
+                        "capped at that lock.",
+                    },
                 ),
                 "cfg_weight": (
                     "FLOAT",
@@ -326,6 +449,11 @@ class EZDubRender:
                         "min": -1.0,
                         "max": 1.0,
                         "step": 0.05,
+                        "tooltip": "Chatterbox guidance weight, 0.0 to 1.0: "
+                        "-1 asks the engine, which lands on 0.3 for a "
+                        "cross-language dub and 0.5 same-language. Raise it "
+                        "toward 0.5 to keep more of the original accent; "
+                        "qwen3tts ignores this knob.",
                     },
                 ),
                 "exaggeration": (
@@ -335,13 +463,22 @@ class EZDubRender:
                         "min": 0.25,
                         "max": 2.0,
                         "step": 0.05,
+                        "tooltip": "Chatterbox expressiveness: 0.25 is flat, "
+                        "0.5 neutral, 2.0 the most intense and the fastest. "
+                        "qwen3tts ignores this knob.",
                     },
                 ),
             },
             "optional": {
                 "job_id": (
                     "STRING",
-                    {"forceInput": True, "dynamicPrompts": False},
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the job_id out of Dub ingest so the "
+                        "mix lands in that same dubs/<slug>/ folder; unlinked "
+                        "it writes to dubs/episode/.",
+                    },
                 ),
             },
         }

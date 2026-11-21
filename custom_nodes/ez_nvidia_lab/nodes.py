@@ -1210,7 +1210,17 @@ class EZNvidiaLabCatalog:
         """
         return {
             "required": {
-                "detail": (list(DETAIL_VALUES), {"default": "table"}),
+                "detail": (
+                    list(DETAIL_VALUES),
+                    {
+                        "default": "table",
+                        "tooltip": "Pick table for one aligned line per row, "
+                        "or list for a block per row that also shows arm64, "
+                        "gb10, install, footprint, and graph; this node is "
+                        "the one that lists the ids the preflight, job, and "
+                        "verdict nodes accept.",
+                    },
+                ),
             }
         }
 
@@ -1226,7 +1236,9 @@ class EZNvidiaLabCatalog:
         "is a block per row with arm64, gb10, install, footprint, and graph. "
         "Reads the pack's own catalog.json with stdlib json; a missing or "
         "malformed catalog prints the reason instead of failing the Queue. "
-        "Nothing is installed and nothing is downloaded."
+        "Nothing is installed and nothing is downloaded. Start here: read the "
+        "id of the row you want out of this report, then type that id into "
+        "the preflight, job, or verdict node."
     )
 
     def run(self, detail: str = "table") -> ReportPayload:
@@ -1263,7 +1275,17 @@ class EZNvidiaLabPreflight:
         """
         return {
             "required": {
-                "tool_id": ("STRING", {"default": "artifixer", "multiline": False}),
+                "tool_id": (
+                    "STRING",
+                    {
+                        "default": "artifixer",
+                        "multiline": False,
+                        "tooltip": "Type the catalog id of the row to check, "
+                        "for example artifixer, and the node answers whether "
+                        "it could run on this Spark; NVIDIA lab catalog "
+                        "(EZNvidiaLabCatalog) lists every valid id.",
+                    },
+                ),
             }
         }
 
@@ -1277,7 +1299,9 @@ class EZNvidiaLabPreflight:
         "row's install verb needs is on PATH (docker for docker-pull, git for "
         "git-clone), the artifact ref is shaped like a pull spec or a clone "
         "URL, and what upstream says about GB10. Missing tooling is ok=False "
-        "with a reason, never an error. Installs nothing."
+        "with a reason, never an error. Installs nothing. Read ok=False as a "
+        "to-do list: every reason line names the tool to install or the row "
+        "to choose instead."
     )
 
     def __init__(
@@ -1347,11 +1371,44 @@ class EZNvidiaLabJob:
         """
         return {
             "required": {
-                "tool_id": ("STRING", {"default": "artifixer", "multiline": False}),
-                "input_path": ("STRING", {"default": "", "multiline": False}),
+                "tool_id": (
+                    "STRING",
+                    {
+                        "default": "artifixer",
+                        "multiline": False,
+                        "tooltip": "Type the catalog id of the row to run, "
+                        "for example artifixer, and only a row the NVIDIA "
+                        "lab catalog node (EZNvidiaLabCatalog) shows as "
+                        "opt-in gets as far as the operator CLI.",
+                    },
+                ),
+                "input_path": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Type the full path of one existing file "
+                        "the tool reads, for example "
+                        "/inputs/example.png, and the node refuses to start "
+                        "the job while that path is blank or is not a "
+                        "readable file; the row whose id you type is listed "
+                        "by NVIDIA lab catalog (EZNvidiaLabCatalog).",
+                    },
+                ),
                 "params_json": (
                     "STRING",
-                    {"default": "{}", "multiline": True, "dynamicPrompts": False},
+                    {
+                        "default": "{}",
+                        "multiline": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Type the tool's parameters as one JSON "
+                        'object, for example {"steps": 8}, or keep {} when '
+                        "the row needs none; the text reaches the operator "
+                        "CLI unchanged, malformed JSON comes back as the "
+                        "parser's line and message, and the row ids worth "
+                        "typing are the ones NVIDIA lab catalog "
+                        "(EZNvidiaLabCatalog) prints.",
+                    },
                 ),
             }
         }
@@ -1368,7 +1425,9 @@ class EZNvidiaLabJob:
         "The CLI does the heavy confirm, the headroom preflight, and the "
         "occupancy XOR; this node spawns nothing of its own and touches no "
         "Compose, restart policy, or memory limit. Exit code and output tail "
-        "come back as the report."
+        "come back as the report. Before Queue: run the catalog node to see "
+        "which rows are opt-in, type a real file path into input_path, and "
+        "unload Klein, Wan, or LTX so the GPU holds one heavy job at a time."
     )
 
     def __init__(
@@ -1505,7 +1564,18 @@ class EZNvidiaLabVerdict:
         """
         return {
             "required": {
-                "tool_id": ("STRING", {"default": "nurec-ga", "multiline": False}),
+                "tool_id": (
+                    "STRING",
+                    {
+                        "default": "nurec-ga",
+                        "multiline": False,
+                        "tooltip": "Type the catalog id of the row whose "
+                        "verdict you want, for example nurec-ga, and the "
+                        "node prints what blocks it, what would reopen it, "
+                        "and the command that re-checks it; NVIDIA lab "
+                        "catalog (EZNvidiaLabCatalog) lists every valid id.",
+                    },
+                ),
             }
         }
 
@@ -1519,7 +1589,8 @@ class EZNvidiaLabVerdict:
         "The blocking reason for one row (its gate notes) plus the sentence "
         "that says what would reopen it, and the command that re-checks it. An "
         "opt-in row says nothing blocks it. Reads the catalog only; runs "
-        "nothing."
+        "nothing. Read the verify line and run it on the host when you want "
+        "that answer checked again."
     )
 
     def run(self, tool_id: str = "") -> ReportPayload:

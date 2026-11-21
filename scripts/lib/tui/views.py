@@ -59,6 +59,16 @@ _STYLE_RANK: dict[Style, int] = {Style.OK: 0, Style.WARN: 1, Style.BAD: 2}
 _NO_READING = "no reading"
 """What a row says when its probe never answered."""
 
+_MISSING_HINT_NOTE = "no hint for this field: file a bug so it gets one"
+"""What a required row says when the catalog shipped it without any help text.
+
+The operator cannot be the one to guess what a required field wants, so the row
+names the gap as a defect and points at the report-bug action that records it.
+"""
+
+_LEAVE_BLANK_NOTE = "optional: leave blank to skip it"
+"""What an optional row says when it has no help text of its own."""
+
 _MAX_TAIL = 40
 """Output lines a progress or result screen repeats back at the operator."""
 
@@ -510,14 +520,17 @@ def _param_note(param: ParamSpec, value: str) -> str:
         value: The answer on file, possibly the default.
 
     Returns:
-        The answer, the offered menu, the help text, or a required marker.
+        The answer, the offered menu, the help text, or the marker for a field
+        the catalog left without help text.
     """
     if param.kind is ParamKind.CHOICE:
         offered = ", ".join(choice.label for choice in param.choices)
         return f"{value} [{offered}]" if value else f"[{offered}]"
     if value:
         return value
-    return param.help_text or ("required" if param.required else "optional")
+    if param.required:
+        return param.help_text or _MISSING_HINT_NOTE
+    return param.help_text or _LEAVE_BLANK_NOTE
 
 
 def health_rows(health: Health) -> tuple[Row, ...]:

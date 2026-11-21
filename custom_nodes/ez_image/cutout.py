@@ -90,6 +90,7 @@ class CutoutResult(TypedDict):
     ui: CutoutUiText
     result: tuple[CutoutImage, CutoutImage, MaskGrid, MaskGrid]
 
+
 REASON_DISABLED = "cutout off: image passed through"
 """UI status when ``EZ_CUTOUT`` turns the node off."""
 REASON_NO_MODEL = "no cutout model: image passed through"
@@ -142,16 +143,21 @@ BACKDROP_TRANSPARENT = "transparent"
 BACKDROP_KEEP = "keep original"
 """Keep every pixel: only the matte and mask are useful in this mode."""
 BACKDROPS: tuple[str, ...] = (
-    BACKDROP_WHITE, BACKDROP_BLACK, BACKDROP_GREY,
-    BACKDROP_GREEN, BACKDROP_BLUE, BACKDROP_TRANSPARENT, BACKDROP_KEEP,
+    BACKDROP_WHITE,
+    BACKDROP_BLACK,
+    BACKDROP_GREY,
+    BACKDROP_GREEN,
+    BACKDROP_BLUE,
+    BACKDROP_TRANSPARENT,
+    BACKDROP_KEEP,
 )
 """What replaces the removed background."""
 BACKDROP_RGB: dict[str, tuple[float, float, float]] = {
     BACKDROP_WHITE: (1.0, 1.0, 1.0),
     BACKDROP_BLACK: (0.0, 0.0, 0.0),
     BACKDROP_GREY: (0.5, 0.5, 0.5),
-    BACKDROP_GREEN: (0.0, 0.694, 0.251),   # chroma green #00B140
-    BACKDROP_BLUE: (0.0, 0.278, 0.733),    # chroma blue  #0047BB
+    BACKDROP_GREEN: (0.0, 0.694, 0.251),  # chroma green #00B140
+    BACKDROP_BLUE: (0.0, 0.278, 0.733),  # chroma blue  #0047BB
 }
 """RGB each solid backdrop paints with; see :func:`_blend`."""
 DEFAULT_BACKDROP = BACKDROP_WHITE
@@ -379,9 +385,7 @@ def load_model() -> CutoutModel | None:
         return _MODEL
     if cutout_disabled():
         return None
-    if _LAST_MISS_S is not None and (
-        time.monotonic() - _LAST_MISS_S < MISS_COOLDOWN_S
-    ):
+    if _LAST_MISS_S is not None and (time.monotonic() - _LAST_MISS_S < MISS_COOLDOWN_S):
         return None
     tools = _cutout_tools()
     if tools is None:
@@ -700,7 +704,9 @@ def remove_background(
         return _passthrough(image, subject, REASON_NO_MODEL)
     if _subject_ratio(mask) < MIN_SUBJECT_RATIO:
         return _passthrough(image, subject, REASON_EMPTY)
-    grown = feather_mask(dilate_mask(mask, max(0, min(dilate, 32))), max(0, min(feather, 32)))
+    grown = feather_mask(
+        dilate_mask(mask, max(0, min(dilate, 32))), max(0, min(feather, 32))
+    )
     painted = _blend(subject, grown, backdrop)
     matte = _matte_image(grown)
     return (
@@ -768,10 +774,46 @@ class EZCutout:
         """
         return {
             "required": {
-                "image": ("IMAGE",),
-                "backdrop": (list(BACKDROPS), {"default": DEFAULT_BACKDROP}),
-                "dilate": ("INT", {"default": DILATE_RADIUS, "min": 0, "max": 32}),
-                "feather": ("INT", {"default": FEATHER_RADIUS, "min": 0, "max": 32}),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "The photo to cut a subject out of. The matte "
+                        "is measured from this still; nothing here is painted by "
+                        "hand.",
+                    },
+                ),
+                "backdrop": (
+                    list(BACKDROPS),
+                    {
+                        "default": DEFAULT_BACKDROP,
+                        "tooltip": "What the cut subject sits on. White, black, "
+                        "grey, green, or blue paint a flat colour behind it, "
+                        "transparent keeps the alpha, and keep original leaves "
+                        "the background in place.",
+                    },
+                ),
+                "dilate": (
+                    "INT",
+                    {
+                        "default": DILATE_RADIUS,
+                        "min": 0,
+                        "max": 32,
+                        "tooltip": "Pixels grown past the matte edge so thin "
+                        "detail like hair survives the cut. 2 by default; 0 gives "
+                        "the tightest edge and can clip fine strands.",
+                    },
+                ),
+                "feather": (
+                    "INT",
+                    {
+                        "default": FEATHER_RADIUS,
+                        "min": 0,
+                        "max": 32,
+                        "tooltip": "Soft-edge width in pixels, so the rim is not "
+                        "a hard cut. 2 by default; 0 leaves a crisp, pasted-on "
+                        "looking edge.",
+                    },
+                ),
             }
         }
 

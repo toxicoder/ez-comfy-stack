@@ -455,25 +455,89 @@ class EZSceneLayout:
         """
         return {
             "required": {
-                "scene_id": ("STRING", {"default": "dawn-rooftop"}),
+                "scene_id": (
+                    "STRING",
+                    {
+                        "default": "dawn-rooftop",
+                        "tooltip": "Name of the layout you are composing: "
+                        "lowercase words joined by hyphens, dawn-rooftop is "
+                        "the shipped example. It is written to the document "
+                        "as its id.",
+                    },
+                ),
                 "assets": (
                     "STRING",
                     {
                         "multiline": True,
                         "default": "hero-olive-jacket\nmug-cobalt-chipped",
+                        "tooltip": "One Asset Bible slug per line, so "
+                        "hero-olive-jacket, or hero-olive-jacket:mesh/prop.glb "
+                        "when you know the mesh path. asset-ls lists the slugs "
+                        "it already printed under <output>/assets/.",
                     },
                 ),
             },
             "optional": {
-                "camera_pos": ("STRING", {"default": DEFAULT_CAMERA_POS}),
-                "camera_look": ("STRING", {"default": DEFAULT_CAMERA_LOOK}),
+                "camera_pos": (
+                    "STRING",
+                    {
+                        "default": DEFAULT_CAMERA_POS,
+                        "tooltip": "Camera position as three comma-separated "
+                        "numbers in metres, for example 2.1, 1.6, 3.4 for a "
+                        "three-quarter view. Leave it empty to take that same "
+                        "default.",
+                    },
+                ),
+                "camera_look": (
+                    "STRING",
+                    {
+                        "default": DEFAULT_CAMERA_LOOK,
+                        "tooltip": "Point the camera at three comma-separated "
+                        "numbers in metres, for example 0, 1.2, 0 for standing "
+                        "height. Leave it empty to take that same default.",
+                    },
+                ),
                 "camera_fov": (
                     "INT",
-                    {"default": DEFAULT_FOV, "min": FOV_MIN, "max": FOV_MAX, "step": 1},
+                    {
+                        "default": DEFAULT_FOV,
+                        "min": FOV_MIN,
+                        "max": FOV_MAX,
+                        "step": 1,
+                        "tooltip": "Vertical field of view in degrees: 35 is "
+                        "the blockout default, 10 is a long lens, 120 is a "
+                        "wide angle.",
+                    },
                 ),
-                "hdri": ("STRING", {"default": DEFAULT_HDRI}),
-                "filename": ("STRING", {"default": DEFAULT_FILENAME}),
-                "overwrite": ("BOOLEAN", {"default": False}),
+                "hdri": (
+                    "STRING",
+                    {
+                        "default": DEFAULT_HDRI,
+                        "tooltip": "Lighting reference in polyhaven:<name> "
+                        "form, for example polyhaven:kloppenheim_06. Leave the "
+                        "default none to write no hdri key.",
+                    },
+                ),
+                "filename": (
+                    "STRING",
+                    {
+                        "default": DEFAULT_FILENAME,
+                        "tooltip": "Plain basename, no path, of the document "
+                        "written into <output>/scenes/; scene is the default "
+                        "and .json is appended. The status line prints the "
+                        "full path it wrote.",
+                    },
+                ),
+                "overwrite": (
+                    "BOOLEAN",
+                    {
+                        "default": False,
+                        "tooltip": "Turn on to replace an existing "
+                        "<output>/scenes/<filename>.json. Off, the node "
+                        "refuses and keeps your last draft, printing a status "
+                        "line instead.",
+                    },
+                ),
             },
         }
 

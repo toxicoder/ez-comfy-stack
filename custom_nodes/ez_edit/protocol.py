@@ -266,7 +266,14 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "project_id": {"type": "string", "default": ""},
+                "project_id": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The project whose state to read, its id as "
+                    "edit_list_projects lists it, for example 3f2a9c14be07. "
+                    "Empty, the default, reads the most recently updated "
+                    "project.",
+                },
             },
         },
     },
@@ -282,9 +289,32 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "path": {"type": "string"},
-                "label": {"type": "string", "default": ""},
-                "track": {"type": "integer", "default": 0},
+                "path": {
+                    "type": "string",
+                    "description": "Media file to add as a clip, addressed under "
+                    "the Comfy output dir, relative or absolute, such as "
+                    "edit/renders/3f2a9c14be07-8ad05f1b9c22.mp4 or "
+                    "clips/mug-turn.mp4. The file has to sit there already; "
+                    "edit_job_status reports the out_path a finished render "
+                    "wrote, which is the usual thing to import next.",
+                },
+                "label": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Display name the clip carries on the "
+                    "timeline, any text such as Mug turn. Empty, the default, "
+                    "uses the file name, so pass it when the operator calls the "
+                    "shot something the file name does not say.",
+                },
+                "track": {
+                    "type": "integer",
+                    "default": 0,
+                    "description": "Video track the clip lands on, a whole "
+                    "number from 0 up; 0, the default, is the base plane and a "
+                    "higher number stacks over it, so use 1 for an overlay. A "
+                    "negative track is refused, and set_track moves a clip that "
+                    "already landed.",
+                },
             },
             "required": ["path"],
         },
@@ -299,8 +329,27 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "project_id": {"type": "string", "default": ""},
-                "ops": {"type": "array", "items": {"type": "object"}},
+                "project_id": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The project the ops apply to, its id as "
+                    "edit_list_projects lists it, for example 3f2a9c14be07. "
+                    "Empty, the default, applies to the most recently updated "
+                    "project.",
+                },
+                "ops": {
+                    "type": "array",
+                    "items": {"type": "object"},
+                    "description": "Ordered op records applied one after "
+                    'another, each an object with an "op" verb, one of the '
+                    'fourteen this tool names, and an "args" object, for '
+                    'example [{"op": "project_create", "args": {"title": "Mug '
+                    'spot", "width": 1024, "height": 1024}}, {"op": '
+                    '"trim_clip", "args": {"clip_id": "a31c0d7e5b49", "in_s": '
+                    "1.5}}]. Any clip_id, overlay_id, or caption_id an op "
+                    "names has to be one edit_get_state just returned, and "
+                    "in_s, out_s, and duration_s are seconds, not frames.",
+                },
             },
             "required": ["ops"],
         },
@@ -313,9 +362,33 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "project_id": {"type": "string", "default": ""},
-                "mode": {"type": "string", "enum": ["server", "client"]},
-                "client_id": {"type": "string", "default": ""},
+                "project_id": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The project to render, its id as "
+                    "edit_list_projects lists it, for example 3f2a9c14be07. "
+                    "Empty, the default, renders the most recently updated "
+                    "project.",
+                },
+                "mode": {
+                    "type": "string",
+                    "enum": ["server", "client"],
+                    "description": "Where the render runs, and there is no "
+                    "default, so pick one on purpose: server runs ffmpeg on the "
+                    "Spark and writes an mp4 under edit/renders; client queues "
+                    "the timeline for the open browser panel to encode with "
+                    "WebCodecs into a webm on the laptop. occupancy_status "
+                    "shows what already holds the GPU before you pick server.",
+                },
+                "client_id": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Browser panel that must claim a client "
+                    "render, its stable per-tab id such as "
+                    "7c1d9f2e-4b3a-4a1e-9c6d-2f5b8e0a1d34, which the panel "
+                    "gives itself the first time it opens. A client render "
+                    "without it fails the row; a server render ignores it.",
+                },
             },
             "required": ["mode"],
         },
@@ -324,7 +397,15 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "description": "Return one jobstore row by id.",
         "parameters": {
             "type": "object",
-            "properties": {"job_id": {"type": "string"}},
+            "properties": {
+                "job_id": {
+                    "type": "string",
+                    "description": "The jobstore row to read, the job id "
+                    "edit_render or edit_generate_clip handed back, for example "
+                    "8ad05f1b9c22, not a project id. edit_get_state lists the "
+                    "recent job ids of a project when it was lost.",
+                },
+            },
             "required": ["job_id"],
         },
     },
@@ -335,9 +416,31 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "prompt": {"type": "string"},
-                "duration_s": {"type": "number", "default": 5.0},
-                "fps": {"type": "number", "default": 24.0},
+                "prompt": {
+                    "type": "string",
+                    "description": "What the cutaway shows, in plain words, for "
+                    "example a slow push past a chipped cobalt mug on linen. "
+                    "The graph is silent motion, so describe the movement and "
+                    "the framing rather than a voice or a line of dialogue, and "
+                    "edit_get_state shows the clips it has to cut against.",
+                },
+                "duration_s": {
+                    "type": "number",
+                    "default": 5.0,
+                    "description": "Length of the cutaway in seconds as a "
+                    "number, for example 5.0, the default, or 2.5; it becomes "
+                    "round(duration_s * fps) frames on the queue, so a longer "
+                    "clip costs proportionally more GPU time. It is a duration, "
+                    "not a timecode.",
+                },
+                "fps": {
+                    "type": "number",
+                    "default": 24.0,
+                    "description": "Frame rate of the cutaway as a number, for "
+                    "example 24.0, the default, or 30.0. Match the project "
+                    "frame rate so the clip needs no conform; edit_list_projects "
+                    "reports fps per project.",
+                },
             },
             "required": ["prompt"],
         },
@@ -350,11 +453,24 @@ TOOL_CATALOG: dict[str, JsonObject] = {
         "parameters": {
             "type": "object",
             "properties": {
-                "project_id": {"type": "string", "default": ""},
+                "project_id": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The project to hand off, its id as "
+                    "edit_list_projects lists it, for example 3f2a9c14be07. "
+                    "Empty, the default, exports the most recently updated "
+                    "project, and the file is named after the id it resolved "
+                    "to.",
+                },
                 "format": {
                     "type": "string",
                     "enum": ["json", "cmx"],
                     "default": "json",
+                    "description": "Which handoff document to write: json, the "
+                    "default, is this lane's own document the panel reads back, "
+                    "such as edit/projects/3f2a9c14be07.edl.json; cmx writes "
+                    "CMX 3600 text to edit/projects/3f2a9c14be07.edl for an "
+                    "external NLE to import.",
                 },
             },
         },

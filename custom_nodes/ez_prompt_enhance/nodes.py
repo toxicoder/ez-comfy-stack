@@ -132,13 +132,33 @@ class CaptionUiResult(TypedDict):
 # Shared Comfy widget specs (boolean, optional context, hidden catalog).
 _ENHANCE_BOOL: InputWidget = (
     "BOOLEAN",
-    {"default": True, "label_on": "On", "label_off": "Off"},
+    {
+        "default": True,
+        "label_on": "On",
+        "label_off": "Off",
+        "tooltip": "Leave on to let the on-box rewriter improve what you "
+        "typed; off skips the rewrite.",
+    },
 )
 _CONTEXT_INPUT: InputWidget = (
     "STRING",
-    {"forceInput": True, "dynamicPrompts": False},
+    {
+        "forceInput": True,
+        "dynamicPrompts": False,
+        "tooltip": "Optional text wired in from another node; leave it "
+        "disconnected when you do not need it.",
+    },
 )
-_CATALOG_INPUT: InputWidget = ("STRING", {"default": "", "multiline": False})
+_CATALOG_INPUT: InputWidget = (
+    "STRING",
+    {
+        "default": "",
+        "multiline": False,
+        "tooltip": "Normally leave what the graph shipped: it names the "
+        "sample file the Sample list reads, and blank falls back to this "
+        "node's own catalog.",
+    },
+)
 
 
 def _visual_input_types(
@@ -163,28 +183,73 @@ def _visual_input_types(
         "sample": _sample_input(catalog_id),
         "prompt": (
             "STRING",
-            {"multiline": True, "default": "", "dynamicPrompts": False},
+            {
+                "multiline": True,
+                "default": "",
+                "dynamicPrompts": False,
+                "tooltip": "Type your own idea here; this text is used when "
+                "Sample is Custom.",
+            },
         ),
         "enhance": _ENHANCE_BOOL,
     }
     if modes:
-        required["mode"] = (list(modes), {"default": modes[0]})
-    required["duration_hint"] = ("STRING", {"default": duration_default})
+        required["mode"] = (
+            list(modes),
+            {
+                "default": modes[0],
+                "tooltip": "Pick what this shot is; the mode picks the "
+                "samples and the rewrite rules behind it.",
+            },
+        )
+    required["duration_hint"] = (
+        "STRING",
+        {
+            "default": duration_default,
+            "tooltip": "One line on the target shape, for example 5 seconds, "
+            "24 fps or YouTube 16:9 still.",
+        },
+    )
     if audio_notes:
         required["audio_notes"] = (
             "STRING",
-            {"multiline": True, "default": "", "dynamicPrompts": False},
+            {
+                "multiline": True,
+                "default": "",
+                "dynamicPrompts": False,
+                "tooltip": "Optional sound notes (dialogue, ambience, music) "
+                "that the rewriter weaves into the paragraph.",
+            },
         )
-    required["style"] = (style_ids(), {"default": STYLE_NONE})
+    required["style"] = (
+        style_ids(),
+        {
+            "default": STYLE_NONE,
+            "tooltip": "Pick a look from the style catalog, or none. Modes "
+            "that keep a start image ignore it.",
+        },
+    )
     required["catalog"] = _CATALOG_INPUT
     return {
         "required": required,
         "optional": {
             "context": _CONTEXT_INPUT,
-            "goal": (goal_ids(), {"default": GOAL_AUTO}),
+            "goal": (
+                goal_ids(),
+                {
+                    "default": GOAL_AUTO,
+                    "tooltip": "What the shot is for, such as a thumbnail or "
+                    "a packshot; auto lets the rewriter choose.",
+                },
+            ),
             "image_desc": (
                 "STRING",
-                {"forceInput": True, "dynamicPrompts": False},
+                {
+                    "forceInput": True,
+                    "dynamicPrompts": False,
+                    "tooltip": "Optional caption from EZImageDescribe; it "
+                    "helps the rewriter name what is already in the still.",
+                },
             ),
         },
     }
@@ -199,7 +264,14 @@ def _sample_input(catalog_id: str) -> tuple[list[str], dict[str, str]]:
     Returns:
         ``(labels, {default: custom})`` widget spec.
     """
-    return (sample_combo_labels(catalog_id), {"default": CUSTOM})
+    return (
+        sample_combo_labels(catalog_id),
+        {
+            "default": CUSTOM,
+            "tooltip": "Pick a lab sample to fill this node's text, or "
+            "Custom to write your own.",
+        },
+    )
 
 
 def _as_bool(value: object) -> bool:
@@ -441,7 +513,15 @@ class EZKleinPromptEnhance:
             modes=list(KLEIN_MODE_COMBO),
         )
         optional = dict(types.get("optional") or {})
-        optional["background_cast"] = _CONTEXT_INPUT
+        optional["background_cast"] = (
+            "STRING",
+            {
+                "forceInput": True,
+                "dynamicPrompts": False,
+                "tooltip": "Optional cast token from EZBackgroundCast that "
+                "says which people count as background.",
+            },
+        )
         return {
             "required": types["required"],
             "optional": optional,
@@ -463,8 +543,10 @@ class EZKleinPromptEnhance:
         "person paste cannot run. "
         "Optional context is bible/research (ignored when Enhance is "
         "off). Enhance defaults on. After Queue the CLIP prompt box is the "
-        "CLIP string; Enhance status explains passthrough. Fail-soft without "
-        "a GGUF (run download-models)."
+        "CLIP string; read the Enhance status under the preview, because "
+        "passthrough means your own wording went through untouched. "
+        "Fail-soft without a GGUF: run `bazelisk run //:manage -- "
+        "download-models`, then Queue again."
     )
 
     def run(
@@ -717,17 +799,39 @@ class EZPromptJoin:
                         "multiline": True,
                         "forceInput": True,
                         "dynamicPrompts": False,
+                        "tooltip": "Wire the camera-free world bible in from "
+                        "another node; it repeats on every shot here.",
                     },
                 ),
                 "shot": (
                     "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "This shot only: the camera, light, or "
+                        "action line you want on top of the bible.",
+                    },
                 ),
                 "inventory": (
                     "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "Objects that must repeat exactly across "
+                        "every view of this place.",
+                    },
                 ),
-                "lock": (list(LOCK_IDS), {"default": LOCK_VIEW}),
+                "lock": (
+                    list(LOCK_IDS),
+                    {
+                        "default": LOCK_VIEW,
+                        "tooltip": "view puts a new camera on the same place; "
+                        "state keeps the camera and changes only light, "
+                        "grade, or the named action.",
+                    },
+                ),
             }
         }
 
@@ -776,11 +880,45 @@ class EZContextJoin:
         """
         return {
             "required": {
-                "a": _CONTEXT_INPUT,
-                "label_a": ("STRING", {"default": "Logline"}),
-                "label_b": ("STRING", {"default": "Script"}),
-                "label_c": ("STRING", {"default": "Audio policy"}),
-                "label_d": ("STRING", {"default": "Score"}),
+                "a": (
+                    "STRING",
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the first text field in from another "
+                        "node; it is always part of the block.",
+                    },
+                ),
+                "label_a": (
+                    "STRING",
+                    {
+                        "default": "Logline",
+                        "tooltip": "Heading printed above field a, for "
+                        "example Logline.",
+                    },
+                ),
+                "label_b": (
+                    "STRING",
+                    {
+                        "default": "Script",
+                        "tooltip": "Heading printed above field b, for example Script.",
+                    },
+                ),
+                "label_c": (
+                    "STRING",
+                    {
+                        "default": "Audio policy",
+                        "tooltip": "Heading printed above field c, for "
+                        "example Audio policy.",
+                    },
+                ),
+                "label_d": (
+                    "STRING",
+                    {
+                        "default": "Score",
+                        "tooltip": "Heading printed above field d, for example Score.",
+                    },
+                ),
             },
             "optional": {
                 "b": _CONTEXT_INPUT,
@@ -928,14 +1066,29 @@ class EZAceStepPromptEnhance:
                         "multiline": True,
                         "default": "boom bap, hip-hop, dusty drums, 88 bpm",
                         "dynamicPrompts": False,
+                        "tooltip": "Genre first, then style words and the "
+                        "tempo; used when Sample is Custom.",
                     },
                 ),
                 "lyrics": (
                     "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "Verse and chorus lines; leave blank on "
+                        "an instrumental. Used when Sample is Custom.",
+                    },
                 ),
                 "enhance": _ENHANCE_BOOL,
-                "mode": (["vocal", "instrumental"], {"default": "vocal"}),
+                "mode": (
+                    ["vocal", "instrumental"],
+                    {
+                        "default": "vocal",
+                        "tooltip": "vocal keeps the lyrics; instrumental "
+                        "drops them and forces the no-vocals tags.",
+                    },
+                ),
                 "catalog": _CATALOG_INPUT,
             },
             "optional": {
@@ -1300,7 +1453,13 @@ class EZSamplePrompt:
                 "sample": _sample_input("forge_lazy"),
                 "prompt": (
                     "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "Type your own text here; it is sent as "
+                        "typed when Sample is Custom.",
+                    },
                 ),
                 "catalog": _CATALOG_INPUT,
             }
@@ -1356,15 +1515,35 @@ class EZNegativePromptEnhance:
             "required": {
                 "prompt": (
                     "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "dynamicPrompts": False,
+                        "tooltip": "The seed of things you do not want; the "
+                        "rewrite trims it so it stops fighting the image you "
+                        "asked for.",
+                    },
                 ),
                 "enhance": _ENHANCE_BOOL,
-                "family": (list(NEGATIVE_FAMILIES), {"default": "klein"}),
+                "family": (
+                    list(NEGATIVE_FAMILIES),
+                    {
+                        "default": "klein",
+                        "tooltip": "Pick the model this negative is for; "
+                        "each one gets its own exclusion wording.",
+                    },
+                ),
             },
             "optional": {
                 "positive": (
                     "STRING",
-                    {"forceInput": True, "dynamicPrompts": False},
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire the finished positive prompt in so "
+                        "the negative is checked against what you really "
+                        "asked for.",
+                    },
                 ),
             },
         }
@@ -1380,8 +1559,11 @@ class EZNegativePromptEnhance:
         "negative does not fight the intended medium, lighting, subject, or "
         "audio. Keeps anatomy and watermark artifacts unless the positive "
         "asked for that body. Enhance defaults on and stays on when Rewrite "
-        "prompt is off. Fail-soft without a GGUF; a deterministic complement "
-        "still runs."
+        "prompt is off. Wire the finished positive into Positive so the "
+        "rewrite has something to check itself against. Fail-soft without a "
+        "GGUF; a deterministic complement still runs, so read the Enhance "
+        "status after Queue and run `bazelisk run //:manage -- "
+        "download-models` when it says passthrough."
     )
 
     def run(
@@ -1452,7 +1634,12 @@ class EZPromptBundle:
         for index in range(1, BUNDLE_INPUTS + 1):
             optional[f"text_{index:02d}"] = (
                 "STRING",
-                {"forceInput": True, "dynamicPrompts": False},
+                {
+                    "forceInput": True,
+                    "dynamicPrompts": False,
+                    "tooltip": "One shot's finished prompt, wired in from "
+                    "another node; a slot you leave empty is skipped.",
+                },
             )
         return {"required": {}, "optional": optional}
 
@@ -1502,13 +1689,35 @@ class EZCinemaRack:
                     "multiline": True,
                     "default": "",
                     "dynamicPrompts": False,
+                    "tooltip": "Optional sentence naming who or what the shot "
+                    "is about; it goes in front of the spliced text.",
                 },
             ),
-            "flavor": (list(FLAVORS), {"default": FLAVOR_KLEIN}),
-            "recipe": (recipe_combo_ids(), {"default": CINEMA_NONE}),
+            "flavor": (
+                list(FLAVORS),
+                {
+                    "default": FLAVOR_KLEIN,
+                    "tooltip": "Pick the model this prompt is for; each one "
+                    "has its own wording and camera rules.",
+                },
+            ),
+            "recipe": (
+                recipe_combo_ids(),
+                {
+                    "default": CINEMA_NONE,
+                    "tooltip": "Pick a named bundle to fill the axes you left at none.",
+                },
+            ),
         }
         for axis_id in WIDGET_AXIS_ORDER:
-            required[axis_id] = (combo_ids(axis_id), {"default": CINEMA_NONE})
+            required[axis_id] = (
+                combo_ids(axis_id),
+                {
+                    "default": CINEMA_NONE,
+                    "tooltip": "Pick one technique for this axis, or none to "
+                    "leave it out of the spliced prompt.",
+                },
+            )
         return {"required": required}
 
     # Comfy node registration fields.
@@ -1572,13 +1781,35 @@ class EZAudioRack:
                     "multiline": True,
                     "default": "",
                     "dynamicPrompts": False,
+                    "tooltip": "Optional words to build the lyrics from; an "
+                    "instrumental flavor ignores it.",
                 },
             ),
-            "flavor": (list(AUDIO_FLAVORS), {"default": FLAVOR_ACE_VOCAL}),
-            "recipe": (audio_recipe_combo_ids(), {"default": AUDIO_NONE}),
+            "flavor": (
+                list(AUDIO_FLAVORS),
+                {
+                    "default": FLAVOR_ACE_VOCAL,
+                    "tooltip": "Pick vocal, instrumental, or a podcast bed; "
+                    "it sets the tags and the lyrics form.",
+                },
+            ),
+            "recipe": (
+                audio_recipe_combo_ids(),
+                {
+                    "default": AUDIO_NONE,
+                    "tooltip": "Pick a named bundle to fill the axes you left at none.",
+                },
+            ),
         }
         for axis_id in AUDIO_WIDGET_AXIS_ORDER:
-            required[axis_id] = (audio_combo_ids(axis_id), {"default": AUDIO_NONE})
+            required[axis_id] = (
+                audio_combo_ids(axis_id),
+                {
+                    "default": AUDIO_NONE,
+                    "tooltip": "Pick one technique for this axis, or none to "
+                    "leave it out of the tags.",
+                },
+            )
         return {"required": required}
 
     # Comfy node registration fields.
@@ -1635,14 +1866,30 @@ class EZBackgroundCast:
         Returns:
             Required BOOLEAN widget map.
         """
-        flag = (
-            "BOOLEAN",
-            {"default": True, "label_on": "On", "label_off": "Off"},
-        )
         return {
             "required": {
-                "other_characters": flag,
-                "background_characters": flag,
+                "other_characters": (
+                    "BOOLEAN",
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "On treats companions as part of the "
+                        "environment so a background swap repaints them; off "
+                        "keeps them locked with the main subject.",
+                    },
+                ),
+                "background_characters": (
+                    "BOOLEAN",
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "On treats crowd extras as part of the "
+                        "environment so a background swap repaints them; off "
+                        "keeps them locked with the main subject.",
+                    },
+                ),
             }
         }
 
@@ -1693,11 +1940,24 @@ class EZImageDescribe:
             "required": {
                 "enable": (
                     "BOOLEAN",
-                    {"default": False, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": False,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "Leave off to skip captioning entirely; on "
+                        "reads the still and loads the vision model for it.",
+                    },
                 ),
             },
             "optional": {
-                "image": ("IMAGE", {"lazy": True}),
+                "image": (
+                    "IMAGE",
+                    {
+                        "lazy": True,
+                        "tooltip": "Wire the still you want captioned here; "
+                        "it is only loaded when Enable is on.",
+                    },
+                ),
             },
         }
 

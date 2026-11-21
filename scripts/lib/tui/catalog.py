@@ -97,6 +97,31 @@ _JSON_HELP = "print the machine-readable payload instead of the table"
 _DRY_RUN_HELP = "print what would change and touch nothing"
 """Help text shared by the optional ``--dry-run`` flag parameters."""
 
+_FILM_SLUG_HELP = (
+    "the films/ directory name under COMFY_OUTPUT_DIR; go-see is a shipped one."
+)
+"""Help text shared by the parameters that name a film."""
+
+_SHOT_ID_HELP = (
+    "the shot number as the shot sheet lists it; a shipped film runs 01 through 18."
+)
+"""Help text shared by the parameters that name one shot of a film."""
+
+_GUIDES_HELP = (
+    "the guide pack to read; default COMFY_OUTPUT_DIR/guides/<film>/<shot>."
+)
+"""Help text shared by the parameters that point at a guide pack."""
+
+_ROW_ID_HELP = (
+    "one row id from List the NVIDIA lab rows; artifixer is a real one."
+)
+"""Help text shared by the NVIDIA lab parameters that name a catalog row."""
+
+_ALBUM_HELP = (
+    "the ARTIST/SLUG of a shipped album; List shipped albums reports them."
+)
+"""Help text shared by the parameters that name one shipped album."""
+
 _CORE_LANES: tuple[Choice, ...] = (
     Choice("photos", "photos"),
     Choice("video", "video"),
@@ -599,9 +624,29 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Host ez-spark LocalForward. Never starts Comfy.",
         "setup-client",
         params=(
-            _text("host", "Spark host", "--host", required=False),
-            _text("user", "SSH user", "--user", required=False),
-            _int("port", "Comfy port", "--port", 1, 65535, required=False),
+            _text(
+                "host",
+                "Spark host",
+                "--host",
+                required=False,
+                help_text="hostname or address of the Spark, as ssh reaches it.",
+            ),
+            _text(
+                "user",
+                "SSH user",
+                "--user",
+                required=False,
+                help_text="the login name ssh uses on that host.",
+            ),
+            _int(
+                "port",
+                "Comfy port",
+                "--port",
+                1,
+                65535,
+                required=False,
+                help_text="the ComfyUI port to forward; the stack publishes 8188.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("laptop", "ssh", "tunnel", "client"),
@@ -613,7 +658,14 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Run setup on a Spark, or set up the laptop and then clone, set up, and "
         "doctor the Spark over ssh. Never auto-starts.",
         "onboard",
-        params=(_flag("download", "Download the core packs", "--download"),),
+        params=(
+            _flag(
+                "download",
+                "Download the core packs",
+                "--download",
+                help_text="also runs download-models on the Spark after the setup.",
+            ),
+        ),
         tier=RiskTier.WRITE,
         keywords=("bootstrap", "clone", "remote"),
     ),
@@ -667,7 +719,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "update-stack",
         params=(
             _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
-            _text("branch", "Branch", "--branch", required=False),
+            _text(
+                "branch",
+                "Branch",
+                "--branch",
+                required=False,
+                help_text="branch to fast-forward first; blank uses the current one.",
+            ),
             _yes(),
         ),
         tier=RiskTier.HEAVY,
@@ -680,7 +738,17 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         Group.STACK,
         "Tail the stack logs from compose.",
         "logs",
-        params=(_int("tail", "Lines", "--tail", 1, 100_000, required=False),),
+        params=(
+            _int(
+                "tail",
+                "Lines",
+                "--tail",
+                1,
+                100_000,
+                required=False,
+                help_text="how many log lines to print; blank uses the default.",
+            ),
+        ),
         keywords=("log", "tail"),
     ),
     # ------------------------------------------------------------------
@@ -694,17 +762,33 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "graph. Copies only; it does not commit.",
         "promote-workflow",
         params=(
-            _text("source", "Source graph", "--from"),
+            _text(
+                "source",
+                "Source graph",
+                "--from",
+                help_text="the graph JSON you exported from the live _user folder.",
+            ),
             ParamSpec(
                 name="lane",
                 label="Lane",
                 kind=ParamKind.CHOICE,
                 flag="--lane",
                 choices=_CORE_LANES,
-                help_text="the lab lane the graph lands in",
+                help_text="the lab lane the graph lands in.",
             ),
-            _text("graph_id", "Graph stem", "--id", help_text="filename without .json"),
-            _text("subdir", "Subdir", "--subdir", required=False),
+            _text(
+                "graph_id",
+                "Graph stem",
+                "--id",
+                help_text="the destination filename, without the .json suffix.",
+            ),
+            _text(
+                "subdir",
+                "Subdir",
+                "--subdir",
+                required=False,
+                help_text="folder under the lane; relative, with no leading slash.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("lab", "graph", "promote", "_user"),
@@ -728,7 +812,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "album-render",
         ("run",),
         params=(
-            _text("album", "Artist/Slug", "--album", help_text="ARTIST/SLUG"),
+            _text("album", "Artist/Slug", "--album", help_text=_ALBUM_HELP),
             ParamSpec(
                 name="art",
                 label="Cover art",
@@ -740,6 +824,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                     Choice("generate", "generate", "render a new cover"),
                 ),
                 required=False,
+                help_text="how the cover is sourced; skip keeps the one on disk.",
             ),
             _text(
                 "quality",
@@ -761,8 +846,14 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "album-render",
         ("pack",),
         params=(
-            _text("album", "Artist/Slug", "--album", help_text="ARTIST/SLUG"),
-            _text("out", "Output dir", "--out", required=False),
+            _text("album", "Artist/Slug", "--album", help_text=_ALBUM_HELP),
+            _text(
+                "out",
+                "Output dir",
+                "--out",
+                required=False,
+                help_text="folder for the album zip; blank uses the default.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("album", "package", "zip"),
@@ -775,9 +866,23 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "JSON, and per-lane MIDI and WAV stems. CPU only; no queue.",
         "export-song",
         params=(
-            _pos("audio", "Master audio", help_text="audio file to convert"),
-            _pos("out_dir", "Output dir", help_text="bundle parent folder"),
-            _text("title", "Title", "--title", required=False),
+            _pos(
+                "audio",
+                "Master audio",
+                help_text="the master audio file to convert into the bundle.",
+            ),
+            _pos(
+                "out_dir",
+                "Output dir",
+                help_text="the folder the hand-off bundle is written into.",
+            ),
+            _text(
+                "title",
+                "Title",
+                "--title",
+                required=False,
+                help_text="title stamped into the bundle; blank uses the default.",
+            ),
             _flag("no_stems", "Skip stems", "--no-stems", help_text="MIDI only, no WAV stems"),
         ),
         tier=RiskTier.WRITE,
@@ -791,7 +896,12 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "compliance gate over it.",
         "icon-pack",
         params=(
-            _text("out", "Output dir", "--out"),
+            _text(
+                "out",
+                "Output dir",
+                "--out",
+                help_text="folder the Android icon pack project is written into.",
+            ),
             _flag("validate_only", "Validate only", "--validate-only"),
             _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
         ),
@@ -806,8 +916,19 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "the operator catalog.",
         "icon-pack",
         params=(
-            _text("scaffold", "Slug", "--scaffold", help_text="new-app-slug"),
-            _text("name", "Label", "--name", required=False),
+            _text(
+                "scaffold",
+                "Slug",
+                "--scaffold",
+                help_text="the slug of the new app, lowercase words joined by hyphens.",
+            ),
+            _text(
+                "name",
+                "Label",
+                "--name",
+                required=False,
+                help_text="the label the launcher shows for the new app.",
+            ),
             _text(
                 "package",
                 "Package",
@@ -815,7 +936,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 required=False,
                 help_text="com.example.app",
             ),
-            _text("glyph", "Glyph", "--glyph", required=False),
+            _text(
+                "glyph",
+                "Glyph",
+                "--glyph",
+                required=False,
+                help_text="glyph recipe id from the shipped catalog, used with the slug.",
+            ),
         ),
         tier=RiskTier.READ,
         keywords=("icon", "scaffold", "new app", "catalog"),
@@ -828,8 +955,19 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "size, and complication-slot limits.",
         "watch-face",
         params=(
-            _text("out", "Output dir", "--out"),
-            _text("face", "Face slug", "--face", required=False),
+            _text(
+                "out",
+                "Output dir",
+                "--out",
+                help_text="folder the Wear OS watch face project is written into.",
+            ),
+            _text(
+                "face",
+                "Face slug",
+                "--face",
+                required=False,
+                help_text="one face slug from the catalog; blank builds every face.",
+            ),
             _flag("validate_only", "Validate only", "--validate-only"),
             _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
         ),
@@ -844,8 +982,19 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "as WAV, M4A, and OGG with the launcher manifest.",
         "tones-pack",
         params=(
-            _text("out", "Output dir", "--out"),
-            _text("tone", "Tone slug", "--tone", required=False),
+            _text(
+                "out",
+                "Output dir",
+                "--out",
+                help_text="folder the ringtone, notification, and alarm pack lands in.",
+            ),
+            _text(
+                "tone",
+                "Tone slug",
+                "--tone",
+                required=False,
+                help_text="one tone slug from the catalog; glass-two-note is a real one.",
+            ),
             _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
         ),
         tier=RiskTier.WRITE,
@@ -901,6 +1050,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "all",
                 required=False,
                 default="analog",
+                help_text="which audio pack to pull; analog is the Kokoro voice.",
             ),
             _text(
                 "limit",
@@ -932,6 +1082,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "all",
                 required=False,
                 default="asr",
+                help_text="which dub pack to pull; asr is Silero VAD plus whisper.",
             ),
             _text(
                 "limit",
@@ -962,6 +1113,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "all",
                 required=False,
                 default="turbo",
+                help_text="which ACE-Step pack to pull; turbo is the smaller one.",
             ),
             _text(
                 "limit",
@@ -993,6 +1145,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "all",
                 required=False,
                 default="enhance",
+                help_text="which GGUF to pull; enhance is the prompt-enhance model.",
             ),
             _text(
                 "limit",
@@ -1013,7 +1166,16 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         Group.MODELS,
         "Opt-in SeedVR2-3B Apache restore pack used after concat.",
         "download-restore",
-        params=(_choice("tier", "Tier", "--tier", "seedvr2-3b", required=False),),
+        params=(
+            _choice(
+                "tier",
+                "Tier",
+                "--tier",
+                "seedvr2-3b",
+                required=False,
+                help_text="the SeedVR2-3B Apache restorer; it is the only row here.",
+            ),
+        ),
         tier=RiskTier.HEAVY,
         confirm=ConfirmKind.YES,
         keywords=("seedvr", "upscale", "restore"),
@@ -1034,6 +1196,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "all",
                 required=False,
                 default="trellis2",
+                help_text="which pack to pull; trellis2 is the INT8 mesh model.",
             ),
         ),
         tier=RiskTier.HEAVY,
@@ -1056,6 +1219,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "all",
                 required=False,
                 default="video",
+                help_text="which pack to pull; video is the LongCat-Video base.",
             ),
         ),
         tier=RiskTier.HEAVY,
@@ -1068,7 +1232,16 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         Group.MODELS,
         "Opt-in DreamX-Creator 1.0 Apache joint AV. Not DreamX-World.",
         "download-dreamx",
-        params=(_choice("tier", "Tier", "--tier", "creator", required=False),),
+        params=(
+            _choice(
+                "tier",
+                "Tier",
+                "--tier",
+                "creator",
+                required=False,
+                help_text="the DreamX-Creator joint AV pack; it is the only row here.",
+            ),
+        ),
         tier=RiskTier.HEAVY,
         confirm=ConfirmKind.YES,
         keywords=("dreamx", "joint av"),
@@ -1108,8 +1281,18 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 default="auto",
                 help_text="auto, off, or a fixed Mbps number",
             ),
-            _flag("refresh", "Re-measure", "--refresh"),
-            _flag("fallback", "Soft-fail", "--fallback"),
+            _flag(
+                "refresh",
+                "Re-measure",
+                "--refresh",
+                help_text="measure the link again instead of using the cached number.",
+            ),
+            _flag(
+                "fallback",
+                "Soft-fail",
+                "--fallback",
+                help_text="Mbps to assume when the speed test cannot measure.",
+            ),
         ),
         tier=RiskTier.HEAVY,
         confirm=ConfirmKind.YES,
@@ -1141,7 +1324,15 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         Group.MODELS,
         "Delete every *.incomplete under MODELS_DIR. Finished weights are kept.",
         "reset-hf-partials",
-        params=(_yes(), _flag("force", "Force", "--force")),
+        params=(
+            _yes(),
+            _flag(
+                "force",
+                "Force",
+                "--force",
+                help_text="delete while an hf download is still running; unsafe.",
+            ),
+        ),
         tier=RiskTier.HEAVY,
         confirm=ConfirmKind.YES,
         guards=_APPLY_SAFE,
@@ -1257,7 +1448,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Print the catalog status of one tier row by id.",
         "nvidia-lab",
         ("status",),
-        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        params=(_pos("tool_id", "Row id", help_text=_ROW_ID_HELP),),
         keywords=("nvidia", "lab", "tier", "status", "row"),
     ),
     _verb(
@@ -1268,7 +1459,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "clone target, and the VRAM and disk envelope. Fetches nothing.",
         "nvidia-lab",
         ("plan",),
-        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        params=(_pos("tool_id", "Row id", help_text=_ROW_ID_HELP),),
         keywords=("nvidia", "lab", "tier", "plan", "fetch", "dry run"),
     ),
     _verb(
@@ -1280,7 +1471,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "and artifacts never land in the repo or a Comfy bind.",
         "nvidia-lab",
         ("install",),
-        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        params=(_pos("tool_id", "Row id", help_text=_ROW_ID_HELP),),
         tier=RiskTier.HEAVY,
         confirm=ConfirmKind.YES,
         guards=_LAB_HEAVY,
@@ -1297,12 +1488,12 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "nvidia-lab",
         ("run",),
         params=(
-            _pos("tool_id", "Row id", help_text="the catalog row id"),
+            _pos("tool_id", "Row id", help_text=_ROW_ID_HELP),
             _text(
                 "input_path",
                 "Input path",
                 "--input",
-                help_text="host file the row reads",
+                help_text="the file on this host the row reads; a PNG or MP4 usually.",
             ),
             _text(
                 "params_json",
@@ -1326,7 +1517,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "remove it and says so.",
         "nvidia-lab",
         ("uninstall",),
-        params=(_pos("tool_id", "Row id", help_text="the catalog row id"),),
+        params=(_pos("tool_id", "Row id", help_text=_ROW_ID_HELP),),
         tier=RiskTier.WRITE,
         keywords=("nvidia", "lab", "tier", "uninstall", "remove", "checkout"),
     ),
@@ -1438,7 +1629,14 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "_user folder. The sanctioned route; the console never copies it itself.",
         "studio-mcp",
         ("--call", "clone_graph"),
-        params=(_pos("payload", "Call payload", help_text="JSON object for the tool"),),
+        params=(
+            _pos(
+                "payload",
+                "Call payload",
+                help_text="one-line JSON object of arguments; List the studio MCP tools"
+                " shows what the tool takes.",
+            ),
+        ),
         tier=RiskTier.WRITE,
         guards=(Guard.PACKS_READY,),
         keywords=("mcp", "clone", "_user", "lab"),
@@ -1469,7 +1667,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "One-shot prompt through the optional host Qwen3-4B CPU client. Path D "
         "when llama.cpp is missing.",
         "blender-llm",
-        params=(_pos("prompt", "Prompt", help_text="one-line scene description"),),
+        params=(
+            _pos(
+                "prompt",
+                "Prompt",
+                help_text="one line describing the scene you want drawn.",
+            ),
+        ),
         tier=RiskTier.WRITE,
         keywords=("gguf", "prompt", "path d"),
     ),
@@ -1509,6 +1713,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "ltx-iclora-canny",
                 "wan-flf",
                 required=False,
+                help_text="the control family the guide pack is cut for.",
             ),
         ),
         tier=RiskTier.WRITE,
@@ -1523,9 +1728,20 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "is up.",
         "blender-stills",
         params=(
-            _text("film", "Film slug", "--film"),
-            _text("plate", "Plate", "--plate"),
-            _text("blend", "Blend file", "--blend", required=False),
+            _text("film", "Film slug", "--film", help_text=_FILM_SLUG_HELP),
+            _text(
+                "plate",
+                "Plate",
+                "--plate",
+                help_text="the still plate to dump; mug is a shipped one.",
+            ),
+            _text(
+                "blend",
+                "Blend file",
+                "--blend",
+                required=False,
+                help_text="the .blend to render instead of the shipped still scene.",
+            ),
             _choice(
                 "size",
                 "Frame size",
@@ -1555,10 +1771,31 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Write 1024x1280 four-by-five clay stills plus the GLB for one set.",
         "house-views",
         params=(
-            _text("slug", "Set slug", "--slug"),
-            _text("layout", "Layout file", "--layout", required=False),
-            _flag("install_inputs", "Install into the input dir", "--install-inputs"),
-            _flag("seed_inputs", "Seed the input dir", "--seed-inputs"),
+            _text(
+                "slug",
+                "Set slug",
+                "--slug",
+                help_text="the house set to dump; lab-penthouse is a shipped one.",
+            ),
+            _text(
+                "layout",
+                "Layout file",
+                "--layout",
+                required=False,
+                help_text="the layout JSON that places the views; blank uses the shipped set.",
+            ),
+            _flag(
+                "install_inputs",
+                "Install into the input dir",
+                "--install-inputs",
+                help_text="copies an existing dump into the ComfyUI input dir",
+            ),
+            _flag(
+                "seed_inputs",
+                "Seed the input dir",
+                "--seed-inputs",
+                help_text="copies a pack or renders the layout into the ComfyUI input dir",
+            ),
         ),
         tier=RiskTier.WRITE,
         guards=_STOP_FIRST,
@@ -1612,7 +1849,15 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Assign shot ranges to the workers so each runs its own local print-shot.",
         "spark-farm",
         ("dispatch",),
-        params=(_text("film", "Film slug", "--film", required=False),),
+        params=(
+            _text(
+                "film",
+                "Film slug",
+                "--film",
+                required=False,
+                help_text="the film whose shots the workers split; go-see is a real one.",
+            ),
+        ),
         tier=RiskTier.WRITE,
         guards=_GPU_WORK,
         keywords=("farm", "dispatch", "shots"),
@@ -1724,8 +1969,8 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Queue one compiled shot into films/<slug>/shots/ through ComfyUI.",
         "print-shot",
         params=(
-            _pos("film", "Film slug", help_text="the films/ directory name"),
-            _pos("shot_id", "Shot id", help_text="01 through 18"),
+            _pos("film", "Film slug", help_text=_FILM_SLUG_HELP),
+            _pos("shot_id", "Shot id", help_text=_SHOT_ID_HELP),
             _text(
                 "quality",
                 "Detail",
@@ -1746,7 +1991,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "already at five seconds.",
         "film-resume",
         params=(
-            _pos("film", "Film slug"),
+            _pos("film", "Film slug", help_text=_FILM_SLUG_HELP),
             _text(
                 "quality",
                 "Detail",
@@ -1766,9 +2011,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Copy takes/<id>/tNNN.mp4 over shots/<id>.mp4 and mark the shot ok.",
         "take-promote",
         params=(
-            _pos("film", "Film slug"),
-            _pos("shot_id", "Shot id"),
-            _pos("take", "Take number", help_text="NNN"),
+            _pos("film", "Film slug", help_text=_FILM_SLUG_HELP),
+            _pos("shot_id", "Shot id", help_text=_SHOT_ID_HELP),
+            _pos(
+                "take",
+                "Take number",
+                help_text="the take under takes/<id>/ as tNNN.mp4, three digits.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("take", "approve", "copy"),
@@ -1780,11 +2029,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Fail-closed check that every shot is 5.00 s at 1280x704 with LTX audio.",
         "film-accept",
         params=(
-            _pos(
-                "film",
-                "Film slug",
-                help_text="go-see, still-here, or switchyard",
-            ),
+            _pos("film", "Film slug", help_text=_FILM_SLUG_HELP),
         ),
         tier=RiskTier.READ,
         keywords=("gate", "verify", "qc"),
@@ -1795,7 +2040,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         Group.FILM,
         "Write films/<slug>/publish/<slug>.otio from the jobstore.",
         "film-export-otio",
-        params=(_pos("film", "Film slug"),),
+        params=(_pos("film", "Film slug", help_text=_FILM_SLUG_HELP),),
         tier=RiskTier.WRITE,
         keywords=("otio", "timeline", "publish"),
     ),
@@ -1806,7 +2051,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Render 960x528 h264 proxies. Refuses while compose is up and never "
         "rewrites a master.",
         "film-proxies",
-        params=(_pos("film", "Film slug"), _yes()),
+        params=(_pos("film", "Film slug", help_text=_FILM_SLUG_HELP), _yes()),
         tier=RiskTier.WRITE,
         guards=_STOP_FIRST,
         keywords=("proxy", "h264", "preview"),
@@ -1819,7 +2064,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "shot-sheet",
         ("status",),
         params=(
-            _text("film", "Film slug", "--film", required=False),
+            _text(
+                "film",
+                "Film slug",
+                "--film",
+                required=False,
+                help_text=_FILM_SLUG_HELP,
+            ),
             _flag("as_json", "JSON", "--json", help_text=_JSON_HELP),
         ),
         keywords=("yaml", "shot card"),
@@ -1832,10 +2083,27 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "shot-sheet",
         ("run",),
         params=(
-            _text("film", "Film slug", "--film"),
-            _text("source", "Source sheet", "--from", required=False),
-            _text("out", "Output path", "--out", required=False),
-            _flag("lab_example", "Start from the lab example", "--lab-example"),
+            _text("film", "Film slug", "--film", help_text=_FILM_SLUG_HELP),
+            _text(
+                "source",
+                "Source sheet",
+                "--from",
+                required=False,
+                help_text="an existing shots.yaml to copy instead of the defaults.",
+            ),
+            _text(
+                "out",
+                "Output path",
+                "--out",
+                required=False,
+                help_text="where to write the sheet; default films/<slug>/shots.yaml.",
+            ),
+            _flag(
+                "lab_example",
+                "Start from the lab example",
+                "--lab-example",
+                help_text="seed the sheet from the shipped lab example",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("yaml", "shot card", "generate"),
@@ -1847,10 +2115,21 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Composite a fifty per cent clay-and-look comparison with host ffmpeg.",
         "overlay-qc",
         params=(
-            _text("film", "Film slug", "--film"),
-            _text("shot_id", "Shot id", "--shot"),
-            _text("look", "Look clip", "--look"),
-            _text("guides", "Guides dir", "--guides", required=False),
+            _text("film", "Film slug", "--film", help_text=_FILM_SLUG_HELP),
+            _text("shot_id", "Shot id", "--shot", help_text=_SHOT_ID_HELP),
+            _text(
+                "look",
+                "Look clip",
+                "--look",
+                help_text="the Klein look plate to blend against the clay still.",
+            ),
+            _text(
+                "guides",
+                "Guides dir",
+                "--guides",
+                required=False,
+                help_text=_GUIDES_HELP,
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("overlay", "ffmpeg", "qc"),
@@ -1862,9 +2141,21 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Build a ninety second animatic from clay.mp4 or the stills.",
         "film-animatic",
         params=(
-            _text("film", "Film slug", "--film"),
-            _text("yaml", "Shot sheet", "--yaml", required=False),
-            _text("guides", "Guides dir", "--guides", required=False),
+            _text("film", "Film slug", "--film", help_text=_FILM_SLUG_HELP),
+            _text(
+                "yaml",
+                "Shot sheet",
+                "--yaml",
+                required=False,
+                help_text="the sheet that sets pacing; default films/<slug>/shots.yaml.",
+            ),
+            _text(
+                "guides",
+                "Guides dir",
+                "--guides",
+                required=False,
+                help_text=_GUIDES_HELP,
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("animatic", "preview", "ffmpeg"),
@@ -1876,13 +2167,42 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Duck the background bed fifteen dB and loudnorm to the YouTube target.",
         "stem-mix",
         params=(
-            _text("film", "Film slug", "--film"),
-            _text("shot_id", "Shot id", "--shot"),
-            _text("background", "Background bed", "--bg"),
-            _text("dialogue", "Dialogue stem", "--dx", required=False),
-            _text("effects", "Effects stem", "--fx", required=False),
-            _text("mix", "Mix stem", "--mx", required=False),
-            _text("video", "Video master", "--video", required=False),
+            _text("film", "Film slug", "--film", help_text=_FILM_SLUG_HELP),
+            _text("shot_id", "Shot id", "--shot", help_text=_SHOT_ID_HELP),
+            _text(
+                "background",
+                "Background bed",
+                "--bg",
+                help_text="the bed the mix ducks; a printed shot MP4 works.",
+            ),
+            _text(
+                "dialogue",
+                "Dialogue stem",
+                "--dx",
+                required=False,
+                help_text="the speech stem the bed is ducked under.",
+            ),
+            _text(
+                "effects",
+                "Effects stem",
+                "--fx",
+                required=False,
+                help_text="the effects stem to fold into the mix.",
+            ),
+            _text(
+                "mix",
+                "Mix stem",
+                "--mx",
+                required=False,
+                help_text="a ready mix stem to fold in alongside the others.",
+            ),
+            _text(
+                "video",
+                "Video master",
+                "--video",
+                required=False,
+                help_text="a picture to stream-copy in; the mix comes out as mix.mp4.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("audio", "loudnorm", "duck"),
@@ -1905,9 +2225,25 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "audio-still-video",
         ("run",),
         params=(
-            _text("audio", "Audio master", "--audio"),
-            _text("image", "Still image", "--image"),
-            _text("out", "Output file", "--out", required=False),
+            _text(
+                "audio",
+                "Audio master",
+                "--audio",
+                help_text="the audio master to mux; a FLAC or an MP3 both work.",
+            ),
+            _text(
+                "image",
+                "Still image",
+                "--image",
+                help_text="the still the video holds on for the whole track.",
+            ),
+            _text(
+                "out",
+                "Output file",
+                "--out",
+                required=False,
+                help_text="where the muxed MP4 lands; blank uses the default name.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("mux", "ffmpeg", "youtube"),
@@ -1920,7 +2256,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "asset-ls",
         params=(
             _flag("as_json", "JSON", "--json", help_text=_JSON_HELP),
-            _text("output_dir", "Output dir", "--output-dir", required=False),
+            _text(
+                "output_dir",
+                "Output dir",
+                "--output-dir",
+                required=False,
+                help_text="the assets folder to read; blank uses COMFY_OUTPUT_DIR/assets.",
+            ),
         ),
         keywords=("assets", "catalog", "bible"),
     ),
@@ -1930,7 +2272,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         Group.FILM,
         "Compile the shot list of a film into the graph jobs the printer queues.",
         "compile-film",
-        params=(_pos("film", "Film slug"),),
+        params=(_pos("film", "Film slug", help_text=_FILM_SLUG_HELP),),
         tier=RiskTier.WRITE,
         keywords=("compile", "shots"),
     ),
@@ -1941,8 +2283,20 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Join the promoted shots into one master. Dry run unless you tick --yes.",
         "concat-shots",
         params=(
-            _text("film", "Film slug", "--film", required=False),
-            _text("shots_dir", "Shots dir", "--dir", required=False),
+            _text(
+                "film",
+                "Film slug",
+                "--film",
+                required=False,
+                help_text="the film whose promoted shots you are joining.",
+            ),
+            _text(
+                "shots_dir",
+                "Shots dir",
+                "--dir",
+                required=False,
+                help_text="the shot MP4s to join; default films/<slug>/shots.",
+            ),
             _text(
                 "files",
                 "Explicit file list",
@@ -1950,7 +2304,13 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 required=False,
                 help_text="comma-separated paths, used instead of a dir",
             ),
-            _text("out", "Output file", "--out", required=False),
+            _text(
+                "out",
+                "Output file",
+                "--out",
+                required=False,
+                help_text="where the joined master lands; blank uses the default.",
+            ),
             _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
             _yes(),
         ),
@@ -1964,10 +2324,35 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Re-encode one clip under a byte budget, optionally writing a poster.",
         "compress-cinema-clip",
         params=(
-            _text("source", "Input file", "--in"),
-            _text("out", "Output file", "--out"),
-            _text("poster", "Poster file", "--poster", required=False),
-            _int("crf", "CRF", "--crf", 0, 51, required=False, default="28"),
+            _text(
+                "source",
+                "Input file",
+                "--in",
+                help_text="the Cinema Rack clip to re-encode, as an MP4 on this host.",
+            ),
+            _text(
+                "out",
+                "Output file",
+                "--out",
+                help_text="the compressed MP4 to write; Git LFS wants it under 512 KiB.",
+            ),
+            _text(
+                "poster",
+                "Poster file",
+                "--poster",
+                required=False,
+                help_text="a JPEG poster to write beside the compressed clip.",
+            ),
+            _int(
+                "crf",
+                "CRF",
+                "--crf",
+                0,
+                51,
+                required=False,
+                default="28",
+                help_text="x264 quality; 28 is what the shipped clips pass on.",
+            ),
             _int(
                 "max_bytes",
                 "Byte budget",
@@ -1976,6 +2361,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 1_073_741_824,
                 required=False,
                 default="524288",
+                help_text="fail the encode above this size; 524288 is the LFS budget.",
             ),
             _flag("dry_run", "Dry run", "--dry-run", help_text=_DRY_RUN_HELP),
         ),
@@ -1990,8 +2376,18 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "deletes nothing.",
         "nvenc-preview",
         params=(
-            _text("source", "Master file", "--in"),
-            _text("out", "Preview file", "--out"),
+            _text(
+                "source",
+                "Master file",
+                "--in",
+                help_text="the film master to preview; a master is never rewritten.",
+            ),
+            _text(
+                "out",
+                "Preview file",
+                "--out",
+                help_text="the preview MP4 to write.",
+            ),
             _yes(),
         ),
         tier=RiskTier.WRITE,
@@ -2005,8 +2401,18 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "Turn a numbered frame directory into one video file.",
         "pack-frames",
         params=(
-            _text("source", "Frames dir", "--in"),
-            _text("out", "Output file", "--out"),
+            _text(
+                "source",
+                "Frames dir",
+                "--in",
+                help_text="the numbered frame directory to mux into one clip.",
+            ),
+            _text(
+                "out",
+                "Output file",
+                "--out",
+                help_text="the MP4 to write from the frame sequence.",
+            ),
             _int(
                 "fps",
                 "Frames per second",
@@ -2015,6 +2421,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 240,
                 required=False,
                 default="24",
+                help_text="playback rate of the muxed clip; 24 matches the guide packs.",
             ),
             _text(
                 "pattern",
@@ -2022,6 +2429,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "--pattern",
                 required=False,
                 default="%04d.png",
+                help_text="the printf pattern the frames match; %04d.png is the pack naming.",
             ),
         ),
         tier=RiskTier.WRITE,
@@ -2045,8 +2453,19 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "dub-fetch",
         ("run",),
         params=(
-            _text("url", "Source URL", "--url"),
-            _text("out", "Output dir", "--out", required=False),
+            _text(
+                "url",
+                "Source URL",
+                "--url",
+                help_text="an http or https link to media you hold the rights to.",
+            ),
+            _text(
+                "out",
+                "Output dir",
+                "--out",
+                required=False,
+                help_text="folder to fetch into; blank uses COMFY_OUTPUT_DIR/input.",
+            ),
         ),
         tier=RiskTier.WRITE,
         keywords=("dub", "download", "source audio"),
@@ -2070,8 +2489,19 @@ _ACTIONS: tuple[ActionSpec, ...] = (
         "podcast-loudnorm",
         ("run",),
         params=(
-            _text("source", "Input file", "--in"),
-            _text("out", "Output file", "--out", required=False),
+            _text(
+                "source",
+                "Input file",
+                "--in",
+                help_text="the episode audio to normalise, as a file on this host.",
+            ),
+            _text(
+                "out",
+                "Output file",
+                "--out",
+                required=False,
+                help_text="where the normalised file lands; blank uses the default name.",
+            ),
             _choice(
                 "target",
                 "Loudness target",
@@ -2080,6 +2510,7 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "youtube",
                 required=False,
                 default="podcast",
+                help_text="podcast targets -16 LUFS; youtube targets -14.",
             ),
         ),
         tier=RiskTier.WRITE,
@@ -2146,6 +2577,8 @@ _ACTIONS: tuple[ActionSpec, ...] = (
                 "junk",
                 "superseded",
                 "banned",
+                help_text="junk is partials and locks, superseded an older pack, "
+                "banned the refuse list.",
             ),
             _flag(
                 "quarantine",

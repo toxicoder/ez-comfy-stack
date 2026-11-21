@@ -371,6 +371,7 @@ filegroup(
         "js/ez_image_mode.test.mjs",
         "js/ez_outputs.test.mjs",
         "js/ez_outputs_model3d.test.mjs",
+        "js/ez_studio_app.test.mjs",
         "js/harness.mjs",
         "js/quality_overlay.test.mjs",
     ],

@@ -246,7 +246,18 @@ class EZSnapImage:
         Returns:
             Required IMAGE input.
         """
-        return {"required": {"image": ("IMAGE",)}}
+        return {
+            "required": {
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire your LoadImage still here; it comes "
+                        "back scaled down to the largest size that fits inside "
+                        "it and divides by 16.",
+                    },
+                ),
+            }
+        }
 
     # Comfy node contract.
     RETURN_TYPES = ("IMAGE",)
@@ -257,7 +268,8 @@ class EZSnapImage:
         "Scale a still to the largest width and height that fit inside the "
         "source and are multiples of 16 (Flux.2 Klein VAE). Used so a Klein "
         "edit latent matches the start image, then EZMatchImageSize restores "
-        "the exact source pixels."
+        "the exact source pixels. Wire your LoadImage into this node and keep "
+        "the original for Match image size."
     )
 
     def run(self, image: ImageTensor) -> tuple[ImageTensor]:
@@ -288,7 +300,18 @@ class EZEmptyFlux2FromImage:
         Returns:
             Required IMAGE input.
         """
-        return {"required": {"image": ("IMAGE",)}}
+        return {
+            "required": {
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the snapped photo here; its size sets "
+                        "the empty Flux.2 latent you then wire into KSampler "
+                        "latent_image.",
+                    },
+                ),
+            }
+        }
 
     # Comfy node contract.
     RETURN_TYPES = ("LATENT",)
@@ -298,7 +321,9 @@ class EZEmptyFlux2FromImage:
     DESCRIPTION = (
         "Empty Flux.2 noise canvas at the still's width and height snapped to "
         "div16. photos/background-swap uses this as KSampler.latent_image so "
-        "the encoded source is only a ReferenceLatent, not the denoise start."
+        "the encoded source is only a ReferenceLatent, not the denoise start. "
+        "Wire it into KSampler latent_image and leave the encoded photo on the "
+        "reference input."
     )
 
     def run(self, image: ImageTensor) -> tuple[Flux2Latent]:
@@ -327,8 +352,20 @@ class EZMatchImageSize:
         """
         return {
             "required": {
-                "image": ("IMAGE",),
-                "size_src": ("IMAGE",),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the edited still here; it comes back "
+                        "at the exact size of the reference below.",
+                    },
+                ),
+                "size_src": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the uploaded plate you started from; "
+                        "its width and height are the target size.",
+                    },
+                ),
             }
         }
 
@@ -378,8 +415,23 @@ class EZImageFormat:
             default_label = labels[0]
         return {
             "required": {
-                "format": (labels, {"default": default_label}),
-                "look": (look_combo_labels(), {"default": LOOK_NONE}),
+                "format": (
+                    labels,
+                    {
+                        "default": default_label,
+                        "tooltip": "Pick an aspect or a named platform; it sets "
+                        "width, height, the SaveImage prefix, and the framing "
+                        "words sent to Enhance.",
+                    },
+                ),
+                "look": (
+                    look_combo_labels(),
+                    {
+                        "default": LOOK_NONE,
+                        "tooltip": "Pick a Cinema Rack recipe to splice into "
+                        "the Enhance context; none adds no look.",
+                    },
+                ),
                 "width": (
                     "INT",
                     {
@@ -387,6 +439,8 @@ class EZImageFormat:
                         "min": MIN_DIM,
                         "max": MAX_DIM,
                         "step": GRID,
+                        "tooltip": "Canvas width in pixels, used only when "
+                        "Format is Custom; it snaps down to a multiple of 16.",
                     },
                 ),
                 "height": (
@@ -396,6 +450,8 @@ class EZImageFormat:
                         "min": MIN_DIM,
                         "max": MAX_DIM,
                         "step": GRID,
+                        "tooltip": "Canvas height in pixels, used only when "
+                        "Format is Custom; it snaps down to a multiple of 16.",
                     },
                 ),
                 "batch_size": (
@@ -405,12 +461,27 @@ class EZImageFormat:
                         "min": MIN_BATCH,
                         "max": MAX_BATCH,
                         "step": 1,
+                        "tooltip": "How many stills one Queue makes; raise it "
+                        "for more takes of the same prompt.",
                     },
                 ),
-                "size_mode": (list(SIZE_MODE_CHOICES), {"default": SIZE_MODE_MATCH}),
+                "size_mode": (
+                    list(SIZE_MODE_CHOICES),
+                    {
+                        "default": SIZE_MODE_MATCH,
+                        "tooltip": "Match input snaps the canvas to the wired "
+                        "still below; Force format keeps the size you picked.",
+                    },
+                ),
             },
             "optional": {
-                "image": ("IMAGE",),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the plate whose aspect the canvas "
+                        "matches when Size mode is Match input.",
+                    },
+                ),
             },
         }
 
@@ -500,8 +571,23 @@ class EZVideoFormat:
         min_dim = min(family_spec.min_dim, ltx.min_dim)
         return {
             "required": {
-                "family": (families, {"default": family_default}),
-                "format": (labels, {"default": default_label}),
+                "family": (
+                    families,
+                    {
+                        "default": family_default,
+                        "tooltip": "Pick the clip model family first; it sets "
+                        "the size grid and which Format labels apply.",
+                    },
+                ),
+                "format": (
+                    labels,
+                    {
+                        "default": default_label,
+                        "tooltip": "Pick an aspect or a named platform; it sets "
+                        "width, height, the SaveImage prefix, and the framing "
+                        "words sent to Enhance.",
+                    },
+                ),
                 "width": (
                     "INT",
                     {
@@ -509,6 +595,8 @@ class EZVideoFormat:
                         "min": min_dim,
                         "max": max_dim,
                         "step": family_spec.grid,
+                        "tooltip": "Clip width in pixels, used only when Format "
+                        "is Custom; it snaps to the family grid.",
                     },
                 ),
                 "height": (
@@ -518,13 +606,35 @@ class EZVideoFormat:
                         "min": min_dim,
                         "max": max_dim,
                         "step": family_spec.grid,
+                        "tooltip": "Clip height in pixels, used only when Format "
+                        "is Custom; it snaps to the family grid.",
                     },
                 ),
-                "size_mode": (list(SIZE_MODE_CHOICES), {"default": SIZE_MODE_MATCH}),
-                "duration_s": (list(DURATION_CHOICES), {"default": DURATION_DEFAULT}),
+                "size_mode": (
+                    list(SIZE_MODE_CHOICES),
+                    {
+                        "default": SIZE_MODE_MATCH,
+                        "tooltip": "Match input snaps the canvas to the wired "
+                        "still below; Force format keeps the size you picked.",
+                    },
+                ),
+                "duration_s": (
+                    list(DURATION_CHOICES),
+                    {
+                        "default": DURATION_DEFAULT,
+                        "tooltip": "Clip length in seconds, LTX only; Wan "
+                        "ignores it, so set it last.",
+                    },
+                ),
             },
             "optional": {
-                "image": ("IMAGE",),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the plate whose aspect the canvas "
+                        "matches when Size mode is Match input.",
+                    },
+                ),
             },
         }
 
@@ -540,7 +650,9 @@ class EZVideoFormat:
         "uses the width/height widgets. Match input snaps aspect to a "
         "provided still. Duration is LTX-only (5/8/10/12 s, default 8) and "
         "writes the latent length in the frontend. Detail does not change "
-        "size."
+        "size. Pick Family first and Format second, open the width and height "
+        "widgets only when Format is Custom, and set Duration last because "
+        "Wan ignores it."
     )
 
     def run(
@@ -602,8 +714,21 @@ class EZImageUpscale:
         labels = upscale_combo_labels()
         return {
             "required": {
-                "image": ("IMAGE",),
-                "upscale": (labels, {"default": DEFAULT_UPSCALE}),
+                "image": (
+                    "IMAGE",
+                    {
+                        "tooltip": "Wire the decoded still here; it comes back "
+                        "larger when the combo below is not none.",
+                    },
+                ),
+                "upscale": (
+                    labels,
+                    {
+                        "default": DEFAULT_UPSCALE,
+                        "tooltip": "Pick none to leave the still alone, 2x or "
+                        "4x to enlarge it, or 4K to fit it in a 3840x2160 box.",
+                    },
+                ),
             }
         }
 

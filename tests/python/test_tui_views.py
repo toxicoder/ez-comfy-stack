@@ -230,9 +230,15 @@ def test_health_rows_surface_unknown_readings_as_blocked() -> None:
 
 def test_health_rows_warn_inside_the_margin_and_bad_under_the_floor() -> None:
     """Headroom grades against the same floors the CLI blocks on."""
-    near = {row.key: row for row in views.health_rows(
-        _health(host_free_gib=c.MIN_HOST_FREE_GIB + 2, disk_free_gib=c.MIN_DISK_FREE_GIB - 1)
-    )}
+    near = {
+        row.key: row
+        for row in views.health_rows(
+            _health(
+                host_free_gib=c.MIN_HOST_FREE_GIB + 2,
+                disk_free_gib=c.MIN_DISK_FREE_GIB - 1,
+            )
+        )
+    }
     assert near["health.ram"].badge == "warn"
     assert near["health.ram"].style is c.Style.WARN
     assert near["health.ram"].enabled is True
@@ -272,14 +278,21 @@ def test_health_rows_treat_a_still_unknown_probe_as_unknown() -> None:
     rows = {
         row.key: row
         for row in views.health_rows(
-            _health(stack_state="weird", queue="half", shaping=True, shaping_mbps=c.UNMEASURED)
+            _health(
+                stack_state="weird",
+                queue="half",
+                shaping=True,
+                shaping_mbps=c.UNMEASURED,
+            )
         )
     }
     assert rows["health.stack"].badge == "?"
     assert rows["health.queue"].badge == "?"
     assert rows["health.cap"].badge == "?"
     assert rows["health.cap"].enabled is False
-    present = {row.key: row for row in views.health_rows(_health(stack_state="present"))}
+    present = {
+        row.key: row for row in views.health_rows(_health(stack_state="present"))
+    }
     assert present["health.stack"].badge == "warn"
     assert present["health.stack"].enabled is True
     assert present["health.attn"].note == "n/a"
@@ -287,10 +300,14 @@ def test_health_rows_treat_a_still_unknown_probe_as_unknown() -> None:
 
 def test_health_rows_only_judge_attention_while_the_stack_runs() -> None:
     """A stopped stack has no attention backend to grade."""
-    stopped = {row.key: row for row in views.health_rows(_health(stack_state="stopped"))}
+    stopped = {
+        row.key: row for row in views.health_rows(_health(stack_state="stopped"))
+    }
     assert stopped["health.attn"].note == "n/a"
     assert stopped["health.attn"].enabled is True
-    fallback = {row.key: row for row in views.health_rows(_health(attention="pytorch-fallback"))}
+    fallback = {
+        row.key: row for row in views.health_rows(_health(attention="pytorch-fallback"))
+    }
     assert fallback["health.attn"].badge == "warn"
     odd = {row.key: row for row in views.health_rows(_health(attention="mystery"))}
     assert odd["health.attn"].badge == "?"
@@ -331,8 +348,14 @@ def test_status_bar_truncates_to_the_terminal_width() -> None:
 
 def test_dashboard_leads_with_the_readings_and_offers_the_quick_actions() -> None:
     """The landing screen is the health list followed by runnable actions."""
-    quick = (_action("stack.status", "Show status"), _action("stack.start", "Start", tier=c.RiskTier.HEAVY))
-    verdicts = {"stack.status": _ALLOWED, "stack.start": _blocked("free RAM is unknown")}
+    quick = (
+        _action("stack.status", "Show status"),
+        _action("stack.start", "Start", tier=c.RiskTier.HEAVY),
+    )
+    verdicts = {
+        "stack.status": _ALLOWED,
+        "stack.start": _blocked("free RAM is unknown"),
+    }
     model = views.dashboard(_health(), verdicts, quick)
     assert model.screen is c.ScreenId.DASHBOARD
     assert model.rows[0].key == "health.stack"
@@ -359,8 +382,18 @@ def test_dashboard_says_out_loud_when_nothing_is_ready() -> None:
 
 def test_group_list_carries_the_tier_badge_and_the_guard_reason() -> None:
     """Every action row states its tier and, when blocked, why."""
-    start = _action("stack.start", "Start the stack", tier=c.RiskTier.HEAVY, summary="Bring the stack up.")
-    stop = _action("stack.stop", "Stop the stack", tier=c.RiskTier.WRITE, summary="Take the stack down.")
+    start = _action(
+        "stack.start",
+        "Start the stack",
+        tier=c.RiskTier.HEAVY,
+        summary="Bring the stack up.",
+    )
+    stop = _action(
+        "stack.stop",
+        "Stop the stack",
+        tier=c.RiskTier.WRITE,
+        summary="Take the stack down.",
+    )
     verdicts = {
         "stack.start": _blocked("the ComfyUI queue still has a job in flight"),
         "stack.stop": _ALLOWED,
@@ -425,10 +458,16 @@ def test_group_list_clamps_an_out_of_range_selection() -> None:
 
 def test_palette_filters_on_every_field_and_keeps_the_blocked_rows() -> None:
     """The palette searches id, title, summary, keywords, and group."""
-    still = _action("photos.still", "Print a still", group=c.Group.FILM, keywords=("klein",))
-    clip = _action("video.clip", "Print a clip", group=c.Group.OCCUPANCY, summary="wan motion")
+    still = _action(
+        "photos.still", "Print a still", group=c.Group.FILM, keywords=("klein",)
+    )
+    clip = _action(
+        "video.clip", "Print a clip", group=c.Group.OCCUPANCY, summary="wan motion"
+    )
     actions = (still, clip)
-    model = views.palette("klein", actions, {"photos.still": _ALLOWED, "video.clip": _ALLOWED})
+    model = views.palette(
+        "klein", actions, {"photos.still": _ALLOWED, "video.clip": _ALLOWED}
+    )
     assert model.row_keys() == ("photos.still",)
     assert views.palette("wan", actions, {}).row_keys() == ("video.clip",)
     assert views.palette("film", actions, {}).row_keys() == ("photos.still",)
@@ -508,11 +547,56 @@ def test_param_form_states_what_is_still_missing() -> None:
     )
     model = views.param_form(action, {})
     detail = _detail_text(model)
-    assert "not ready: film: Film is required" in detail
-    assert _row(model, "film").note == "required"
-    assert _row(model, "drafts").note == "optional"
+    assert "not ready: Film is required" in detail
+    assert _row(model, "film").note == "no hint for this field: file a bug so it gets one"
+    assert _row(model, "drafts").note == "optional: leave blank to skip it"
     assert _row(model, "look").note == "[Warm]"
     assert model.selected == 0
+
+
+def test_param_form_turns_a_missing_hint_into_a_reportable_defect() -> None:
+    """A required field the catalog left bare never renders a bare label.
+
+    The placeholder is the only thing the operator reads before typing, so an
+    absent hint has to read as something worth reporting rather than as a blank,
+    an optional one has to keep saying it may be left blank, and a menu has to
+    keep showing its offered choices.
+    """
+    action = _action(
+        "film.pack_frames",
+        "Pack frames into a clip",
+        group=c.Group.FILM,
+        params=(
+            c.ParamSpec(name="source", label="Frames dir", kind=c.ParamKind.TEXT),
+            c.ParamSpec(
+                name="fps",
+                label="Frames per second",
+                kind=c.ParamKind.INT,
+                flag="--fps",
+                required=False,
+            ),
+            c.ParamSpec(
+                name="family",
+                label="Family",
+                kind=c.ParamKind.CHOICE,
+                flag="--family",
+                choices=(c.Choice("clay", "Clay"),),
+            ),
+            c.ParamSpec(
+                name="note",
+                label="Note",
+                kind=c.ParamKind.TEXT,
+                flag="--note",
+                required=False,
+                help_text="one line stamped on the clip",
+            ),
+        ),
+    )
+    model = views.param_form(action, {})
+    assert _row(model, "source").note == "no hint for this field: file a bug so it gets one"
+    assert _row(model, "fps").note == "optional: leave blank to skip it"
+    assert _row(model, "family").note == "[Clay]"
+    assert _row(model, "note").note == "one line stamped on the clip"
 
 
 def test_param_form_uses_a_default_answer_and_shows_the_tier_colour() -> None:
@@ -555,7 +639,12 @@ def test_param_form_colours_a_refused_entry_the_way_the_guard_meant_it() -> None
 
 def test_confirm_view_shows_the_argv_and_the_exact_yes_token() -> None:
     """Nothing runs until the operator retypes what the child script reads."""
-    action = _action("stack.start", "Start the stack", tier=c.RiskTier.HEAVY, confirm=c.ConfirmKind.YES)
+    action = _action(
+        "stack.start",
+        "Start the stack",
+        tier=c.RiskTier.HEAVY,
+        confirm=c.ConfirmKind.YES,
+    )
     model = views.confirm_view(action, ("scripts/manage.sh", "start"), typed="ye")
     detail = _detail_text(model)
     assert "scripts/manage.sh start" in detail
@@ -566,7 +655,9 @@ def test_confirm_view_shows_the_argv_and_the_exact_yes_token() -> None:
     typed = [line for line in model.detail if line.text.startswith("typed:")]
     assert typed[0].style is c.Style.DIM
     matched = views.confirm_view(action, ("scripts/manage.sh", "start"), typed="yes")
-    assert [line.style for line in matched.detail if line.text.startswith("typed:")][0] is c.Style.OK
+    assert [line.style for line in matched.detail if line.text.startswith("typed:")][
+        0
+    ] is c.Style.OK
 
 
 def test_confirm_view_demands_DELETE_and_names_what_is_lost() -> None:
@@ -579,7 +670,9 @@ def test_confirm_view_demands_DELETE_and_names_what_is_lost() -> None:
         tier=c.RiskTier.DESTRUCTIVE,
         confirm=c.ConfirmKind.DELETE,
     )
-    model = views.confirm_view(action, ("scripts/utilities", "disk-reclaim.sh", "--apply"))
+    model = views.confirm_view(
+        action, ("scripts/utilities", "disk-reclaim.sh", "--apply")
+    )
     detail = _detail_text(model)
     assert "type exactly: DELETE" in detail
     assert "DESTRUCTIVE: Reclaim the model cache erases data" in detail
@@ -654,7 +747,9 @@ def test_result_view_marks_a_failure_red() -> None:
 def test_result_view_explains_a_run_that_never_happened() -> None:
     """A blocked dispatch reads as blocked, with the reason beside it."""
     model = views.result_view(
-        _result(returncode=c.UNMEASURED, output="", ran=False, note="blocked: queue busy")
+        _result(
+            returncode=c.UNMEASURED, output="", ran=False, note="blocked: queue busy"
+        )
     )
     detail = _detail_text(model)
     assert "ran no  exit ?  3.0s" in detail
@@ -688,7 +783,9 @@ def test_graph_list_rows_the_lane_and_its_occupancy_desk() -> None:
     """Each graph is addressable by the id other tools use."""
     lane = lane_lib.Lane("photos", 10, "Photos", "Single images.", 2)
     graphs = (
-        lane_lib.Graph("photos", "photos/background-swap", "background-swap", "Swap a bg.", "klein"),
+        lane_lib.Graph(
+            "photos", "photos/background-swap", "background-swap", "Swap a bg.", "klein"
+        ),
         lane_lib.Graph("photos", "photos/still-draft", "still-draft", "A draft.", ""),
     )
     model = views.graph_list(lane, graphs, selected=1)
@@ -726,7 +823,9 @@ def test_graph_detail_shows_the_graph_and_where_a_live_copy_lives() -> None:
 
 def test_graph_detail_fills_in_what_a_thin_graph_omits() -> None:
     """A graph with no blurb or hand-off still renders completely."""
-    model = views.graph_detail(lane_lib.Graph("3d", "3d/turntable", "turntable", "", ""))
+    model = views.graph_detail(
+        lane_lib.Graph("3d", "3d/turntable", "turntable", "", "")
+    )
     detail = _detail_text(model)
     assert "occupancy unspecified" in detail
     assert "blurb none recorded" in detail

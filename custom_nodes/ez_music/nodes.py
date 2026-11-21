@@ -76,7 +76,14 @@ def _sample_combo() -> ComboSpec:
     _ensure_lab_custom_nodes_path()
     from ez_prompt_enhance.samples import CUSTOM, sample_combo_labels
 
-    return (sample_combo_labels("rap_draft"), {"default": CUSTOM})
+    return (
+        sample_combo_labels("rap_draft"),
+        {
+            "default": CUSTOM,
+            "tooltip": "Pick a shipped lab recipe to fill the lyrics box from "
+            "the sample catalog, or custom to write your own words.",
+        },
+    )
 
 
 def _ensure_lab_custom_nodes_path() -> None:
@@ -173,18 +180,43 @@ class EZRapLyrics:
                         "multiline": True,
                         "default": DRAFT_LYRICS,
                         "dynamicPrompts": False,
+                        "tooltip": "Type your own lab-original verses and hook "
+                        "with [verse] and [chorus] tags; Enhance rewrites this "
+                        "box and ACE-Step sings what comes back.",
                     },
                 ),
                 "enhance": (
                     "BOOLEAN",
-                    {"default": True, "label_on": "On", "label_off": "Off"},
+                    {
+                        "default": True,
+                        "label_on": "On",
+                        "label_off": "Off",
+                        "tooltip": "Turn off to Queue the lyrics exactly as "
+                        "typed, with no writer pass and no GGUF load.",
+                    },
                 ),
-                "catalog": ("STRING", {"default": "", "multiline": False}),
+                "catalog": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Leave empty for this node's own recipes, "
+                        "or name a catalog stem such as rap_draft to read that "
+                        "file from custom_nodes/ez_prompt_enhance/js/samples/, "
+                        "which ez_prompt_enhance/samples.py lists.",
+                    },
+                ),
             },
             "optional": {
                 "context": (
                     "STRING",
-                    {"forceInput": True, "dynamicPrompts": False},
+                    {
+                        "forceInput": True,
+                        "dynamicPrompts": False,
+                        "tooltip": "Wire an extra context STRING here and the "
+                        "writer folds it into the system prompt beside the "
+                        "lyrics.",
+                    },
                 ),
             },
         }
@@ -198,8 +230,9 @@ class EZRapLyrics:
     DESCRIPTION = (
         "Rewrites lab-original rap lyrics with the on-box Qwen3-4B-Instruct "
         "GGUF. Enhance defaults on. Missing GGUF passes the widget text "
-        "through. Forbids living-MC names and famous hooks. ACE-Step still "
-        "invents the vocal timbre from tags plus lyrics."
+        "through, so Queue anyway or fetch the writer with bazelisk run "
+        "//:manage -- download-models. Forbids living-MC names and famous "
+        "hooks. ACE-Step still invents the vocal timbre from tags plus lyrics."
     )
 
     def run(
@@ -287,14 +320,85 @@ class EZAudioMetadata:
         return {
             "required": {
                 "audio": ("AUDIO",),
-                "artist": ("STRING", {"default": "", "multiline": False}),
-                "album": ("STRING", {"default": "", "multiline": False}),
-                "title": ("STRING", {"default": "", "multiline": False}),
-                "track": ("INT", {"default": 1, "min": 1, "max": 99}),
-                "tracktotal": ("INT", {"default": 1, "min": 1, "max": 99}),
-                "year": ("INT", {"default": 2026, "min": 1900, "max": 2100}),
-                "art_mode": (["skip", "upload", "generate"], {"default": "skip"}),
-                "prefix": ("STRING", {"default": "", "multiline": False}),
+                "artist": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Your act name: it names the "
+                        "albums/<Artist>/ folder the masters land in and the "
+                        "artist tag on every file.",
+                    },
+                ),
+                "album": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Album title: it names the "
+                        "albums/<Artist>/<Album>/ folder this node copies into "
+                        "and the album tag.",
+                    },
+                ),
+                "title": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Track title for the title tag, and the "
+                        "SaveAudio stem this node stamps when Prefix is empty.",
+                    },
+                ),
+                "track": (
+                    "INT",
+                    {
+                        "default": 1,
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "tooltip": "One-based track number for the track tag.",
+                    },
+                ),
+                "tracktotal": (
+                    "INT",
+                    {
+                        "default": 1,
+                        "min": 1,
+                        "max": 99,
+                        "step": 1,
+                        "tooltip": "How many tracks the album holds, written "
+                        "to the tracktotal tag.",
+                    },
+                ),
+                "year": (
+                    "INT",
+                    {
+                        "default": 2026,
+                        "min": 1900,
+                        "max": 2100,
+                        "step": 1,
+                        "tooltip": "Release year written to the date tag; 2026 "
+                        "suits lab-original releases.",
+                    },
+                ),
+                "art_mode": (
+                    ["skip", "upload", "generate"],
+                    {
+                        "default": "skip",
+                        "tooltip": "skip stamps no art, upload stamps the image "
+                        "wired to Cover, generate stamps the cover.jpg the "
+                        "album folder already holds.",
+                    },
+                ),
+                "prefix": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "SaveAudio filename stem to match; leave "
+                        "empty to derive it from the title and track number.",
+                    },
+                ),
             },
             "optional": {
                 "cover": ("IMAGE",),
@@ -451,8 +555,24 @@ class EZAlbumPack:
         """
         return {
             "required": {
-                "artist": ("STRING", {"default": "", "multiline": False}),
-                "album": ("STRING", {"default": "", "multiline": False}),
+                "artist": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Act name of the album folder to zip; empty "
+                        "is read as Unknown.",
+                    },
+                ),
+                "album": (
+                    "STRING",
+                    {
+                        "default": "",
+                        "multiline": False,
+                        "tooltip": "Album title of the folder to zip; empty is "
+                        "read as Untitled and the zip takes that name.",
+                    },
+                ),
             }
         }
 
@@ -587,7 +707,17 @@ class EZAudioBeatJoin:
         return {
             "required": {
                 "audio_01": ("AUDIO",),
-                "bpm": ("INT", {"default": 172, "min": 40, "max": 300}),
+                "bpm": (
+                    "INT",
+                    {
+                        "default": 172,
+                        "min": 40,
+                        "max": 300,
+                        "step": 1,
+                        "tooltip": "Tempo of the passes in BPM: it sets the "
+                        "bar grid every seam snaps to.",
+                    },
+                ),
                 "overlap_bars": (
                     "STRING",
                     {
@@ -599,7 +729,15 @@ class EZAudioBeatJoin:
                 ),
                 "crossover_hz": (
                     "FLOAT",
-                    {"default": 120.0, "min": 40.0, "max": 500.0, "step": 5.0},
+                    {
+                        "default": 120.0,
+                        "min": 40.0,
+                        "max": 500.0,
+                        "step": 5.0,
+                        "tooltip": "Hand-off point in hertz where the sub "
+                        "gives way to the mid at each seam; 120 suits most "
+                        "808s.",
+                    },
                 ),
             },
             "optional": optional,

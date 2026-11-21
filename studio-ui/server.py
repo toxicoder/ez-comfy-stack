@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import difflib
 import html
 import io
 import json
@@ -27,6 +28,7 @@ if not GUIDES.is_dir():
     alt = Path("/films/guides")
     if alt.is_dir():
         GUIDES = alt
+
 
 class FilmRow(TypedDict):
     """One film's board row from jobstore ``state.json``.
@@ -92,6 +94,34 @@ SURFACE_WATCH = "watch"
 LABELS = {"bug": "bug", "enhancement": "enhancement"}
 # Link text per kind; short because these sit inline in operator page lines.
 LINK_TEXT = {"bug": "Report a bug", "enhancement": "Request a feature"}
+# Plain-language sentence for each audio policy a shot card can record, so the
+# film row reads as operator words rather than as a raw state.json key. The
+# three values come from ``AUDIO_POLICIES`` in custom_nodes/ez_film/shots.py.
+AUDIO_POLICY_WORDS = {
+    "world-only": "The film keeps the world sound the video model generated.",
+    "stems": "The film is mixed from separate dialogue, background, and effects stems.",
+    "a2v-lock": "The picture follows locked audio, so no new sound is generated.",
+}
+# Sentence for a policy the shot cards do not ship, kept honest and generic.
+AUDIO_POLICY_OTHER_WORDS = "Audio policy this film records for its shots."
+# Appended to either sentence: where the operator can go read or change it.
+AUDIO_POLICY_SOURCE = " It comes from audio_policy in the film's state.json."
+# Label and hover sentence per shot light, in board order. Each light checks
+# one artifact: the guide pack files, the jobstore status, or the shot stems.
+SHOT_LIGHT_WORDS = {
+    "clay": (
+        "clay",
+        "Greybox pass landed: a clay still or a clay clip is in the guide pack.",
+    ),
+    "look": ("look", "Klein look plate is in the guide pack for this shot."),
+    "overlay": ("overlay", "Overlay QC score is written for this shot."),
+    "print": ("print", "The 5.00 s take is printed and marked ok in the jobstore."),
+    "audio": ("audio", "This shot's mix has landed under the film's stems dir."),
+}
+# Alt text per thumb kind, so a screen reader says what the picture shows.
+THUMB_ALT = {"clay": "clay still", "overlay": "look plate"}
+# Line on the not-found page naming the route that lists what does exist.
+BOARD_LISTS_LINE = '<a href="/">/</a> lists every film this studio has printed.'
 # Canonical GitHub mark (primer/octicons mark-github-16), static markup so it
 # never passes through html.escape. Same path the ez_feedback pack renders.
 GITHUB_ICON = (
@@ -217,9 +247,55 @@ def _light(on: bool) -> str:
     return "on" if on else "off"
 
 
-def _shot_lights(
-    dest: Path, slug: str, sid: str, row: ShotLightRow
-) -> dict[str, str]:
+def _term(text: str, tooltip: str) -> str:
+    """One board term carrying the sentence that explains it on hover.
+
+    Args:
+        text: The words the operator reads.
+        tooltip: The sentence the browser shows on hover.
+
+    Returns:
+        ``<span>`` markup with both values escaped.
+    """
+    return '<span title="{tooltip}">{text}</span>'.format(
+        tooltip=html.escape(tooltip, quote=True), text=html.escape(text, quote=True)
+    )
+
+
+def _audio_policy_term(policy: str) -> str:
+    """Film-row audio policy as operator words, with a hover sentence.
+
+    Args:
+        policy: ``audio_policy`` value read from the film's ``state.json``.
+
+    Returns:
+        ``<span>`` markup: ``audio policy <value>`` plus its tooltip.
+    """
+    words = AUDIO_POLICY_WORDS.get(policy, AUDIO_POLICY_OTHER_WORDS)
+    return _term(f"audio policy {policy}", words + AUDIO_POLICY_SOURCE)
+
+
+def _light_chip(state: str | None, label: str, hint: str) -> str:
+    """One shot light: a plain word that explains itself on hover.
+
+    Args:
+        state: ``on`` / ``off`` CSS class, or ``None`` when the jobstore row had
+            no readable value for this light. Untrusted data, so the caller
+            screens it to a string and it is escaped again here.
+        label: The word the operator reads.
+        hint: The sentence the browser shows on hover.
+
+    Returns:
+        ``<span>`` markup with the class, label, and tooltip escaped.
+    """
+    return '<span class="{state}" title="{hint}">{label}</span>'.format(
+        state=html.escape(str(state or "off"), quote=True),
+        hint=html.escape(hint, quote=True),
+        label=html.escape(label, quote=True),
+    )
+
+
+def _shot_lights(dest: Path, slug: str, sid: str, row: ShotLightRow) -> dict[str, str]:
     """Build one shot's clay/look/overlay/print/audio lights and thumb URL.
 
     Args:
@@ -302,6 +378,26 @@ def _rows() -> list[FilmRow]:
             }
         )
     return rows
+
+
+def _unreadable_films() -> list[str]:
+    """Film directories whose ``state.json`` could not be read.
+
+    :func:`_rows` drops such a film from the board, so the board names it here
+    instead of letting a broken film vanish without a trace.
+
+    Returns:
+        Sorted film directory names, empty when every state file is readable.
+    """
+    unreadable: list[str] = []
+    if not FILMS.is_dir():
+        return unreadable
+    for state in sorted(FILMS.glob("*/state.json")):
+        try:
+            json.loads(state.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            unreadable.append(state.parent.name)
+    return unreadable
 
 
 def clip(value: str, max_len: int) -> str:
@@ -484,10 +580,7 @@ def report_link(kind: str, surface: str, context: list[tuple[str, str]]) -> str:
     """
     href = html.escape(issue_href(kind, surface, context), quote=True)
     text = html.escape(LINK_TEXT.get(kind, LINK_TEXT["bug"]))
-    return (
-        f'<a href="{href}" target="_blank" rel="noopener">{GITHUB_ICON}{text}'
-        "</a>"
-    )
+    return f'<a href="{href}" target="_blank" rel="noopener">{GITHUB_ICON}{text}</a>'
 
 
 def _count(value: object) -> int:
@@ -588,14 +681,17 @@ def _page() -> bytes:
     ]
     if not rows:
         body.append(
-            "<p>No films yet. Run <code>./scripts/utilities/compile-film.sh go-see</code> "
-            "then <code>print-shot</code>.</p>"
+            "<p>No films yet. Run <code>bazelisk run //scripts:run-utility -- "
+            "compile-film go-see</code> then <code>bazelisk run //:manage -- "
+            "print-shot go-see 1</code>.</p>"
         )
     else:
         for row in rows:
-            body.append("<h2>{} / {}</h2>".format(
-                html.escape(str(row["film"])), html.escape(str(row["slug"]))
-            ))
+            body.append(
+                "<h2>{} / {}</h2>".format(
+                    html.escape(str(row["film"])), html.escape(str(row["slug"]))
+                )
+            )
             watch = ""
             slug = str(row["slug"])
             if publish_mp4(slug) is not None:
@@ -604,45 +700,62 @@ def _page() -> bytes:
                     ' - <a href="/media/{0}?dl=1">Download MP4</a>'
                 ).format(html.escape(slug))
             body.append(
-                "<p>prints {}/{} - audio_policy {}{} - {} - {}</p>".format(
+                "<p>prints {}/{} - {}{} - {} - {}</p>".format(
                     html.escape(str(row["ok"])),
                     html.escape(str(row["total"])),
-                    html.escape(str(row["audio_policy"])),
+                    _audio_policy_term(str(row["audio_policy"])),
                     watch,
                     report_link("bug", SURFACE_BOARD, _film_context(row)),
                     report_link("enhancement", SURFACE_BOARD, _film_context(row)),
                 )
             )
             body.append('<div class="strip">')
+            title = str(row["film"])
             for shot in row["shots"]:
                 if not isinstance(shot, dict):
                     continue
-                img = ""
-                thumb = str(shot.get("thumb") or "")
-                if thumb:
-                    img = f'<img src="{thumb}" alt="" width="64">'
                 sid = str(shot.get("id") or "")
+                thumb = str(shot.get("thumb") or "")
+                img = ""
+                if thumb:
+                    kind = "overlay" if "kind=overlay" in thumb else "clay"
+                    alt = "{what} for {film} shot {sid}".format(
+                        what=THUMB_ALT[kind], film=title, sid=sid
+                    )
+                    img = '<img src="{src}" alt="{alt}" width="64">'.format(
+                        src=html.escape(thumb, quote=True),
+                        alt=html.escape(alt, quote=True),
+                    )
                 shot_link = report_link(
                     "bug", SURFACE_BOARD, _shot_context(slug, sid, thumb)
                 )
+                # A light class is a string; the screening keeps a row that
+                # stored a number or a list under this key out of the class.
+                classes = {k: v for k, v in shot.items() if isinstance(v, str)}
+                chips = " ".join(
+                    _light_chip(classes.get(key), label, hint)
+                    for key, (label, hint) in SHOT_LIGHT_WORDS.items()
+                )
                 body.append(
-                    '<div class="shot">{}{}<br>'
-                    '<span class="{}">clay</span> '
-                    '<span class="{}">look</span> '
-                    '<span class="{}">ov</span> '
-                    '<span class="{}">print</span> '
-                    '<span class="{}">audio</span><br>{}</div>'.format(
-                        img,
-                        html.escape(sid),
-                        shot.get("clay") or "off",
-                        shot.get("look") or "off",
-                        shot.get("overlay") or "off",
-                        shot.get("print") or "off",
-                        shot.get("audio") or "off",
-                        shot_link,
+                    '<div class="shot">{img}{sid}<br>{chips}<br>{link}</div>'.format(
+                        img=img, sid=html.escape(sid), chips=chips, link=shot_link
                     )
                 )
             body.append("</div>")
+    unreadable = _unreadable_films()
+    if unreadable:
+        names = ", ".join(
+            "<code>{}</code>".format(html.escape(name)) for name in unreadable
+        )
+        noun = "film" if len(unreadable) == 1 else "films"
+        body.append(
+            "<p>{count} {noun} could not be read: {names}. No lights show for "
+            "those films. Run <code>bazelisk run //:manage -- print-shot "
+            "&lt;film&gt; &lt;id&gt;</code> to print a shot again, or remove "
+            "that film directory.</p>".format(
+                count=len(unreadable), noun=noun, names=names
+            )
+        )
     doc = (
         "<!doctype html><html><head><meta charset='utf-8'>"
         "<title>ez-comfy studio-ui</title></head><body>"
@@ -684,6 +797,50 @@ def watch_page(slug: str) -> bytes | None:
         "</p>"
         "</main></body></html>"
     ).encode("utf-8")
+
+
+def _board_slugs() -> list[str]:
+    """Film slugs the not-found page can suggest back to a typo.
+
+    Returns:
+        Sorted set of the jobstore slugs and every allowlisted master slug.
+    """
+    return sorted({str(row["slug"]) for row in _rows()} | set(PUBLISH_FILES))
+
+
+def not_found_page(requested: str) -> bytes:
+    """HTML for a path this board does not serve.
+
+    Says what was asked for, names the route that lists what does exist, and
+    suggests the closest film slug so a typo has a way out of it.
+
+    Args:
+        requested: Request path the operator asked for.
+
+    Returns:
+        UTF-8 HTML document bytes.
+    """
+    asked = html.escape(clip(requested, MAX_FIELD), quote=False)
+    want = urlparse(requested).path.rsplit("/", 1)[-1]
+    near = difflib.get_close_matches(want, _board_slugs(), n=1)
+    if near:
+        safe = html.escape(str(near[0]), quote=True)
+        if publish_mp4(str(near[0])) is None:
+            hint = "Closest film: <code>{0}</code>.".format(safe)
+        else:
+            hint = 'Closest film: <a href="/watch/{0}">{0}</a>.'.format(safe)
+    else:
+        hint = "Nothing here is spelled close to that."
+    doc = (
+        "<!doctype html><html><head><meta charset='utf-8'>"
+        "<title>Nothing here</title>"
+        "<style>body{font:14px/1.4 ui-sans-serif,system-ui,sans-serif}</style>"
+        "</head><body>"
+        + "<h1>Nothing at {}</h1>".format(asked)
+        + "<p>{} {}</p>".format(hint, BOARD_LISTS_LINE)
+        + "</body></html>"
+    )
+    return doc.encode("utf-8")
 
 
 def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
@@ -818,10 +975,18 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(payload)
 
-    def _send_404(self) -> None:
-        """Write an empty 404."""
+    def _send_404(self, requested: str) -> None:
+        """Write a 404 page that says what was asked for and where to look.
+
+        Args:
+            requested: Request path the operator asked for.
+        """
+        payload = not_found_page(requested)
         self.send_response(404)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
+        self.wfile.write(payload)
 
     def _serve_watch(self, slug: str) -> None:
         """Serve the watch HTML for a published master.
@@ -830,7 +995,7 @@ class Handler(BaseHTTPRequestHandler):
             slug: Film slug.
         """
         if publish_mp4(slug) is None:
-            self._send_404()
+            self._send_404(self.path)
             return
         self._send(watch_page(slug) or b"", "text/html; charset=utf-8")
 
@@ -907,7 +1072,7 @@ class Handler(BaseHTTPRequestHandler):
         """
         path = publish_mp4(slug)
         if path is None:
-            self._send_404()
+            self._send_404(self.path)
             return
         download = (query.get("dl") or [""])[0] == "1"
         name = path.name if download else None
@@ -929,7 +1094,7 @@ class Handler(BaseHTTPRequestHandler):
         kind = (query.get("kind") or ["clay"])[0]
         path = _safe_thumb(slug, shot, kind)
         if path is None:
-            self._send_404()
+            self._send_404(self.path)
             return
         self._stream_file(path, "image/png", download_name=None, honor_range=True)
 
@@ -938,7 +1103,7 @@ class Handler(BaseHTTPRequestHandler):
         self._send(_page(), "text/html; charset=utf-8")
 
     def do_GET(self) -> None:  # noqa: N802
-        """Serve board HTML, ``/watch``, ``/media``, or ``/thumb``.
+        """Serve board HTML, ``/watch``, ``/media``, ``/thumb``, or the 404 page.
 
         Returns:
             None
@@ -955,7 +1120,10 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path == "/thumb":
             self._serve_thumb(parse_qs(parsed.query))
             return
-        self._serve_board()
+        if parsed.path in {"/", ""}:
+            self._serve_board()
+            return
+        self._send_404(self.path)
 
     @override
     def log_message(self, format: str, *args: object) -> None:

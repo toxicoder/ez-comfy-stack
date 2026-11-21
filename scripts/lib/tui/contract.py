@@ -947,6 +947,38 @@ EXIT_LOCKED = 3
 """Another console already holds the single-console flock."""
 
 
+def _refuse(param: ParamSpec, problem: str) -> str:
+    """Phrase a rejected answer in the words the operator was actually shown.
+
+    The catalog key ``param.name`` is left out on purpose: it is snake_case, it
+    never appears on screen, and naming it sends the operator looking for a
+    field that does not exist. ``param.label`` is the prompt they read, and
+    ``help_text`` repeats the guidance they skipped past.
+
+    Args:
+        param: The parameter the answer belongs to.
+        problem: The predicate the answer failed, phrased as a tail of a sentence.
+
+    Returns:
+        One line naming the field the way the console named it.
+    """
+    detail = f" - {param.help_text}" if param.help_text else ""
+    return f"{param.label} {problem}{detail}"
+
+
+def _catalog_defect(param: ParamSpec, noun: str) -> str:
+    """Report a console catalog entry the operator cannot fix.
+
+    Args:
+        param: The misconfigured parameter.
+        noun: What the field renders as, so the message names the right control.
+
+    Returns:
+        One line that says what is missing and who has to act.
+    """
+    return f"{param.label}: the console catalog gives this {noun} no flag - report it"
+
+
 def build_argv(
     action: ActionSpec,
     answers: Mapping[str, str],
@@ -972,31 +1004,37 @@ def build_argv(
         raw = answers.get(param.name, param.default)
         if not raw:
             if param.required:
-                raise ValueError(f"{param.name}: {param.label} is required")
+                raise ValueError(_refuse(param, "is required"))
             continue
         if param.kind is ParamKind.FLAG:
             if raw not in _TRUEISH:
                 continue
             if not param.flag:
-                raise ValueError(f"{param.name}: a flag parameter needs a flag")
+                raise ValueError(_catalog_defect(param, "switch"))
             argv.append(param.flag)
             continue
         if param.kind is ParamKind.CHOICE:
             allowed = tuple(choice.value for choice in param.choices)
             if raw not in allowed:
-                raise ValueError(f"{param.name}: {raw!r} is not one of {allowed}")
+                offered = ", ".join(choice.label for choice in param.choices)
+                raise ValueError(
+                    _refuse(param, f"is not one of: {offered} (you typed {raw})")
+                )
         if param.kind is ParamKind.INT:
             if not raw.lstrip("-").isdigit():
-                raise ValueError(f"{param.name}: {raw!r} is not a number")
+                raise ValueError(_refuse(param, f"is not a number: you typed {raw}"))
             value = int(raw)
             if value < param.low or value > param.high:
                 raise ValueError(
-                    f"{param.name}: {value} is outside {param.low}..{param.high}"
+                    _refuse(
+                        param,
+                        f"is outside {param.low}..{param.high}: you typed {value}",
+                    )
                 )
         if param.kind is ParamKind.TEXT and ("\x00" in raw or "\n" in raw):
-            raise ValueError(f"{param.name}: no newlines or NUL bytes allowed")
+            raise ValueError(_refuse(param, "has newlines or NUL bytes"))
         if param.kind is ParamKind.CHOICE and not param.flag:
-            raise ValueError(f"{param.name}: a choice parameter needs a flag")
+            raise ValueError(_catalog_defect(param, "menu"))
         if not param.flag:
             argv.append(raw)
         elif param.argv_style is ArgvStyle.EQUALS:
