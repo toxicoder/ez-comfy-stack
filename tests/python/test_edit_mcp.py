@@ -10,6 +10,7 @@ from __future__ import annotations
 import ast
 import io
 import json
+import re
 import runpy
 import sys
 import urllib.error
@@ -187,6 +188,18 @@ def _hermetic_env(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
 
 
+def _without_description(prop: Any) -> dict[str, Any]:
+    """Return one property body minus its agent-facing text.
+
+    Args:
+        prop: One property object, from the catalog or the merged schema.
+
+    Returns:
+        The wire shape: type, enum, default, and required-side keys only.
+    """
+    return {key: value for key, value in prop.items() if key != "description"}
+
+
 def test_tool_surface_is_the_pinned_catalog() -> None:
     assert [row["name"] for row in mcp.list_tools()] == CATALOG_NAMES
     assert list(mcp.TOOLS) == CATALOG_NAMES
@@ -214,9 +227,10 @@ def test_tool_surface_is_the_pinned_catalog() -> None:
         for key, prop in wire_props.items():
             assert key in catalog_props, f"{name}.{key} is not a catalog parameter"
             assert isinstance(prop, dict), f"{name}.{key} shape"
-            assert {
-                k: v for k, v in prop.items() if k != "description"
-            } == catalog_props[key], f"{name}.{key} changed the pinned wire schema"
+            assert isinstance(catalog_props[key], dict), f"{name}.{key} catalog shape"
+            assert _without_description(prop) == _without_description(
+                catalog_props[key]
+            ), f"{name}.{key} changed the pinned wire schema"
 
 
 def _protocol_catalog() -> dict[str, dict[str, Any]]:
@@ -748,13 +762,63 @@ def test_main_guard_exits(
 
 
 _PROPERTY_COUNT = 15
-"""How many catalog properties the doc tables and the sweep have to cover."""
+"""How many catalog properties the doc tables and the sweeps have to cover."""
 
 _MIN_ARG_DOC = 60
 """Shortest argument description that still reads as guidance."""
 
 _MIN_ERROR_DOC = 60
 """Shortest error that says what to pass instead of only what broke."""
+
+_PROTOCOL_PROPERTY_COUNTS: dict[str, int] = {
+    "edit_get_state": 1,
+    "edit_list_projects": 0,
+    "edit_import": 3,
+    "edit_apply_ops": 2,
+    "edit_render": 3,
+    "edit_job_status": 1,
+    "edit_generate_clip": 3,
+    "edit_export_edl": 2,
+    "occupancy_status": 0,
+}
+"""Per-tool property count of the container catalog, so the protocol sweep
+fails when a property appears or disappears instead of checking less."""
+
+_VALUE_SOURCE_TOOLS: dict[str, dict[str, str]] = {
+    "edit_get_state": {"project_id": "edit_list_projects"},
+    "edit_import": {"path": "edit_job_status"},
+    "edit_apply_ops": {
+        "project_id": "edit_list_projects",
+        "ops": "edit_get_state",
+    },
+    "edit_render": {
+        "project_id": "edit_list_projects",
+        "mode": "occupancy_status",
+    },
+    "edit_job_status": {"job_id": "edit_render"},
+    "edit_generate_clip": {"fps": "edit_list_projects"},
+}
+"""Arguments whose valid values come out of another tool's output: the tool id
+each of those descriptions has to name, on both the catalog and the merge."""
+
+_RETURN_CLAIM = re.compile(
+    r"Returns?:|(?<![A-Za-z])[Rr]eturns? (?:the|its|one|a|current|new|job)\b"
+    r"|summary row"
+)
+"""The return guarantee a tool description has to carry: either the host's
+``Returns:`` sentence or the container file's own prose naming the artifact."""
+
+
+def _words(text: str) -> set[str]:
+    """Return the word set of one argument description.
+
+    Args:
+        text: An argument description.
+
+    Returns:
+        Lowercase runs of letters and digits, for comparing two sentences.
+    """
+    return set(re.findall(r"[a-z0-9]+", text.lower()))
 
 
 def _argument_docs(tool_name: str, spec: Any) -> dict[str, str]:
@@ -806,24 +870,96 @@ def _refusal(tool: str, args: dict[str, Any], subject: str) -> str:
     return error
 
 
+def _catalog_argument_docs(tool_name: str, entry: dict[str, Any]) -> dict[str, str]:
+    """Collect the argument descriptions of one container catalog tool.
+
+    Args:
+        tool_name: Tool id, used in failure messages.
+        entry: One row parsed out of ``protocol.TOOL_CATALOG``.
+
+    Returns:
+        ``{argument name: description}`` for every declared property.
+
+    Raises:
+        AssertionError: The row has no parameters mapping, or a property is
+            not a mapping, or has no string description.
+    """
+    parameters = entry["parameters"]
+    assert isinstance(parameters, dict), f"{tool_name} parameters"
+    properties = parameters.get("properties") or {}
+    assert isinstance(properties, dict), f"{tool_name} properties"
+    docs: dict[str, str] = {}
+    for prop_name, prop in properties.items():
+        assert isinstance(prop, dict), f"{tool_name}.{prop_name} shape"
+        text = prop.get("description")
+        assert isinstance(text, str), f"{tool_name}.{prop_name} has no description"
+        docs[str(prop_name)] = text
+    return docs
+
+
 def test_every_tool_documents_its_arguments_and_its_return() -> None:
     assert list(mcp.TOOLS) == CATALOG_NAMES, "the published tool set moved"
     documented = 0
     for name, spec in mcp.TOOLS.items():
         assert "Returns:" in spec["description"], f"{name} never says what it returns"
         docs = _argument_docs(name, spec)
-        assert set(docs) == set(mcp._ARG_DOCS[name]), f"{name} doc table drifted"
         catalog_props = mcp._TOOL_CATALOG[name]["parameters"].get("properties") or {}
+        assert isinstance(catalog_props, dict), f"{name} catalog properties"
+        assert set(docs) == set(catalog_props), f"{name} merged schema lost a property"
         assert set(mcp._ARG_DOCS[name]) <= set(catalog_props), (
             f"{name} documents a parameter the catalog does not declare"
         )
         documented += len(docs)
         for prop_name, text in docs.items():
             assert len(text) >= _MIN_ARG_DOC, f"{name}.{prop_name}: {text!r}"
+        for prop_name, host_text in mcp._ARG_DOCS[name].items():
+            catalog_text = str(catalog_props[prop_name]["description"])
+            assert host_text != catalog_text, (
+                f"{name}.{prop_name} ships one sentence twice"
+            )
+            assert _words(host_text) - _words(catalog_text), (
+                f"{name}.{prop_name} overrides with nothing the catalog lacks"
+            )
         required = spec["inputSchema"].get("required") or []
         assert isinstance(required, list)
         assert set(required) <= set(docs), f"{name} requires an undocumented argument"
     assert documented == _PROPERTY_COUNT, "the sweep stopped covering properties"
+
+
+def test_protocol_catalog_documents_every_property_and_its_return() -> None:
+    catalog = _protocol_catalog()
+    assert list(catalog) == CATALOG_NAMES, "the container tool set moved"
+    documented = 0
+    for name, entry in catalog.items():
+        description = entry["description"]
+        assert isinstance(description, str), f"{name} description"
+        assert _RETURN_CLAIM.search(description), f"{name} never says what it returns"
+        docs = _catalog_argument_docs(name, entry)
+        assert len(docs) == _PROTOCOL_PROPERTY_COUNTS[name], (
+            f"{name} property count moved and the sweep would check less"
+        )
+        documented += len(docs)
+        for prop_name, text in docs.items():
+            assert len(text) >= _MIN_ARG_DOC, f"{name}.{prop_name}: {text!r}"
+        required = entry["parameters"].get("required") or []
+        assert isinstance(required, list)
+        assert set(required) <= set(docs), f"{name} requires an undocumented argument"
+    assert documented == _PROPERTY_COUNT, "the protocol sweep stopped covering props"
+
+
+def test_arguments_that_need_another_tool_name_it_on_both_sides() -> None:
+    catalog = _protocol_catalog()
+    for name, pointers in _VALUE_SOURCE_TOOLS.items():
+        catalog_props = _catalog_argument_docs(name, catalog[name])
+        merged_props = _argument_docs(name, mcp.TOOLS[name])
+        assert set(pointers) <= set(catalog_props), f"{name} pointer table drifted"
+        for arg, source_tool in pointers.items():
+            assert source_tool in catalog_props[arg], (
+                f"{name}.{arg}: {catalog_props[arg]!r}"
+            )
+            assert source_tool in merged_props[arg], (
+                f"{name}.{arg}: {merged_props[arg]!r}"
+            )
 
 
 def test_arguments_that_name_a_value_point_at_a_sibling_tool() -> None:
