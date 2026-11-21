@@ -195,8 +195,28 @@ def test_tool_surface_is_the_pinned_catalog() -> None:
     for forbidden in ("execute_code", "telemetry", "fetch_url"):
         assert forbidden not in blob
     for name, spec in mcp.TOOLS.items():
-        assert spec["description"] == mcp._TOOL_CATALOG[name]["description"]
-        assert spec["inputSchema"] == mcp._TOOL_CATALOG[name]["parameters"]
+        entry = mcp._TOOL_CATALOG[name]
+        assert spec["description"].startswith(str(entry["description"]))
+        assert spec["description"].endswith(mcp._RETURNS_DOCS[name])
+        assert "Returns:" in spec["description"], f"{name} never says what it returns"
+        catalog = entry["parameters"]
+        wire = {
+            key: value
+            for key, value in spec["inputSchema"].items()
+            if key != "properties"
+        }
+        assert wire == {
+            key: value for key, value in catalog.items() if key != "properties"
+        }, f"{name} changed the pinned wire schema"
+        catalog_props = catalog.get("properties") or {}
+        wire_props = spec["inputSchema"].get("properties")
+        assert isinstance(wire_props, dict), f"{name} properties"
+        for key, prop in wire_props.items():
+            assert key in catalog_props, f"{name}.{key} is not a catalog parameter"
+            assert isinstance(prop, dict), f"{name}.{key} shape"
+            assert {
+                k: v for k, v in prop.items() if k != "description"
+            } == catalog_props[key], f"{name}.{key} changed the pinned wire schema"
 
 
 def _protocol_catalog() -> dict[str, dict[str, Any]]:
@@ -476,7 +496,9 @@ def test_generate_clip_posts_numbers(monkeypatch: pytest.MonkeyPatch) -> None:
     }
 
 
-def test_generate_clip_bad_numbers_use_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_generate_clip_bad_numbers_use_defaults(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     stub = _install(monkeypatch, '{"ok": true}')
     mcp.call_tool("edit_generate_clip", {"prompt": "p", "duration_s": "x", "fps": None})
     body = _body(stub.requests[0])
@@ -558,7 +580,9 @@ def test_http_error_keeps_route_error_text(monkeypatch: pytest.MonkeyPatch) -> N
     assert result["error"] == "disabled"
 
 
-def test_http_error_without_error_key_uses_status(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_http_error_without_error_key_uses_status(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     _install(monkeypatch, _http_error(404, '{"detail": "no project"}'))
     result = mcp.call_tool("edit_export_edl", {})
     assert result["ok"] is False
@@ -721,3 +745,106 @@ def test_main_guard_exits(
         runpy.run_path(str(LIB / "edit_mcp.py"), run_name="__main__")
     assert caught.value.code == 0
     assert "occupancy_status" in capsys.readouterr().out
+
+
+_PROPERTY_COUNT = 15
+"""How many catalog properties the doc tables and the sweep have to cover."""
+
+_MIN_ARG_DOC = 60
+"""Shortest argument description that still reads as guidance."""
+
+_MIN_ERROR_DOC = 60
+"""Shortest error that says what to pass instead of only what broke."""
+
+
+def _argument_docs(tool_name: str, spec: Any) -> dict[str, str]:
+    """Collect the argument descriptions of one tool's ``inputSchema``.
+
+    Args:
+        tool_name: Tool id, used in failure messages.
+        spec: One row of ``edit_mcp.TOOLS``.
+
+    Returns:
+        ``{argument name: description}`` for every declared property.
+
+    Raises:
+        AssertionError: A property is not a mapping, or has no string
+            description.
+    """
+    properties = spec["inputSchema"].get("properties") or {}
+    assert isinstance(properties, dict), f"{tool_name} properties"
+    docs: dict[str, str] = {}
+    for prop_name, prop in properties.items():
+        assert isinstance(prop, dict), f"{tool_name}.{prop_name} shape"
+        text = prop.get("description")
+        assert isinstance(text, str), f"{tool_name}.{prop_name} has no description"
+        docs[str(prop_name)] = text
+    return docs
+
+
+def _refusal(tool: str, args: dict[str, Any], subject: str) -> str:
+    """Call a thin tool that must refuse and return its operator-facing error.
+
+    Args:
+        tool: Tool id to call.
+        args: Arguments that must make it refuse.
+        subject: Text the error has to repeat back (the empty parameter name).
+
+    Returns:
+        The error string.
+
+    Raises:
+        AssertionError: The call succeeded, or the error is bare text that
+            names neither the missing parameter nor another tool to ask first.
+    """
+    result = mcp.call_tool(tool, args)
+    assert result["ok"] is False, result
+    error = str(result["error"])
+    assert len(error) >= _MIN_ERROR_DOC, f"{tool}: {error!r}"
+    assert subject in error, f"{tool}: {error!r}"
+    assert any(name in error for name in mcp.TOOLS), f"{tool}: {error!r}"
+    return error
+
+
+def test_every_tool_documents_its_arguments_and_its_return() -> None:
+    assert list(mcp.TOOLS) == CATALOG_NAMES, "the published tool set moved"
+    documented = 0
+    for name, spec in mcp.TOOLS.items():
+        assert "Returns:" in spec["description"], f"{name} never says what it returns"
+        docs = _argument_docs(name, spec)
+        assert set(docs) == set(mcp._ARG_DOCS[name]), f"{name} doc table drifted"
+        catalog_props = mcp._TOOL_CATALOG[name]["parameters"].get("properties") or {}
+        assert set(mcp._ARG_DOCS[name]) <= set(catalog_props), (
+            f"{name} documents a parameter the catalog does not declare"
+        )
+        documented += len(docs)
+        for prop_name, text in docs.items():
+            assert len(text) >= _MIN_ARG_DOC, f"{name}.{prop_name}: {text!r}"
+        required = spec["inputSchema"].get("required") or []
+        assert isinstance(required, list)
+        assert set(required) <= set(docs), f"{name} requires an undocumented argument"
+    assert documented == _PROPERTY_COUNT, "the sweep stopped covering properties"
+
+
+def test_arguments_that_name_a_value_point_at_a_sibling_tool() -> None:
+    for name, spec in mcp.TOOLS.items():
+        for arg, text in _argument_docs(name, spec).items():
+            if arg == "project_id":
+                assert "edit_list_projects" in text, f"{name}.{arg}: {text!r}"
+    job = _argument_docs("edit_job_status", mcp.TOOLS["edit_job_status"])
+    assert "edit_render" in job["job_id"], job["job_id"]
+    render = _argument_docs("edit_render", mcp.TOOLS["edit_render"])
+    assert "occupancy_status" in render["mode"], render["mode"]
+
+
+def test_refusals_repeat_the_missing_parameter_and_name_a_tool_to_ask() -> None:
+    job = _refusal("edit_job_status", {"job_id": ""}, "job_id")
+    assert "edit_render" in job, job
+    imported = _refusal("edit_import", {"path": ""}, "path")
+    assert "edit_job_status" in imported, imported
+    ops = _refusal("edit_apply_ops", {"ops": []}, "ops")
+    assert "edit_get_state" in ops, ops
+    render = _refusal("edit_render", {"mode": ""}, "mode")
+    assert "occupancy_status" in render, render
+    cutaway = _refusal("edit_generate_clip", {"prompt": ""}, "prompt")
+    assert "edit_get_state" in cutaway, cutaway

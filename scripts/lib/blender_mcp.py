@@ -358,7 +358,14 @@ def tool_occupancy_enter(args: ToolArgs) -> ToolResult:
     mode = str(args.get("mode") or "")
     yes = bool(args.get("yes") or False)
     if not mode:
-        return {"ok": False, "error": "mode is required"}
+        return {
+            "ok": False,
+            "error": (
+                "occupancy_enter needs a mode: one of idle, blender-desk, "
+                "klein, trellis, wan, or ltx (blender-desk for a bpy or dump "
+                "tool). occupancy_status shows the mode the host holds now."
+            ),
+        }
     return _run_occupancy_enter(mode, yes)
 
 
@@ -398,7 +405,14 @@ def tool_create_primitive(args: ToolArgs) -> ToolResult:
     name = str(args.get("name") or kind)
     allowed = {"cube", "uv_sphere", "cylinder", "plane", "cone"}
     if kind not in allowed:
-        return {"ok": False, "error": f"kind must be one of {sorted(allowed)}"}
+        return {
+            "ok": False,
+            "error": (
+                f"create_primitive cannot add kind {kind!r}; it takes one of "
+                f"{', '.join(sorted(allowed))}. scene_info lists what the "
+                "scene already holds if you were checking for a clash."
+            ),
+        }
     op = {
         "cube": "primitive_cube_add",
         "uv_sphere": "primitive_uv_sphere_add",
@@ -458,7 +472,14 @@ def tool_keyframe_object(args: ToolArgs) -> ToolResult:
     name = str(args.get("name") or "")
     frame = int(cast(ToolNumber, args.get("frame") or 1))
     if not name:
-        return {"ok": False, "error": "name is required"}
+        return {
+            "ok": False,
+            "error": (
+                "keyframe_object needs the name of an object that is already "
+                "in the scene; pass it exactly as scene_info lists it (Blender "
+                "names such as Cube or Camera)."
+            ),
+        }
     script = (
         "import bpy; "
         f"obj = bpy.data.objects.get({name!r}); "
@@ -481,12 +502,18 @@ def tool_export_glb(args: ToolArgs) -> ToolResult:
     blocked = _require_desk()
     if blocked:
         return blocked
-    dest = args.get("path")
-    if not dest:
-        dest = str(_output_dir() / "assets" / "objects" / "mcp-export.glb")
-    dest_s = str(dest)
+    default = str(_output_dir() / "assets" / "objects" / "mcp-export.glb")
+    dest_s = str(args.get("path") or default)
     if "models" in Path(dest_s).parts and "assets" not in Path(dest_s).parts:
-        return {"ok": False, "error": "GLB must not land in MODELS_DIR"}
+        return {
+            "ok": False,
+            "error": (
+                f"export_glb refused {dest_s!r}: a path under a models "
+                "directory would drop a dump into MODELS_DIR, which holds "
+                f"shipped weights only. Write under the assets folder instead, "
+                f"for example {default}."
+            ),
+        }
     script = (
         "import bpy; "
         f"bpy.ops.export_scene.gltf(filepath={dest_s!r}, export_format='GLB'); "
@@ -574,107 +601,304 @@ def tool_house_views(args: ToolArgs) -> ToolResult:
     return _run_utility("house-views.sh", ["--slug", slug])
 
 
+# Shared argument docs: the same value means the same thing in every tool.
+_BLEND_DOC = (
+    "Path to a host .blend file opened before the run, for example "
+    "/home/me/blender/go-see.blend. Omit it to use Blender's default startup "
+    "scene. The file is read from the host filesystem, not from inside the "
+    "Comfy image."
+)
+"""Doc for the optional ``blend`` argument the bpy and dump tools share."""
+
+_FILM_DOC = (
+    "Film slug the pack is filed under, for example go-see; it becomes the "
+    "<film> segment of the dump folder under COMFY_OUTPUT_DIR/guides. Pass "
+    "the slug the studio-ui film board already shows for the film rather than "
+    "inventing a new one."
+)
+"""Doc for the ``film`` argument both host dump tools share."""
+
 # Typed MCP tool table (names are the public tool ids).
 TOOLS: dict[str, ToolSpec] = {
     "occupancy_status": {
-        "description": "Read GB10 occupancy mode, parked flag, and PIDs.",
+        "description": (
+            "Read GB10 occupancy mode, parked flag, and PIDs, so a caller can "
+            "tell whether the Blender desk is free. "
+            "Returns: {ok, occupancy}, where occupancy is the host record "
+            "read from COMFY_OUTPUT_DIR/.occupancy.json, or the host occupancy "
+            "helper when that file is missing or unreadable: mode (idle, "
+            "blender-desk, klein, trellis, wan, or ltx), compose, parked, and "
+            "the blender/mcp/llm pids. An all-idle record comes back when the "
+            "host has never recorded a mode."
+        ),
         "inputSchema": {"type": "object", "properties": {}},
         "handler": tool_occupancy_status,
     },
     "occupancy_enter": {
-        "description": "Enter idle|blender-desk|klein|trellis|wan|ltx. Does not start Compose.",
+        "description": (
+            "Enter an occupancy mode so host Blender can take the GPU. Does "
+            "not start Compose. "
+            "Returns: {ok, returncode, stderr, mode} from the host occupancy "
+            "helper, with ok false and the helper's own stderr when the mode "
+            "was refused, or {ok: false, error} that repeats the accepted "
+            "modes and points at occupancy_status when mode came in empty."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "mode": {"type": "string"},
-                "yes": {"type": "boolean"},
+                "mode": {
+                    "type": "string",
+                    "description": (
+                        "Exact occupancy mode to claim: idle, blender-desk, "
+                        "klein, trellis, wan, or ltx. blender-desk is the one "
+                        "a bpy or dump tool needs, because it parks Comfy "
+                        "without stopping Compose. occupancy_status shows the "
+                        "mode the host holds right now."
+                    ),
+                },
+                "yes": {
+                    "type": "boolean",
+                    "description": (
+                        "True passes --yes so the host helper skips its "
+                        "interactive confirm, which a stdio agent cannot "
+                        "answer; false, the default, lets the helper prompt "
+                        "and wait for a keyboard."
+                    ),
+                },
             },
             "required": ["mode"],
         },
         "handler": tool_occupancy_enter,
     },
     "scene_info": {
-        "description": "List object names in the current Blender scene.",
+        "description": (
+            "List object names in the current Blender scene. Run it before "
+            "any tool that has to name an object. "
+            "Returns: {ok, returncode, stdout, stderr} where stdout is the "
+            'JSON line {"objects": ["Cube", "Camera"]}, or '
+            "{ok: false, error} naming the command that takes the desk while "
+            "Comfy holds the GPU and naming blender-install when the host has "
+            "no blender binary."
+        ),
         "inputSchema": {
             "type": "object",
-            "properties": {"blend": {"type": "string"}},
+            "properties": {"blend": {"type": "string", "description": _BLEND_DOC}},
         },
         "handler": tool_scene_info,
     },
     "create_primitive": {
-        "description": "Add a Workbench primitive (cube, uv_sphere, cylinder, plane, cone).",
+        "description": (
+            "Add a Workbench primitive to the scene. "
+            "Returns: {ok, returncode, stdout, stderr, name, kind} naming what "
+            "it added, or {ok: false, error} that repeats the kind it rejected "
+            "and lists the kinds it takes, or names the command that takes the "
+            "desk while Comfy holds the GPU."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "kind": {"type": "string"},
-                "name": {"type": "string"},
+                "kind": {
+                    "type": "string",
+                    "description": (
+                        "Which primitive to add, exactly one of cube, "
+                        "uv_sphere, cylinder, plane, or cone; cube when "
+                        "omitted. Anything else is refused with that list "
+                        "repeated. scene_info shows what the scene already "
+                        "holds before you add to it."
+                    ),
+                },
+                "name": {
+                    "type": "string",
+                    "description": (
+                        "Name given to the new object, any text such as Mug; "
+                        "the kind is used when you omit it. scene_info lists "
+                        "the names already taken, and keyframe_object is the "
+                        "tool that must match one of them exactly."
+                    ),
+                },
             },
         },
         "handler": tool_create_primitive,
     },
     "set_camera": {
-        "description": "Set Camera location [x,y,z].",
+        "description": (
+            "Move the scene Camera to [x, y, z], creating it when the scene "
+            "has none. "
+            "Returns: {ok, returncode, stdout, stderr} with stdout naming the "
+            "camera object, or {ok: false, error} naming the command that "
+            "takes the desk while Comfy holds the GPU. A location that is not "
+            "three numbers is replaced by the default rather than raising."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "location": {
                     "type": "array",
                     "items": {"type": "number"},
+                    "description": (
+                        "Three numbers [x, y, z] in Blender metres, for "
+                        "example [0, -8, 2] for a front three-quarter shot. "
+                        "Shorter than three numbers, or not a list at all, is "
+                        "silently replaced by that same default, so a typo "
+                        "moves the camera instead of failing."
+                    ),
                 }
             },
         },
         "handler": tool_set_camera,
     },
     "keyframe_object": {
-        "description": "Insert a location keyframe on a named object.",
+        "description": (
+            "Insert a location keyframe on a named object at one frame. "
+            "Returns: {ok, returncode, stdout, stderr} with stdout ok when the "
+            "key landed; an object the scene does not have makes the Blender "
+            "run fail with its traceback in stderr, and the call is refused "
+            "with {ok: false, error} before it runs when name is empty or "
+            "Comfy holds the GPU."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "name": {"type": "string"},
-                "frame": {"type": "integer"},
+                "name": {
+                    "type": "string",
+                    "description": (
+                        "Exact name of an object already in the scene, "
+                        "matched against Blender's own object names such as "
+                        "Cube or Camera. scene_info lists the names that "
+                        "exist; an unknown name fails the run."
+                    ),
+                },
+                "frame": {
+                    "type": "integer",
+                    "description": (
+                        "Whole-number timeline frame to key, for example 1 or "
+                        "120; frame 1 when omitted. It keys the object's "
+                        "location only, so move it first with set_camera."
+                    ),
+                },
             },
             "required": ["name"],
         },
         "handler": tool_keyframe_object,
     },
     "export_glb": {
-        "description": "Export GLB under COMFY_OUTPUT_DIR/assets (never MODELS_DIR).",
+        "description": (
+            "Export the scene as a GLB under COMFY_OUTPUT_DIR/assets (never "
+            "MODELS_DIR). "
+            "Returns: {ok, returncode, stdout, stderr, path} with path the "
+            "file it wrote, or {ok: false, error} that repeats the refused "
+            "path when it points into a models directory and names the assets "
+            "folder to use instead, or names the command that takes the desk."
+        ),
         "inputSchema": {
             "type": "object",
-            "properties": {"path": {"type": "string"}},
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": (
+                        "Absolute host path the GLB is written to, under "
+                        "COMFY_OUTPUT_DIR/assets, for example "
+                        "/mnt/comfy-output/assets/objects/mug.glb; that "
+                        "default mcp-export.glb file is used when you omit "
+                        "it. A path under a models directory is refused: "
+                        "MODELS_DIR holds shipped weights only."
+                    ),
+                }
+            },
         },
         "handler": tool_export_glb,
     },
     "export_guides": {
-        "description": "Dump a 5.00s clay/depth/canny guide pack (host blender-guide.sh).",
+        "description": (
+            "Dump a 5.00s clay/depth/canny guide pack for one shot (host "
+            "blender-guide.sh). "
+            "Returns: {ok, returncode, stdout, stderr} from the host utility, "
+            "stderr carrying its own log line naming the folder it wrote under "
+            "COMFY_OUTPUT_DIR/guides/<film>/<shot>, or {ok: false, error} "
+            "naming the command that takes the desk while Comfy holds the GPU."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "film": {"type": "string"},
-                "shot": {"type": "string"},
-                "blend": {"type": "string"},
+                "film": {"type": "string", "description": _FILM_DOC},
+                "shot": {
+                    "type": "string",
+                    "description": (
+                        "Shot id used as the guide folder name, digits only, "
+                        "such as 12 or 07; the host utility zero-pads it to "
+                        "two digits for the last segment of "
+                        "COMFY_OUTPUT_DIR/guides/<film>/<shot>. Anything with "
+                        "a letter in it fails the run with 'shot id must be "
+                        "numeric'."
+                    ),
+                },
+                "blend": {"type": "string", "description": _BLEND_DOC},
             },
         },
         "handler": tool_export_guides,
     },
     "blender_stills": {
-        "description": "Dump a creator still pack (host blender-stills.sh).",
+        "description": (
+            "Dump a creator still pack: one frame of clay, depth, and canny "
+            "(host blender-stills.sh). "
+            "Returns: {ok, returncode, stdout, stderr} from the host utility, "
+            "stderr carrying its own log line naming the folder it wrote under "
+            "COMFY_OUTPUT_DIR/guides/<film>/stills/<plate>, or "
+            "{ok: false, error} naming the command that takes the desk while "
+            "Comfy holds the GPU."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
-                "film": {"type": "string"},
-                "plate": {"type": "string"},
-                "size": {"type": "string"},
-                "blend": {"type": "string"},
+                "film": {"type": "string", "description": _FILM_DOC},
+                "plate": {
+                    "type": "string",
+                    "description": (
+                        "Plate name the still pack is filed under, for example "
+                        "mug; it becomes the last segment of "
+                        "COMFY_OUTPUT_DIR/guides/<film>/stills/<plate> and "
+                        "should match the plate the .blend scene actually "
+                        "renders, so the dump is not overwritten blind."
+                    ),
+                },
+                "size": {
+                    "type": "string",
+                    "description": (
+                        "Frame size written as WxH, for example 1024x1024. The "
+                        "host utility accepts 1280x704, 768x1280, 1024x1280, "
+                        "1024x1024, and 1280x720 (a thumb size, not an LTX "
+                        "size); omit it for the utility default."
+                    ),
+                },
+                "blend": {"type": "string", "description": _BLEND_DOC},
             },
         },
         "handler": tool_blender_stills,
     },
     "house_views": {
-        "description": "Dump Instagram 4:5 greybox stills + GLB (host house-views.sh).",
+        "description": (
+            "Dump Instagram 4:5 greybox stills plus a GLB of a house scene "
+            "(host house-views.sh). "
+            "Returns: {ok, returncode, stdout, stderr} from the host utility, "
+            "stderr carrying its own log line naming the folder it wrote under "
+            "COMFY_OUTPUT_DIR/assets/sets/<slug>, or {ok: false, error} naming "
+            "the command that takes the desk while Comfy holds the GPU."
+        ),
         "inputSchema": {
             "type": "object",
-            "properties": {"slug": {"type": "string"}},
+            "properties": {
+                "slug": {
+                    "type": "string",
+                    "description": (
+                        "House scene slug, the folder name the stills and the "
+                        "GLB are written under, for example lab-penthouse (the "
+                        "default). Pass the slug the scene ships under rather "
+                        "than a title typed by an operator, or the utility "
+                        "dumps a folder of that name and finds nothing to "
+                        "render."
+                    ),
+                }
+            },
         },
         "handler": tool_house_views,
     },
@@ -739,9 +963,7 @@ def main(argv: list[str] | None = None) -> int:
         argv,
         tools=TOOLS,
         prog="blender_mcp.py",
-        usage_extra=(
-            "Occupancy-aware Blender MCP. No execute_code. No telemetry."
-        ),
+        usage_extra=("Occupancy-aware Blender MCP. No execute_code. No telemetry."),
         handle=handle_rpc,
     )
 

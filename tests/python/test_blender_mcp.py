@@ -1,4 +1,10 @@
-"""In-tree Blender MCP: typed tools, occupancy, no execute_code."""
+"""In-tree Blender MCP: typed tools, occupancy, no execute_code.
+
+Also pins the catalog invariant both other MCP servers share: every
+inputSchema argument carries a description and every tool description says
+what a call returns, so a model reading ``tools/list`` is never handed a bare
+``{"type": "string"}``.
+"""
 
 from __future__ import annotations
 
@@ -8,6 +14,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -30,7 +37,9 @@ def test_tools_are_typed_and_have_no_execute_code() -> None:
     assert "hunyuan" not in blob.lower()
 
 
-def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_occupancy_status_reads_state_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     payload = {
         "version": 1,
@@ -47,7 +56,9 @@ def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch: pytest.M
     assert result["occupancy"]["parked"] is True
 
 
-def test_desk_allowed_parked_and_refuses_heavy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_desk_allowed_parked_and_refuses_heavy(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
@@ -64,7 +75,9 @@ def test_desk_allowed_parked_and_refuses_heavy(tmp_path: Path, monkeypatch: pyte
     assert "blender-desk" in blocked["error"]
 
 
-def test_desk_allowed_refuses_a_live_llm_sidecar(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_desk_allowed_refuses_a_live_llm_sidecar(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """The 35B on the GPU is the job: a parked Compose does not make room for bpy."""
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
@@ -82,7 +95,9 @@ def test_desk_allowed_refuses_a_live_llm_sidecar(tmp_path: Path, monkeypatch: py
     assert mcp.desk_allowed() is False
 
 
-def test_desk_allowed_lets_an_orphaned_llm_record_go(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_desk_allowed_lets_an_orphaned_llm_record_go(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """A killed sidecar leaves a desk nobody sits at, so bpy may proceed."""
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
@@ -100,7 +115,9 @@ def test_desk_allowed_lets_an_orphaned_llm_record_go(tmp_path: Path, monkeypatch
     assert mcp.desk_allowed() is True
 
 
-def test_occupancy_view_adds_custom_nodes_to_the_path(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_occupancy_view_adds_custom_nodes_to_the_path(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """The MCP server runs from the checkout, so it anchors the reader itself."""
     custom = str(mcp._repo_root() / "custom_nodes")
     monkeypatch.setattr(sys, "path", [entry for entry in sys.path if entry != custom])
@@ -108,7 +125,9 @@ def test_occupancy_view_adds_custom_nodes_to_the_path(monkeypatch: pytest.Monkey
     assert custom in sys.path
 
 
-def test_create_primitive_rejects_unknown_kind(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_create_primitive_rejects_unknown_kind(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
@@ -118,7 +137,9 @@ def test_create_primitive_rejects_unknown_kind(tmp_path: Path, monkeypatch: pyte
     assert result["ok"] is False
 
 
-def test_export_glb_refuses_models_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_export_glb_refuses_models_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "idle", "parked": False, "compose": False}),
@@ -134,7 +155,9 @@ def test_occupancy_enter_requires_mode() -> None:
     assert result["ok"] is False
 
 
-def test_unknown_tool_and_rpc_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_unknown_tool_and_rpc_call(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
@@ -168,10 +191,15 @@ def test_jsonrpc_initialize_and_tools_list() -> None:
     assert listed is not None
     names = [t["name"] for t in listed["result"]["tools"]]
     assert "occupancy_enter" in names
-    assert mcp.handle_rpc({"jsonrpc": "2.0", "method": "notifications/initialized"}) is None
+    assert (
+        mcp.handle_rpc({"jsonrpc": "2.0", "method": "notifications/initialized"})
+        is None
+    )
 
 
-def test_main_list_tools_and_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_main_list_tools_and_call(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True}),
@@ -227,7 +255,9 @@ def test_well_known_blender_paths_skip_system_when_hermetic(
     assert str(tmp_path / "home" / ".local" / "bin" / "blender") in hermetic
 
 
-def test_bpy_tools_fail_without_blender(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_bpy_tools_fail_without_blender(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     monkeypatch.setenv("PATH", str(tmp_path / "bin"))
     monkeypatch.setenv("HOME", str(tmp_path / "home"))
@@ -285,7 +315,7 @@ def test_occupancy_status_falls_back_to_script(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     occ = tmp_path / "occ.sh"
     occ.write_text(
-        "#!/usr/bin/env bash\necho '{\"mode\":\"from-sh\",\"parked\":true}'\n",
+        '#!/usr/bin/env bash\necho \'{"mode":"from-sh","parked":true}\'\n',
         encoding="utf-8",
     )
     occ.chmod(0o755)
@@ -434,3 +464,139 @@ def test_main_stdio_and_call_json(
     assert mcp.main(["--call", "occupancy_status", "{}"]) == 0
     payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])
     assert payload["ok"] is True
+
+
+_TOOL_NAMES = [
+    "occupancy_status",
+    "occupancy_enter",
+    "scene_info",
+    "create_primitive",
+    "set_camera",
+    "keyframe_object",
+    "export_glb",
+    "export_guides",
+    "blender_stills",
+    "house_views",
+]
+"""The ten tool ids this server publishes; the sweeps below only check
+something while the table still holds exactly these."""
+
+_PROPERTY_COUNT = 17
+"""How many inputSchema properties the sweep has to find a description for."""
+
+_MIN_ARG_DOC = 60
+"""Shortest argument description that still reads as guidance."""
+
+_MIN_ERROR_DOC = 60
+"""Shortest error that says what to pass instead of only what broke."""
+
+
+def _argument_docs(tool_name: str, spec: Any) -> dict[str, str]:
+    """Collect the argument descriptions of one tool's ``inputSchema``.
+
+    Args:
+        tool_name: Tool id, used in failure messages.
+        spec: One row of ``blender_mcp.TOOLS``.
+
+    Returns:
+        ``{argument name: description}`` for every declared property.
+
+    Raises:
+        AssertionError: A property is not a mapping, or has no string
+            description.
+    """
+    properties = spec["inputSchema"].get("properties") or {}
+    assert isinstance(properties, dict), f"{tool_name} properties"
+    docs: dict[str, str] = {}
+    for prop_name, prop in properties.items():
+        assert isinstance(prop, dict), f"{tool_name}.{prop_name} shape"
+        text = prop.get("description")
+        assert isinstance(text, str), f"{tool_name}.{prop_name} has no description"
+        docs[str(prop_name)] = text
+    return docs
+
+
+def _refusal(tool: str, args: dict[str, Any], subject: str) -> str:
+    """Call a tool that must refuse and return its operator-facing error.
+
+    Args:
+        tool: Tool id to call.
+        args: Arguments that must make it refuse.
+        subject: Text the error has to repeat back (bad value or key).
+
+    Returns:
+        The error string.
+
+    Raises:
+        AssertionError: The call succeeded, or the error is bare text that
+            names neither the bad input nor another tool to try instead.
+    """
+    result = mcp.call_tool(tool, args)
+    assert result["ok"] is False, result
+    error = str(result["error"])
+    assert len(error) >= _MIN_ERROR_DOC, f"{tool}: {error!r}"
+    assert subject in error, f"{tool}: {error!r}"
+    assert any(name in error for name in mcp.TOOLS), f"{tool}: {error!r}"
+    return error
+
+
+def test_every_tool_documents_its_arguments_and_its_return() -> None:
+    assert list(mcp.TOOLS) == _TOOL_NAMES, "the published tool set moved"
+    documented = 0
+    for name, spec in mcp.TOOLS.items():
+        assert "Returns:" in spec["description"], f"{name} never says what it returns"
+        docs = _argument_docs(name, spec)
+        documented += len(docs)
+        for prop_name, text in docs.items():
+            assert len(text) >= _MIN_ARG_DOC, f"{name}.{prop_name}: {text!r}"
+        required = spec["inputSchema"].get("required") or []
+        assert isinstance(required, list)
+        assert set(required) <= set(docs), f"{name} requires an undocumented argument"
+    assert documented == _PROPERTY_COUNT, "the sweep stopped covering properties"
+
+
+def test_tools_list_publishes_the_documented_schema() -> None:
+    listed = mcp.handle_rpc({"jsonrpc": "2.0", "id": 9, "method": "tools/list"})
+    assert listed is not None
+    rows = {str(row["name"]): row for row in listed["result"]["tools"]}
+    assert set(rows) == set(_TOOL_NAMES)
+    for name, spec in mcp.TOOLS.items():
+        assert rows[name]["description"] == spec["description"]
+        assert rows[name]["inputSchema"] == spec["inputSchema"]
+
+
+def test_arguments_that_name_a_value_point_at_a_sibling_tool() -> None:
+    enter = _argument_docs("occupancy_enter", mcp.TOOLS["occupancy_enter"])
+    assert "occupancy_status" in enter["mode"], enter["mode"]
+    key = _argument_docs("keyframe_object", mcp.TOOLS["keyframe_object"])
+    assert "scene_info" in key["name"], key["name"]
+    primitive = _argument_docs("create_primitive", mcp.TOOLS["create_primitive"])
+    assert "scene_info" in primitive["name"], primitive["name"]
+
+
+def test_refusals_repeat_the_bad_input_and_name_a_tool_that_could_have_helped(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _park_desk(tmp_path, monkeypatch)
+    enter = _refusal("occupancy_enter", {}, "mode")
+    assert "occupancy_status" in enter, enter
+    keyed = _refusal("keyframe_object", {}, "name")
+    assert "scene_info" in keyed, keyed
+    kind = _refusal("create_primitive", {"kind": "suzanne"}, "suzanne")
+    assert "uv_sphere" in kind, kind
+    glb = _refusal("export_glb", {"path": "/mnt/models/evil.glb"}, "evil.glb")
+    assert "assets" in glb, glb
+
+
+def test_desk_refusal_names_the_command_that_frees_the_desk(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    (tmp_path / ".occupancy.json").write_text(
+        json.dumps({"mode": "ltx", "parked": False, "compose": True}),
+        encoding="utf-8",
+    )
+    blocked = mcp.call_tool("scene_info", {})
+    assert blocked["ok"] is False
+    assert "blender-desk" in str(blocked["error"]), blocked["error"]
+    assert "//:manage" in str(blocked["error"]), blocked["error"]

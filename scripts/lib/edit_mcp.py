@@ -86,14 +86,15 @@ INVALID_JSON_ERROR = "comfyui returned invalid JSON"
 NON_OBJECT_ERROR = "comfyui returned a non-object reply"
 """Error text when a route replies with JSON that is not an object."""
 
+
 class CatalogSchema(TypedDict, total=False):
     """One parameter schema authored alongside the mirrored catalog."""
 
     type: str
     """Always ``object`` for a tool argument object."""
 
-    properties: JsonObject
-    """Per-parameter JSON Schema bodies."""
+    properties: dict[str, JsonObject]
+    """Per-parameter JSON Schema bodies, keyed by parameter name."""
 
     required: list[str]
     """Parameter names a call must carry."""
@@ -230,6 +231,190 @@ ROUTES: dict[str, tuple[str, str]] = {
     "edit_export_edl": ("POST", "/ez_edit/export_edl"),
 }
 """Thin tool id -> (method, path) of the one route it calls."""
+
+# Host-side agent docs for the mirrored catalog. The mirror above stays
+# byte-identical to custom_nodes/ez_edit/protocol.py (drift is a pytest
+# failure), so the text a host agent reads from tools/list, and nothing else
+# this server adds, lives in these tables and is merged in by _spec.
+_PROJECT_ID_DOC = (
+    "Saved edit project id, exactly as edit_list_projects returns it. Leave "
+    "it empty to address the most recently updated project, which is what a "
+    "one-project-at-a-time session wants; pass it whenever the operator named "
+    "a project, rather than trusting which timeline was touched last."
+)
+"""Doc for the ``project_id`` argument five of the thin tools share."""
+
+_ARG_DOCS: dict[str, dict[str, str]] = {
+    "edit_get_state": {"project_id": _PROJECT_ID_DOC},
+    "edit_list_projects": {},
+    "edit_import": {
+        "path": (
+            "Media file to import, given as a path that already sits under "
+            "COMFY_OUTPUT_DIR, for example clips/mug-turn.mp4. ffprobe reads "
+            "its duration. edit_job_status reports the path a finished render "
+            "wrote, which is the usual thing to import next."
+        ),
+        "label": (
+            "Display name the clip carries on the timeline, any text such as "
+            "mug turn; empty, the default, lets the panel fall back to the "
+            "file name."
+        ),
+        "track": (
+            "Track index the clip lands on, a whole number counted from 0; 0, "
+            "the default, is the base video track. Higher numbers stack over "
+            "it, so use 1 for an overlay."
+        ),
+    },
+    "edit_apply_ops": {
+        "project_id": _PROJECT_ID_DOC,
+        "ops": (
+            "Ordered list of op records, applied in the order given, each one "
+            'an object with an "op" verb and an "args" object, for example '
+            '[{"op": "trim_clip", "args": {"clip_id": "c1", "in_s": 1.5}}]. '
+            "Only project_create, add_clip, remove_clip, trim_clip, move_clip, "
+            "set_track, set_transition, set_gain, add_overlay, "
+            "remove_overlay, add_caption, remove_caption, set_title, and "
+            "clear are known verbs, and edit_get_state returns the clip, "
+            "overlay, and caption ids an op can name."
+        ),
+    },
+    "edit_render": {
+        "project_id": _PROJECT_ID_DOC,
+        "mode": (
+            "Renderer to use: server runs ffmpeg on the Spark and produces an "
+            "mp4 on the box; client queues the timeline for the open browser "
+            "panel to render with WebCodecs and produces a webm on the laptop. "
+            "occupancy_status shows whether the GPU is busy before you pick "
+            "server."
+        ),
+        "client_id": (
+            "Browser panel that must pick up a client render, as the panel "
+            "registers itself; leave it empty to let the lane choose the one "
+            "attached client. Ignored by a server render."
+        ),
+    },
+    "edit_job_status": {
+        "job_id": (
+            "Jobstore id to read, the job id edit_render or "
+            "edit_generate_clip handed back, not a project id. edit_get_state "
+            "lists the recent job ids of a project when you lost it."
+        ),
+    },
+    "edit_generate_clip": {
+        "prompt": (
+            "What the cutaway shows, in plain words, for example a slow push "
+            "past a chipped cobalt mug on linen. The editing-lane graph is "
+            "silent motion, so describe the movement rather than a voice. "
+            "edit_get_state shows the clips it has to cut against."
+        ),
+        "duration_s": (
+            "Length of the clip in seconds as a number, for example 5.0; the "
+            "default is 5.0. Longer clips cost more GPU time on the Spark."
+        ),
+        "fps": (
+            "Frame rate of the clip as a number, for example 24.0; the "
+            "default is 24.0. Match the project frame rate, which "
+            "edit_list_projects reports per project."
+        ),
+    },
+    "edit_export_edl": {
+        "project_id": _PROJECT_ID_DOC,
+        "format": (
+            "Handoff document to write: json, the default, is this lane's own "
+            "document that the panel reads back; cmx writes CMX 3600 text that "
+            "DaVinci Resolve, Premiere, Kdenlive, and Shotcut import."
+        ),
+    },
+    "occupancy_status": {},
+}
+"""One entry per catalog property: the text tools/list shows for that argument."""
+
+_RETURNS_DOCS: dict[str, str] = {
+    "edit_get_state": (
+        "Returns: {ok, project, jobs, enabled} straight from the state route, "
+        "where project carries the clips, overlays, and captions and jobs the "
+        "recent jobstore rows; {ok: false, error} when ComfyUI is unreachable, "
+        "the lane is disabled, or the reply was not a JSON object."
+    ),
+    "edit_list_projects": (
+        "Returns: {ok, projects, enabled} straight from the projects route, "
+        "newest first, each row {id, title, fps, width, height, clips, "
+        "updated_at} where clips is a count and id is what the other tools "
+        "take; {ok: false, error} when ComfyUI is unreachable, the lane is "
+        "disabled, or the reply was not a JSON object."
+    ),
+    "edit_import": (
+        "Returns: {ok, clip} straight from the import route, the clip carrying "
+        "its id, source, label, track, and the probed in_s/out_s span; "
+        "{ok: false, error} naming the parameter that came in empty, or the "
+        "failure the route reported."
+    ),
+    "edit_apply_ops": (
+        "Returns: {ok, project} straight from the ops route, the project as "
+        "the reducer left it. One unknown op or id fails the whole call and "
+        "comes back as {ok: false, error} quoting the route's reason, so read "
+        "edit_get_state for the ids before applying."
+    ),
+    "edit_render": (
+        "Returns: {ok, job} straight from the render route, the job row "
+        "carrying the id to poll with edit_job_status; {ok: false, error} when "
+        "mode came in empty, when ComfyUI is unreachable, or when the route "
+        "refused the render."
+    ),
+    "edit_job_status": (
+        "Returns: {ok, job} straight from the job route, the row carrying "
+        "state, its message progress line, and out_path once the render "
+        "landed; {ok: false, error} when job_id came in empty, when the row "
+        "states failed (the job still comes back), or when ComfyUI is "
+        "unreachable."
+    ),
+    "edit_generate_clip": (
+        "Returns: {ok, job} straight from the generate-cutaway route, the job "
+        "row carrying the id to poll with edit_job_status and the out_path to "
+        "import once it lands; {ok: false, error} when prompt came in empty or "
+        "when the occupancy gate refused the heavy GPU job."
+    ),
+    "edit_export_edl": (
+        "Returns: {ok, path, project_id, clips, format} straight from the "
+        "export route, path the file written under the edit dir, relative to "
+        "COMFY_OUTPUT_DIR; {ok: false, error} when no project matches or when "
+        "ComfyUI is unreachable."
+    ),
+    "occupancy_status": (
+        "Returns: {ok, mode} read from the host state file with no HTTP call - "
+        "the mode string, or unknown when that file is missing, unreadable, or "
+        "carries no mode - plus recorded_mode, orphaned, and note when a desk "
+        "record outlived its sidecar."
+    ),
+}
+"""One Returns sentence per tool, appended to the mirrored catalog description."""
+
+_REQUIRED_HINTS: dict[str, str] = {
+    "path": (
+        "pass a media file that already sits under COMFY_OUTPUT_DIR; "
+        "edit_job_status reports the path a finished render wrote"
+    ),
+    "ops": (
+        "pass a list of op objects; edit_get_state returns the clips, "
+        "overlays, and captions an op can name"
+    ),
+    "mode": (
+        "pass server (ffmpeg on the Spark) or client (the open browser panel "
+        "renders it); occupancy_status shows whether the GPU is busy"
+    ),
+    "job_id": (
+        "pass the job id edit_render or edit_generate_clip returned; "
+        "edit_get_state lists a project's recent jobs"
+    ),
+    "prompt": (
+        "describe the cutaway in plain words; edit_get_state shows the clips "
+        "it has to cut against"
+    ),
+}
+"""What to pass, per required parameter, for the empty-parameter refusal."""
+
+_MISSING_REQUIRED_HINT = "see this tool's description for what it takes"
+"""Fallback for a required parameter the hint table does not cover yet."""
 
 
 def _comfy_base() -> str:
@@ -368,9 +553,7 @@ def _http_error_payload(path: str, exc: urllib.error.HTTPError) -> ToolResult:
     return {"ok": False, "error": f"{path} -> HTTP {exc.code} {exc.reason}"}
 
 
-def _http(
-    method: str, path: str, body: dict[str, object] | None = None
-) -> ToolResult:
+def _http(method: str, path: str, body: dict[str, object] | None = None) -> ToolResult:
     """Open one socket to one route and decode its reply.
 
     Args:
@@ -478,9 +661,12 @@ def _call_route(name: str, payload: ToolArgs) -> ToolResult:
     """
     missing = _missing_required(name, payload)
     if missing:
+        hints = "; ".join(
+            _REQUIRED_HINTS.get(key, _MISSING_REQUIRED_HINT) for key in missing
+        )
         return {
             "ok": False,
-            "error": f"{name}: missing required {', '.join(missing)}",
+            "error": f"{name}: missing required {', '.join(missing)} - {hints}",
         }
     method, path = ROUTES[name]
     if method == "GET":
@@ -657,19 +843,27 @@ def tool_occupancy_status(_args: ToolArgs) -> ToolResult:
 
 
 def _spec(name: str, handler: ToolHandler) -> ToolSpec:
-    """Wrap one mirrored catalog entry and its handler as an MCP tool.
+    """Wrap one mirrored catalog entry, its host-side docs, and its handler.
 
     Args:
         name: Tool id (also the catalog key).
         handler: Handler for this tool.
 
     Returns:
-        MCP tool spec (description and schema come from the catalog only).
+        MCP tool spec: the catalog description plus its ``Returns:`` sentence,
+        and the catalog schema with a ``description`` added to every property.
+        The catalog itself is never mutated, so the drift check against the
+        protocol file still compares the same object.
     """
     entry = _TOOL_CATALOG[name]
+    docs = _ARG_DOCS[name]
+    properties: JsonObject = {
+        key: {**schema, "description": docs[key]}
+        for key, schema in (entry["parameters"].get("properties") or {}).items()
+    }
     return {
-        "description": str(entry["description"]),
-        "inputSchema": dict(entry["parameters"]),
+        "description": f"{entry['description']} {_RETURNS_DOCS[name]}",
+        "inputSchema": {**entry["parameters"], "properties": properties},
         "handler": handler,
     }
 
@@ -747,8 +941,7 @@ def main(argv: list[str] | None = None) -> int:
         tools=TOOLS,
         prog="edit_mcp.py",
         usage_extra=(
-            "Typed tools only; no execute_code, no telemetry, "
-            "no arbitrary fetch_url."
+            "Typed tools only; no execute_code, no telemetry, no arbitrary fetch_url."
         ),
         handle=handle_rpc,
     )
