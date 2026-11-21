@@ -548,10 +548,55 @@ def test_param_form_states_what_is_still_missing() -> None:
     model = views.param_form(action, {})
     detail = _detail_text(model)
     assert "not ready: Film is required" in detail
-    assert _row(model, "film").note == "required"
-    assert _row(model, "drafts").note == "optional"
+    assert _row(model, "film").note == "no hint for this field: file a bug so it gets one"
+    assert _row(model, "drafts").note == "optional: leave blank to skip it"
     assert _row(model, "look").note == "[Warm]"
     assert model.selected == 0
+
+
+def test_param_form_turns_a_missing_hint_into_a_reportable_defect() -> None:
+    """A required field the catalog left bare never renders a bare label.
+
+    The placeholder is the only thing the operator reads before typing, so an
+    absent hint has to read as something worth reporting rather than as a blank,
+    an optional one has to keep saying it may be left blank, and a menu has to
+    keep showing its offered choices.
+    """
+    action = _action(
+        "film.pack_frames",
+        "Pack frames into a clip",
+        group=c.Group.FILM,
+        params=(
+            c.ParamSpec(name="source", label="Frames dir", kind=c.ParamKind.TEXT),
+            c.ParamSpec(
+                name="fps",
+                label="Frames per second",
+                kind=c.ParamKind.INT,
+                flag="--fps",
+                required=False,
+            ),
+            c.ParamSpec(
+                name="family",
+                label="Family",
+                kind=c.ParamKind.CHOICE,
+                flag="--family",
+                choices=(c.Choice("clay", "Clay"),),
+            ),
+            c.ParamSpec(
+                name="note",
+                label="Note",
+                kind=c.ParamKind.TEXT,
+                flag="--note",
+                required=False,
+                help_text="one line stamped on the clip",
+            ),
+        ),
+    )
+    model = views.param_form(action, {})
+    assert _row(model, "source").note == "no hint for this field: file a bug so it gets one"
+    assert _row(model, "fps").note == "optional: leave blank to skip it"
+    assert _row(model, "family").note == "[Clay]"
+    assert _row(model, "note").note == "one line stamped on the clip"
 
 
 def test_param_form_uses_a_default_answer_and_shows_the_tier_colour() -> None:
