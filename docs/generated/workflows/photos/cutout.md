@@ -209,7 +209,7 @@ Matte a photo so one character or object can be reused: painted onto a backdrop,
 | `image` | in | `IMAGE` | Photo to matte - the original, not a crop. |
 | `image` | out | `IMAGE` | Subject on the chosen backdrop, ready for LoadImage in a 3d App. |
 | `matte` | out | `IMAGE` | Grey alpha copy so SaveImage can write the matte. |
-| `mask` | out | `MASK` | Raw grown subject mask for anything that composites. |
+| `mask` | out | `MASK` | Raw grown subject mask for anything that composites. (B, H, W) with one frame - the rank a Comfy MASK means. |
 | `save_mask` | out | `MASK` | Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painte... |
 
 #### `backdrop`

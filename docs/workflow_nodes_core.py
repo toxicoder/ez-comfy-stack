@@ -355,8 +355,8 @@ def core_nodes() -> NodeSpecs:
                 _s("image", "IMAGE", "in", "Photo to matte - the original, not a crop."),
                 _s("image", "IMAGE", "out", "Subject on the chosen backdrop, ready for LoadImage in a 3d App."),
                 _s("matte", "IMAGE", "out", "Grey alpha copy so SaveImage can write the matte."),
-                _s("mask", "MASK", "out", "Raw grown subject mask for anything that composites."),
-                _s("save_mask", "MASK", "out", "Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painted colour. Wire this into the alpha path, never mask."),
+                _s("mask", "MASK", "out", "Raw grown subject mask for anything that composites. (B, H, W) with one frame - the rank a Comfy MASK means."),
+                _s("save_mask", "MASK", "out", "Alpha to feed InvertMask ahead of JoinImageWithAlpha: the real matte under transparent, an opaque grid under any painted colour. Wire this into the alpha path, never mask. Also (B, H, W) with one frame, because JoinImageWithAlpha sizes its batch as max(len(image), len(alpha)) and repeats both inputs up to it: a bare (H, W) grid is read as H frames and tiles the one cut H times."),
             ],
             widgets=[
                 _w("backdrop", index=0, typ="COMBO", desc="What fills the pixels the subject leaves.", gen="white is the lab default: a clean plate reads as one object. grey is a neutral plate. green (#00B140) and blue (#0047BB) are chroma keys a compositor downstream pulls. transparent leaves the pixels alone so the joined alpha carries the emptiness - the only pick that writes real transparency, and only in a graph that wires save_mask through InvertMask and JoinImageWithAlpha. keep original changes nothing but the matte and mask. An unrecognised name blends as white.", choices=[("white", "Paint the vacated pixels white."), ("black", "Paint them black."), ("grey", "Paint them mid grey."), ("green", "Chroma green #00B140."), ("blue", "Chroma blue #0047BB."), ("transparent", "Keep the pixels; the alpha carries the emptiness."), ("keep original", "Keep every pixel; only matte and mask change.")]),
@@ -523,17 +523,17 @@ def core_nodes() -> NodeSpecs:
             lab="photos/background-removal puts it between EZCutout.save_mask and JoinImageWithAlpha, which keys on the inverse of what you hand it. Keeping the flip in a node named Invert is deliberate - the polarity quirk stays visible on the canvas instead of hiding inside the first-party cut.",
             sockets=[
                 _s("mask", "MASK", "in", "MASK to flip - 1 means keep."),
-                _s("MASK", "MASK", "out", "1.0 - mask at the same HxW."),
+                _s("MASK", "MASK", "out", "1.0 - mask at the same rank and the same HxW. It is arithmetic, so it never repairs a rank the input arrived with."),
             ],
             widgets=[],
         ),
         "JoinImageWithAlpha": _n(
             "Join Image with Alpha",
             "Attach a MASK as the alpha channel of an IMAGE, returning a 4-channel tensor. No widgets.",
-            lab="photos/background-removal, ahead of the EZImageUpscale rung so one Upscale pick scales RGB and alpha together. It computes alpha = 1.0 - mask, so feed it an InvertMask output, not the matte directly, and it bilinear-resizes the mask to the image's own size, so a matte can never arrive at the wrong HxW. Stock SaveImage has no mask input at the pinned tag - the (H, W, 4) tensor is what makes Pillow write RGBA.",
+            lab="photos/background-removal, ahead of the EZImageUpscale rung so one Upscale pick scales RGB and alpha together. It computes alpha = 1.0 - mask, so feed it an InvertMask output, not the matte directly, and it bilinear-resizes the mask to the image's own size, so a matte can never arrive at the wrong HxW. Stock SaveImage has no mask input at the pinned tag - the (H, W, 4) tensor is what makes Pillow write RGBA. At that same tag it opens with batch_size = max(len(image), len(alpha)) and repeats both inputs up to that batch, so an alpha without a frame dim inflates the batch and the file count: a (H, W) grid is read as H frames, the one cut tiles H times, and SaveImage writes a PNG per entry. Hand it a (B, H, W) MASK with one frame - which is what EZCutout's sockets are.",
             sockets=[
                 _s("image", "IMAGE", "in", "RGB still that carries the alpha."),
-                _s("alpha", "MASK", "in", "Inverted matte (1 = transparent). Resized to image HxW by this node."),
+                _s("alpha", "MASK", "in", "Inverted matte (1 = transparent) as (B, H, W) with one frame. Resized to image HxW by this node."),
                 _s("IMAGE", "IMAGE", "out", "4-channel tensor. SaveImage writes it as RGBA."),
             ],
             widgets=[],
