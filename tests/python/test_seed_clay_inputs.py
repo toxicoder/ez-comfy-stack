@@ -98,7 +98,7 @@ def test_main_success_and_failure(
     models.mkdir()
     monkeypatch.setenv("MODELS_DIR", str(models))
     assert seed.main([str(models / "nope")]) == 1
-    assert "failed" in capsys.readouterr().err
+    assert "not seeded" in capsys.readouterr().err
 
 
 def test_main_default_root(
@@ -552,7 +552,7 @@ def test_main_seeds_the_bed_when_a_plate_write_fails(
     assert (dest / seed.AUDIO_BED_NAME).is_file()
     assert (dest / seed.EXAMPLE_NAME).is_file()
     captured = capsys.readouterr()
-    assert "failed: [Errno 13] Permission denied" in captured.err
+    assert "clay plates not seeded: [Errno 13] Permission denied" in captured.err
     assert "cover.png" in captured.err
     # The plate stage never ran, so stdout must not claim plates it did not
     # write; the two stages that did run still say what they wrote.
@@ -575,7 +575,7 @@ def test_main_seeds_the_bed_when_the_example_plate_fails(
     assert (dest / seed.PLACEHOLDER_PLATES[0].name).is_file()
     assert (dest / seed.AUDIO_BED_NAME).is_file()
     captured = capsys.readouterr()
-    assert "failed: [Errno 13] Permission denied" in captured.err
+    assert "example plate not seeded: [Errno 13] Permission denied" in captured.err
     assert "10 plates ready" in captured.out
     assert f"wrote {seed.EXAMPLE_NAME}" not in captured.out
 
@@ -600,6 +600,32 @@ def test_main_keeps_every_plate_when_the_bed_fails(
     assert "audio bed not seeded" in captured.err
     assert "10 plates ready" in captured.out
     assert f"wrote {seed.AUDIO_BED_NAME}" not in captured.out
+
+
+def test_each_refusal_names_the_stage_that_refused(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Three identical OSErrors still say which of the three stages hit them.
+
+    An ``OSError`` out of ``write_bytes`` carries no filename, so on a full
+    ``/inputs`` every failure line would read the same and the operator could
+    not tell a clay plate from the example still from the audio bed.
+    """
+    dest = tmp_path / "in"
+
+    def _boom(_path: str | Path) -> object:
+        raise OSError(27, "File too large")
+
+    monkeypatch.setattr(seed, "seed_clay_inputs", _boom)
+    monkeypatch.setattr(seed, "seed_example_input", _boom)
+    monkeypatch.setattr(seed, "seed_audio_bed_input", _boom)
+
+    assert seed.main([str(dest)]) == 1
+
+    err = capsys.readouterr().err
+    assert "clay plates not seeded: [Errno 27] File too large" in err
+    assert "example plate not seeded: [Errno 27] File too large" in err
+    assert "audio bed not seeded: [Errno 27] File too large" in err
 
 
 def test_main_says_nothing_about_plates_when_every_stage_fails(
@@ -657,4 +683,4 @@ def test_main_still_refuses_a_models_dir_target(
     models.mkdir()
     monkeypatch.setenv("MODELS_DIR", str(models))
     assert seed.main([str(models / "input")]) == 1
-    assert "failed" in capsys.readouterr().err
+    assert "not seeded" in capsys.readouterr().err

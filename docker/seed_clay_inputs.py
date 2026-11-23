@@ -636,7 +636,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         written = seed_clay_inputs(dest)
     except (OSError, ValueError) as exc:
-        print(f"[seed-clay] failed: {exc}", file=sys.stderr)
+        # The stage is named because an OSError from write_bytes carries no
+        # filename: three identical refusals must still say which of the three
+        # things the operator has to go look at.
+        print(f"[seed-clay] clay plates not seeded: {exc}", file=sys.stderr)
         failed = True
     else:
         reports.append(f"{len(written)} plates ready in {dest}")
@@ -644,7 +647,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         example = seed_example_input(dest)
     except (OSError, ValueError) as exc:
-        print(f"[seed-clay] failed: {exc}", file=sys.stderr)
+        print(f"[seed-clay] example plate not seeded: {exc}", file=sys.stderr)
         failed = True
     else:
         if example is not None:
