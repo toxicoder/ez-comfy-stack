@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 from .nodes import CATEGORY, snap_dim
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
+
+    from PIL.Image import Image as PilImage
 
     from ez_common import (
         ComfyInputTypes,
@@ -27,6 +30,12 @@ MIN_MAX_REFS = 1
 
 MAX_MAX_REFS = 4
 """Highest accepted ``max_refs`` widget value (Klein reference budget)."""
+
+UNSUPPORTED_STILL_SUFFIXES = frozenset({".heic", ".heif"})
+"""Phone stills Pillow cannot decode here - no HEIF plugin is installed."""
+
+HEIC_STILL_HINT = "HEIC/HEIF is not decodable here, export a JPG or PNG"
+"""One-line repair the operator can act on for an unsupported phone still."""
 
 LimitToken: TypeAlias = str | int | float | bool
 """``max_refs`` value ``int()`` can parse before the clamp."""
@@ -148,6 +157,24 @@ def _count_note(count: int) -> str:
     return f"{count} reference stills"
 
 
+def _status_note(count: int, reasons: list[str]) -> tuple[str, ...]:
+    """Return the node's single status line: the count plus any failed pick.
+
+    Args:
+        count: Total frames the node found.
+        reasons: Per-picker reasons from :func:`still_failure_reason`, in
+            picker order; empty entries are dropped.
+
+    Returns:
+        One plain-text line, so a bad pick never hides behind the bare
+        ``no reference still`` the empty case earns.
+    """
+    notes = [reason for reason in reasons if reason]
+    if not notes:
+        return (_count_note(count),)
+    return ("; ".join([_count_note(count), *notes]),)
+
+
 def _filename_str(value: WidgetValue) -> str:
     """Strip a filename widget to a path string.
 
@@ -184,6 +211,90 @@ def input_still_choices() -> list[str]:
     return names
 
 
+def _exif_transpose(image: PilImage) -> PilImage:
+    """Apply the orientation the camera stored in EXIF before anything else.
+
+    A phone photo is saved on its side with an orientation tag telling viewers
+    to rotate it; without that step the reference reaches the model sideways.
+
+    Args:
+        image: Opened PIL image.
+
+    Returns:
+        The oriented image, or ``image`` unchanged when Pillow cannot transpose
+        it (no ImageOps in this build, or odd/absent EXIF).
+    """
+    try:
+        from PIL import ImageOps
+    except Exception:  # noqa: BLE001 - Pillow build without ImageOps
+        return image
+    try:
+        transposed: PilImage = ImageOps.exif_transpose(image)
+    except Exception:  # noqa: BLE001 - junk EXIF keeps the stored pixels
+        return image
+    return transposed
+
+
+def _still_reason_note(name: str) -> str:
+    """Return the one-line reason a pick that exists cannot be used.
+
+    Args:
+        name: Filename the operator picked.
+
+    Returns:
+        Text naming the file and the repair; a ``.heic``/``.heif`` pick is
+        called out as needing a JPG or PNG export, since no HEIF decoder is
+        installed here.
+    """
+    if Path(name).suffix.lower() in UNSUPPORTED_STILL_SUFFIXES:
+        return f"{name}: {HEIC_STILL_HINT}"
+    return f"{name}: could not be read as an image"
+
+
+def load_input_still_with_reason(
+    filename: WidgetValue,
+) -> tuple[ImageTensor | None, str]:
+    """Load a still from Comfy ``input/``, or say why the pick cannot be used.
+
+    "No pick" and "unreadable pick" are different facts. An empty picker and a
+    name that resolves to nothing leave the reason empty (the node then says
+    ``no reference still``); a pick whose file cannot be opened or decoded gets
+    a reason naming it, so a corrupt plate no longer looks like an empty node.
+
+    Args:
+        filename: Combo value (empty is a no-op).
+
+    Returns:
+        ``(batch, reason)`` - BHWC float batch (never 4-channel) or None, plus
+        the one-line reason, empty on success and on "no pick".
+    """
+    name = _filename_str(filename)
+    if not name:
+        return None, ""
+    try:
+        import numpy as np
+        from PIL import Image
+
+        import folder_paths
+    except Exception:  # noqa: BLE001 - hermetic tests / missing deps
+        return None, ""
+    try:
+        path = folder_paths.get_annotated_filepath(name)
+    except Exception:  # noqa: BLE001 - missing helper
+        path = None
+    if not path:
+        return None, ""
+    try:
+        with Image.open(path) as img:
+            rgb = _exif_transpose(img).convert("RGB")
+            arr = np.asarray(rgb).astype("float32") / 255.0
+    except Exception:  # noqa: BLE001 - unreadable file
+        return None, _still_reason_note(name)
+    if getattr(arr, "ndim", 0) != 3:
+        return None, _still_reason_note(name)
+    return arr[None, ...], ""
+
+
 def load_input_still(filename: WidgetValue) -> ImageTensor | None:
     """Load a still from Comfy ``input/`` when ``filename`` is set.
 
@@ -191,33 +302,23 @@ def load_input_still(filename: WidgetValue) -> ImageTensor | None:
         filename: Combo value (empty is a no-op).
 
     Returns:
-        BHWC float batch, or None when empty/unreadable.
+        BHWC float batch, or None when empty/unreadable. Ask
+        :func:`load_input_still_with_reason` for the reason behind a None.
     """
-    name = _filename_str(filename)
-    if not name:
-        return None
-    try:
-        import numpy as np
-        from PIL import Image
+    return load_input_still_with_reason(filename)[0]
 
-        import folder_paths
-    except Exception:  # noqa: BLE001 - hermetic tests / missing deps
-        return None
-    try:
-        path = folder_paths.get_annotated_filepath(name)
-    except Exception:  # noqa: BLE001 - missing helper
-        path = None
-    if not path:
-        return None
-    try:
-        with Image.open(path) as img:
-            rgb = img.convert("RGB")
-            arr = (np.asarray(rgb).astype("float32") / 255.0)
-    except Exception:  # noqa: BLE001 - unreadable file
-        return None
-    if getattr(arr, "ndim", 0) != 3:
-        return None
-    return arr[None, ...]
+
+def still_failure_reason(filename: WidgetValue) -> str:
+    """Return why a picked still could not be used, or ``""``.
+
+    Args:
+        filename: Combo value.
+
+    Returns:
+        One line naming the file and the repair; empty for an empty picker or
+        a name with no file behind it, which stay the "no still" case.
+    """
+    return load_input_still_with_reason(filename)[1]
 
 
 def _concat_frames(frames: list[ImageTensor]) -> ImageTensor:
@@ -345,11 +446,12 @@ class EZOptionalImage:
 
         Returns:
             Dict with the still (or None), the frame count, the has_image
-            flag, and a ui note.
+            flag, and a ui note that names a pick it could not read.
         """
         if not _as_bool(use_references):
             return {"ui": {"text": ("references off",)}, "result": (None, 0, False)}
         frames: list[ImageTensor] = []
+        reasons: list[str] = []
         count = 0
         if _image_present(image):
             frames.append(image)
@@ -364,6 +466,8 @@ class EZOptionalImage:
             if _image_present(loaded):
                 frames.append(loaded)
                 count += _batch_len(loaded)
+            else:
+                reasons.append(still_failure_reason(name))
         first: ImageTensor | None = None
         if len(frames) == 1:
             first = frames[0]
@@ -371,7 +475,7 @@ class EZOptionalImage:
             first = _concat_frames(frames)
         has_image = count > 0
         return {
-            "ui": {"text": (_count_note(count),)},
+            "ui": {"text": _status_note(count, reasons)},
             "result": (first, count, has_image),
         }
 

@@ -566,13 +566,16 @@ def test_progress_and_input_directory_fallbacks(tmp_path: Path, monkeypatch: pyt
     assert pipeline.input_directory() == Path("/inputs")
 
 
-def test_list_input_media_skips_dirs_and_hidden(tmp_path: Path) -> None:
+def test_list_input_media_skips_hidden_and_lists_nested(tmp_path: Path) -> None:
+    """A folder's files are picks too, as root-relative paths; dots do not."""
     (tmp_path / "keep.wav").write_bytes(b"RIFF")
     (tmp_path / ".hidden.wav").write_bytes(b"RIFF")
+    (tmp_path / ".cache").mkdir()
+    (tmp_path / ".cache" / "cached.wav").write_bytes(b"RIFF")
     (tmp_path / "nested").mkdir()
     (tmp_path / "nested" / "clip.mp4").write_bytes(b"ftyp")
     names = pipeline.list_input_media(tmp_path)
-    assert names == ["keep.wav"]
+    assert names == ["keep.wav", "nested/clip.mp4"]
 
 
 def test_resolve_media_source_url_and_annotated(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

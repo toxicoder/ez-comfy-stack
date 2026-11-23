@@ -16,12 +16,16 @@ from .rights import require_rights
 if TYPE_CHECKING:
     from ez_common.comfy_graph import WidgetValue
 
-# Ingest widgets and media suffixes. The suffix sets are the Outputs sidebar's
-# own, so the Dub source combo can only offer a file the explorer also lists;
-# .mov and .aac are not in that set and reach ingest as a bare path or a
-# yt-dlp download instead of a combo pick.
+# Ingest widgets and media suffixes. ``MEDIA_SUFFIXES`` stays the Outputs
+# sidebar's own set: it classifies what the explorer lists, and nothing here
+# widens it. The Dub source *picker* answers to a different job - ``ingest``
+# already reads .mov and .aac - so ``INPUT_MEDIA_SUFFIXES`` adds the camera and
+# phone containers the explorer has no reason to catalogue. Holding the picker
+# to the explorer's set is what made a droppable clip unpickable.
 SOURCE_NONE = "(none)"
 MEDIA_SUFFIXES = AUDIO_SUFFIXES | VIDEO_SUFFIXES
+INPUT_MEDIA_SUFFIXES = MEDIA_SUFFIXES | {".mov", ".m4a", ".aac", ".webm"}
+"""Suffixes the Dub source combo offers, wider than the explorer's list."""
 
 
 def is_url(source: object) -> bool:
@@ -52,7 +56,9 @@ def input_directory() -> Path:
             return path
     except Exception:  # noqa: BLE001 - Comfy is optional in unit tests
         pass
-    env = (os.environ.get("COMFY_OUTPUT_DIR") or os.environ.get("COMFY_OUTPUT") or "").strip()
+    env = (
+        os.environ.get("COMFY_OUTPUT_DIR") or os.environ.get("COMFY_OUTPUT") or ""
+    ).strip()
     if env:
         return Path(env) / "input"
     if Path("/inputs").is_dir():
@@ -61,25 +67,32 @@ def input_directory() -> Path:
 
 
 def list_input_media(root: Path | None = None) -> list[str]:
-    """Audio and video filenames in the Comfy input folder (not recursive).
+    """Audio and video files under the Comfy input folder, recursively.
+
+    Recursive because the repo's own upload widget files a drop under
+    ``input/<subfolder>/``, and a non-recursive listing dropped it from the
+    combo the moment the page reloaded. Entries are root-relative so the combo
+    value is the string :func:`resolve_media_source` re-joins onto the root.
 
     Args:
         root: Override directory (tests). Default is ``input_directory()``.
     Returns:
-        Sorted basenames with a media suffix. Missing dirs yield ``[]``.
+        Sorted root-relative paths with a pickable media suffix. Dot files and
+        dot folders stay out. Missing dirs yield ``[]``.
     """
     folder = root if root is not None else input_directory()
     if not folder.is_dir():
         return []
     names: list[str] = []
-    for entry in folder.iterdir():
+    for entry in folder.rglob("*"):
         if not entry.is_file():
             continue
-        if entry.name.startswith("."):
+        relative = entry.relative_to(folder)
+        if any(part.startswith(".") for part in relative.parts):
             continue
-        if entry.suffix.lower() not in MEDIA_SUFFIXES:
+        if entry.suffix.lower() not in INPUT_MEDIA_SUFFIXES:
             continue
-        names.append(entry.name)
+        names.append(relative.as_posix())
     names.sort(key=str.lower)
     return names
 
@@ -167,6 +180,7 @@ def fetch_url(url: str, dest_dir: Path) -> Path:
     """
     dest_dir.mkdir(parents=True, exist_ok=True)
     from . import pipeline as _pl
+
     hook = _pl.fetch_hook
     if hook is not None:
         return hook(url, dest_dir)
@@ -201,6 +215,7 @@ def extract_audio(src: Path, dest: Path, rate: int = SAMPLE_RATE) -> None:
         rate: Target sample rate.
     """
     from . import pipeline as _pl
+
     dest.parent.mkdir(parents=True, exist_ok=True)
     code, err = _pl._run(
         [
