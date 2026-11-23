@@ -153,13 +153,15 @@ bazelisk run //:everything -- --skip-bootstrap  # same, without the toolchain pr
 | 1 | `//:setup-host -- --check` | the host toolchain the lint and docs gates shell out to is installed |
 | 2 | `bazelisk build //... --nobuild` | every package loads and every target analyzes |
 | 3 | `bazelisk test //:test-all --test_tag_filters=-visual` | every test gate a plain host can run, manual linters and compose config included |
-| 4 | `bazelisk test //docs-site:visual-test //docs-site:visual_tooling_test` | the docs-site screenshots match the committed baselines, rendered in the pinned container |
+| 4 | `bazelisk run //docs-site:visual-linux`, then `bazelisk test //docs-site:visual_tooling_test` | the docs-site screenshots match the committed baselines, rendered in the pinned container, and the capture pipeline still holds |
 | 5 | `bazelisk run //docs:docs` | the generators plus the full static export build |
 | 6 | `bazelisk run //docs:render-check` | the built docs-site tree satisfies the render contract |
 
 Gate 4 is the one gate that needs a container runtime, so it is probed before it is attempted:
-with no reachable Docker daemon, or with no `.png` committed under
-`docs-site/tests/visual/goldens/`, the sweep prints
+with no reachable Docker daemon, with no `.png` committed under
+`docs-site/tests/visual/goldens/`, or with a daemon that cannot bind-mount this checkout (a
+DinD sidecar or a remote context, which mounts an empty `/lab` rather than refusing), the
+sweep prints
 `SKIP docs-site visual lane (<reason>)`, names the refresh command, counts the skip in its
 summary, and carries on. An environment the host cannot provide is reported as a skip; a
 baseline that actually differs fails gate 4 by name. `bazelisk test //:test-all` stays the

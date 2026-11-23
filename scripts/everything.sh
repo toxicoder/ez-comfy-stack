@@ -56,6 +56,8 @@ source "${SCRIPT_DIR}/lib/bug_report.sh"
 # them plus a container runtime, so their absence is an environment gap the
 # sweep reports as a skip rather than as a failing gate.
 GOLDENS_DIR="docs-site/tests/visual/goldens"
+# Overridable so the bats suite can drive the readiness answer without a container.
+VISUAL_LAUNCHER="${VISUAL_LAUNCHER:-docs-site/scripts/visual_linux.sh}"
 
 #######################################
 # Print usage and exit 0.
@@ -226,13 +228,21 @@ visual_lane_ready() {
     echo "no committed baselines under ${GOLDENS_DIR}"
     return 1
   fi
+  # The daemon being up is not enough: the lane renders inside a container that bind-mounts
+  # this checkout, and a daemon that lives elsewhere (a DinD sidecar, a remote context) mounts
+  # an empty /lab rather than refusing. The launcher owns that question, so ask it.
+  local check_out=""
+  if ! check_out=$(${VISUAL_LAUNCHER} --check 2>&1); then
+    printf '%s\n' "${check_out}"
+    return 1
+  fi
   return 0
 }
 
 #######################################
 # Compare the docs-site screenshot baselines in the pinned container.
 # Globals:
-#   BAZEL, GOLDENS_DIR, SKIPPED
+#   BAZEL, GOLDENS_DIR, VISUAL_LAUNCHER, SKIPPED
 # Arguments:
 #   None
 # Outputs:
@@ -248,7 +258,16 @@ run_visual_gate() {
     SKIPPED+=("docs-site visual lane")
     return 0
   fi
-  gate "//docs-site visual lane" test //docs-site:visual-test //docs-site:visual_tooling_test
+  # The container is the renderer the baselines were captured in and the one CI enforces, so
+  # that is what gets compared. //docs-site:visual-test is the host-browser twin, marked manual
+  # and documented as an escape hatch: a Next build cannot resolve modules through the runfiles
+  # symlink tree a sandboxed test action hands it.
+  # Both halves have to be able to fail the lane: returning the last gate's status would let a
+  # broken capture pass as long as the guard stayed green.
+  local rc=0
+  gate "//docs-site visual lane" run //docs-site:visual-linux || rc=1
+  gate "//docs-site visual guard" test //docs-site:visual_tooling_test || rc=1
+  return ${rc}
 }
 
 #######################################

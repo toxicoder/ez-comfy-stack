@@ -24,18 +24,24 @@ const GOLDENS_DIR = join(import.meta.dirname, "goldens");
 /** CI must never invent a baseline; only a local run may bootstrap one. */
 const CI = Boolean(process.env.CI);
 
-/** Pages whose rendering is worth a baseline: diagrams, callouts, panels, tables, prose. */
+/**
+ * Pages whose rendering is worth a baseline, chosen to cover each surface the site draws:
+ * the home hero, long prose, a Mermaid architecture diagram, callouts, wide tables, a
+ * generated reference page.  Every route here is cross-checked against the `docs/` tree by
+ * `//docs-site:visual_tooling_test`, because this list was ported from the MkDocs site and
+ * six of its ten entries had rotted into routes that no longer exist.
+ */
 const KEY_PAGES = [
   ["index", "/"],
   ["getting-started", "/getting-started/"],
-  ["architecture", "/architecture/"],
-  ["models-catalog", "/models-catalog/"],
+  ["architecture", "/learn/architecture/"],
+  ["models-and-cache", "/models-and-cache/"],
   ["troubleshooting", "/troubleshooting/"],
   ["reboot-safety", "/reboot-safety/"],
-  ["dgx-spark-notes", "/dgx-spark-notes/"],
-  ["monitoring-observability", "/monitoring-observability/"],
-  ["dev-workspaces", "/dev-workspaces/"],
-  ["gitea-ci-setup", "/gitea-ci-setup/"]
+  ["manage-cli", "/manage-cli/"],
+  ["download-tiers", "/download-tiers/"],
+  ["studio-apps", "/studio-apps/"],
+  ["generated-audio", "/generated/audio/"]
 ];
 
 /** Wait for hydration and for the widgets that paint after the first render. */
@@ -66,13 +72,34 @@ async function settle(page) {
       }
     }
   });
+  // The last-published chip rewrites itself from Date.now() once it hydrates, so its visible
+  // text is a relative phrase that changes between the day a baseline is captured and any day
+  // it is later compared.  Restore the absolute label from the baked datetime attribute, which
+  // the pinned visual build fixes, so the wall clock cannot move a baseline.
+  await page.evaluate(() => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    for (const time of document.querySelectorAll(".ez-published-chip time[datetime]")) {
+      const stamp = new Date(time.getAttribute("datetime") ?? "");
+      if (Number.isNaN(stamp.getTime())) continue;
+      time.textContent = `${stamp.getUTCDate()} ${months[stamp.getUTCMonth()]} ${stamp.getUTCFullYear()}`;
+    }
+  });
+
   // Animations are finished above, so only the paint after the last DOM change is pending.
   await page.waitForTimeout(400);
 }
 
 for (const [slug, route] of KEY_PAGES) {
   test(slug, async ({ page }, testInfo) => {
-    await page.goto(route, { waitUntil: "commit" });
+    const response = await page.goto(route, { waitUntil: "commit" });
+    // A route the export no longer has is served as the 404 page, which carries an h1 and a
+    // short body, so every wait below still passes and the suite happily baselines a blank
+    // frame.  This is how six of the ten original entries went unnoticed.
+    if (!response?.ok()) {
+      throw new Error(
+        `${slug}: ${route} returned ${response?.status() ?? "no response"}; the page list points at a route the export does not have`,
+      );
+    }
     await settle(page);
 
     // Mirrors snapshotPathTemplate in playwright.config.mjs: goldens/<project>/<name>.png.

@@ -110,14 +110,14 @@ filegroup(
 # Committed screenshot baselines.  Produced on the CI image (Linux Chromium): font metrics
 # differ per platform, so a golden captured on a laptop will not match CI.
 #
-# STATUS: this matches zero files today - no baselines have ever been committed. The
-# companion guard //docs-site:visual_tooling_test asserts a baseline exists for every page
-# the spec captures, so the empty set is not silently accepted; it is the reason that gate
-# is red and the reason :visual-test cannot pass yet. Refresh with
+# Capture the whole set in the pinned Linux image, review the diff, then commit the PNGs:
 #   bazelisk run //docs-site:visual-linux -- --update
-# in the pinned Linux image, then commit the PNGs. allow_empty stays True only because an
-# empty golden set is a legitimate state between "baselines removed" and "recaptured"; the
-# guard above is what makes it transient rather than permanent.
+# The companion guard //docs-site:visual_tooling_test asserts that a baseline exists for
+# every page the spec captures, that every captured route still resolves to a page under
+# //docs, and that the export is stamped with a fixed publish date so the last-published
+# chip cannot drift a baseline as it ages.  allow_empty stays True only because an empty
+# golden set is a legitimate state between "baselines removed" and "recaptured"; the guard
+# is what makes that state transient rather than permanent.
 filegroup(
     name = "visual-goldens",
     srcs = glob(
@@ -296,8 +296,11 @@ sh_test(
 # the escape hatch for debugging a rendering difference inside one environment; `//:validate`
 # and CI use the container path.  Marked manual because the sandboxed test action cannot
 # install or launch a browser reliably, and tagged `visual` because both halves need a
-# container runtime and committed baselines - //:everything probes those and skips when this
-# host has neither.
+# container runtime and committed baselines - //:everything probes the daemon, the committed
+# set, and whether that daemon can bind-mount this checkout, and skips with the reason when this
+# host cannot supply one of them.  Run the same comparison with `bazelisk run
+# //docs-site:visual`, which executes from the real checkout: a sandboxed test action hands
+# webpack a runfiles symlink tree it cannot resolve modules through.
 sh_test(
     name = "visual-test",
     size = "large",

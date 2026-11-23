@@ -32,6 +32,7 @@ PACKAGE_DIR = pathlib.Path(__file__).resolve().parent
 SCRIPT = PACKAGE_DIR / "scripts" / "visual_linux.sh"
 CONTAINER_SCRIPT = PACKAGE_DIR / "scripts" / "visual_linux_in_container.sh"
 SPEC = PACKAGE_DIR / "tests" / "visual" / "site.spec.mjs"
+PACKAGE_JSON = PACKAGE_DIR / "package.json"
 
 sys.path.insert(0, str(PACKAGE_DIR / "scripts"))
 
@@ -192,7 +193,102 @@ class VisualToolingTests(unittest.TestCase):
                 )
 
 
+    def test_visual_build_pins_the_published_stamp(self) -> None:
+        """The visual export bakes a fixed publish date, on both sides of the comparison.
+
+        Every page renders a last-published chip, and the date behind it resolves from git
+        HEAD when nothing pins it.  A container without a checkout resolves no stamp at all,
+        so a captured baseline and a later comparison would disagree about whether the chip
+        exists, let alone what it says.  One pinned SOURCE_DATE_EPOCH, shared by the capture
+        and the compare, is what makes the two agree.
+        """
+        scripts = json.loads(read(PACKAGE_JSON))["scripts"]
+        build = scripts.get("build:visual", "")
+        pinned = re.search(r"SOURCE_DATE_EPOCH=(\d+)\b", build)
+        self.assertIsNotNone(pinned, "build:visual does not pin SOURCE_DATE_EPOCH")
+        self.assertIn("next build", build, "build:visual no longer builds the export")
+        for name in ("visual", "visual:update"):
+            self.assertTrue(
+                scripts.get(name, "").startswith("npm run build:visual &&"),
+                f"{name} compares against an export nobody stamped with the pinned date",
+            )
+        self.assertIn(
+            "npm run build:visual",
+            read(CONTAINER_SCRIPT),
+            "the capture container builds with a different stamp than the comparison does",
+        )
+
+    def test_spec_freezes_the_relative_published_label(self) -> None:
+        """The suite overwrites the relative label before it screenshots.
+
+        The chip rewrites itself from Date.now() after hydration, so the phrase it shows is
+        a function of when the browser ran.  Without this the same page reports a changed
+        baseline every day the golden ages.
+        """
+        spec = read(SPEC)
+        self.assertRegex(
+            spec,
+            r"ez-published-chip time\[datetime]",
+            "the spec does not retarget the published chip's time element",
+        )
+        self.assertIn("getUTCDate", spec, "the frozen label is not the absolute UTC date")
+    def test_captured_routes_exist_in_the_docs_tree(self) -> None:
+        """Every page the suite captures maps to a real page under ``docs/``.
+
+        The captured page list was ported from the MkDocs site and rotted quietly: a route the
+        export does not have is served as the 404 page, which still carries an h1, so every
+        wait in the spec passed and the suite baselined a blank frame. The goldens guard only
+        asks whether a file exists, so it stayed green. Cross-checking the list against the
+        source tree catches that without building the site.
+        """
+        spec = read(SPEC)
+        routes = re.findall(r'^\s*\[\s*"[^"]+"\s*,\s*"(/[^"]*)"'  , spec, re.M)
+        self.assertGreaterEqual(len(routes), 8, "the suite captures too few pages to gate anything")
+        docs = PACKAGE_DIR.parent / "docs"
+        for route in routes:
+            if route.startswith("/generated/"):
+                continue  # rendered from the workflow corpus, not from a checked-in page
+            stem = route.strip("/") or "index"
+            candidates = [docs / (stem + ".mdx"), docs / (stem + ".md")]
+            self.assertTrue(
+                any(path.is_file() for path in candidates),
+                f"the suite captures {route!r}, which has no page under {docs}",
+            )
+
+    def test_spec_refuses_to_baseline_a_failed_navigation(self) -> None:
+        """A route that does not resolve fails the run instead of baselining the 404 page.
+
+        Without a status check a stale route is indistinguishable from a real page, because
+        the export serves a 404 document that satisfies the h1 wait.
+        """
+        spec = read(SPEC)
+        self.assertRegex(
+            spec,
+            r"response\?\.ok\(\)",
+            "the spec never checks that the navigation succeeded",
+        )
+        self.assertRegex(spec, r"page\.goto\(", "the spec does not navigate to the page list")
+
+    def test_launcher_offers_a_readiness_probe(self) -> None:
+        """The launcher can answer "can this host run the lane" without starting a capture.
+
+        ``//:everything`` gates the lane on that answer, and a daemon that lives elsewhere (a
+        DinD sidecar, a remote context) accepts a --volume whose source it cannot see and mounts
+        an empty /lab. Only a container started from the image discovers that, so the probe has
+        to ask the container rather than the client.
+        """
+        script = read(SCRIPT)
+        self.assertRegex(script, r"--check\)", "the launcher has no --check option")
+        self.assertIn("/lab", script, "the readiness probe does not use the capture mount point")
+        self.assertRegex(
+            script,
+            r"visual_linux_in_container\.sh",
+            "the readiness probe does not check that the checkout really arrived",
+        )
+
 class ImageResolutionTests(unittest.TestCase):
+
+
     """The helper that names the capture image resolves it from the checkout, not from Docker."""
 
     @staticmethod

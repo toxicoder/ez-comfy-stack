@@ -120,5 +120,6 @@ build artefacts and can be removed - they are gitignored.
 
 No gate was dropped: each MkDocs-era target was retargeted onto the Next app, and the CI
 `docs-and-render` job runs the same checks in the same order (fast gates, then export).
-Playwright visual goldens exist as a manual `//docs-site:visual-linux` path; they are not
-part of `docs-and-render` until a Linux baseline set is committed.
+Playwright visual goldens live behind the manual `//docs-site:visual-linux` path and are
+committed as a Linux-captured set, so gate 4 of `//:everything` compares against them in the
+pinned container; `docs-and-render` still holds them back with `--test_tag_filters=-visual`.

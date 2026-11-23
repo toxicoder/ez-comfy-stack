@@ -40,6 +40,19 @@ exit "${STUB_DOCKER:-1}"
 STUB
   chmod +x "${SCRATCH}/bin/docker"
   export STUB_DOCKER="${STUB_DOCKER:-1}"
+  # Stub the visual launcher's readiness probe: the real one starts a container, and this
+  # suite promises no Docker and no network. STUB_LAUNCHER_FAIL drives the negative case.
+  cat >"${SCRATCH}/visual-launcher" <<'STUB'
+#!/usr/bin/env bash
+if [[ "${STUB_LAUNCHER_FAIL:-0}" == "1" ]]; then
+  echo "${STUB_LAUNCHER_REASON:-the Docker daemon cannot read this checkout at /lab}"
+  exit 1
+fi
+echo "visual lane ready"
+exit 0
+STUB
+  chmod +x "${SCRATCH}/visual-launcher"
+  export VISUAL_LAUNCHER="${SCRATCH}/visual-launcher"
   export STUB_LOG="${SCRATCH}/calls.txt"
   : >"${STUB_LOG}"
 }
@@ -209,7 +222,7 @@ _place_baseline() {
 }
 
 @test "everything: a failing visual lane is reported by its own gate name" {
-  export STUB_EXIT="0,0,0,1,0,0"
+  export STUB_EXIT="0,0,0,1,0,0,0"
   _load_script
   _stub_docker 0
   _place_baseline
@@ -218,9 +231,10 @@ _place_baseline() {
   [[ "${output}" == *"gate //docs-site visual lane failed"* ]]
   [[ "${output}" == *"1 gate(s) failed: //docs-site visual lane"* ]]
   run cat "${STUB_LOG}"
-  [ "${lines[3]}" = "bazelisk test //docs-site:visual-test //docs-site:visual_tooling_test" ]
+  [ "${lines[3]}" = "bazelisk run //docs-site:visual-linux" ]
+  [ "${lines[4]}" = "bazelisk test //docs-site:visual_tooling_test" ]
   # The docs gates still ran after the visual failure.
-  [ "${lines[4]}" = "bazelisk run //docs:docs" ]
+  [ "${lines[5]}" = "bazelisk run //docs:docs" ]
 }
 
 @test "everything: a broken docs render-check is reported separately" {
@@ -299,14 +313,30 @@ _place_baseline() {
   [ -z "${output}" ]
 }
 
-@test "everything: the visual lane runs both targets when the host can support it" {
+@test "everything: the visual lane compares in the container and then runs the guard" {
   _load_script
   _stub_docker 0
   _place_baseline
   run run_visual_gate
   [ "$status" -eq 0 ]
   run cat "${STUB_LOG}"
-  [ "${lines[0]}" = "bazelisk test //docs-site:visual-test //docs-site:visual_tooling_test" ]
+  [ "${lines[0]}" = "bazelisk run //docs-site:visual-linux" ]
+  [ "${lines[1]}" = "bazelisk test //docs-site:visual_tooling_test" ]
+}
+
+@test "everything: the visual lane skips when the daemon cannot mount the checkout" {
+  # A DinD sidecar or a remote context accepts a --volume whose source it cannot see and
+  # mounts an empty /lab, so the capture would render ten copies of a blank frame.
+  _load_script
+  _stub_docker 0
+  _place_baseline
+  export STUB_LAUNCHER_FAIL=1
+  export STUB_LAUNCHER_REASON="the Docker daemon cannot read this checkout at /lab; it needs one that can bind-mount it"
+  run run_visual_gate
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *"SKIP docs-site visual lane (the Docker daemon cannot read this checkout"* ]]
+  [[ "${output}" == *"bazelisk run //docs-site:visual-linux -- --update"* ]]
+  [ ! -s "${STUB_LOG}" ]
 }
 
 @test "everything: the sweep touches no host-mutating verb" {

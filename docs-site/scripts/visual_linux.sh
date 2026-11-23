@@ -18,6 +18,7 @@
 #   bazelisk run //docs-site:visual-linux              # compare against committed baselines
 #   bazelisk run //docs-site:visual-linux -- --update  # rewrite baselines, then review diffs
 #   bazelisk run //docs-site:visual-linux -- --project desktop
+#   bazelisk run //docs-site:visual-linux -- --check     # report why the lane cannot run here
 #
 # Baselines land in docs-site/tests/visual/goldens/ in the checkout; review the image diff
 # before committing them.
@@ -33,15 +34,17 @@ if [[ -n ${BUILD_WORKSPACE_DIRECTORY:-} && -d "${BUILD_WORKSPACE_DIRECTORY}/docs
 fi
 
 usage() {
-  sed -n '3,25p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  sed -n '3,26p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
   exit "${1:-0}"
 }
 
+CHECK="false"
 UPDATE="false"
 PLAYWRIGHT_ARGS=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --update) UPDATE="true" ;;
+    --check) CHECK="true" ;;
     --help | -h) usage 0 ;;
     --)
       shift
@@ -107,6 +110,21 @@ for candidate in "${REFERENCES[@]}"; do
   fi
   echo "-> ${candidate} reported '${reported:-nothing}'; wanted ${EXPECTED_MACHINE}" >&2
 done
+if [[ ${CHECK} == "true" ]]; then
+  # Ask the container whether the checkout really arrived.  A daemon that lives somewhere else
+  # - a DinD sidecar, a remote context - accepts a --volume whose source it cannot see and
+  # silently mounts an empty /lab, so the capture would build nothing and every baseline would
+  # be the same blank frame.  Nothing else in this script distinguishes those two daemons.
+  if ! docker run --rm --platform "$PLATFORM" --volume "${REPO_ROOT}:/lab" \
+    --entrypoint test "$IMAGE" -f /lab/docs-site/scripts/visual_linux_in_container.sh \
+    >/dev/null 2>&1; then
+    echo "the Docker daemon cannot read this checkout at ${REPO_ROOT}; the lane needs a daemon that can bind-mount it"
+    exit 1
+  fi
+  echo "visual lane ready in ${IMAGE} (${PLATFORM})"
+  exit 0
+fi
+
 [[ -n $IMAGE ]] || {
   echo "no candidate image starts a ${PLATFORM} container (${EXPECTED_MACHINE})" >&2
   echo "baselines from the wrong renderer would fail the docs CI job, so this run stopped" >&2

@@ -299,3 +299,62 @@ teardown() {
   [[ ${output} == *'exited with status 1'* ]]
   [ "${hints}" -eq 1 ]
 }
+
+# A Bazel sh_test names $0 after the target and passes the npm script as $1, so the runner
+# has to resolve the script from the argument whenever the target name is not itself a
+# command. //docs-site:visual-test was unreachable for exactly this reason: it ran "npm
+# visual" and npm answered "Unknown command".
+_make_npm_stub() {
+  local pkg="$1"
+  mkdir -p "${pkg}/bin" "${pkg}/node_modules/.bin"
+  cat >"${pkg}/bin/npm" <<'STUB'
+#!/usr/bin/env bash
+printf '%s\n' "$@"
+STUB
+  chmod +x "${pkg}/bin/npm"
+  : >"${pkg}/node_modules/.bin/next"
+  : >"${pkg}/node_modules/.bin/vitest"
+  chmod +x "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+}
+
+@test "npm runner maps a gate target onto its npm script" {
+  local pkg
+  pkg="$(mktemp -d)"
+  _make_npm_stub "${pkg}"
+  cp "${REPO_ROOT}/docs-site/run_npm.sh" "${pkg}/visual-test"
+  run env PATH="${pkg}/bin:${PATH}" bash "${pkg}/visual-test" visual
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
+  [ "${lines[0]}" = "run" ]
+  [ "${lines[1]}" = "visual" ]
+  rm -f "${pkg}/bin/npm" "${pkg}/visual-test" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+  rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
+}
+
+@test "npm runner still resolves a target named after its script" {
+  local pkg
+  pkg="$(mktemp -d)"
+  _make_npm_stub "${pkg}"
+  cp "${REPO_ROOT}/docs-site/run_npm.sh" "${pkg}/typecheck"
+  run env PATH="${pkg}/bin:${PATH}" bash "${pkg}/typecheck" typecheck
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
+  [ "${lines[0]}" = "run" ]
+  [ "${lines[1]}" = "typecheck" ]
+  rm -f "${pkg}/bin/npm" "${pkg}/typecheck" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+  rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
+}
+
+@test "npm runner generic escape hatch forwards every argument" {
+  local pkg
+  pkg="$(mktemp -d)"
+  _make_npm_stub "${pkg}"
+  cp "${REPO_ROOT}/docs-site/run_npm.sh" "${pkg}/npm"
+  run env PATH="${pkg}/bin:${PATH}" bash "${pkg}/npm" ci --force
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
+  [ "${lines[0]}" = "ci" ]
+  [ "${lines[1]}" = "--force" ]
+  rm -f "${pkg}/bin/npm" "${pkg}/npm" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+  rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
+}
