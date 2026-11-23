@@ -37,7 +37,7 @@ Rules, matching what the hand-written corpus already does:
 from __future__ import annotations
 
 import re
-from typing import Iterator
+from typing import Iterable, Iterator
 
 MAX_TITLE_CHARS = 60
 
@@ -297,6 +297,7 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
             changed += 1
     bases = set(CLASS_TITLES.values())
     bases.update(title_for_class(str(node.get("type") or ""), 0, 1) for node in nodes)
+    widths = authored_number_widths(nodes)
     worn: set[tuple[str, str]] = set()
     worn_titles: set[str] = set()
     for node in sorted(nodes, key=_node_sort_key):
@@ -304,7 +305,10 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
         title = str(node.get("title") or "").strip()
         if title and (
             (node_type, title) in worn
-            or (title in worn_titles and _is_table_sourced(title, bases))
+            or (
+                title in worn_titles
+                and _is_table_sourced(title, bases, widths.get(node_type, frozenset()))
+            )
         ):
             title = _unique_title(title, taken)
             node["title"] = title
@@ -316,7 +320,55 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
     return changed
 
 
-def _is_table_sourced(title: str, bases: set[str]) -> bool:
+def _is_authored_number(tail: str) -> bool:
+    """Whether a trailing token is a zero-padded number the corpus typed.
+
+    The mirror of :func:`_is_pass_number`: the pass numbers with ``str(int)``,
+    so a leading zero can only have come from a person.
+
+    Arguments:
+        tail: The last whitespace-separated token of a title.
+
+    Returns:
+        ``True`` for an ASCII digit run that starts with ``0``.
+    """
+    return tail.isdigit() and tail.isascii() and tail.startswith("0")
+
+
+def authored_number_widths(
+    nodes: Iterable[dict[str, object]],
+) -> dict[str, frozenset[int]]:
+    """Return the digit widths of each class's own zero-padded numbering.
+
+    Read on its own, a two-digit tail is indistinguishable from the pass's own
+    tenth repeat, and blanking one beside the corpus's ``Sampler 01``..
+    ``Sampler 09`` re-derives it as ``Sampler 1``, leaving the canvas to read
+    ``01..09, 1``. A person types a run at one digit width, so every numbered
+    sibling of a class at that class's padded width is authored and stays.
+
+    Arguments:
+        nodes: Every node dict of one graph, in any order.
+
+    Returns:
+        Per node type, the digit widths its zero-padded numbered titles use.
+    """
+    widths: dict[str, set[int]] = {}
+    for node in nodes:
+        node_type = str(node.get("type") or "")
+        base = title_for_class(node_type, 0, 1)
+        prefix = f"{base} "
+        title = str(node.get("title") or "").strip()
+        if not title.startswith(prefix):
+            continue
+        tail = title[len(prefix) :]
+        if _is_authored_number(tail):
+            widths.setdefault(node_type, set()).add(len(tail))
+    return {node_type: frozenset(seen) for node_type, seen in widths.items()}
+
+
+def _is_table_sourced(
+    title: str, bases: set[str], widths: frozenset[int] = frozenset()
+) -> bool:
     """Whether a title is a label the title pass writes, not an operator's prose.
 
     ``test_lab_titles._is_table_sourced`` is this predicate verbatim: what this
@@ -332,14 +384,17 @@ def _is_table_sourced(title: str, bases: set[str]) -> bool:
     Returns:
         ``True`` for a label in the table and for that label with a plain ASCII
         counting number on the end. A leading zero is the operator's own
-        numbering, so it is not table-sourced.
+        numbering, so it is not table-sourced, and so is a number at the width
+        this class's own padded run uses - see ``authored_number_widths``,
+        without which a ``Sampler 10`` typed beside ``Sampler 09`` reads as the
+        pass's tenth repeat.
     """
     if title in bases:
         return True
     stem, sep, tail = title.rpartition(" ")
     if not sep or stem not in bases:
         return False
-    return _is_pass_number(tail)
+    return _is_pass_number(tail) and len(tail) not in widths
 
 
 def _title_needs_setting(node: dict[str, object]) -> bool:

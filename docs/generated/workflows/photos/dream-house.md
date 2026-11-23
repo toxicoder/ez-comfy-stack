@@ -131,7 +131,7 @@ flowchart TB
 | 54 | Save 09 | `SaveImage` | SHOT 09 drone |
 | 55 | SHOT 10 study | `EZPromptJoin` | SHOT 10 study |
 | 56 | Positive 10 | `CLIPTextEncode` | SHOT 10 study |
-| 57 | Sampler 1 | `KSampler` | SHOT 10 study |
+| 57 | Sampler 10 | `KSampler` | SHOT 10 study |
 | 58 | Decode 10 | `VAEDecode` | SHOT 10 study |
 | 59 | Save 10 | `SaveImage` | SHOT 10 study |
 | 60 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |

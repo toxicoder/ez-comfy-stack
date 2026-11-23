@@ -29,6 +29,7 @@ from _lab_paths import cached_lab_graph_rows
 from _lab_titles import (
     CLASS_TITLES,
     _is_pass_number,
+    authored_number_widths,
     ensure_node_titles,
     title_for_class,
 )
@@ -95,7 +96,9 @@ def _title_findings(node: dict[str, Any]) -> list[str]:
     return findings
 
 
-def _is_table_sourced(title: str, bases: set[str]) -> bool:
+def _is_table_sourced(
+    title: str, bases: set[str], widths: frozenset[int] = frozenset()
+) -> bool:
     """Whether a title is one the title pass writes for some class.
 
     Args:
@@ -107,19 +110,22 @@ def _is_table_sourced(title: str, bases: set[str]) -> bool:
         plain ASCII counting number on the end; an operator's own wording is
         never table-sourced, so a hand-written cross-class pair is nobody's
         defect. A leading zero means the operator wrote the number, so that is
-        not table-sourced either. ``_lab_titles._is_table_sourced`` is this
-        predicate, built on the same ``_is_pass_number``: it is the cross-class
-        half of the duplicate rule, the half that numbers one table label two
-        classes both wear, so what this gate calls a duplicate here is exactly
-        what the pass renumbers. Repeats inside one class are the wider half,
-        and :func:`_same_class_findings` holds that one.
+        not table-sourced either, and neither is a number at the width that
+        class's own padded run uses - see ``authored_number_widths``, without
+        which a ``Sampler 10`` typed beside ``Sampler 09`` reads as the pass's
+        tenth repeat. ``_lab_titles._is_table_sourced`` is this predicate,
+        built on the same ``_is_pass_number``: it is the cross-class half of
+        the duplicate rule, the half that numbers one table label two classes
+        both wear, so what this gate calls a duplicate here is exactly what the
+        pass renumbers. Repeats inside one class are the wider half, and
+        :func:`_same_class_findings` holds that one.
     """
     if title in bases:
         return True
     stem, sep, tail = title.rpartition(" ")
     if not sep or stem not in bases:
         return False
-    return _is_pass_number(tail)
+    return _is_pass_number(tail) and len(tail) not in widths
 
 
 def _table_sourced_findings(graph: dict[str, Any]) -> list[str]:
@@ -145,10 +151,12 @@ def _table_sourced_findings(graph: dict[str, Any]) -> list[str]:
     nodes = _nodes_of(graph)
     bases = set(CLASS_TITLES.values())
     bases.update(title_for_class(str(node.get("type") or ""), 0, 1) for node in nodes)
+    widths = authored_number_widths(nodes)
     worn: dict[str, list[Any]] = {}
     for node in nodes:
         title = str(node.get("title") or "").strip()
-        if title and _is_table_sourced(title, bases):
+        class_widths = widths.get(str(node.get("type") or ""), frozenset())
+        if title and _is_table_sourced(title, bases, class_widths):
             worn.setdefault(title, []).append(node.get("id"))
     return [
         f"title {title!r} is carried by nodes " + ", ".join(str(i) for i in ids)
@@ -478,6 +486,45 @@ def test_the_reset_only_blanks_titles_the_pass_could_have_written() -> None:
     assert [node["title"] for node in graph["nodes"]][4] == authored[2]
     assert ensure_node_titles(graph) == 2
     assert [str(node["title"]) for node in graph["nodes"]] == titles
+
+
+def test_an_authored_padded_run_keeps_its_two_digit_sibling() -> None:
+    """``Sampler 10`` beside an authored ``Sampler 01``..``Sampler 09`` stays put.
+
+    Read on its own a two-digit tail is indistinguishable from the pass's own
+    tenth repeat, and blanking it next to a padded run re-derived the node as
+    ``Sampler 1``: the canvas then read ``01..09, 1`` and the tenth tile looked
+    like the first. An operator types a run at one digit width, so a sibling at
+    that class's padded width belongs to the run.
+    """
+    graph = _graph(
+        *[_node(index, "KSampler", f"Sampler {index:02d}") for index in range(1, 10)],
+        _node(10, "KSampler", "Sampler 10"),
+    )
+    wanted = [f"Sampler {index:02d}" for index in range(1, 10)] + ["Sampler 10"]
+
+    _reset_generated_titles(graph)
+    assert [str(node["title"]) for node in graph["nodes"]] == wanted
+    assert ensure_node_titles(graph) == 0
+    assert not _same_class_findings(graph)
+    assert not _table_sourced_findings(graph)
+
+
+def test_the_padded_dream_house_run_reads_one_to_ten() -> None:
+    """The shipped padded sampler runs number through their tenth sampler."""
+    wanted = [f"Sampler {index:02d}" for index in range(1, 10)] + ["Sampler 10"]
+    seen: dict[str, list[str]] = {}
+    for lab_rel, _path, data in cached_lab_graph_rows():
+        if lab_rel in {"photos/dream-house", "photos/dream-house-clay"}:
+            seen[lab_rel] = [
+                str(node.get("title") or "")
+                for node in _nodes_of(data)
+                if str(node.get("type") or "") == "KSampler"
+            ]
+
+    assert sorted(seen) == ["photos/dream-house", "photos/dream-house-clay"]
+    for lab_rel, titles in sorted(seen.items()):
+        assert titles == wanted, lab_rel
 
 
 def test_the_gate_leaves_a_cross_class_untabled_twin_alone() -> None:

@@ -33,7 +33,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from _lab_titles import ensure_node_titles, title_for_class
+from _lab_titles import authored_number_widths, ensure_node_titles
+from _lab_titles import title_for_class
 
 ROOT = Path(__file__).resolve().parents[2]
 LAB_ROOT = ROOT / "workflows" / "_lab"
@@ -74,25 +75,39 @@ def _nodes_of(graph: dict[str, Any]) -> list[dict[str, Any]]:
     return nodes
 
 
-def _is_generated_title(title: str, node_type: str) -> bool:
+def _is_generated_title(title: str, node_type: str, widths: frozenset[int]) -> bool:
     """Whether a title is one the title pass wrote rather than an operator typed.
+
+    Blanking a title is the one way a re-run can renumber a node, so the two
+    sides of this have to agree with ``_lab_titles._is_table_sourced``: what
+    this blanks, the pass re-derives.
 
     Arguments:
         title: The title a node carries, already stripped.
         node_type: Node ``type``.
+        widths: This class's own padded digit widths, from
+            ``authored_number_widths``.
     Returns:
         ``True`` for the label ``title_for_class`` gives this class and for that
         label with a plain ASCII counting number on the end, which is everything
         a re-run has to recompute to stay collision-free. A leading zero is the
         operator's numbering (the corpus ships ``Sampler 01``..``Sampler 06``),
-        never the pass's, so such a title stays as authored.
+        never the pass's, and so is any number at the width that padded run
+        uses - blanking ``Sampler 10`` beside ``Sampler 09`` would re-derive it
+        as ``Sampler 1``. With a padded run present, even the bare label is the
+        operator's: the pass only writes that for a class with one node.
     """
     base = title_for_class(node_type, 0, 1)
     if title == base:
-        return True
+        return not widths
     prefix = f"{base} "
     tail = title[len(prefix) :] if title.startswith(prefix) else ""
-    return tail.isdigit() and tail.isascii() and not tail.startswith("0")
+    return (
+        tail.isdigit()
+        and tail.isascii()
+        and not tail.startswith("0")
+        and len(tail) not in widths
+    )
 
 
 def _reset_generated_titles(graph: dict[str, object]) -> None:
@@ -104,10 +119,13 @@ def _reset_generated_titles(graph: dict[str, object]) -> None:
     Arguments:
         graph: Comfy workflow dict (mutated).
     """
-    for node in _nodes_of(graph):
+    nodes = _nodes_of(graph)
+    widths = authored_number_widths(nodes)
+    for node in nodes:
         raw = node.get("title")
         title = raw.strip() if isinstance(raw, str) else ""
-        if title and _is_generated_title(title, str(node.get("type") or "")):
+        node_type = str(node.get("type") or "")
+        if title and _is_generated_title(title, node_type, widths.get(node_type, frozenset())):
             node["title"] = ""
 
 

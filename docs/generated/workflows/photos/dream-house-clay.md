@@ -178,7 +178,7 @@ flowchart TB
 | 112 | Clay 10 (ez_house_clay_10.png) | `LoadImage` | SHOT 10 study |
 | 113 | Encode clay 10 | `VAEEncode` | SHOT 10 study |
 | 114 | Positive + clay 10 | `ReferenceLatent` | SHOT 10 study |
-| 115 | Sampler 1 | `KSampler` | SHOT 10 study |
+| 115 | Sampler 10 | `KSampler` | SHOT 10 study |
 | 116 | Decode 10 | `VAEDecode` | SHOT 10 study |
 | 117 | Save 10 | `SaveImage` | SHOT 10 study |
 | 118 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
