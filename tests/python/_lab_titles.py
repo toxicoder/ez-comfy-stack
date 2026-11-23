@@ -200,24 +200,32 @@ def _derived_title(node_type: str) -> str:
     return title
 
 
-def title_for_class(node_type: str, index: int, total: int) -> str:
+def title_for_class(
+    node_type: str, index: int, total: int, pad: int = 0
+) -> str:
     """Return the label a node of this class should carry.
 
     Samplers are numbered: one sampler in a graph reads ``Sampler``, several
     read ``Sampler 1``..``Sampler N``, so ``index`` (0-based) and ``total``
     matter only for ``SAMPLER_CLASSES``.
 
+    A graph whose samplers an operator numbered ``Sampler 01``..``Sampler 09``
+    is answered in kind: ``pad`` (the digit width that run uses, from
+    ``authored_number_widths``) keeps an added sampler at ``Sampler 10``
+    instead of handing back ``Sampler 1``, which reads as the first tile.
+
     Arguments:
         node_type: Node ``type``.
         index: Position of this node among the samplers of its graph.
         total: Number of samplers in the graph.
+        pad: Digit width to write the sampler number at; ``0`` is plain.
     Returns:
         The title text, 60 characters or fewer.
     """
     if node_type in SAMPLER_CLASSES:
         if total <= 1:
             return "Sampler"
-        return f"Sampler {index + 1}"
+        return f"Sampler {index + 1:0{max(pad, 1)}d}"
     seeded = CLASS_TITLES.get(node_type)
     if seeded:
         return seeded
@@ -250,6 +258,7 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
         The number of nodes whose ``title`` changed.
     """
     nodes = list(_iter_nodes(graph))
+    widths = authored_number_widths(nodes)
     taken = {
         stripped
         for node in nodes
@@ -265,8 +274,15 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
     position = 0
     for node in samplers:
         if _title_needs_setting(node):
+            node_type = str(node.get("type") or "")
+            run_widths = widths.get(title_for_class(node_type, 0, 1), frozenset())
             title = _unique_title(
-                title_for_class(str(node.get("type") or ""), position, sampler_total),
+                title_for_class(
+                    node_type,
+                    position,
+                    sampler_total,
+                    max(run_widths, default=0),
+                ),
                 taken,
             )
             node["title"] = title
@@ -297,7 +313,6 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
             changed += 1
     bases = set(CLASS_TITLES.values())
     bases.update(title_for_class(str(node.get("type") or ""), 0, 1) for node in nodes)
-    widths = authored_number_widths(nodes)
     worn: set[tuple[str, str]] = set()
     worn_titles: set[str] = set()
     for node in sorted(nodes, key=_node_sort_key):
@@ -307,7 +322,9 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
             (node_type, title) in worn
             or (
                 title in worn_titles
-                and _is_table_sourced(title, bases, widths.get(node_type, frozenset()))
+                and _is_table_sourced(
+                    title, bases, widths.get(title_for_class(node_type, 0, 1), frozenset())
+                )
             )
         ):
             title = _unique_title(title, taken)
@@ -344,26 +361,30 @@ def authored_number_widths(
     tenth repeat, and blanking one beside the corpus's ``Sampler 01``..
     ``Sampler 09`` re-derives it as ``Sampler 1``, leaving the canvas to read
     ``01..09, 1``. A person types a run at one digit width, so every numbered
-    sibling of a class at that class's padded width is authored and stays.
+    title at that run's width is authored and stays.
+
+    The key is the label rather than the node type, because that is what was
+    typed: ``KSampler`` and ``KSamplerAdvanced`` both read ``Sampler``, and a
+    ``Sampler 10`` on one beside a padded run on the other is the same run.
 
     Arguments:
         nodes: Every node dict of one graph, in any order.
 
     Returns:
-        Per node type, the digit widths its zero-padded numbered titles use.
+        Per generated label, the digit widths its zero-padded numbered titles
+        use.
     """
     widths: dict[str, set[int]] = {}
     for node in nodes:
-        node_type = str(node.get("type") or "")
-        base = title_for_class(node_type, 0, 1)
+        base = title_for_class(str(node.get("type") or ""), 0, 1)
         prefix = f"{base} "
         title = str(node.get("title") or "").strip()
         if not title.startswith(prefix):
             continue
         tail = title[len(prefix) :]
         if _is_authored_number(tail):
-            widths.setdefault(node_type, set()).add(len(tail))
-    return {node_type: frozenset(seen) for node_type, seen in widths.items()}
+            widths.setdefault(base, set()).add(len(tail))
+    return {base: frozenset(seen) for base, seen in widths.items()}
 
 
 def _is_table_sourced(
@@ -464,8 +485,11 @@ def _unique_title(title: str, taken: set[str]) -> str:
     unique = title
     while unique in taken:
         stem, sep, tail = unique.rpartition(" ")
-        if sep and _is_pass_number(tail):
-            unique = f"{stem} {_next_number(unique)}"
+        if sep and tail.isdigit() and tail.isascii():
+            # Bump in the candidate's own digit width, so clearing a padded
+            # ``Sampler 01`` walks to ``Sampler 02``..``Sampler 10`` rather
+            # than dropping to an unpadded number the run never used.
+            unique = f"{stem} {_next_number(unique):0>{len(tail)}}"
         else:
             unique = f"{unique} {_next_number(unique)}"
     return unique

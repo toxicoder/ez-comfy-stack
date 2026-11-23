@@ -85,8 +85,8 @@ def _is_generated_title(title: str, node_type: str, widths: frozenset[int]) -> b
     Arguments:
         title: The title a node carries, already stripped.
         node_type: Node ``type``.
-        widths: This class's own padded digit widths, from
-            ``authored_number_widths``.
+        widths: The padded digit widths this node's generated label wears,
+            from ``authored_number_widths``.
     Returns:
         ``True`` for the label ``title_for_class`` gives this class and for that
         label with a plain ASCII counting number on the end, which is everything
@@ -124,8 +124,11 @@ def _reset_generated_titles(graph: dict[str, object]) -> None:
     for node in nodes:
         raw = node.get("title")
         title = raw.strip() if isinstance(raw, str) else ""
+        if not title:
+            continue
         node_type = str(node.get("type") or "")
-        if title and _is_generated_title(title, node_type, widths.get(node_type, frozenset())):
+        run_widths = widths.get(title_for_class(node_type, 0, 1), frozenset())
+        if _is_generated_title(title, node_type, run_widths):
             node["title"] = ""
 
 

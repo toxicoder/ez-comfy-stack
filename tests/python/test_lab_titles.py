@@ -155,8 +155,10 @@ def _table_sourced_findings(graph: dict[str, Any]) -> list[str]:
     worn: dict[str, list[Any]] = {}
     for node in nodes:
         title = str(node.get("title") or "").strip()
-        class_widths = widths.get(str(node.get("type") or ""), frozenset())
-        if title and _is_table_sourced(title, bases, class_widths):
+        label_widths = widths.get(
+            title_for_class(str(node.get("type") or ""), 0, 1), frozenset()
+        )
+        if title and _is_table_sourced(title, bases, label_widths):
             worn.setdefault(title, []).append(node.get("id"))
     return [
         f"title {title!r} is carried by nodes " + ", ".join(str(i) for i in ids)
@@ -451,7 +453,10 @@ def test_the_reset_only_blanks_titles_the_pass_could_have_written() -> None:
 
     ``Sampler 01``..``Sampler 06`` is vocabulary the corpus ships with and the
     pass numbers with ``str(int)``, so a leading zero marks a title that is not
-    the pass's and must survive every re-run untouched.
+    the pass's and must survive every re-run untouched. An unpadded ``Sampler 2``
+    beside that run is the pass's own, so it is blanked and numbered clear - in
+    the run's width, which is why it lands on ``Sampler 03``. A number the pass
+    wrote at the run's width then reads as authored on the next run, and stays.
     """
     graph = _graph(
         _node(1, "KSampler", "Sampler 01"),
@@ -475,7 +480,7 @@ def test_the_reset_only_blanks_titles_the_pass_could_have_written() -> None:
     assert titles == [
         "Sampler 01",
         "Sampler 02",
-        "Sampler 1",
+        "Sampler 03",
         "Upscale still",
         "Sampler CLOSE",
     ]
@@ -484,7 +489,7 @@ def test_the_reset_only_blanks_titles_the_pass_could_have_written() -> None:
     _reset_generated_titles(graph)
     assert [node["title"] for node in graph["nodes"]][:2] == authored[:2]
     assert [node["title"] for node in graph["nodes"]][4] == authored[2]
-    assert ensure_node_titles(graph) == 2
+    assert ensure_node_titles(graph) == 1
     assert [str(node["title"]) for node in graph["nodes"]] == titles
 
 
@@ -506,6 +511,50 @@ def test_an_authored_padded_run_keeps_its_two_digit_sibling() -> None:
     _reset_generated_titles(graph)
     assert [str(node["title"]) for node in graph["nodes"]] == wanted
     assert ensure_node_titles(graph) == 0
+    assert not _same_class_findings(graph)
+    assert not _table_sourced_findings(graph)
+
+
+def test_a_padded_run_shields_the_label_not_only_the_class() -> None:
+    """A person types a label, and both sampler classes read ``Sampler``.
+
+    ``KSamplerAdvanced`` and ``KSampler`` share one generated label, so a
+    ``Sampler 10`` typed on the advanced node beside a ``KSampler``
+    ``Sampler 01``..``Sampler 09`` is one run wearing one label. Keying the
+    shield on the class left that tile to be re-derived as ``Sampler 1``.
+    """
+    graph = _graph(
+        *[_node(index, "KSampler", f"Sampler {index:02d}") for index in range(1, 10)],
+        _node(10, "KSamplerAdvanced", "Sampler 10"),
+    )
+    wanted = [f"Sampler {index:02d}" for index in range(1, 10)] + ["Sampler 10"]
+
+    _reset_generated_titles(graph)
+    assert [str(node["title"]) for node in graph["nodes"]] == wanted
+    assert ensure_node_titles(graph) == 0
+    assert not _same_class_findings(graph)
+    assert not _table_sourced_findings(graph)
+
+
+def test_the_pass_continues_a_padded_run_it_did_not_write() -> None:
+    """A tenth sampler added to ``Sampler 01``..``Sampler 09`` reads ``Sampler 10``.
+
+    The pass numbers with ``str(int)``, so the node a builder appends to an
+    authored padded run came out ``Sampler 1`` - the tile that reads like the
+    first, which is the defect the shield exists to stop, on the write side.
+    """
+    graph = _graph(
+        *[_node(index, "KSampler", f"Sampler {index:02d}") for index in range(1, 10)],
+        _node(10, "KSampler", ""),
+        _node(11, "KSampler", ""),
+    )
+
+    assert ensure_node_titles(graph) == 2
+    titles = [str(node["title"]) for node in graph["nodes"]]
+    assert titles == [f"Sampler {index:02d}" for index in range(1, 10)] + [
+        "Sampler 10",
+        "Sampler 11",
+    ]
     assert not _same_class_findings(graph)
     assert not _table_sourced_findings(graph)
 
