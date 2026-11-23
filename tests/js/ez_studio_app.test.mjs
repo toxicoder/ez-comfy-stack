@@ -82,6 +82,39 @@ describe("widget labels", () => {
     await ext.nodeCreated(node);
     assert.equal(node.widgets[0].label, "Repeat");
   });
+
+  test("a selector or input socket the graph left in snake_case reads as a word", async () => {
+    // LABELS is class-agnostic, so one node carries the widget names the
+    // shipped graphs use across several first-party classes, plus one entry
+    // the map has covered all along.
+    const node = makeNode("EZPromptJoin", [
+      makeWidget("family", "klein"),
+      makeWidget("filename_2", ""),
+      makeWidget("bed", ""),
+      makeWidget("lock", "view"),
+      makeWidget("backend", "kokoro"),
+      makeWidget("flavor", "podcast_two_host"),
+      makeWidget("layer", "clay"),
+      makeWidget("size_src", ""),
+      makeWidget("duration_hint", "wide 8s"),
+    ]);
+    const { ext } = await chrome([node]);
+    await ext.nodeCreated(node);
+    const labels = Object.fromEntries(
+      node.widgets.map((widget) => [widget.name, widget.label]),
+    );
+    assert.deepEqual(labels, {
+      family: "Model family",
+      filename_2: "Choose image 2",
+      bed: "Music bed",
+      lock: "Shot lock",
+      backend: "Voice engine",
+      flavor: "Script style",
+      layer: "Render layer",
+      size_src: "Size reference",
+      duration_hint: "Duration / framing",
+    });
+  });
 });
 
 describe("node titles", () => {

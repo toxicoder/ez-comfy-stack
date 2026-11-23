@@ -139,7 +139,7 @@ this order, and the first one that exists wins:
 | Order | The row reads | Why it wins |
 | --- | --- | --- |
 | 1 | The label the graph stamps | `extra.linearData.inputs` holds `[nodeId, widgetName, config]`, and a `config.label` is written by the graph that knows what this knob is for in this shot |
-| 2 | A word from the chrome's own table | 118 entries map a raw widget name to a label, covering the first-party knobs the shipped graphs leave in `snake_case` (`upscale` reads **Upscale by**, `params_json` reads **Parameters (JSON)**, `speaker_a_ref` reads **Speaker A reference WAV**) plus the core ComfyUI and VHS rows those graphs also leave unlabelled (`sampler_name` -> **Sampler**, `noise_seed` -> **Seed**, `filename_prefix` -> **Output filename**) |
+| 2 | A word from the chrome's own table | 133 entries map a raw widget name to a label, covering the first-party knobs the shipped graphs leave in `snake_case` (`upscale` reads **Upscale by**, `params_json` reads **Parameters (JSON)**, `speaker_a_ref` reads **Speaker A reference WAV**), the input sockets a graph hands in (`latent` -> **Latent**, `vae` -> **VAE**, `bed` -> **Music bed**, `size_src` -> **Size reference**), plus the core ComfyUI and VHS rows those graphs also leave unlabelled (`sampler_name` -> **Sampler**, `noise_seed` -> **Seed**, `filename_prefix` -> **Output filename**) |
 | 3 | The raw widget name | Neither the graph nor the table named it, so the row prints `snake_case`. That is the one case to report: [Troubleshooting](troubleshooting.md#app-chrome-input-plates-tooltips-and-mcp-arguments) |
 
 One built-in case sits between rows 1 and 2: **Rewrite negative** on `EZNegativePromptEnhance`. That
