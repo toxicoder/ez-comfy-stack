@@ -611,27 +611,34 @@ def main(argv: list[str] | None = None) -> int:
         argv: Optional args without program name. Default ``/inputs``.
 
     Returns:
-        0 on success; 1 on refuse / IO error.
+        0 on success; 1 when any stage refused or hit an IO error.
     """
     args = list(sys.argv[1:] if argv is None else argv)
     dest = Path(args[0] if args else "/inputs")
+    # The three stages are attempted independently: an unwritable plate must
+    # not quietly take the audio bed down with it, so every failure is
+    # collected and named rather than short-circuiting the run.
+    written: list[Path] = []
+    failed = False
     try:
         written = seed_clay_inputs(dest)
+    except (OSError, ValueError) as exc:
+        print(f"[seed-clay] failed: {exc}", file=sys.stderr)
+        failed = True
+    example: Path | None = None
+    try:
         example = seed_example_input(dest)
     except (OSError, ValueError) as exc:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
-        return 1
-    bed: Path | None
+        failed = True
+    bed: Path | None = None
     try:
         bed = seed_audio_bed_input(dest)
     except (OSError, ValueError) as exc:
         # A bed that will not seed is its own line: the plates really did land
         # and the operator should not be told to go look for a plate problem.
         print(f"[seed-clay] audio bed not seeded: {exc}", file=sys.stderr)
-        bed = None
         failed = True
-    else:
-        failed = False
     seeded = f"; wrote {EXAMPLE_NAME}" if example is not None else ""
     if bed is not None:
         seeded += f"; wrote {AUDIO_BED_NAME}"

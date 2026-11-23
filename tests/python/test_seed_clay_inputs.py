@@ -521,6 +521,68 @@ def test_main_reports_plates_when_only_the_bed_fails(
     assert seed.AUDIO_BED_NAME not in captured.out
 
 
+def test_main_seeds_the_bed_when_a_plate_write_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A plate that will not write must not take the audio bed down with it."""
+    dest = tmp_path / "in"
+
+    def _boom(_path: str | Path) -> list[Path]:
+        raise PermissionError(13, "Permission denied", str(dest / "cover.png"))
+
+    monkeypatch.setattr(seed, "seed_clay_inputs", _boom)
+    assert seed.main([str(dest)]) == 1
+    assert (dest / seed.AUDIO_BED_NAME).is_file()
+    assert (dest / seed.EXAMPLE_NAME).is_file()
+    captured = capsys.readouterr()
+    assert "failed: [Errno 13] Permission denied" in captured.err
+    assert "cover.png" in captured.err
+    assert "plates ready" in captured.out
+    assert f"wrote {seed.AUDIO_BED_NAME}" in captured.out
+
+
+def test_main_seeds_the_bed_when_the_example_plate_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The example plate is its own stage: it neither leads nor blocks the rest."""
+    dest = tmp_path / "in"
+
+    def _boom(_path: str | Path) -> Path | None:
+        raise PermissionError(13, "Permission denied", str(dest / seed.EXAMPLE_NAME))
+
+    monkeypatch.setattr(seed, "seed_example_input", _boom)
+    assert seed.main([str(dest)]) == 1
+    assert seed.clay_plate_valid(dest / seed.clay_copy_name(0))
+    assert (dest / seed.PLACEHOLDER_PLATES[0].name).is_file()
+    assert (dest / seed.AUDIO_BED_NAME).is_file()
+    captured = capsys.readouterr()
+    assert "failed: [Errno 13] Permission denied" in captured.err
+    assert "10 plates ready" in captured.out
+    assert f"wrote {seed.EXAMPLE_NAME}" not in captured.out
+
+
+def test_main_keeps_every_plate_when_the_bed_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The mirror of the bed line: plates that landed are on disk, not just named."""
+    dest = tmp_path / "in"
+
+    def _boom(_path: str | Path) -> Path | None:
+        raise PermissionError(13, "Permission denied", str(dest / seed.AUDIO_BED_NAME))
+
+    monkeypatch.setattr(seed, "seed_audio_bed_input", _boom)
+    assert seed.main([str(dest)]) == 1
+    for index in range(seed.CLAY_COUNT):
+        assert seed.clay_plate_valid(dest / seed.clay_copy_name(index))
+    assert all((dest / plate.name).is_file() for plate in seed.PLACEHOLDER_PLATES)
+    assert (dest / seed.EXAMPLE_NAME).is_file()
+    assert not (dest / seed.AUDIO_BED_NAME).exists()
+    captured = capsys.readouterr()
+    assert "audio bed not seeded" in captured.err
+    assert "10 plates ready" in captured.out
+    assert f"wrote {seed.AUDIO_BED_NAME}" not in captured.out
+
+
 def test_main_still_refuses_a_models_dir_target(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
