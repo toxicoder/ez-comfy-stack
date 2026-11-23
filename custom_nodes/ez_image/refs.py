@@ -268,6 +268,27 @@ def _has_palette_transparency(image: PilImage, bands: tuple[str, ...]) -> bool:
     return info.get("transparency") is not None
 
 
+def _alpha_band(image: PilImage) -> str:
+    """Return the name of this image's alpha band, or ``""`` when it carries none.
+
+    ``getbands()`` cannot answer this: Pillow names the CIELAB green-red axis
+    ``"A"`` too, so a band probe reads a Lab still as alpha-bearing and pastes
+    it onto the backdrop through its own colour. The mode spells its alpha band
+    last - ``RGBA``, ``LA`` and ``PA`` carry a straight ``"A"``, ``RGBa`` and
+    ``La`` a premultiplied ``"a"`` - while ``LAB`` ends on its ``"B"``. A
+    palette image names no alpha band at all, which is what
+    :func:`_has_palette_transparency` is there to see past.
+
+    Arguments:
+        image: Oriented PIL image.
+
+    Returns:
+        ``"A"`` or ``"a"`` for a mode that carries alpha, else ``""``.
+    """
+    mode = str(getattr(image, "mode", ""))
+    return mode[-1:] if mode[-1:] in ("A", "a") else ""
+
+
 def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
     """Composite a stored alpha band onto a flat backdrop.
 
@@ -282,7 +303,12 @@ def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
     ``convert("RGBA")`` builds for it, which is where Pillow applies that
     transparency. The same RGBA view feeds both the extrema probe and the
     paste, so a logo or sticker saved as palette PNG lands on ``backdrop``
-    like any other cutout instead of on its palette colour.
+    like any other cutout instead of on its palette colour. A premultiplied
+    ``RGBa`` pick reaches for that view for the same reason.
+
+    Alpha presence comes from the mode, never the band names: Pillow calls the
+    CIELAB green-red axis ``"A"``, and a ``LAB`` still has to be read as the
+    opaque colour it is. See :func:`_alpha_band`.
 
     Args:
         image: Oriented PIL image.
@@ -301,15 +327,18 @@ def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
         bands = None
     if bands is None:
         bands = tuple(str(getattr(image, "mode", "")))
-    has_alpha = "A" in bands
+    alpha_band = _alpha_band(image)
     try:
         from PIL import Image
     except Exception:  # noqa: BLE001 - Pillow build without Image
         return image
     try:
-        if not has_alpha and not _has_palette_transparency(image, bands):
+        if not alpha_band and not _has_palette_transparency(image, bands):
             return image
-        source: PilImage = image if has_alpha else image.convert("RGBA")
+        # A premultiplied ``a`` band already holds values scaled by their own
+        # alpha, so that composite runs off the RGBA view Pillow un-scales; a
+        # straight ``A`` band is the coverage the paste wants as it stands.
+        source: PilImage = image if alpha_band == "A" else image.convert("RGBA")
         alpha = source.getchannel("A")
         extrema = alpha.getextrema()
         if extrema is not None and len(extrema) == 2:

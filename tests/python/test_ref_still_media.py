@@ -491,6 +491,59 @@ def test_a_palette_that_cannot_expand_keeps_the_stored_pixels(
     assert stage.flat_out.pasted == []
 
 
+def test_a_lab_still_is_never_composited_through_its_colour(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A CIELAB TIFF keeps its pixels: the ``A`` in ``LAB`` is a colour axis.
+
+    ``getbands()`` names the green-red axis ``"A"``, so a band probe reads a Lab
+    still as alpha-bearing and pastes it onto the backdrop through its colour.
+    The mode names the alpha band instead, and ``LAB`` ends on its ``"B"``.
+    """
+    stored = _Image("LAB", "lab", TRANSPARENT_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "swatch.tif").write_bytes(b"tif")
+
+    loaded = load_input_still("swatch.tif")
+
+    assert stage.transposed_out.channel_reads == []
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
+    assert stage.transposed_out.converted == ["RGB"]
+    assert stage.asarrayed == [stage.transposed_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
+def test_a_premultiplied_still_flattens_from_its_rgba_view(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """``RGBa`` is alpha-bearing too, and its stored pixels need un-premultiplying.
+
+    Pillow spells that band a lower-case ``"a"``, which a band probe looking for
+    ``"A"`` misses entirely, and the values are pre-multiplied, so the composite
+    takes the RGBA view Pillow builds rather than the raw band.
+    """
+    stored = _Image("RGBa", "premultiplied", TRANSPARENT_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "premult.png").write_bytes(b"png")
+
+    loaded = load_input_still("premult.png")
+
+    assert stage.transposed_out.converted == ["RGBA"]
+    assert stage.transposed_out.channel_reads == ["A"]
+    assert stage.new_backdrops == [("RGB", stage.transposed_out.size, WHITE)]
+    assert [source for source, _mask in stage.flat_out.pasted] == [
+        stage.transposed_out
+    ]
+    assert [mask.extrema for _source, mask in stage.flat_out.pasted] == [
+        TRANSPARENT_ALPHA
+    ]
+    assert stage.asarrayed == [stage.flat_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
 def test_heic_pick_reports_an_export_hint(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
