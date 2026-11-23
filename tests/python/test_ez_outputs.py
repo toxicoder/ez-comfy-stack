@@ -734,6 +734,58 @@ def test_copy_to_input_default_dir(
     assert dest.is_file()
 
 
+def test_copy_to_input_never_overwrites_a_shared_plate(tmp_path: Path) -> None:
+    """Staging a generation never clobbers the seeded plate it collides with."""
+    root = tmp_path / "out"
+    inputs = tmp_path / "in"
+    _touch(root / "example.png", b"generation")
+    plate = inputs / "example.png"
+    _touch(plate, b"seeded-clay")
+
+    first = copy_to_input(root, "example.png", input_dir=inputs)
+    assert first == inputs / "example-2.png"
+    assert first.read_bytes() == b"generation"
+    assert plate.read_bytes() == b"seeded-clay"
+
+    second = copy_to_input(root, "example.png", input_dir=inputs)
+    assert second == inputs / "example-3.png"
+    assert second.read_bytes() == b"generation"
+    assert sorted(path.name for path in inputs.iterdir()) == [
+        "example-2.png",
+        "example-3.png",
+        "example.png",
+    ]
+    assert plate.read_bytes() == b"seeded-clay"
+
+
+def test_to_input_reports_the_name_actually_written(tmp_path: Path) -> None:
+    """The route names the file the copy made, not the source basename."""
+    root = tmp_path / "out"
+    inputs = tmp_path / "in"
+    _touch(root / "cover.png", b"first")
+    _touch(root / "a" / "plate.png", b"from-a")
+    _touch(root / "b" / "plate.png", b"from-b")
+
+    first = handle_to_input({"rel": "cover.png"}, root=root, input_dir=inputs)
+    assert first[0] == 200
+    assert first[1]["name"] == "cover.png"
+
+    again = handle_to_input({"rel": "cover.png"}, root=root, input_dir=inputs)
+    assert again[0] == 200
+    assert again[1]["name"] == "cover-2.png"
+    assert (inputs / "cover.png").read_bytes() == b"first"
+    assert (inputs / "cover-2.png").read_bytes() == b"first"
+
+    bulk = handle_to_input(
+        {"rels": ["a/plate.png", "b/plate.png"]}, root=root, input_dir=inputs
+    )
+    assert bulk[0] == 200
+    assert [row["name"] for row in bulk[1]["copied"]] == ["plate.png", "plate-2.png"]
+    assert [row["rel"] for row in bulk[1]["copied"]] == ["a/plate.png", "b/plate.png"]
+    assert (inputs / "plate.png").read_bytes() == b"from-a"
+    assert (inputs / "plate-2.png").read_bytes() == b"from-b"
+
+
 def test_list_outputs_parent_and_truncated(tmp_path: Path) -> None:
     _touch(tmp_path / "root.png")
     _touch(tmp_path / "shots" / "take.webp")
@@ -829,7 +881,7 @@ def test_rels_from_args_and_bulk_handlers(tmp_path: Path) -> None:
     assert (inputs / "still.png").is_file()
     one = handle_to_input({"rels": ["still.png"]}, root=root, input_dir=inputs)
     assert one[0] == 200
-    assert one[1]["name"] == "still.png"
+    assert one[1]["name"] == "still-2.png"
     fail_copy = handle_to_input({"rels": ["nope.png", "no2.png"]}, root=root, input_dir=inputs)
     assert fail_copy[0] == 400
 
