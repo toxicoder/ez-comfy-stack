@@ -17,6 +17,11 @@ and the film lane's ``ez_<film>_plate.png`` shots). Nothing in ``docker/``,
 ``scripts/``, or ``tools/`` writes those, so each one is seeded here as a
 color-bar placeholder an operator swaps out for a real plate.
 
+The one non-image default is the audio bed ``ez_a2v_bed.wav``, which
+``video/av/audio-to-video-8s`` loads on a bare box. Nothing writes that either,
+so a soft eight-second pad is seeded in its place; a bed the operator dropped in
+first is left alone.
+
 Typical invocation
 ------------------
     python3 /opt/ez-comfy/seed_clay_inputs.py /inputs
@@ -24,9 +29,11 @@ Typical invocation
 
 from __future__ import annotations
 
+import math
 import os
 import struct
 import sys
+import wave
 import zlib
 from dataclasses import dataclass
 from pathlib import Path
@@ -110,6 +117,24 @@ PLACEHOLDER_PLATES: tuple[PlaceholderPlate, ...] = (
 lane that renders it works at. Derived from the graphs, not chosen: the drift test
 in tests/python/test_seed_clay_inputs.py fails when a graph names a plate missing
 here."""
+
+# Audio bed the audio-to-video App defaults its LoadAudio to. Same story as the
+# plates: nothing in the repo wrote it, so Queue failed on a missing file.
+AUDIO_BED_NAME = "ez_a2v_bed.wav"
+AUDIO_BED_RATE = 16000
+AUDIO_BED_SECONDS = 8
+AUDIO_BED_PEAK = 20000
+"""Peak sample amplitude; kept under int16 so the bed never clips."""
+AUDIO_BED_TONES = (110.0, 165.0, 220.0)
+"""A2, E3, A3: a soft pad rather than a test tone."""
+AUDIO_BED_SWELL_HZ = 0.25
+AUDIO_BED_FADE_SECONDS = 0.12
+"""Edge fade so a loop point does not click."""
+
+SEEDED_AUDIO_INPUTS = frozenset({AUDIO_BED_NAME})
+"""Every bare audio filename a shipped graph defaults a loader to. The drift test
+in tests/python/test_seed_clay_inputs.py fails when a graph names one that is not
+seeded here."""
 
 
 def placeholder_rgb(index: int) -> tuple[int, int, int]:
@@ -403,6 +428,103 @@ def seed_placeholder_inputs(input_dir: str | Path) -> list[Path]:
     return written
 
 
+def audio_bed_frames(seconds: int, rate: int) -> bytes:
+    """Deterministic 16-bit mono PCM bed: a soft pad that swells and fades.
+
+    Args:
+        seconds: Whole seconds of audio.
+        rate: Samples per second.
+
+    Returns:
+        ``seconds * rate`` little-endian 16-bit mono samples.
+    """
+    total = int(seconds) * int(rate)
+    fade = max(1, int(AUDIO_BED_FADE_SECONDS * rate))
+    steps = len(AUDIO_BED_TONES)
+    out = bytearray()
+    for index in range(total):
+        when = index / rate
+        envelope = min(1.0, index / fade, max(0, total - 1 - index) / fade)
+        swell = 0.72 + 0.28 * math.sin(2 * math.pi * AUDIO_BED_SWELL_HZ * when)
+        voices = sum(math.sin(2 * math.pi * hz * when) for hz in AUDIO_BED_TONES)
+        level = AUDIO_BED_PEAK * envelope * swell * voices / steps
+        out += struct.pack("<h", int(max(-32768, min(32767, round(level)))))
+    return bytes(out)
+
+
+def write_pcm_wav(path: Path, frames: bytes, rate: int) -> None:
+    """Write little-endian 16-bit mono PCM to ``path`` as RIFF/WAVE.
+
+    Args:
+        path: Destination file; parents are created.
+        frames: Sample bytes, a whole number of 16-bit samples.
+        rate: Samples per second.
+
+    Raises:
+        ValueError: ``frames`` holds half a sample.
+    """
+    if len(frames) % 2:
+        raise ValueError(f"16-bit PCM frames need whole samples, got {len(frames)} bytes")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(path), "wb") as handle:
+        handle.setnchannels(1)
+        handle.setsampwidth(2)
+        handle.setframerate(int(rate))
+        handle.writeframes(bytes(frames))
+
+
+def wav_valid(path: Path) -> bool:
+    """True when ``path`` already holds a decodable 16-bit PCM WAV.
+
+    A bed the operator dropped in is never replaced, so a file this module
+    cannot read as audio is treated as not-ours rather than as corrupt.
+
+    Args:
+        path: Candidate bed.
+
+    Returns:
+        Whether ``path`` is a file with a readable RIFF/WAVE audio header.
+    """
+    if not path.is_file():
+        return False
+    try:
+        with wave.open(str(path), "rb") as handle:
+            return (
+                handle.getnframes() > 0
+                and handle.getsampwidth() == 2
+                and handle.getnchannels() in (1, 2)
+            )
+    except (OSError, EOFError, wave.Error):
+        return False
+
+
+def seed_audio_bed_input(input_dir: str | Path) -> Path | None:
+    """Ensure the audio-to-video App's default bed exists so Queue works.
+
+    Args:
+        input_dir: Container ``/inputs`` (host ``COMFY_OUTPUT_DIR/input``).
+
+    Returns:
+        The written path, or ``None`` when a usable bed was already there.
+
+    Raises:
+        ValueError: Target is under MODELS_DIR.
+    """
+    target = Path(input_dir)
+    if _under_models_dir(target):
+        raise ValueError(f"refusing MODELS_DIR target {target}")
+    target.mkdir(parents=True, exist_ok=True)
+    dest = target / AUDIO_BED_NAME
+    if wav_valid(dest):
+        return None
+    write_pcm_wav(
+        dest,
+        audio_bed_frames(AUDIO_BED_SECONDS, AUDIO_BED_RATE),
+        AUDIO_BED_RATE,
+    )
+    return dest
+
+
 def _under_models_dir(path: Path) -> bool:
     """True when path is under MODELS_DIR / MODELS_ROOT.
 
@@ -473,10 +595,13 @@ def main(argv: list[str] | None = None) -> int:
     try:
         written = seed_clay_inputs(dest)
         example = seed_example_input(dest)
+        bed = seed_audio_bed_input(dest)
     except (OSError, ValueError) as exc:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
         return 1
     seeded = f"; wrote {EXAMPLE_NAME}" if example is not None else ""
+    if bed is not None:
+        seeded += f"; wrote {AUDIO_BED_NAME}"
     placeholders = len(PLACEHOLDER_PLATES)
     print(
         f"[seed-clay] {len(written)} plates ready in {dest}{seeded}; "

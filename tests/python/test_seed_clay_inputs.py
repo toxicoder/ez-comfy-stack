@@ -7,12 +7,17 @@ reads the committed lab graphs, the same tree the other suites walk.
 from __future__ import annotations
 
 import runpy
+import struct
 import sys
+import wave
 from pathlib import Path
 
 import pytest
 import seed_clay_inputs as seed
 from _lab_paths import cached_lab_graph_rows
+
+_AUDIO_LOADERS = {"LoadAudio", "LoadVideo", "VHS_LoadVideo", "VHS_LoadAudio"}
+_AUDIO_SUFFIXES = (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac", ".mov", ".webm")
 
 
 def test_seed_writes_ten_distinct_valid_plates(tmp_path: Path) -> None:
@@ -108,6 +113,7 @@ def test_main_default_root(
 
     monkeypatch.setattr(seed, "seed_clay_inputs", _fake_seed)
     monkeypatch.setattr(seed, "seed_example_input", lambda _p: None)
+    monkeypatch.setattr(seed, "seed_audio_bed_input", lambda _p: None)
     assert seed.main() == 0
     assert called["path"] == Path("/inputs")
     assert "plates ready" in capsys.readouterr().out
@@ -327,3 +333,101 @@ def test_main_reports_placeholder_plates(
     out = capsys.readouterr().out
     assert f"{len(seed.PLACEHOLDER_PLATES)} placeholder plates in place" in out
     assert (dest / "cover.png").is_file()
+
+
+def _bare_audio_defaults() -> set[str]:
+    """Every bare audio filename a shipped lab graph defaults a loader to."""
+    names: set[str] = set()
+    for _lab_rel, _path, data in cached_lab_graph_rows():
+        pending: list[object] = [data]
+        while pending:
+            node = pending.pop()
+            if isinstance(node, dict):
+                node_type = node.get("type")
+                if isinstance(node_type, str) and node_type in _AUDIO_LOADERS:
+                    widgets = node.get("widgets_values")
+                    if isinstance(widgets, list) and widgets:
+                        first = widgets[0]
+                        if (
+                            isinstance(first, str)
+                            and first.lower().endswith(_AUDIO_SUFFIXES)
+                            and "/" not in first
+                            and "\\" not in first
+                        ):
+                            names.add(first)
+                pending.extend(node.values())
+            elif isinstance(node, list):
+                pending.extend(node)
+    return names
+
+
+def test_audio_bed_is_written_once_and_is_a_real_wav(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    written = seed.seed_audio_bed_input(dest)
+    assert written is not None
+    assert written.name == seed.AUDIO_BED_NAME == "ez_a2v_bed.wav"
+    assert seed.wav_valid(written)
+    with wave.open(str(written), "rb") as handle:
+        assert handle.getnchannels() == 1
+        assert handle.getsampwidth() == 2
+        assert handle.getframerate() == seed.AUDIO_BED_RATE
+        assert handle.getnframes() == seed.AUDIO_BED_RATE * seed.AUDIO_BED_SECONDS
+    assert seed.seed_audio_bed_input(dest) is None
+
+
+def test_audio_bed_is_audible_and_never_clips() -> None:
+    frames = seed.audio_bed_frames(seed.AUDIO_BED_SECONDS, seed.AUDIO_BED_RATE)
+    assert len(frames) == seed.AUDIO_BED_RATE * seed.AUDIO_BED_SECONDS * 2
+    samples = struct.unpack(f"<{len(frames) // 2}h", frames)
+    peak = max(abs(sample) for sample in samples)
+    assert peak > 1000, "bed is inaudible"
+    assert peak < 32767, "bed clips"
+    # Ends fade out so a loop point does not click.
+    assert abs(samples[-1]) < peak // 20
+
+
+def test_audio_bed_keeps_the_operators_take(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    dest.mkdir()
+    keep = dest / seed.AUDIO_BED_NAME
+    seed.write_pcm_wav(keep, b"\x00\x01\x02\x03" * 32, seed.AUDIO_BED_RATE)
+    before = keep.read_bytes()
+    assert seed.seed_audio_bed_input(dest) is None
+    assert keep.read_bytes() == before
+
+
+def test_audio_bed_replaces_a_corrupt_file(tmp_path: Path) -> None:
+    dest = tmp_path / "input"
+    dest.mkdir()
+    junk = dest / seed.AUDIO_BED_NAME
+    junk.write_bytes(b"not a wav")
+    assert seed.wav_valid(junk) is False
+    assert seed.seed_audio_bed_input(dest) is not None
+    assert seed.wav_valid(junk)
+
+
+def test_write_pcm_wav_rejects_an_odd_frame_count(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="16-bit"):
+        seed.write_pcm_wav(tmp_path / "x.wav", b"\x00", seed.AUDIO_BED_RATE)
+
+
+def test_audio_bed_refuses_models_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    models = tmp_path / "models"
+    monkeypatch.setenv("MODELS_DIR", str(models))
+    with pytest.raises(ValueError, match="refusing MODELS_DIR"):
+        seed.seed_audio_bed_input(models / "input")
+
+
+def test_main_seeds_the_audio_bed(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    dest = tmp_path / "in"
+    assert seed.main([str(dest)]) == 0
+    assert (dest / seed.AUDIO_BED_NAME).is_file()
+    assert seed.AUDIO_BED_NAME in capsys.readouterr().out
+
+
+def test_every_shipped_audio_default_is_seeded() -> None:
+    """A graph may not default an audio loader at a file nothing writes."""
+    assert _bare_audio_defaults() == seed.SEEDED_AUDIO_INPUTS
+    assert seed.AUDIO_BED_NAME in seed.SEEDED_AUDIO_INPUTS

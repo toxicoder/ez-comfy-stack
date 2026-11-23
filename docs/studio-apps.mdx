@@ -170,10 +170,10 @@ and fails if the chrome's table has no entry for that widget. A shipped App cann
 
 ## Seeded input plates
 
-Several shipped Apps default a **LoadImage** to a bare filename. This stack remaps Comfy's input
-folder onto the `/inputs` bind and ships no `input/` tree of its own, so those files have to be
-created - otherwise the first **Queue** on a fresh host dies on a missing plate instead of rendering.
-The container seeds each one at start:
+Several shipped Apps default a **LoadImage**, or the one **LoadAudio**, to a bare filename. This
+stack remaps Comfy's input folder onto the `/inputs` bind and ships no `input/` tree of its own, so
+those files have to be created - otherwise the first **Queue** on a fresh host dies on a missing
+plate instead of rendering. The container seeds each one at start:
 
 | Plate | Size | What defaults to it |
 | --- | --- | --- |
@@ -184,13 +184,16 @@ The container seeds each one at start:
 | `canny.png` | 1280x704 | **guides/canny-hero** |
 | `ez_<film>_plate.png` and `ez_<film>_b<N>_s3_last.png`, 28 files | 1280x704 | each film title's plate and the act hand-off frames |
 | `ez_house_clay_01.png` .. `ez_house_clay_10.png` | 1024x1280 | the clay desk Apps, when the host layout dump did not stage them |
+| `ez_a2v_bed.wav` | 8 s, 16 kHz mono | the **Audio file** on **video/av/audio-to-video-8s** |
 
 A placeholder is a real image, not a blank: a tonal gradient with a tinted stripe band along the
 bottom, so two plates at the same size never look alike and the sampler has something to render.
-Swap it whenever you like - **Upload media** on the picker puts your own still there.
+Swap it whenever you like - **Upload media** on the picker puts your own still there. The audio bed
+works the same way: a soft eight-second A-minor pad, faded at both ends so a loop point does not
+click, quiet enough that it never clips. Drop your own `ez_a2v_bed.wav` in and it stays yours.
 
-Seeding never replaces a file that is already a readable PNG, so a plate you uploaded, and the clay
-pack the host staged, survive every restart. It runs in the container's start phase, so the verb that
+Seeding never replaces a file that is already a readable PNG (or a readable WAV, for the bed), so a
+plate you uploaded, and the clay pack the host staged, survive every restart. It runs in the container's start phase, so the verb that
 re-seeds is `bazelisk run //:manage -- start` on a fresh host and `bazelisk run //:manage -- restart`
 after you deliberately delete a plate you want back. A run that worked prints one
 `input plates ready in /inputs` line in `bazelisk run //:manage -- logs`; the failure line and what
