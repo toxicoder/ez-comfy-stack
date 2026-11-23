@@ -110,13 +110,13 @@ flowchart TB
 | 46 | Upscale still | `EZImageUpscale` | SHOT CLOSE |
 | 47 | Check models | `EZModelCheck` | QUALITY |
 | 48 | Negative SHOT BEAT | `EZNegativePromptEnhance` | PROMPT |
-| 49 | Negative Negative SHOT BEAT | `CLIPTextEncode` | PROMPT |
+| 49 | Negative SHOT BEAT | `CLIPTextEncode` | PROMPT |
 | 50 | Negative SHOT DETAIL | `EZNegativePromptEnhance` | PROMPT |
-| 51 | Negative Negative SHOT DETAIL | `CLIPTextEncode` | PROMPT |
+| 51 | Negative SHOT DETAIL | `CLIPTextEncode` | PROMPT |
 | 52 | Negative SHOT WIDE | `EZNegativePromptEnhance` | PROMPT |
-| 53 | Negative Negative SHOT WIDE | `CLIPTextEncode` | PROMPT |
+| 53 | Negative SHOT WIDE | `CLIPTextEncode` | PROMPT |
 | 54 | Negative SHOT CLOSE | `EZNegativePromptEnhance` | PROMPT |
-| 55 | Negative Negative SHOT CLOSE | `CLIPTextEncode` | PROMPT |
+| 55 | Negative SHOT CLOSE | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -704,10 +704,10 @@ Prompt encoded by CLIP.
 | Positive DETAIL | `Detail still. Hands or prop, 85mm. Same place. Same building, rooms, furniture ...` |
 | Positive WIDE | `Wide establishing. 24mm, more terrace and towers. Same building, rooms, furnitu...` |
 | Positive CLOSE | `Close closer. Face and coat, 85mm, same golden hour. Same building, rooms, furn...` |
-| Negative Negative SHOT BEAT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT DETAIL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT WIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT BEAT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT DETAIL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT WIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

@@ -108,13 +108,13 @@ flowchart TB
 | 40 | Upscale still | `EZImageUpscale` | SHOT NIGHT |
 | 41 | Check models | `EZModelCheck` | QUALITY |
 | 42 | Negative SHOT DAWN | `EZNegativePromptEnhance` | PROMPT |
-| 43 | Negative Negative SHOT DAWN | `CLIPTextEncode` | PROMPT |
+| 43 | Negative SHOT DAWN | `CLIPTextEncode` | PROMPT |
 | 44 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 45 | Negative SHOT NOON | `EZNegativePromptEnhance` | PROMPT |
-| 46 | Negative Negative SHOT NOON | `CLIPTextEncode` | PROMPT |
+| 46 | Negative SHOT NOON | `CLIPTextEncode` | PROMPT |
 | 47 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 48 | Negative SHOT NIGHT | `EZNegativePromptEnhance` | PROMPT |
-| 49 | Negative Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
+| 49 | Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
 | 50 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
@@ -702,9 +702,9 @@ Prompt encoded by CLIP.
 | Positive DAWN | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NOON | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NIGHT | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
-| Negative Negative SHOT DAWN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NOON | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT DAWN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NOON | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

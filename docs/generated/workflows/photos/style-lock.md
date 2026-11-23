@@ -103,11 +103,11 @@ flowchart TB
 | 39 | Upscale still | `EZImageUpscale` | SHOT RAIN |
 | 40 | Check models | `EZModelCheck` | QUALITY |
 | 41 | Negative SHOT LIVING | `EZNegativePromptEnhance` | PROMPT |
-| 42 | Negative Negative SHOT LIVING | `CLIPTextEncode` | PROMPT |
+| 42 | Negative SHOT LIVING | `CLIPTextEncode` | PROMPT |
 | 43 | Negative SHOT TERRACE | `EZNegativePromptEnhance` | PROMPT |
-| 44 | Negative Negative SHOT TERRACE | `CLIPTextEncode` | PROMPT |
+| 44 | Negative SHOT TERRACE | `CLIPTextEncode` | PROMPT |
 | 45 | Negative SHOT RAIN | `EZNegativePromptEnhance` | PROMPT |
-| 46 | Negative Negative SHOT RAIN | `CLIPTextEncode` | PROMPT |
+| 46 | Negative SHOT RAIN | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -694,9 +694,9 @@ Prompt encoded by CLIP.
 | Positive LIVING | `From the primary interior looking out the main opening, late-day sun, Instagram...` |
 | Positive TERRACE | `Outdoor living or threshold of this place at golden hour, Instagram 4:5. Same b...` |
 | Positive RAIN | `This same place at night or in weather. Lamps on if the bible has them. Massing...` |
-| Negative Negative SHOT LIVING | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT TERRACE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT RAIN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT LIVING | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT TERRACE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT RAIN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

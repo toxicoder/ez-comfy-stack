@@ -97,9 +97,9 @@ flowchart TB
 | 32 | Upscale still | `EZImageUpscale` | SHOT PROFILE |
 | 33 | Check models | `EZModelCheck` | QUALITY |
 | 34 | Negative SHOT THREE-QUARTER | `EZNegativePromptEnhance` | PROMPT |
-| 35 | Negative Negative SHOT THREE-QUARTER | `CLIPTextEncode` | PROMPT |
+| 35 | Negative SHOT THREE-QUARTER | `CLIPTextEncode` | PROMPT |
 | 36 | Negative SHOT PROFILE | `EZNegativePromptEnhance` | PROMPT |
-| 37 | Negative Negative SHOT PROFILE | `CLIPTextEncode` | PROMPT |
+| 37 | Negative SHOT PROFILE | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -685,8 +685,8 @@ Prompt encoded by CLIP.
 | Positive FRONT | `Front camera, eye-level, 24mm. Same identity. YouTube 16:9. Same building, room...` |
 | Positive THREE-QUARTER | `Three-quarter camera, 35mm, body turned 45 degrees. Same identity and light. Ca...` |
 | Positive PROFILE | `Profile camera, 50mm, full side view. Same identity and light. Camera is the on...` |
-| Negative Negative SHOT THREE-QUARTER | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT PROFILE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT THREE-QUARTER | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT PROFILE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

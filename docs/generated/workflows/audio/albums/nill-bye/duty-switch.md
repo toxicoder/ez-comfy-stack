@@ -6449,7 +6449,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 1 | `1024` |
 | 2 | `1` |
 
-**KSampler** (`KSampler`)
+**Sampler** (`KSampler`)
 
 | Slot | Value |
 | --- | --- |
@@ -7341,7 +7341,7 @@ Random seed for the noise tensor.
 | ACE sampler | `733` |
 | ACE sampler | `739` |
 | ACE sampler | `743` |
-| KSampler | `42` |
+| Sampler | `42` |
 
 #### `control_after_generate`
 

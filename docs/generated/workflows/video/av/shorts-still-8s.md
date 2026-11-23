@@ -63,7 +63,7 @@ flowchart LR
   N6["Negative"]
   N7["Vertical I2V (9:16)"]
   N8["LTX frame rate cond"]
-  N9["KSampler"]
+  N9["Sampler"]
   N10["VAE Decode"]
   N12["Save frames (secondary)"]
   N13["LTX-2.5 audio VAE"]
@@ -121,7 +121,7 @@ flowchart LR
 | 6 | Negative | `CLIPTextEncode` | PROMPT |
 | 7 | Vertical I2V (9:16) | `LTXVImgToVideo` | SETTINGS |
 | 8 | LTX frame rate cond | `LTXVConditioning` | SETTINGS |
-| 9 | KSampler | `KSampler` | SETTINGS |
+| 9 | Sampler | `KSampler` | SETTINGS |
 | 10 | VAE Decode | `VAEDecode` | OUTPUT |
 | 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
 | 13 | LTX-2.5 audio VAE | `VAELoader` | MODEL |

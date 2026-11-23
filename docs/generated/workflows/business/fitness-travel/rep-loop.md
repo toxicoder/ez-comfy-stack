@@ -60,7 +60,7 @@ flowchart LR
   N7["Negative"]
   N8["Loop size 480x832 x 49"]
   N9["Shift"]
-  N10["KSampler"]
+  N10["Sampler"]
   N11["VAE Decode"]
   N12["Save frames (secondary)"]
   N13["Save video (MP4) - open node for preview"]
@@ -104,7 +104,7 @@ flowchart LR
 | 7 | Negative | `CLIPTextEncode` | PROMPT |
 | 8 | Loop size 480x832 x 49 | `Wan22ImageToVideoLatent` | SETTINGS |
 | 9 | Shift | `ModelSamplingSD3` | SETTINGS |
-| 10 | KSampler | `KSampler` | SETTINGS |
+| 10 | Sampler | `KSampler` | SETTINGS |
 | 11 | VAE Decode | `VAEDecode` | OUTPUT |
 | 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
 | 13 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | OUTPUT |

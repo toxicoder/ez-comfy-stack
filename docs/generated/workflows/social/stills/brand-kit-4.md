@@ -108,13 +108,13 @@ flowchart TB
 | 40 | Upscale still | `EZImageUpscale` | SHOT HIGH |
 | 41 | Check models | `EZModelCheck` | QUALITY |
 | 42 | Negative SHOT COOL | `EZNegativePromptEnhance` | PROMPT |
-| 43 | Negative Negative SHOT COOL | `CLIPTextEncode` | PROMPT |
+| 43 | Negative SHOT COOL | `CLIPTextEncode` | PROMPT |
 | 44 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 45 | Negative SHOT NIGHT | `EZNegativePromptEnhance` | PROMPT |
-| 46 | Negative Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
+| 46 | Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
 | 47 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 48 | Negative SHOT HIGH | `EZNegativePromptEnhance` | PROMPT |
-| 49 | Negative Negative SHOT HIGH | `CLIPTextEncode` | PROMPT |
+| 49 | Negative SHOT HIGH | `CLIPTextEncode` | PROMPT |
 | 50 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
@@ -702,9 +702,9 @@ Prompt encoded by CLIP.
 | Positive COOL | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NIGHT | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive HIGH | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
-| Negative Negative SHOT COOL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT HIGH | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT COOL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT HIGH | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

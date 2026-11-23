@@ -91,7 +91,7 @@ flowchart TB
 | 26 | Upscale still | `EZImageUpscale` | SHOT AFTER |
 | 27 | Check models | `EZModelCheck` | QUALITY |
 | 28 | Negative SHOT AFTER | `EZNegativePromptEnhance` | PROMPT |
-| 29 | Negative Negative SHOT AFTER | `CLIPTextEncode` | PROMPT |
+| 29 | Negative SHOT AFTER | `CLIPTextEncode` | PROMPT |
 | 30 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
@@ -677,7 +677,7 @@ Prompt encoded by CLIP.
 | Negative | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, ...` |
 | Positive BEFORE | `A photoreal still of a small kitchen table at first light. One cream ceramic mu...` |
 | Positive AFTER | `A photoreal still of a small kitchen table at first light. One cream ceramic mu...` |
-| Negative Negative SHOT AFTER | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, ...` |
+| Negative SHOT AFTER | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, ...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

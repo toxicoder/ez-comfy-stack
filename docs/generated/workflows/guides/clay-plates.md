@@ -79,7 +79,7 @@ flowchart TB
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
 | 5 | Negative | `CLIPTextEncode` | PROMPT |
 | 6 | Size 1280x704 | `EmptyFlux2LatentImage` | SHOT packshot |
-| 7 | KSampler | `KSampler` | SETTINGS |
+| 7 | Sampler 1 | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save hero | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |
@@ -401,7 +401,7 @@ Denoising iterations.
 
 | Instance | Value |
 | --- | --- |
-| KSampler | `8` |
+| Sampler 1 | `8` |
 | Sampler packshot | `4` |
 | Sampler ig | `4` |
 | Sampler shorts | `4` |

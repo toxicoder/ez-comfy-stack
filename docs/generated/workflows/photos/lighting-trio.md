@@ -100,10 +100,10 @@ flowchart TB
 | 33 | Upscale still | `EZImageUpscale` | SHOT NIGHT LAMP |
 | 34 | Check models | `EZModelCheck` | QUALITY |
 | 35 | Negative SHOT WINDOW | `EZNegativePromptEnhance` | PROMPT |
-| 36 | Negative Negative SHOT WINDOW | `CLIPTextEncode` | PROMPT |
+| 36 | Negative SHOT WINDOW | `CLIPTextEncode` | PROMPT |
 | 37 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 38 | Negative SHOT NIGHT LAMP | `EZNegativePromptEnhance` | PROMPT |
-| 39 | Negative Negative SHOT NIGHT LAMP | `CLIPTextEncode` | PROMPT |
+| 39 | Negative SHOT NIGHT LAMP | `CLIPTextEncode` | PROMPT |
 | 40 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
@@ -690,8 +690,8 @@ Prompt encoded by CLIP.
 | Positive KEY | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive WINDOW | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NIGHT LAMP | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
-| Negative Negative SHOT WINDOW | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NIGHT LAMP | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT WINDOW | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NIGHT LAMP | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

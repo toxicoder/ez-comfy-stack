@@ -120,11 +120,11 @@ flowchart TB
 | 37 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 38 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 39 | Negative SHOT SIDE | `EZNegativePromptEnhance` | PROMPT |
-| 40 | Negative Negative SHOT SIDE | `CLIPTextEncode` | PROMPT |
+| 40 | Negative SHOT SIDE | `CLIPTextEncode` | PROMPT |
 | 41 | Negative SHOT BACK | `EZNegativePromptEnhance` | PROMPT |
-| 42 | Negative Negative SHOT BACK | `CLIPTextEncode` | PROMPT |
+| 42 | Negative SHOT BACK | `CLIPTextEncode` | PROMPT |
 | 43 | Negative SHOT TOP-DOWN | `EZNegativePromptEnhance` | PROMPT |
-| 44 | Negative Negative SHOT TOP-DOWN | `CLIPTextEncode` | PROMPT |
+| 44 | Negative SHOT TOP-DOWN | `CLIPTextEncode` | PROMPT |
 | 45 | Detail | `EZQuality` | QUALITY |
 | 46 | Check models | `EZModelCheck` | QUALITY |
 
@@ -872,9 +872,9 @@ Prompt encoded by CLIP.
 | Positive SIDE | `Right side camera, 90 degrees around the subject, 50mm, full profile. Same iden...` |
 | Positive BACK | `Rear camera, 180 degrees behind the subject, 50mm, back of the suit to the lens...` |
 | Positive TOP-DOWN | `Overhead camera straight down from above the subject, 35mm, helmet top and shou...` |
-| Negative Negative SHOT SIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT BACK | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT TOP-DOWN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT SIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT BACK | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT TOP-DOWN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EZPromptJoin` - Prompt Join
 

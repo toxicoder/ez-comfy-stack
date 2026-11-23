@@ -127,15 +127,15 @@ flowchart TB
 | 53 | Upscale still | `EZImageUpscale` | SHOT banner |
 | 54 | Check models | `EZModelCheck` | QUALITY |
 | 55 | Negative SHOT ig | `EZNegativePromptEnhance` | Ungrouped |
-| 56 | Negative Negative SHOT ig | `CLIPTextEncode` | Ungrouped |
+| 56 | Negative SHOT ig | `CLIPTextEncode` | Ungrouped |
 | 57 | Negative SHOT portrait | `EZNegativePromptEnhance` | Ungrouped |
-| 58 | Negative Negative SHOT portrait | `CLIPTextEncode` | Ungrouped |
+| 58 | Negative SHOT portrait | `CLIPTextEncode` | Ungrouped |
 | 59 | Negative SHOT shorts | `EZNegativePromptEnhance` | Ungrouped |
-| 60 | Negative Negative SHOT shorts | `CLIPTextEncode` | Ungrouped |
+| 60 | Negative SHOT shorts | `CLIPTextEncode` | Ungrouped |
 | 61 | Negative SHOT og | `EZNegativePromptEnhance` | Ungrouped |
-| 62 | Negative Negative SHOT og | `CLIPTextEncode` | Ungrouped |
+| 62 | Negative SHOT og | `CLIPTextEncode` | Ungrouped |
 | 63 | Negative SHOT banner | `EZNegativePromptEnhance` | Ungrouped |
-| 64 | Negative Negative SHOT banner | `CLIPTextEncode` | Ungrouped |
+| 64 | Negative SHOT banner | `CLIPTextEncode` | Ungrouped |
 
 ## Node parameter reference
 
@@ -724,11 +724,11 @@ Prompt encoded by CLIP.
 | Positive shorts | `Vertical 9:16 Shorts still. Caption headroom at the top. Same building, rooms, ...` |
 | Positive og | `Blog / Open Graph hero ~1.9:1. Subject left-weighted, quiet right third. Same b...` |
 | Positive banner | `Ultra-wide channel banner ~3:1. Horizon low, empty sky band for a name overlay....` |
-| Negative Negative SHOT ig | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT portrait | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT shorts | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT og | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT banner | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT ig | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT portrait | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT shorts | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT og | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT banner | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `Note` - Note
 

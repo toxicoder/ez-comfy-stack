@@ -97,7 +97,7 @@ flowchart TB
 | 201 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
 | 202 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
 | 203 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 204 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 204 | Sampler 1 | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
 | 205 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
 | 206 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 207 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
@@ -109,7 +109,7 @@ flowchart TB
 | 221 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
 | 222 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
 | 223 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 224 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 224 | Sampler 2 | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
 | 225 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
 | 226 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 227 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
@@ -121,7 +121,7 @@ flowchart TB
 | 241 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
 | 242 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
 | 243 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 244 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 244 | Sampler 3 | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
 | 245 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
 | 246 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 247 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
@@ -133,7 +133,7 @@ flowchart TB
 | 261 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
 | 262 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
 | 263 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 264 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 264 | Sampler 4 | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
 | 265 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
 | 266 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 267 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
@@ -145,7 +145,7 @@ flowchart TB
 | 281 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
 | 282 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
 | 283 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 284 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 284 | Sampler 5 | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
 | 285 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
 | 286 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 287 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
@@ -157,7 +157,7 @@ flowchart TB
 | 301 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
 | 302 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
 | 303 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 304 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 304 | Sampler 6 | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
 | 305 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
 | 306 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 307 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
@@ -169,7 +169,7 @@ flowchart TB
 | 321 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
 | 322 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
 | 323 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 324 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 324 | Sampler 7 | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
 | 325 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
 | 326 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 327 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
@@ -181,7 +181,7 @@ flowchart TB
 | 341 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
 | 342 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
 | 343 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 344 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 344 | Sampler 8 | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
 | 345 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
 | 346 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 347 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
@@ -193,7 +193,7 @@ flowchart TB
 | 361 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
 | 362 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
 | 363 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 364 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 364 | Sampler 9 | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
 | 365 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
 | 366 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 367 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
@@ -205,7 +205,7 @@ flowchart TB
 | 381 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
 | 382 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
 | 383 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 384 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 384 | Sampler 10 | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
 | 385 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
 | 386 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 387 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
@@ -217,7 +217,7 @@ flowchart TB
 | 401 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
 | 402 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
 | 403 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 404 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 404 | Sampler 11 | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
 | 405 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
 | 406 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 407 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
@@ -229,7 +229,7 @@ flowchart TB
 | 421 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
 | 422 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
 | 423 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 424 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 424 | Sampler 12 | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
 | 425 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
 | 426 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 427 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
@@ -241,7 +241,7 @@ flowchart TB
 | 441 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
 | 442 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
 | 443 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 444 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 444 | Sampler 13 | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
 | 445 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
 | 446 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 447 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
@@ -253,7 +253,7 @@ flowchart TB
 | 461 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
 | 462 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
 | 463 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 464 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 464 | Sampler 14 | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
 | 465 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
 | 466 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 467 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
@@ -265,7 +265,7 @@ flowchart TB
 | 481 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
 | 482 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
 | 483 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 484 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 484 | Sampler 15 | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
 | 485 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
 | 486 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 487 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
@@ -277,7 +277,7 @@ flowchart TB
 | 501 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
 | 502 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
 | 503 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 504 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 504 | Sampler 16 | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
 | 505 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
 | 506 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 507 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
@@ -289,7 +289,7 @@ flowchart TB
 | 521 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
 | 522 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
 | 523 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 524 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 524 | Sampler 17 | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
 | 525 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
 | 526 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 527 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
@@ -301,7 +301,7 @@ flowchart TB
 | 541 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
 | 542 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
 | 543 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 544 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 544 | Sampler 18 | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
 | 545 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
 | 546 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 547 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
@@ -1255,24 +1255,24 @@ Random seed for the noise tensor.
 
 | Instance | Value |
 | --- | --- |
-| KSampler | `60` |
-| KSampler | `61` |
-| KSampler | `62` |
-| KSampler | `63` |
-| KSampler | `64` |
-| KSampler | `65` |
-| KSampler | `66` |
-| KSampler | `67` |
-| KSampler | `68` |
-| KSampler | `69` |
-| KSampler | `70` |
-| KSampler | `71` |
-| KSampler | `72` |
-| KSampler | `73` |
-| KSampler | `74` |
-| KSampler | `75` |
-| KSampler | `76` |
-| KSampler | `77` |
+| Sampler 1 | `60` |
+| Sampler 2 | `61` |
+| Sampler 3 | `62` |
+| Sampler 4 | `63` |
+| Sampler 5 | `64` |
+| Sampler 6 | `65` |
+| Sampler 7 | `66` |
+| Sampler 8 | `67` |
+| Sampler 9 | `68` |
+| Sampler 10 | `69` |
+| Sampler 11 | `70` |
+| Sampler 12 | `71` |
+| Sampler 13 | `72` |
+| Sampler 14 | `73` |
+| Sampler 15 | `74` |
+| Sampler 16 | `75` |
+| Sampler 17 | `76` |
+| Sampler 18 | `77` |
 
 #### `control_after_generate`
 

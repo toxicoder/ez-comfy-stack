@@ -108,13 +108,13 @@ flowchart TB
 | 40 | Upscale still | `EZImageUpscale` | SHOT HIGH KEY |
 | 41 | Check models | `EZModelCheck` | QUALITY |
 | 42 | Negative SHOT COOL | `EZNegativePromptEnhance` | PROMPT |
-| 43 | Negative Negative SHOT COOL | `CLIPTextEncode` | PROMPT |
+| 43 | Negative SHOT COOL | `CLIPTextEncode` | PROMPT |
 | 44 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 45 | Negative SHOT MUTED | `EZNegativePromptEnhance` | PROMPT |
-| 46 | Negative Negative SHOT MUTED | `CLIPTextEncode` | PROMPT |
+| 46 | Negative SHOT MUTED | `CLIPTextEncode` | PROMPT |
 | 47 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 48 | Negative SHOT HIGH KEY | `EZNegativePromptEnhance` | PROMPT |
-| 49 | Negative Negative SHOT HIGH KEY | `CLIPTextEncode` | PROMPT |
+| 49 | Negative SHOT HIGH KEY | `CLIPTextEncode` | PROMPT |
 | 50 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
@@ -702,9 +702,9 @@ Prompt encoded by CLIP.
 | Positive COOL | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive MUTED | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive HIGH KEY | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
-| Negative Negative SHOT COOL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT MUTED | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT HIGH KEY | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT COOL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT MUTED | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT HIGH KEY | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
