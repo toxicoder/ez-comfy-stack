@@ -430,6 +430,42 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert display_label(enh, "prompt") == "New lettering"
 
 
+def test_flavor_row_names_what_each_rack_actually_picks() -> None:
+    """One widget name, three meanings, so the stamp follows the class.
+
+    ``flavor`` is the model a prompt is written for on the Cinema Rack, the
+    kind of track on the Audio Rack, and the script shape on the Podcast
+    writer. A single generic word tells the operator nothing on two of the
+    three, and the chrome's class-scoped table cannot save it: a stamped label
+    outranks that table.
+    """
+    assert display_label({"type": "EZCinemaRack"}, "flavor") == "Prompt model"
+    assert display_label({"type": "EZAudioRack"}, "flavor") == "Track type"
+    assert display_label({"type": "EZPodcastScript"}, "flavor") == "Script format"
+    assert display_label({"type": "EZImageFormat"}, "flavor") == "Flavor"
+    assert display_label(None, "flavor") == "Flavor"
+
+
+def test_shipped_rack_flavor_rows_carry_the_class_word() -> None:
+    """The two racks that surface ``flavor`` ship their own word for it."""
+    expected = {
+        "labs/assist/cinema-rack.json": "Prompt model",
+        "labs/assist/audio-rack.json": "Track type",
+    }
+    for rel, label in expected.items():
+        graph = _load(rel)
+        rows = [
+            entry
+            for entry in ((graph.get("extra") or {}).get("linearData") or {}).get(
+                "inputs"
+            )
+            or []
+            if isinstance(entry, list) and len(entry) > 2 and entry[1] == "flavor"
+        ]
+        assert len(rows) == 1, rel
+        assert rows[0][2].get("label") == label, rel
+
+
 def test_background_swap_prompt_help_and_describe_default() -> None:
     graph = _load("photos/background-swap.json")
     enh = next(

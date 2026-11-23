@@ -400,7 +400,6 @@ GENERIC_LABELS = {
     "subject": "Subject",
     "brief": "Brief",
     "recipe": "Recipe",
-    "flavor": "Family",
     "framing_shot_size": "Shot size",
     "camera_angles": "Angle",
     "camera_movement": "Camera move",
@@ -798,6 +797,16 @@ def display_label(
             "height": "Height",
             "batch_size": "Batch",
         }.get(name, generic)
+    if name == "flavor":
+        # One name, three meanings: which model a prompt is written for, which
+        # kind of track a rack is laying, which shape a script takes. The
+        # chrome labels these on the canvas by class, and a stamped row wins
+        # over that table, so the stamp has to carry the class word too.
+        return {
+            "EZCinemaRack": "Prompt model",
+            "EZAudioRack": "Track type",
+            "EZPodcastScript": "Script format",
+        }.get(ntype, generic)
     if ntype == "EZImageUpscale" and name == "upscale":
         return "Upscale"
     if ntype == "EZImageDescribe" and name == "enable":

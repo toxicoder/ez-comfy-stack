@@ -419,7 +419,7 @@
           "flavor",
           {
             "description": "klein / wan_t2v / ltx_t2v (and edit, identity, i2v). Wan emits one camera verb.",
-            "label": "Family"
+            "label": "Prompt model"
           }
         ],
         [
