@@ -33,8 +33,10 @@ Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-S
 score is a later session if `score: acestep-instrumental`.
 
 This canvas has no audio source: SaveAudio's audio slot stays empty on purpose, so
-Queue is not how this App is run and an empty Queue writes nothing. The mix is a host
-ffmpeg verb. Run it from a repo shell:
+Queue is not how this App is run and nothing reaches disk from it. If the queue stops
+on **Save stem mix (host stem-mix.sh)** asking for its audio input, that is this node
+doing what it was wired for - it carries the host verb's name, and it is not a step to
+repair. The mix is a host ffmpeg verb. Run it from a repo shell:
 
   bazelisk run //:manage -- stem-mix --film go-see --shot 01 --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]
 
@@ -116,8 +118,10 @@ Picture-lock stem mix. Occupancy **audio** - stop Klein / Wan / LTX first. ACE-S
 score is a later session if `score: acestep-instrumental`.
 
 This canvas has no audio source: SaveAudio's audio slot stays empty on purpose, so
-Queue is not how this App is run and an empty Queue writes nothing. The mix is a host
-ffmpeg verb. Run it from a repo shell:
+Queue is not how this App is run and nothing reaches disk from it. If the queue stops
+on **Save stem mix (host stem-mix.sh)** asking for its audio input, that is this node
+doing what it was wired for - it carries the host verb's name, and it is not a step to
+repair. The mix is a host ffmpeg verb. Run it from a repo shell:
 
   bazelisk run //:manage -- stem-mix --film go-see --shot 01 --bg PATH [--dx PATH] [--fx PATH] [--mx PATH] [--video PATH]
 
