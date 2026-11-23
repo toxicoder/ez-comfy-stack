@@ -431,3 +431,83 @@ def test_every_shipped_audio_default_is_seeded() -> None:
     """A graph may not default an audio loader at a file nothing writes."""
     assert _bare_audio_defaults() == seed.SEEDED_AUDIO_INPUTS
     assert seed.AUDIO_BED_NAME in seed.SEEDED_AUDIO_INPUTS
+
+
+def _raw_wav(
+    path: Path,
+    *,
+    sample_width: int = 2,
+    channels: int = 1,
+    rate: int = 48000,
+    frames: int = 4800,
+    fmt: int = 1,
+) -> Path:
+    """Write a RIFF/WAVE by hand so the test controls the format tag."""
+    block_align = channels * sample_width
+    data = bytes(frames * channels * sample_width)
+    fmt_chunk = b"fmt " + struct.pack("<I", 16) + struct.pack(
+        "<HHIIHH", fmt, channels, rate, rate * block_align, block_align, 8 * sample_width
+    )
+    data_chunk = b"data" + struct.pack("<I", len(data)) + data
+    body = b"WAVE" + fmt_chunk + data_chunk
+    path.write_bytes(b"RIFF" + struct.pack("<I", 4 + len(body)) + body)
+    return path
+
+
+@pytest.mark.parametrize(
+    ("label", "kwargs"),
+    [
+        ("24-bit stereo DAW export", {"sample_width": 3, "channels": 2}),
+        ("5.1 surround bed", {"sample_width": 2, "channels": 6}),
+        ("32-bit float mixdown", {"sample_width": 4, "channels": 2, "fmt": 3}),
+        ("mono 96 kHz master", {"sample_width": 2, "channels": 1, "rate": 96000}),
+    ],
+)
+def test_audio_bed_keeps_every_real_wav_shape(
+    tmp_path: Path, label: str, kwargs: dict[str, int]
+) -> None:
+    """A take the stdlib reader cannot judge is still the operator's file."""
+    dest = tmp_path / "input"
+    dest.mkdir()
+    keep = _raw_wav(dest / seed.AUDIO_BED_NAME, **kwargs)
+    before = keep.read_bytes()
+    assert seed.seed_audio_bed_input(dest) is None, label
+    assert keep.read_bytes() == before, label
+
+
+def test_audio_bed_replaces_a_wav_with_no_frames(tmp_path: Path) -> None:
+    """An empty data chunk is not a take, so the placeholder earns its place."""
+    dest = tmp_path / "input"
+    dest.mkdir()
+    stub = _raw_wav(dest / seed.AUDIO_BED_NAME, frames=0)
+    assert seed.wav_valid(stub) is False
+    assert seed.seed_audio_bed_input(dest) is not None
+    assert seed.wav_valid(stub)
+
+
+def test_main_reports_plates_when_only_the_bed_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A bed failure names the bed and keeps the plates' own line honest."""
+    dest = tmp_path / "in"
+    (dest / "input").mkdir(parents=True)
+
+    def _boom(_path: str | Path) -> Path | None:
+        raise IsADirectoryError("is a directory")
+
+    monkeypatch.setattr(seed, "seed_audio_bed_input", _boom)
+    assert seed.main([str(dest / "input")]) == 1
+    captured = capsys.readouterr()
+    assert "audio bed not seeded" in captured.err
+    assert "plates ready" in captured.out
+    assert seed.AUDIO_BED_NAME not in captured.out
+
+
+def test_main_still_refuses_a_models_dir_target(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    models = tmp_path / "models"
+    models.mkdir()
+    monkeypatch.setenv("MODELS_DIR", str(models))
+    assert seed.main([str(models / "input")]) == 1
+    assert "failed" in capsys.readouterr().err

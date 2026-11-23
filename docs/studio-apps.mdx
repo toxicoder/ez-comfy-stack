@@ -192,8 +192,10 @@ Swap it whenever you like - **Upload media** on the picker puts your own still t
 works the same way: a soft eight-second A-minor pad, faded at both ends so a loop point does not
 click, quiet enough that it never clips. Drop your own `ez_a2v_bed.wav` in and it stays yours.
 
-Seeding never replaces a file that is already a readable PNG (or a readable WAV, for the bed), so a
-plate you uploaded, and the clay pack the host staged, survive every restart. It runs in the container's start phase, so the verb that
+Seeding never replaces a file that is already a readable PNG, or - for the bed - any real WAV: 24-bit,
+surround, and float exports from a DAW are all left alone, and only a file with no WAV header at all
+or no frames in it is replaced. So a plate you uploaded, and the clay pack the host staged, survive
+every restart. It runs in the container's start phase, so the verb that
 re-seeds is `bazelisk run //:manage -- start` on a fresh host and `bazelisk run //:manage -- restart`
 after you deliberately delete a plate you want back. A run that worked prints one
 `input plates ready in /inputs` line in `bazelisk run //:manage -- logs`; the failure line and what

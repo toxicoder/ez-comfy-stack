@@ -477,28 +477,47 @@ def write_pcm_wav(path: Path, frames: bytes, rate: int) -> None:
         handle.writeframes(bytes(frames))
 
 
-def wav_valid(path: Path) -> bool:
-    """True when ``path`` already holds a decodable 16-bit PCM WAV.
-
-    A bed the operator dropped in is never replaced, so a file this module
-    cannot read as audio is treated as not-ours rather than as corrupt.
+def _has_wave_magic(path: Path) -> bool:
+    """True when the first twelve bytes read as a RIFF/WAVE container.
 
     Args:
         path: Candidate bed.
 
     Returns:
-        Whether ``path`` is a file with a readable RIFF/WAVE audio header.
+        Whether the file opens and carries the WAV container magic.
+    """
+    try:
+        with path.open("rb") as handle:
+            header = handle.read(12)
+    except OSError:
+        return False
+    return len(header) == 12 and header[:4] == b"RIFF" and header[8:12] == b"WAVE"
+
+
+def wav_valid(path: Path) -> bool:
+    """True when ``path`` already holds audio this module must not touch.
+
+    A bed the operator dropped in stays theirs. 24-bit and multi-channel PCM
+    open with the stdlib reader at any bit depth or channel count; a float,
+    u-law, or extensible-format export that reader cannot parse still carries
+    the WAV container, so it is kept as well. What is left is a file with no
+    WAV header at all - a truncated download, a text stub, a 0-byte file - or
+    a header whose data chunk holds no frames, and those the seed replaces.
+
+    Args:
+        path: Candidate bed.
+
+    Returns:
+        Whether ``path`` is a file the seeder should leave alone.
     """
     if not path.is_file():
         return False
     try:
         with wave.open(str(path), "rb") as handle:
-            return (
-                handle.getnframes() > 0
-                and handle.getsampwidth() == 2
-                and handle.getnchannels() in (1, 2)
-            )
-    except (OSError, EOFError, wave.Error):
+            return handle.getnframes() > 0
+    except wave.Error:
+        return _has_wave_magic(path)
+    except (OSError, EOFError):
         return False
 
 
@@ -599,10 +618,20 @@ def main(argv: list[str] | None = None) -> int:
     try:
         written = seed_clay_inputs(dest)
         example = seed_example_input(dest)
-        bed = seed_audio_bed_input(dest)
     except (OSError, ValueError) as exc:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
         return 1
+    bed: Path | None
+    try:
+        bed = seed_audio_bed_input(dest)
+    except (OSError, ValueError) as exc:
+        # A bed that will not seed is its own line: the plates really did land
+        # and the operator should not be told to go look for a plate problem.
+        print(f"[seed-clay] audio bed not seeded: {exc}", file=sys.stderr)
+        bed = None
+        failed = True
+    else:
+        failed = False
     seeded = f"; wrote {EXAMPLE_NAME}" if example is not None else ""
     if bed is not None:
         seeded += f"; wrote {AUDIO_BED_NAME}"
@@ -611,7 +640,7 @@ def main(argv: list[str] | None = None) -> int:
         f"[seed-clay] {len(written)} plates ready in {dest}{seeded}; "
         f"{placeholders} placeholder plates in place"
     )
-    return 0
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
