@@ -116,9 +116,9 @@ flowchart TB
 | 33 | Decode TOP-DOWN | `VAEDecode` | OUTPUT |
 | 34 | Save TOP-DOWN | `SaveImage` | OUTPUT |
 | 35 | Upscale still | `EZImageUpscale` | OUTPUT |
-| 36 | Upscale still | `EZImageUpscale` | OUTPUT |
-| 37 | Upscale still | `EZImageUpscale` | OUTPUT |
-| 38 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 36 | Upscale still 2 | `EZImageUpscale` | OUTPUT |
+| 37 | Upscale still 3 | `EZImageUpscale` | OUTPUT |
+| 38 | Upscale still 4 | `EZImageUpscale` | OUTPUT |
 | 39 | Negative SHOT SIDE | `EZNegativePromptEnhance` | PROMPT |
 | 40 | Negative SHOT SIDE | `CLIPTextEncode` | PROMPT |
 | 41 | Negative SHOT BACK | `EZNegativePromptEnhance` | PROMPT |

@@ -120,11 +120,11 @@ flowchart TB
 | 46 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT banner |
 | 47 | Detail | `EZQuality` | QUALITY |
 | 48 | Upscale still | `EZImageUpscale` | SHOT thumb |
-| 49 | Upscale still | `EZImageUpscale` | SHOT ig |
-| 50 | Upscale still | `EZImageUpscale` | SHOT portrait |
-| 51 | Upscale still | `EZImageUpscale` | SHOT shorts |
-| 52 | Upscale still | `EZImageUpscale` | SHOT og |
-| 53 | Upscale still | `EZImageUpscale` | SHOT banner |
+| 49 | Upscale still 2 | `EZImageUpscale` | SHOT ig |
+| 50 | Upscale still 3 | `EZImageUpscale` | SHOT portrait |
+| 51 | Upscale still 4 | `EZImageUpscale` | SHOT shorts |
+| 52 | Upscale still 5 | `EZImageUpscale` | SHOT og |
+| 53 | Upscale still 6 | `EZImageUpscale` | SHOT banner |
 | 54 | Check models | `EZModelCheck` | QUALITY |
 | 55 | Negative SHOT ig | `EZNegativePromptEnhance` | Ungrouped |
 | 56 | Negative SHOT ig | `CLIPTextEncode` | Ungrouped |

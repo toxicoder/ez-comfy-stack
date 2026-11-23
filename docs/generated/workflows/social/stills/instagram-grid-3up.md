@@ -92,8 +92,8 @@ flowchart TB
 | 28 | Detail | `EZQuality` | QUALITY |
 | 29 | Format / platform | `EZImageFormat` | SETTINGS |
 | 30 | Upscale still | `EZImageUpscale` | SHOT LEFT |
-| 31 | Upscale still | `EZImageUpscale` | SHOT CENTER |
-| 32 | Upscale still | `EZImageUpscale` | SHOT RIGHT |
+| 31 | Upscale still 2 | `EZImageUpscale` | SHOT CENTER |
+| 32 | Upscale still 3 | `EZImageUpscale` | SHOT RIGHT |
 | 33 | Check models | `EZModelCheck` | QUALITY |
 | 34 | Negative SHOT CENTER | `EZNegativePromptEnhance` | PROMPT |
 | 35 | Negative SHOT CENTER | `CLIPTextEncode` | PROMPT |

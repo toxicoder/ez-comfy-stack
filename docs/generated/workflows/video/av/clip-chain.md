@@ -120,13 +120,13 @@ flowchart TB
 | 140 | Beat 2 prompt | `CLIPTextEncode` | 4. Beat 2 (8.00s LTX) |
 | 151 | Beat 2 negative enhance | `EZNegativePromptEnhance` | 4. Beat 2 (8.00s LTX) |
 | 141 | Beat 2 negative | `CLIPTextEncode` | 4. Beat 2 (8.00s LTX) |
-| 142 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (8.00s LTX) |
-| 143 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (8.00s LTX) |
-| 146 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (8.00s LTX) |
+| 142 | LTX Img->Video condition 2 | `LTXVImgToVideo` | 4. Beat 2 (8.00s LTX) |
+| 143 | LTX frame rate cond 2 | `LTXVConditioning` | 4. Beat 2 (8.00s LTX) |
+| 146 | Concat AV latents 2 | `LTXVConcatAVLatent` | 4. Beat 2 (8.00s LTX) |
 | 144 | Beat 2 KSampler | `KSampler` | 4. Beat 2 (8.00s LTX) |
-| 147 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (8.00s LTX) |
-| 145 | VAE Decode | `VAEDecode` | 4. Beat 2 (8.00s LTX) |
-| 150 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (8.00s LTX) |
+| 147 | Separate AV latents 2 | `LTXVSeparateAVLatent` | 4. Beat 2 (8.00s LTX) |
+| 145 | VAE Decode 2 | `VAEDecode` | 4. Beat 2 (8.00s LTX) |
+| 150 | Audio VAE Decode 2 | `LTXVAudioVAEDecode` | 4. Beat 2 (8.00s LTX) |
 | 148 | Beat 2 video (MP4) - open node for prev... | `VHS_VideoCombine` | 4. Beat 2 (8.00s LTX) |
 | 152 | Beat 2 last frame | `EZClipLastFrame` | 4. Beat 2 (8.00s LTX) |
 | 153 | Save beat 2 last frame | `SaveImage` | 4. Beat 2 (8.00s LTX) |
@@ -134,13 +134,13 @@ flowchart TB
 | 180 | Beat 3 prompt | `CLIPTextEncode` | 5. Beat 3 (8.00s LTX) |
 | 191 | Beat 3 negative enhance | `EZNegativePromptEnhance` | 5. Beat 3 (8.00s LTX) |
 | 181 | Beat 3 negative | `CLIPTextEncode` | 5. Beat 3 (8.00s LTX) |
-| 182 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (8.00s LTX) |
-| 183 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (8.00s LTX) |
-| 186 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (8.00s LTX) |
+| 182 | LTX Img->Video condition 3 | `LTXVImgToVideo` | 5. Beat 3 (8.00s LTX) |
+| 183 | LTX frame rate cond 3 | `LTXVConditioning` | 5. Beat 3 (8.00s LTX) |
+| 186 | Concat AV latents 3 | `LTXVConcatAVLatent` | 5. Beat 3 (8.00s LTX) |
 | 184 | Beat 3 KSampler | `KSampler` | 5. Beat 3 (8.00s LTX) |
-| 187 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (8.00s LTX) |
-| 185 | VAE Decode | `VAEDecode` | 5. Beat 3 (8.00s LTX) |
-| 190 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (8.00s LTX) |
+| 187 | Separate AV latents 3 | `LTXVSeparateAVLatent` | 5. Beat 3 (8.00s LTX) |
+| 185 | VAE Decode 3 | `VAEDecode` | 5. Beat 3 (8.00s LTX) |
+| 190 | Audio VAE Decode 3 | `LTXVAudioVAEDecode` | 5. Beat 3 (8.00s LTX) |
 | 188 | Beat 3 video (MP4) - open node for prev... | `VHS_VideoCombine` | 5. Beat 3 (8.00s LTX) |
 | 192 | Beat 3 last frame | `EZClipLastFrame` | 5. Beat 3 (8.00s LTX) |
 | 193 | Save beat 3 last frame | `SaveImage` | 5. Beat 3 (8.00s LTX) |
@@ -148,13 +148,13 @@ flowchart TB
 | 220 | Beat 4 prompt | `CLIPTextEncode` | 6. Beat 4 (8.00s LTX) |
 | 231 | Beat 4 negative enhance | `EZNegativePromptEnhance` | 6. Beat 4 (8.00s LTX) |
 | 221 | Beat 4 negative | `CLIPTextEncode` | 6. Beat 4 (8.00s LTX) |
-| 222 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (8.00s LTX) |
-| 223 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (8.00s LTX) |
-| 226 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (8.00s LTX) |
+| 222 | LTX Img->Video condition 4 | `LTXVImgToVideo` | 6. Beat 4 (8.00s LTX) |
+| 223 | LTX frame rate cond 4 | `LTXVConditioning` | 6. Beat 4 (8.00s LTX) |
+| 226 | Concat AV latents 4 | `LTXVConcatAVLatent` | 6. Beat 4 (8.00s LTX) |
 | 224 | Beat 4 KSampler | `KSampler` | 6. Beat 4 (8.00s LTX) |
-| 227 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (8.00s LTX) |
-| 225 | VAE Decode | `VAEDecode` | 6. Beat 4 (8.00s LTX) |
-| 230 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (8.00s LTX) |
+| 227 | Separate AV latents 4 | `LTXVSeparateAVLatent` | 6. Beat 4 (8.00s LTX) |
+| 225 | VAE Decode 4 | `VAEDecode` | 6. Beat 4 (8.00s LTX) |
+| 230 | Audio VAE Decode 4 | `LTXVAudioVAEDecode` | 6. Beat 4 (8.00s LTX) |
 | 228 | Beat 4 video (MP4) - open node for prev... | `VHS_VideoCombine` | 6. Beat 4 (8.00s LTX) |
 | 232 | Beat 4 last frame | `EZClipLastFrame` | 6. Beat 4 (8.00s LTX) |
 | 233 | Save beat 4 last frame | `SaveImage` | 6. Beat 4 (8.00s LTX) |

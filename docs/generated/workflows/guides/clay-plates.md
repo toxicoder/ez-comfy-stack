@@ -112,9 +112,9 @@ flowchart TB
 | 37 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT shorts |
 | 38 | Detail | `EZQuality` | QUALITY |
 | 39 | Upscale still | `EZImageUpscale` | OUTPUT |
-| 40 | Upscale still | `EZImageUpscale` | SHOT packshot |
-| 41 | Upscale still | `EZImageUpscale` | SHOT ig |
-| 42 | Upscale still | `EZImageUpscale` | SHOT shorts |
+| 40 | Upscale still 2 | `EZImageUpscale` | SHOT packshot |
+| 41 | Upscale still 3 | `EZImageUpscale` | SHOT ig |
+| 42 | Upscale still 4 | `EZImageUpscale` | SHOT shorts |
 | 43 | Describe image | `EZImageDescribe` | INPUT |
 | 44 | Check models | `EZModelCheck` | QUALITY |
 

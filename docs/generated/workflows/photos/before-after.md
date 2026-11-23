@@ -88,7 +88,7 @@ flowchart TB
 | 23 | Detail | `EZQuality` | QUALITY |
 | 24 | Format / platform | `EZImageFormat` | SETTINGS |
 | 25 | Upscale still | `EZImageUpscale` | SHOT BEFORE |
-| 26 | Upscale still | `EZImageUpscale` | SHOT AFTER |
+| 26 | Upscale still 2 | `EZImageUpscale` | SHOT AFTER |
 | 27 | Check models | `EZModelCheck` | QUALITY |
 | 28 | Negative SHOT AFTER | `EZNegativePromptEnhance` | PROMPT |
 | 29 | Negative SHOT AFTER | `CLIPTextEncode` | PROMPT |

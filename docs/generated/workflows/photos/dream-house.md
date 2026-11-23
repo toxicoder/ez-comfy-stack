@@ -131,22 +131,22 @@ flowchart TB
 | 54 | Save 09 | `SaveImage` | SHOT 09 drone |
 | 55 | SHOT 10 study | `EZPromptJoin` | SHOT 10 study |
 | 56 | Positive 10 | `CLIPTextEncode` | SHOT 10 study |
-| 57 | Sampler 10 | `KSampler` | SHOT 10 study |
+| 57 | Sampler 1 | `KSampler` | SHOT 10 study |
 | 58 | Decode 10 | `VAEDecode` | SHOT 10 study |
 | 59 | Save 10 | `SaveImage` | SHOT 10 study |
 | 60 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
 | 61 | Detail | `EZQuality` | QUALITY |
 | 62 | Format / platform | `EZImageFormat` | SETTINGS |
 | 63 | Upscale still | `EZImageUpscale` | SHOT 01 tower |
-| 64 | Upscale still | `EZImageUpscale` | SHOT 02 foyer |
-| 65 | Upscale still | `EZImageUpscale` | SHOT 03 lounge |
-| 66 | Upscale still | `EZImageUpscale` | SHOT 04 kitchen |
-| 67 | Upscale still | `EZImageUpscale` | SHOT 05 dining |
-| 68 | Upscale still | `EZImageUpscale` | SHOT 06 bedroom |
-| 69 | Upscale still | `EZImageUpscale` | SHOT 07 bath |
-| 70 | Upscale still | `EZImageUpscale` | SHOT 08 terrace |
-| 71 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
-| 72 | Upscale still | `EZImageUpscale` | SHOT 10 study |
+| 64 | Upscale still 2 | `EZImageUpscale` | SHOT 02 foyer |
+| 65 | Upscale still 3 | `EZImageUpscale` | SHOT 03 lounge |
+| 66 | Upscale still 4 | `EZImageUpscale` | SHOT 04 kitchen |
+| 67 | Upscale still 5 | `EZImageUpscale` | SHOT 05 dining |
+| 68 | Upscale still 6 | `EZImageUpscale` | SHOT 06 bedroom |
+| 69 | Upscale still 7 | `EZImageUpscale` | SHOT 07 bath |
+| 70 | Upscale still 8 | `EZImageUpscale` | SHOT 08 terrace |
+| 71 | Upscale still 9 | `EZImageUpscale` | SHOT 09 drone |
+| 72 | Upscale still 10 | `EZImageUpscale` | SHOT 10 study |
 | 73 | Check models | `EZModelCheck` | QUALITY |
 | 74 | Negative SHOT 02 foyer | `EZNegativePromptEnhance` | PROMPT |
 | 75 | Negative SHOT 02 foyer | `CLIPTextEncode` | PROMPT |

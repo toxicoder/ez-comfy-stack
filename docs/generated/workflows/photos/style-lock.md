@@ -98,9 +98,9 @@ flowchart TB
 | 34 | Detail | `EZQuality` | QUALITY |
 | 35 | Format / platform | `EZImageFormat` | SETTINGS |
 | 36 | Upscale still | `EZImageUpscale` | SHOT FACADE |
-| 37 | Upscale still | `EZImageUpscale` | SHOT LIVING |
-| 38 | Upscale still | `EZImageUpscale` | SHOT TERRACE |
-| 39 | Upscale still | `EZImageUpscale` | SHOT RAIN |
+| 37 | Upscale still 2 | `EZImageUpscale` | SHOT LIVING |
+| 38 | Upscale still 3 | `EZImageUpscale` | SHOT TERRACE |
+| 39 | Upscale still 4 | `EZImageUpscale` | SHOT RAIN |
 | 40 | Check models | `EZModelCheck` | QUALITY |
 | 41 | Negative SHOT LIVING | `EZNegativePromptEnhance` | PROMPT |
 | 42 | Negative SHOT LIVING | `CLIPTextEncode` | PROMPT |

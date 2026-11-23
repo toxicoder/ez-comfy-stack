@@ -110,11 +110,11 @@ flowchart TB
 | 46 | Detail | `EZQuality` | QUALITY |
 | 47 | Format / platform | `EZImageFormat` | SETTINGS |
 | 48 | Upscale still | `EZImageUpscale` | SHOT 01 |
-| 49 | Upscale still | `EZImageUpscale` | SHOT 02 |
-| 50 | Upscale still | `EZImageUpscale` | SHOT 03 |
-| 51 | Upscale still | `EZImageUpscale` | SHOT 04 |
-| 52 | Upscale still | `EZImageUpscale` | SHOT 05 |
-| 53 | Upscale still | `EZImageUpscale` | SHOT 06 |
+| 49 | Upscale still 2 | `EZImageUpscale` | SHOT 02 |
+| 50 | Upscale still 3 | `EZImageUpscale` | SHOT 03 |
+| 51 | Upscale still 4 | `EZImageUpscale` | SHOT 04 |
+| 52 | Upscale still 5 | `EZImageUpscale` | SHOT 05 |
+| 53 | Upscale still 6 | `EZImageUpscale` | SHOT 06 |
 | 54 | Check models | `EZModelCheck` | QUALITY |
 | 55 | Negative SHOT 02 | `EZNegativePromptEnhance` | PROMPT |
 | 56 | Negative SHOT 02 | `CLIPTextEncode` | PROMPT |

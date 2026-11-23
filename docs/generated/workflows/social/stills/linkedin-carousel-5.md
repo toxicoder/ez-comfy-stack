@@ -104,10 +104,10 @@ flowchart TB
 | 40 | Detail | `EZQuality` | QUALITY |
 | 41 | Format / platform | `EZImageFormat` | SETTINGS |
 | 42 | Upscale still | `EZImageUpscale` | SHOT COVER |
-| 43 | Upscale still | `EZImageUpscale` | SHOT POINT |
-| 44 | Upscale still | `EZImageUpscale` | SHOT PROOF |
-| 45 | Upscale still | `EZImageUpscale` | SHOT SCENE |
-| 46 | Upscale still | `EZImageUpscale` | SHOT CLOSE |
+| 43 | Upscale still 2 | `EZImageUpscale` | SHOT POINT |
+| 44 | Upscale still 3 | `EZImageUpscale` | SHOT PROOF |
+| 45 | Upscale still 4 | `EZImageUpscale` | SHOT SCENE |
+| 46 | Upscale still 5 | `EZImageUpscale` | SHOT CLOSE |
 | 47 | Check models | `EZModelCheck` | QUALITY |
 | 48 | Negative SHOT POINT | `EZNegativePromptEnhance` | PROMPT |
 | 49 | Negative SHOT POINT | `CLIPTextEncode` | PROMPT |

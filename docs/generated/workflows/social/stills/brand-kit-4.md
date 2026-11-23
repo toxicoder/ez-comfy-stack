@@ -103,9 +103,9 @@ flowchart TB
 | 35 | Detail | `EZQuality` | QUALITY |
 | 36 | Format / platform | `EZImageFormat` | SETTINGS |
 | 37 | Upscale still | `EZImageUpscale` | SHOT KEY |
-| 38 | Upscale still | `EZImageUpscale` | SHOT COOL |
-| 39 | Upscale still | `EZImageUpscale` | SHOT NIGHT |
-| 40 | Upscale still | `EZImageUpscale` | SHOT HIGH |
+| 38 | Upscale still 2 | `EZImageUpscale` | SHOT COOL |
+| 39 | Upscale still 3 | `EZImageUpscale` | SHOT NIGHT |
+| 40 | Upscale still 4 | `EZImageUpscale` | SHOT HIGH |
 | 41 | Check models | `EZModelCheck` | QUALITY |
 | 42 | Negative SHOT COOL | `EZNegativePromptEnhance` | PROMPT |
 | 43 | Negative SHOT COOL | `CLIPTextEncode` | PROMPT |

@@ -81,7 +81,7 @@ flowchart LR
   N4["Save cutout"]
   N5["Save matte"]
   N6["Upscale still"]
-  N7["Upscale still"]
+  N7["Upscale still 2"]
   N8["Check models"]
   N2 --> N3
   N3 --> N6
@@ -101,7 +101,7 @@ flowchart LR
 | 4 | Save cutout | `SaveImage` | OUTPUT |
 | 5 | Save matte | `SaveImage` | OUTPUT |
 | 6 | Upscale still | `EZImageUpscale` | OUTPUT |
-| 7 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 7 | Upscale still 2 | `EZImageUpscale` | OUTPUT |
 | 8 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference

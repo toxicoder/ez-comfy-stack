@@ -178,21 +178,21 @@ flowchart TB
 | 112 | Clay 10 (ez_house_clay_10.png) | `LoadImage` | SHOT 10 study |
 | 113 | Encode clay 10 | `VAEEncode` | SHOT 10 study |
 | 114 | Positive + clay 10 | `ReferenceLatent` | SHOT 10 study |
-| 115 | Sampler 10 | `KSampler` | SHOT 10 study |
+| 115 | Sampler 1 | `KSampler` | SHOT 10 study |
 | 116 | Decode 10 | `VAEDecode` | SHOT 10 study |
 | 117 | Save 10 | `SaveImage` | SHOT 10 study |
 | 118 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
 | 119 | Detail | `EZQuality` | QUALITY |
 | 121 | Upscale still | `EZImageUpscale` | SHOT 01 tower |
-| 122 | Upscale still | `EZImageUpscale` | SHOT 02 foyer |
-| 123 | Upscale still | `EZImageUpscale` | SHOT 03 lounge |
-| 124 | Upscale still | `EZImageUpscale` | SHOT 04 kitchen |
-| 125 | Upscale still | `EZImageUpscale` | SHOT 05 dining |
-| 126 | Upscale still | `EZImageUpscale` | SHOT 06 bedroom |
-| 127 | Upscale still | `EZImageUpscale` | SHOT 07 bath |
-| 128 | Upscale still | `EZImageUpscale` | SHOT 08 terrace |
-| 129 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
-| 130 | Upscale still | `EZImageUpscale` | SHOT 10 study |
+| 122 | Upscale still 2 | `EZImageUpscale` | SHOT 02 foyer |
+| 123 | Upscale still 3 | `EZImageUpscale` | SHOT 03 lounge |
+| 124 | Upscale still 4 | `EZImageUpscale` | SHOT 04 kitchen |
+| 125 | Upscale still 5 | `EZImageUpscale` | SHOT 05 dining |
+| 126 | Upscale still 6 | `EZImageUpscale` | SHOT 06 bedroom |
+| 127 | Upscale still 7 | `EZImageUpscale` | SHOT 07 bath |
+| 128 | Upscale still 8 | `EZImageUpscale` | SHOT 08 terrace |
+| 129 | Upscale still 9 | `EZImageUpscale` | SHOT 09 drone |
+| 130 | Upscale still 10 | `EZImageUpscale` | SHOT 10 study |
 | 131 | Check models | `EZModelCheck` | QUALITY |
 | 132 | Negative SHOT 02 foyer | `EZNegativePromptEnhance` | Ungrouped |
 | 133 | Negative SHOT 02 foyer | `CLIPTextEncode` | Ungrouped |
