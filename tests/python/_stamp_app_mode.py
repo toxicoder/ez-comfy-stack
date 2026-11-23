@@ -747,6 +747,26 @@ def video_format_runs_wan(node: Mapping[str, Any] | None) -> bool:
     return WAN_FAMILY_MARK in str(values[VIDEO_FAMILY_SLOT] or "").lower()
 
 
+#: A title someone typed as an identifier: lower-case words joined by
+#: underscores, which is what a builder's title argument looks like before
+#: anyone turned it into words a person would read.
+IDENTIFIER_TITLE_RX = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)+$")
+
+
+def reads_as_identifier(text: str) -> bool:
+    """Whether text names a graph in code rather than asking a person something.
+
+    Args:
+        text: A node title, already stripped.
+
+    Returns:
+        True for lower-case words joined by underscores. Such a string must
+        never become the prefix of an App Mode label: the panel would print the
+        graph's internal slug where it should be asking the operator something.
+    """
+    return bool(IDENTIFIER_TITLE_RX.match(text))
+
+
 def display_label(
     node: Mapping[str, Any] | None,
     name: str,
@@ -759,6 +779,10 @@ def display_label(
         return generic
     ntype = str(node.get("type") or "")
     title = str(node.get("title") or "").strip()
+    if reads_as_identifier(title):
+        # An identifier names the graph, not the knob: read it as no title at
+        # all so the row falls back to the table's own wording.
+        title = ""
     title_l = title.lower()
     if ntype == "EZNegativePromptEnhance" and name == "enhance":
         if not collide:
@@ -935,8 +959,8 @@ def display_label(
                 "mode": f"{kind} mode",
             }.get(name, generic)
         # Multi-pass Drive-through graphs ship one enhancer per ACE pass
-        # ("ez_edm_prompt pass 2"); number the labels so the App shows each
-        # pass once instead of four identical "Vocal / instrumental" rows.
+        # ("EDM prompt pass 2"); number the labels so the App shows each pass
+        # once instead of four identical "Vocal / instrumental" rows.
         pass_match = re.search(r"\bpass (\d+)\b", title_l)
         if pass_match and collide:
             number = pass_match.group(1)
@@ -946,6 +970,17 @@ def display_label(
                 "lyrics": f"Pass {number} lyrics",
                 "enhance": f"Rewrite pass {number}",
                 "mode": f"Pass {number} vocal / instrumental",
+            }.get(name, generic)
+        if collide:
+            # The un-numbered enhancer is the run's first pass: number its rows
+            # the way its numbered siblings are, rather than reaching for the
+            # node title and printing an identifier on the panel.
+            return {
+                "sample": "Pass 1 sample",
+                "tags": "Pass 1 tags",
+                "lyrics": "Pass 1 lyrics",
+                "enhance": "Rewrite pass 1",
+                "mode": "Pass 1 vocal / instrumental",
             }.get(name, generic)
         if name == "sample":
             return "Sample prompt"

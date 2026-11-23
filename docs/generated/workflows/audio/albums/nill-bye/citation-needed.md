@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -245,7 +245,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -655,7 +655,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1058,7 +1058,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1487,7 +1487,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1885,7 +1885,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2316,7 +2316,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2724,7 +2724,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3120,7 +3120,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3563,7 +3563,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3988,7 +3988,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4421,7 +4421,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4849,7 +4849,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5292,7 +5292,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5704,7 +5704,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6107,7 +6107,7 @@ folk hush
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6854,21 +6854,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
-| ez_rap_prompt | `g-funk, synth bass, dry claps, talkbox lead, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `reggae, offbeat guitar, rimshot, organ bubble, male rap vocals, dry booth, no a...` |
-| ez_rap_prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
-| ez_rap_prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `afrobeat, log drum, guitar stab, shekere, male rap vocals, dry booth, no autotu...` |
-| ez_rap_prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `trip-hop, dusty break, sub bass, spy keys, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
-| ez_rap_prompt | `funk, wah guitar, tight snare, clavinet, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
-| ez_rap_prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
+| Rap prompt | `g-funk, synth bass, dry claps, talkbox lead, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `reggae, offbeat guitar, rimshot, organ bubble, male rap vocals, dry booth, no a...` |
+| Rap prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
+| Rap prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
+| Rap prompt | `afrobeat, log drum, guitar stab, shekere, male rap vocals, dry booth, no autotu...` |
+| Rap prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
+| Rap prompt | `trip-hop, dusty break, sub bass, spy keys, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
+| Rap prompt | `funk, wah guitar, tight snare, clavinet, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
+| Rap prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
+| Rap prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
 
 #### `lyrics`
 
@@ -6880,21 +6880,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[intro] brushed snare source missing Nill Bye citing [verse] Rake drops a claim...` |
-| ez_rap_prompt | `[chorus] P-hacking king Your night is a slice Nill Bye on the uncut batch Rake ...` |
-| ez_rap_prompt | `[intro] rimshot offbeat Nill Bye gauging [verse] Rake swore the flex would land...` |
-| ez_rap_prompt | `[intro] rhodes warm date passed Nill Bye dating [verse] Rake pops a flask with ...` |
-| ez_rap_prompt | `[verse] Rake skipped the goggles for a look Walked the hood like a fashion book...` |
-| ez_rap_prompt | `[intro] metal percussion mill turning Nill Bye weighing [verse] Rake fed the ru...` |
-| ez_rap_prompt | `[verse] Rake posed a gym selfie mid-rep Log drum knocking while he saved the st...` |
-| ez_rap_prompt | `[verse] Rake wore a rented drip to strut Return-by tag hanging off the next Ana...` |
-| ez_rap_prompt | `[intro] dusty break likes as food Nill Bye scanning [verse] Rake ate a clout di...` |
-| ez_rap_prompt | `[intro] strings swell radar ping Nill Bye tracking [verse] Rake sold a mood for...` |
-| ez_rap_prompt | `[intro] wah guitar feed loading Nill Bye ranking [verse] Rake chased the algori...` |
-| ez_rap_prompt | `[spoken word] Story time Rake brought a bedtime rumor Zero timestamps Tossed [v...` |
-| ez_rap_prompt | `[intro] square lead pretty type Nill Bye tabling [verse] Rake wrote a caption v...` |
-| ez_rap_prompt | `[chorus] Energy drink The fuel is fake, the crash is due Nill Bye on the brass-...` |
-| ez_rap_prompt | `[intro] acoustic guitar ember talk Nill Bye sifting [verse] Rake spun a campfir...` |
+| Rap prompt | `[intro] brushed snare source missing Nill Bye citing [verse] Rake drops a claim...` |
+| Rap prompt | `[chorus] P-hacking king Your night is a slice Nill Bye on the uncut batch Rake ...` |
+| Rap prompt | `[intro] rimshot offbeat Nill Bye gauging [verse] Rake swore the flex would land...` |
+| Rap prompt | `[intro] rhodes warm date passed Nill Bye dating [verse] Rake pops a flask with ...` |
+| Rap prompt | `[verse] Rake skipped the goggles for a look Walked the hood like a fashion book...` |
+| Rap prompt | `[intro] metal percussion mill turning Nill Bye weighing [verse] Rake fed the ru...` |
+| Rap prompt | `[verse] Rake posed a gym selfie mid-rep Log drum knocking while he saved the st...` |
+| Rap prompt | `[verse] Rake wore a rented drip to strut Return-by tag hanging off the next Ana...` |
+| Rap prompt | `[intro] dusty break likes as food Nill Bye scanning [verse] Rake ate a clout di...` |
+| Rap prompt | `[intro] strings swell radar ping Nill Bye tracking [verse] Rake sold a mood for...` |
+| Rap prompt | `[intro] wah guitar feed loading Nill Bye ranking [verse] Rake chased the algori...` |
+| Rap prompt | `[spoken word] Story time Rake brought a bedtime rumor Zero timestamps Tossed [v...` |
+| Rap prompt | `[intro] square lead pretty type Nill Bye tabling [verse] Rake wrote a caption v...` |
+| Rap prompt | `[chorus] Energy drink The fuel is fake, the crash is due Nill Bye on the brass-...` |
+| Rap prompt | `[intro] acoustic guitar ember talk Nill Bye sifting [verse] Rake spun a campfir...` |
 
 #### `enhance`
 
@@ -6933,21 +6933,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/01-citation-needed` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/02-p-hacking` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/03-null-result` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/04-expired-reagent` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/05-lab-safety` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/06-rumor-mill` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/07-gym-selfie` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/08-rented-drip` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/09-clout-diet` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/10-mood-forecast` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/11-algorithm` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/12-story-time` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/13-caption` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/14-energy-drink` |
-| ez_rap_prompt | `audio/albums/nill-bye/citation-needed/15-campfire` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/01-citation-needed` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/02-p-hacking` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/03-null-result` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/04-expired-reagent` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/05-lab-safety` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/06-rumor-mill` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/07-gym-selfie` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/08-rented-drip` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/09-clout-diet` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/10-mood-forecast` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/11-algorithm` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/12-story-time` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/13-caption` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/14-energy-drink` |
+| Rap prompt | `audio/albums/nill-bye/citation-needed/15-campfire` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 

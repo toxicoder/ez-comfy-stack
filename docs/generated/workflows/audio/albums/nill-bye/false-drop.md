@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -243,7 +243,7 @@ dummy filed
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -665,7 +665,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1068,7 +1068,7 @@ stage denied
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1457,7 +1457,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1894,7 +1894,7 @@ yield none
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2307,7 +2307,7 @@ ice dumped
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2728,7 +2728,7 @@ boast gone
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3138,7 +3138,7 @@ rumor dies
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3557,7 +3557,7 @@ miss shows
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3957,7 +3957,7 @@ flex filed
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4348,7 +4348,7 @@ paper none
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4765,7 +4765,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5151,7 +5151,7 @@ hollow filed
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5570,7 +5570,7 @@ data none
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5966,7 +5966,7 @@ lift denied
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6647,21 +6647,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a...` |
-| ez_rap_prompt | `festival trap, 808 bass, crowd-bed, supersaw stab, male rap vocals, dry booth, ...` |
-| ez_rap_prompt | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b...` |
-| ez_rap_prompt | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo...` |
-| ez_rap_prompt | `electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry ...` |
-| ez_rap_prompt | `hardstyle, reverse bass, kick split, screech lead, male rap vocals, dry booth, ...` |
-| ez_rap_prompt | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,...` |
+| Rap prompt | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a...` |
+| Rap prompt | `festival trap, 808 bass, crowd-bed, supersaw stab, male rap vocals, dry booth, ...` |
+| Rap prompt | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b...` |
+| Rap prompt | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry boot...` |
+| Rap prompt | `techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo...` |
+| Rap prompt | `electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no ...` |
+| Rap prompt | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry ...` |
+| Rap prompt | `hardstyle, reverse bass, kick split, screech lead, male rap vocals, dry booth, ...` |
+| Rap prompt | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,...` |
 
 #### `lyrics`
 
@@ -6673,21 +6673,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare ...` |
-| ez_rap_prompt | `[intro] stanchion up list blank wristband fake [verse] Rake leans on velvet lik...` |
-| ez_rap_prompt | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra...` |
-| ez_rap_prompt | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I ...` |
-| ez_rap_prompt | `[intro] stick lit pretty burn yield zero [verse] Rake lights a stick like a bre...` |
-| ez_rap_prompt | `[intro] magnum rented tab borrowed ice theater [verse] Rake pops a cork like he...` |
-| ez_rap_prompt | `[intro] flash burst blink gone boast missing [verse] Rake talks big in a white-...` |
-| ez_rap_prompt | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br...` |
-| ez_rap_prompt | `[intro] LFO thick growl covering miss hiding [verse] Rake throws a wobble over ...` |
-| ez_rap_prompt | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note ...` |
-| ez_rap_prompt | `[intro] scanner on gobo fake logos floating [verse] Rake draws a logo in a rent...` |
-| ez_rap_prompt | `[intro] shuffle left skip the one proof dodging [verse] Rake shuffles left when...` |
-| ez_rap_prompt | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B...` |
-| ez_rap_prompt | `[intro] reverse punch split dummy data missing [verse] Rake splits a kick like ...` |
-| ez_rap_prompt | `[verse] Rake throws his hands like a headline Talks a lift that he never signed...` |
+| Rap prompt | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare ...` |
+| Rap prompt | `[intro] stanchion up list blank wristband fake [verse] Rake leans on velvet lik...` |
+| Rap prompt | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra...` |
+| Rap prompt | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I ...` |
+| Rap prompt | `[intro] stick lit pretty burn yield zero [verse] Rake lights a stick like a bre...` |
+| Rap prompt | `[intro] magnum rented tab borrowed ice theater [verse] Rake pops a cork like he...` |
+| Rap prompt | `[intro] flash burst blink gone boast missing [verse] Rake talks big in a white-...` |
+| Rap prompt | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br...` |
+| Rap prompt | `[intro] LFO thick growl covering miss hiding [verse] Rake throws a wobble over ...` |
+| Rap prompt | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note ...` |
+| Rap prompt | `[intro] scanner on gobo fake logos floating [verse] Rake draws a logo in a rent...` |
+| Rap prompt | `[intro] shuffle left skip the one proof dodging [verse] Rake shuffles left when...` |
+| Rap prompt | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B...` |
+| Rap prompt | `[intro] reverse punch split dummy data missing [verse] Rake splits a kick like ...` |
+| Rap prompt | `[verse] Rake throws his hands like a headline Talks a lift that he never signed...` |
 
 #### `enhance`
 
@@ -6726,21 +6726,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/01-false-drop` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/02-velvet-rope` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/03-fog-machine` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/04-guest-list` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/05-sparkler` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/06-bottle-service` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/07-strobe-claim` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/08-amen-rumor` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/09-wobble-alibi` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/10-supersaw-flex` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/11-laser-show` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/12-two-step` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/13-jersey-bounce` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/14-kick-split` |
-| ez_rap_prompt | `audio/albums/nill-bye/false-drop/15-uplift-rumor` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/01-false-drop` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/02-velvet-rope` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/03-fog-machine` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/04-guest-list` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/05-sparkler` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/06-bottle-service` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/07-strobe-claim` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/08-amen-rumor` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/09-wobble-alibi` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/10-supersaw-flex` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/11-laser-show` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/12-two-step` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/13-jersey-bounce` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/14-kick-split` |
+| Rap prompt | `audio/albums/nill-bye/false-drop/15-uplift-rumor` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 

@@ -64,7 +64,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -103,7 +103,7 @@ flowchart LR
 | 3 | Song Duration | `PrimitiveNode` | DURATION |
 | 4 | Latent length (seconds) | `EmptyAceStep1.5LatentAudio` | SETTINGS |
 | 15 | Rap lyrics | `EZRapLyrics` | PROMPT |
-| 5 | ez_rap_prompt | `EZAceStepPromptEnhance` | PROMPT |
+| 5 | Rap prompt | `EZAceStepPromptEnhance` | PROMPT |
 | 6 | ACE tags + lyrics | `TextEncodeAceStepAudio1.5` | PROMPT |
 | 7 | Negative (zero) | `ConditioningZeroOut` | PROMPT |
 | 8 | ACE sampler | `KSampler` | PROMPT |

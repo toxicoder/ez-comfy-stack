@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -246,7 +246,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -660,7 +660,7 @@ hallway stays
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1068,7 +1068,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1509,7 +1509,7 @@ invoice open
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1930,7 +1930,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2361,7 +2361,7 @@ levy stays
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2779,7 +2779,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3208,7 +3208,7 @@ gap stays
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3616,7 +3616,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4017,7 +4017,7 @@ order holds
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4441,7 +4441,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4836,7 +4836,7 @@ racks hum
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5265,7 +5265,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5672,7 +5672,7 @@ lease ends
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6066,7 +6066,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6815,21 +6815,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap voc...` |
-| ez_rap_prompt | `boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no auto...` |
-| ez_rap_prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
-| ez_rap_prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, ...` |
-| ez_rap_prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
-| ez_rap_prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
-| ez_rap_prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap voc...` |
+| Rap prompt | `boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no auto...` |
+| Rap prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
+| Rap prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
+| Rap prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
+| Rap prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, ...` |
+| Rap prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
+| Rap prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
+| Rap prompt | `gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
+| Rap prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
 
 #### `lyrics`
 
@@ -6841,21 +6841,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[intro] yeah grid down Nill Bye grid-gauging [verse] February iced the whole ER...` |
-| ez_rap_prompt | `[spoken word] Robb Elementary Nineteen children Two teachers Seventy-seven minu...` |
-| ez_rap_prompt | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any ...` |
-| ez_rap_prompt | `[intro] invoice hum Nill Bye auditing [verse] Disaster order every month since ...` |
-| ez_rap_prompt | `[intro] gavel wood brass hit Nill Bye grading [verse] Twenty-twenty-three, the ...` |
-| ez_rap_prompt | `[intro] steel strings Nill Bye appraising [verse] No income tax is the state hy...` |
-| ez_rap_prompt | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo...` |
-| ez_rap_prompt | `[intro] harmonica sting Nill Bye charting [verse] Texas never took the expansio...` |
-| ez_rap_prompt | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list...` |
-| ez_rap_prompt | `[intro] rhodes wash Nill Bye noting [verse] GA-thirty-four, March twenty-twenty...` |
-| ez_rap_prompt | `[intro] pixel lead Nill Bye graphing [verse] Mid-decade is not how the clock ru...` |
-| ez_rap_prompt | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot...` |
-| ez_rap_prompt | `[intro] organ swell hand clap Nill Bye reading [verse] August twenty-twenty-six...` |
-| ez_rap_prompt | `[verse] November twenty-five he filed again A fourth term no Texas governor tak...` |
-| ez_rap_prompt | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s...` |
+| Rap prompt | `[intro] yeah grid down Nill Bye grid-gauging [verse] February iced the whole ER...` |
+| Rap prompt | `[spoken word] Robb Elementary Nineteen children Two teachers Seventy-seven minu...` |
+| Rap prompt | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any ...` |
+| Rap prompt | `[intro] invoice hum Nill Bye auditing [verse] Disaster order every month since ...` |
+| Rap prompt | `[intro] gavel wood brass hit Nill Bye grading [verse] Twenty-twenty-three, the ...` |
+| Rap prompt | `[intro] steel strings Nill Bye appraising [verse] No income tax is the state hy...` |
+| Rap prompt | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo...` |
+| Rap prompt | `[intro] harmonica sting Nill Bye charting [verse] Texas never took the expansio...` |
+| Rap prompt | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list...` |
+| Rap prompt | `[intro] rhodes wash Nill Bye noting [verse] GA-thirty-four, March twenty-twenty...` |
+| Rap prompt | `[intro] pixel lead Nill Bye graphing [verse] Mid-decade is not how the clock ru...` |
+| Rap prompt | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot...` |
+| Rap prompt | `[intro] organ swell hand clap Nill Bye reading [verse] August twenty-twenty-six...` |
+| Rap prompt | `[verse] November twenty-five he filed again A fourth term no Texas governor tak...` |
+| Rap prompt | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s...` |
 
 #### `enhance`
 
@@ -6894,21 +6894,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/02-abject-failure` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/05-gavel-theater` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/06-property-hymn` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/10-mask-order` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/12-rack-tax` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/13-wudu-letter` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/14-fourth-term` |
-| ez_rap_prompt | `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/02-abject-failure` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/05-gavel-theater` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/06-property-hymn` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/10-mask-order` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/12-rack-tax` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/13-wudu-letter` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/14-fourth-term` |
+| Rap prompt | `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 

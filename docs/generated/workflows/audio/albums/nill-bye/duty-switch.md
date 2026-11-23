@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -252,7 +252,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -675,7 +675,7 @@ bill dated
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1075,7 +1075,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1500,7 +1500,7 @@ no speaks
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1894,7 +1894,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2323,7 +2323,7 @@ floor sits
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2727,7 +2727,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3122,7 +3122,7 @@ dock open
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3562,7 +3562,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3983,7 +3983,7 @@ drawing first
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4411,7 +4411,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4830,7 +4830,7 @@ river holds
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5258,7 +5258,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5667,7 +5667,7 @@ mic on
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6068,7 +6068,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6815,21 +6815,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a...` |
-| ez_rap_prompt | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b...` |
-| ez_rap_prompt | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry ...` |
-| ez_rap_prompt | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo...` |
-| ez_rap_prompt | `techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,...` |
-| ez_rap_prompt | `festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 15...` |
+| Rap prompt | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a...` |
+| Rap prompt | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b...` |
+| Rap prompt | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry boot...` |
+| Rap prompt | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry ...` |
+| Rap prompt | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo...` |
+| Rap prompt | `techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no ...` |
+| Rap prompt | `hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,...` |
+| Rap prompt | `festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 15...` |
 
 #### `lyrics`
 
@@ -6841,21 +6841,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[spoken word] The job is the switch Minute one, not a long idle A dining room i...` |
-| ez_rap_prompt | `[chorus] Article one Nill Bye on the taxing clause Congress lays and collects. ...` |
-| ez_rap_prompt | `[intro] phonk-bell Nill Bye locking the rate seat [verse] The Federal Reserve A...` |
-| ez_rap_prompt | `[intro] trap-pads Nill Bye timing the notice [verse] Inspectors general are the...` |
-| ez_rap_prompt | `[verse] A republic that punishes a firm for a client is a republic eating its p...` |
-| ez_rap_prompt | `[intro] dnb-amen Nill Bye reading the LCA [verse] H-1B already had a fight wort...` |
-| ez_rap_prompt | `[verse] A republic can have emergencies. It cannot have only emergencies, reaso...` |
-| ez_rap_prompt | `[verse] July twenty-twenty-four handed a structure, not a crown, remainderdock ...` |
-| ez_rap_prompt | `[intro] techno-dry Nill Bye opening the pardon file [verse] Clemency is a const...` |
-| ez_rap_prompt | `[intro] dub-wobble Nill Bye asking for an Act [verse] Public buildings have a p...` |
-| ez_rap_prompt | `[intro] electro-analog Nill Bye tying the bus [verse] Isolation was a choice to...` |
-| ez_rap_prompt | `[verse] Redistricting is a census job. Census jobs have a clock, rivermap The c...` |
-| ez_rap_prompt | `[intro] hardstyle-reverse Nill Bye watt-counting the barn [verse] First the tax...` |
-| ez_rap_prompt | `[chorus] Open quad Nill Bye on the argument A student with a sign is not an inv...` |
-| ez_rap_prompt | `[intro] festival-trap festival-crowd Nill Bye pulling pipe [verse] Lead service...` |
+| Rap prompt | `[spoken word] The job is the switch Minute one, not a long idle A dining room i...` |
+| Rap prompt | `[chorus] Article one Nill Bye on the taxing clause Congress lays and collects. ...` |
+| Rap prompt | `[intro] phonk-bell Nill Bye locking the rate seat [verse] The Federal Reserve A...` |
+| Rap prompt | `[intro] trap-pads Nill Bye timing the notice [verse] Inspectors general are the...` |
+| Rap prompt | `[verse] A republic that punishes a firm for a client is a republic eating its p...` |
+| Rap prompt | `[intro] dnb-amen Nill Bye reading the LCA [verse] H-1B already had a fight wort...` |
+| Rap prompt | `[verse] A republic can have emergencies. It cannot have only emergencies, reaso...` |
+| Rap prompt | `[verse] July twenty-twenty-four handed a structure, not a crown, remainderdock ...` |
+| Rap prompt | `[intro] techno-dry Nill Bye opening the pardon file [verse] Clemency is a const...` |
+| Rap prompt | `[intro] dub-wobble Nill Bye asking for an Act [verse] Public buildings have a p...` |
+| Rap prompt | `[intro] electro-analog Nill Bye tying the bus [verse] Isolation was a choice to...` |
+| Rap prompt | `[verse] Redistricting is a census job. Census jobs have a clock, rivermap The c...` |
+| Rap prompt | `[intro] hardstyle-reverse Nill Bye watt-counting the barn [verse] First the tax...` |
+| Rap prompt | `[chorus] Open quad Nill Bye on the argument A student with a sign is not an inv...` |
+| Rap prompt | `[intro] festival-trap festival-crowd Nill Bye pulling pipe [verse] Lead service...` |
 
 #### `enhance`
 
@@ -6894,21 +6894,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/01-duty-switch` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/02-article-one` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/03-for-cause-lock` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/04-ig-notice` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/05-counsel-stays` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/06-prevailing-wage` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/07-merits-syllabus` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/08-unofficial-sort` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/09-clemency-file` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/10-congress-the-wing` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/11-tie-the-island` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/12-decade-lines` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/13-ratepayer-bus` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/14-open-quad` |
-| ez_rap_prompt | `audio/albums/nill-bye/duty-switch/15-wrench-the-tap` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/01-duty-switch` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/02-article-one` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/03-for-cause-lock` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/04-ig-notice` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/05-counsel-stays` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/06-prevailing-wage` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/07-merits-syllabus` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/08-unofficial-sort` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/09-clemency-file` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/10-congress-the-wing` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/11-tie-the-island` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/12-decade-lines` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/13-ratepayer-bus` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/14-open-quad` |
+| Rap prompt | `audio/albums/nill-bye/duty-switch/15-wrench-the-tap` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
