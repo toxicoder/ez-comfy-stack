@@ -279,7 +279,7 @@ def _alpha_band(image: PilImage) -> str:
     palette image names no alpha band at all, which is what
     :func:`_has_palette_transparency` is there to see past.
 
-    Arguments:
+    Args:
         image: Oriented PIL image.
 
     Returns:
