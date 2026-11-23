@@ -9,6 +9,12 @@ node is labelled.
 
 The pass under test is ``_lab_titles.ensure_node_titles`` and the one-shot that
 applies it to the shipped tree is ``_title_lab_graphs``.
+
+Two nodes of one class in one graph also may not read the same title. That was
+the bigger defect: 964 nodes across 33 shipped graphs shared a label with a
+sibling of their own class, 18 ``SaveImage`` nodes all reading ``Save last
+frame`` in every film graph among them, and the canvas draws the class name
+plus the title, so those 18 tiles are indistinguishable.
 """
 
 from __future__ import annotations
@@ -122,7 +128,10 @@ def _table_sourced_findings(graph: dict[str, Any]) -> list[str]:
     a sibling already wears. Two nodes reading the same table label - three
     ``EZImageUpscale`` nodes all reading ``Upscale still`` in
     ``photos/camera-angles.json`` - is that numbering missing: the operator
-    gets nothing to aim at in the node search box.
+    gets nothing to aim at in the node search box. This is the half of the rule
+    that reaches across classes, because one table label belongs to one class;
+    :func:`_same_class_findings` covers the repeats of any provenance inside
+    one class.
 
     Args:
         graph: Comfy workflow dict.
@@ -142,6 +151,40 @@ def _table_sourced_findings(graph: dict[str, Any]) -> list[str]:
     return [
         f"title {title!r} is carried by nodes " + ", ".join(str(i) for i in ids)
         for title, ids in worn.items()
+        if len(ids) > 1
+    ]
+
+
+def _same_class_findings(graph: dict[str, Any]) -> list[str]:
+    """Return the labels one graph hands to two nodes of the same class.
+
+    The canvas draws ``title`` beside the class name, so two ``SaveImage``
+    nodes both reading ``Save last frame`` - 18 of each in every shipped film
+    graph - give the operator nothing to aim at in the node search box or the
+    properties panel. Provenance does not matter here: a label two nodes share
+    is unreadable whether the table wrote it or an operator did. Two nodes of
+    *different* classes wearing one label is a different thing and is not a
+    defect (see :func:`_table_sourced_findings` for the narrower rule that
+    still applies to the table's own labels).
+
+    Args:
+        graph: Comfy workflow dict.
+
+    Returns:
+        One message per (class, title) pair the graph repeats; empty when every
+        class reads its nodes apart.
+    """
+    worn: dict[tuple[str, str], list[Any]] = {}
+    for node in _nodes_of(graph):
+        title = str(node.get("title") or "").strip()
+        if title:
+            worn.setdefault((str(node.get("type") or ""), title), []).append(
+                node.get("id")
+            )
+    return [
+        f"nodes " + ", ".join(str(i) for i in ids) + f" of class {cls!r} all read "
+        f"{title!r}"
+        for (cls, title), ids in worn.items()
         if len(ids) > 1
     ]
 
@@ -187,6 +230,7 @@ def test_every_shipped_graph_titles_every_node(
     for node in _nodes_of(graph):
         findings.extend(_title_findings(node))
     findings.extend(_table_sourced_findings(graph))
+    findings.extend(_same_class_findings(graph))
     assert not findings, f"{lab_rel}: " + "; ".join(findings)
 
 
@@ -367,18 +411,19 @@ def test_authored_duplicates_number_in_node_id_order() -> None:
     }
 
 
-def test_a_hand_written_duplicate_outside_the_table_is_left_alone() -> None:
+def test_a_hand_written_duplicate_on_two_classes_is_left_alone() -> None:
     """The ``Negative SHOT WIDE`` pair two shot rows share is prose, not the table."""
     graph = _graph(
         _node(1, "EZNegativePromptEnhance", "Negative SHOT WIDE"),
-        _node(2, "EZNegativePromptEnhance", "Negative SHOT WIDE"),
+        _node(2, "CLIPTextEncode", "Negative SHOT WIDE"),
         _node(3, "Note", "Handoff to wrap"),
-        _node(4, "Note", "Handoff to wrap"),
+        _node(4, "MarkdownNote", "Handoff to wrap"),
     )
     before = [dict(node) for node in graph["nodes"]]
     assert ensure_node_titles(graph) == 0
     assert graph["nodes"] == before
     assert not _table_sourced_findings(graph)
+    assert not _same_class_findings(graph)
 
 
 def test_the_gate_flags_a_repeated_generated_title() -> None:
@@ -433,13 +478,74 @@ def test_the_reset_only_blanks_titles_the_pass_could_have_written() -> None:
     assert [str(node["title"]) for node in graph["nodes"]] == titles
 
 
-def test_the_gate_leaves_an_untabled_duplicate_alone() -> None:
-    """A hand-written label two operators happened to pick is not a defect."""
+def test_the_gate_leaves_a_cross_class_untabled_twin_alone() -> None:
+    """A hand-written label two operators happened to pick on two classes is clean."""
     graph = _graph(
         _node(1, "Note", "Handoff to wrap"),
-        _node(2, "Note", "Handoff to wrap"),
+        _node(2, "MarkdownNote", "Handoff to wrap"),
     )
     assert not _table_sourced_findings(graph)
+    assert not _same_class_findings(graph)
+
+
+def test_the_gate_flags_two_nodes_of_one_class_reading_one_title() -> None:
+    """The canvas defect: two ``SaveImage`` nodes both reading ``Save last frame``."""
+    graph = _graph(
+        _node(41, "SaveImage", "Save last frame"),
+        _node(42, "SaveImage", "Save last frame"),
+    )
+    assert _same_class_findings(graph) == [
+        "nodes 41, 42 of class 'SaveImage' all read 'Save last frame'"
+    ]
+
+
+def test_two_nodes_of_one_class_wearing_one_authored_title_are_numbered() -> None:
+    """``Save last frame`` is nobody's table label, and it still gets numbered."""
+    graph = _graph(
+        _node(41, "SaveImage", "Save last frame"),
+        _node(42, "SaveImage", "Save last frame"),
+        _node(43, "SaveImage", "Save last frame"),
+    )
+    assert ensure_node_titles(graph) == 2
+    titles = [str(node["title"]) for node in graph["nodes"]]
+    assert titles == ["Save last frame", "Save last frame 2", "Save last frame 3"]
+    assert not _same_class_findings(graph)
+    assert not _table_sourced_findings(graph)
+
+
+def test_authored_numbering_survives_a_second_pass() -> None:
+    """Re-running never stacks a number onto the number it wrote."""
+    graph = _graph(
+        _node(1, "SaveImage", "Save last frame"),
+        _node(2, "SaveImage", "Save last frame"),
+        _node(3, "SaveImage", "Save last frame"),
+    )
+    assert ensure_node_titles(graph) == 2
+    first = [str(node["title"]) for node in graph["nodes"]]
+    assert ensure_node_titles(graph) == 0
+    assert [str(node["title"]) for node in graph["nodes"]] == first
+    assert first == ["Save last frame", "Save last frame 2", "Save last frame 3"]
+
+
+def test_cross_class_twins_sharing_a_word_stay_untouched() -> None:
+    """Two classes that both read ``Negative SHOT WIDE`` are by design."""
+    graph = _graph(
+        _node(1, "CLIPTextEncode", "Negative SHOT WIDE"),
+        _node(2, "EZNegativePromptEnhance", "Negative SHOT WIDE"),
+        _node(3, "CLIPTextEncode", "Positive SHOT WIDE"),
+    )
+    before = [dict(node) for node in graph["nodes"]]
+    assert ensure_node_titles(graph) == 0
+    assert graph["nodes"] == before
+
+
+def test_a_lone_node_keeps_its_authored_title_verbatim() -> None:
+    """A singleton is nobody's duplicate: the pass does not so much as strip it."""
+    graph = _graph(
+        _node(9, "VHS_VideoCombine", "Save video (MP4) - open node for preview")
+    )
+    assert ensure_node_titles(graph) == 0
+    assert graph["nodes"][0]["title"] == "Save video (MP4) - open node for preview"
 
 
 def test_a_generated_title_never_repeats_the_class_or_a_word() -> None:

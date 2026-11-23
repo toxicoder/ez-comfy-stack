@@ -11,21 +11,27 @@ node once a graph has 18 samplers in it.
 
 Rules, matching what the hand-written corpus already does:
 
-- An existing human title is never overwritten. Only a missing title, a title
-  equal to the class name, and an adjacent doubled word are touched.
+- An existing human title is never replaced with another label. Only a missing
+  title, a title equal to the class name, and an adjacent doubled word are
+  rewritten; a title a same-class sibling already wears only gains the counting
+  number that tells the two apart.
 - ``CLASS_TITLES`` is mined from this corpus: the most common human title per
   class, kept only where that title covers at least 60% of the class's titled
   nodes and carries no digit (a digit in a title is that node's size, bitrate,
   or checkpoint, not a label for the class).
 - Samplers follow the corpus rule: one sampler in a graph reads ``Sampler``,
   several read ``Sampler 1``..``Sampler N`` in node-id order.
-- No two nodes in one graph carry the same generated title: a label the table
-  already gave a sibling is numbered clear of it, so three untitled
-  ``EZImageUpscale`` nodes read ``Upscale still`` / ``Upscale still 2`` /
-  ``Upscale still 3``. A title that arrives already wearing the table's own
-  label is numbered the same way, which is what makes a builder that stamps
-  ``Upscale still`` on every node it inserts rebuild to the shipped graph; a
-  title outside the table is left exactly as it was written.
+- No two nodes of one class in one graph carry the same title, whatever wrote
+  it: a label a sibling already wears is numbered clear of it in node-id order,
+  so three untitled ``EZImageUpscale`` nodes read ``Upscale still`` /
+  ``Upscale still 2`` / ``Upscale still 3``, and 18 ``SaveImage`` nodes all
+  authored ``Save last frame`` read ``Save last frame`` .. ``Save last frame
+  18``. A title that arrives already wearing the table's own label is numbered
+  the same way, which is what makes a builder that stamps ``Upscale still`` on
+  every node it inserts rebuild to the shipped graph. A title only counts as
+  worn by its own class, so two different classes both reading ``Negative SHOT
+  WIDE`` stay exactly as authored; a title already wearing a number this pass
+  wrote is a distinct label and is never re-derived from its stem.
 """
 
 from __future__ import annotations
@@ -223,7 +229,7 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
 
     A title is set when it is missing, when it repeats the class name, and
     halved when it repeats a word back to back. Any other title is the
-    operator-facing text the graph already shipped with and is left alone.
+    operator-facing text the graph already shipped with and keeps its words.
 
     Samplers are numbered over the ones this pass titles, so a graph whose
     ``Sampler CLOSE`` / ``Sampler WIDE`` pair also carries two bare samplers
@@ -233,9 +239,10 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
     Every title this pass writes is numbered clear of the titles the graph
     already carries, authored ones included, so no two nodes in one graph read
     the same label. A title the graph arrived wearing is numbered the same way
-    when an earlier node carries it and the table sources it, walking nodes in
-    ``_node_sort_key`` order so the numbering does not depend on where a node
-    sits in the file.
+    when an earlier node of the same class carries it, whatever wrote that
+    title, plus once more for a table label a node of another class wears;
+    nodes are walked in ``_node_sort_key`` order so the numbering does not
+    depend on where a node sits in the file.
 
     Arguments:
         graph: Comfy workflow dict (mutated).
@@ -290,15 +297,22 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
             changed += 1
     bases = set(CLASS_TITLES.values())
     bases.update(title_for_class(str(node.get("type") or ""), 0, 1) for node in nodes)
-    worn: set[str] = set()
+    worn: set[tuple[str, str]] = set()
+    worn_titles: set[str] = set()
     for node in sorted(nodes, key=_node_sort_key):
+        node_type = str(node.get("type") or "")
         title = str(node.get("title") or "").strip()
-        if title and title in worn and _is_table_sourced(title, bases):
+        if title and (
+            (node_type, title) in worn
+            or (title in worn_titles and _is_table_sourced(title, bases))
+        ):
             title = _unique_title(title, taken)
             node["title"] = title
             taken.add(title)
             changed += 1
-        worn.add(title)
+        if title:
+            worn.add((node_type, title))
+            worn_titles.add(title)
     return changed
 
 
@@ -307,7 +321,10 @@ def _is_table_sourced(title: str, bases: set[str]) -> bool:
 
     ``test_lab_titles._is_table_sourced`` is this predicate verbatim: what this
     pass is willing to renumber has to be exactly what that gate may call a
-    duplicate, or a rebuild and the shipped graph disagree forever.
+    duplicate, or a rebuild and the shipped graph disagree forever. The pass
+    also numbers a repeat within one class, table-sourced or not; this
+    predicate is the wider half of that rule, the one that numbers a label two
+    nodes of *different* classes both wear.
 
     Arguments:
         title: Title text.

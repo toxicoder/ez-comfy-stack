@@ -101,10 +101,10 @@ flowchart TB
 | 34 | Check models | `EZModelCheck` | QUALITY |
 | 35 | Negative SHOT WINDOW | `EZNegativePromptEnhance` | PROMPT |
 | 36 | Negative SHOT WINDOW | `CLIPTextEncode` | PROMPT |
-| 37 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 37 | Negative + identity plate 2 | `ReferenceLatent` | SETTINGS |
 | 38 | Negative SHOT NIGHT LAMP | `EZNegativePromptEnhance` | PROMPT |
 | 39 | Negative SHOT NIGHT LAMP | `CLIPTextEncode` | PROMPT |
-| 40 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 40 | Negative + identity plate 3 | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
 

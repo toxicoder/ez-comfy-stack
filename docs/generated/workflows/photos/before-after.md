@@ -92,7 +92,7 @@ flowchart TB
 | 27 | Check models | `EZModelCheck` | QUALITY |
 | 28 | Negative SHOT AFTER | `EZNegativePromptEnhance` | PROMPT |
 | 29 | Negative SHOT AFTER | `CLIPTextEncode` | PROMPT |
-| 30 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 30 | Negative + identity plate 2 | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
 

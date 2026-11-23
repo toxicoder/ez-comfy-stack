@@ -113,9 +113,9 @@ flowchart TB
 | 225 | Separate AV latents 2 | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
 | 226 | VAE Decode 2 | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 227 | Audio VAE Decode 2 | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 228 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 228 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
 | 229 | Last frame 2 | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
-| 230 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 230 | Save last frame 2 | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
 | 251 | b1 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 x 5.00s LTX) |
 | 240 | b1 s3 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 241 | LTX Img->Video condition 3 | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
@@ -125,9 +125,9 @@ flowchart TB
 | 245 | Separate AV latents 3 | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
 | 246 | VAE Decode 3 | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 247 | Audio VAE Decode 3 | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 248 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 248 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
 | 249 | Last frame 3 | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
-| 250 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 250 | Save last frame 3 | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
 | 271 | b2 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
 | 260 | b2 s1 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 261 | LTX Img->Video condition 4 | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
@@ -137,9 +137,9 @@ flowchart TB
 | 265 | Separate AV latents 4 | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
 | 266 | VAE Decode 4 | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 267 | Audio VAE Decode 4 | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 268 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 268 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
 | 269 | Last frame 4 | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
-| 270 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 270 | Save last frame 4 | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
 | 291 | b2 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
 | 280 | b2 s2 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 281 | LTX Img->Video condition 5 | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
@@ -149,9 +149,9 @@ flowchart TB
 | 285 | Separate AV latents 5 | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
 | 286 | VAE Decode 5 | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 287 | Audio VAE Decode 5 | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 288 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 288 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
 | 289 | Last frame 5 | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
-| 290 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 290 | Save last frame 5 | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
 | 311 | b2 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
 | 300 | b2 s3 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 301 | LTX Img->Video condition 6 | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
@@ -161,9 +161,9 @@ flowchart TB
 | 305 | Separate AV latents 6 | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
 | 306 | VAE Decode 6 | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
 | 307 | Audio VAE Decode 6 | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 308 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 308 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
 | 309 | Last frame 6 | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
-| 310 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 310 | Save last frame 6 | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
 | 331 | b3 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
 | 320 | b3 s1 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 321 | LTX Img->Video condition 7 | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
@@ -173,9 +173,9 @@ flowchart TB
 | 325 | Separate AV latents 7 | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
 | 326 | VAE Decode 7 | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 327 | Audio VAE Decode 7 | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 328 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 328 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
 | 329 | Last frame 7 | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
-| 330 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 330 | Save last frame 7 | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
 | 351 | b3 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
 | 340 | b3 s2 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 341 | LTX Img->Video condition 8 | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
@@ -185,9 +185,9 @@ flowchart TB
 | 345 | Separate AV latents 8 | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
 | 346 | VAE Decode 8 | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 347 | Audio VAE Decode 8 | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 348 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 348 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
 | 349 | Last frame 8 | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
-| 350 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 350 | Save last frame 8 | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
 | 371 | b3 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
 | 360 | b3 s3 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 361 | LTX Img->Video condition 9 | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
@@ -197,9 +197,9 @@ flowchart TB
 | 365 | Separate AV latents 9 | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
 | 366 | VAE Decode 9 | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
 | 367 | Audio VAE Decode 9 | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 368 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 368 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
 | 369 | Last frame 9 | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
-| 370 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 370 | Save last frame 9 | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
 | 391 | b4 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
 | 380 | b4 s1 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 381 | LTX Img->Video condition 10 | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
@@ -209,9 +209,9 @@ flowchart TB
 | 385 | Separate AV latents 10 | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
 | 386 | VAE Decode 10 | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 387 | Audio VAE Decode 10 | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 388 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 388 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
 | 389 | Last frame 10 | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
-| 390 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 390 | Save last frame 10 | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
 | 411 | b4 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
 | 400 | b4 s2 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 401 | LTX Img->Video condition 11 | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
@@ -221,9 +221,9 @@ flowchart TB
 | 405 | Separate AV latents 11 | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
 | 406 | VAE Decode 11 | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 407 | Audio VAE Decode 11 | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 408 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 408 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
 | 409 | Last frame 11 | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
-| 410 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 410 | Save last frame 11 | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
 | 431 | b4 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
 | 420 | b4 s3 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 421 | LTX Img->Video condition 12 | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
@@ -233,9 +233,9 @@ flowchart TB
 | 425 | Separate AV latents 12 | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
 | 426 | VAE Decode 12 | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
 | 427 | Audio VAE Decode 12 | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 428 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 428 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
 | 429 | Last frame 12 | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
-| 430 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 430 | Save last frame 12 | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
 | 451 | b5 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
 | 440 | b5 s1 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 441 | LTX Img->Video condition 13 | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
@@ -245,9 +245,9 @@ flowchart TB
 | 445 | Separate AV latents 13 | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
 | 446 | VAE Decode 13 | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 447 | Audio VAE Decode 13 | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 448 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 448 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
 | 449 | Last frame 13 | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
-| 450 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 450 | Save last frame 13 | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
 | 471 | b5 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
 | 460 | b5 s2 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 461 | LTX Img->Video condition 14 | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
@@ -257,9 +257,9 @@ flowchart TB
 | 465 | Separate AV latents 14 | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
 | 466 | VAE Decode 14 | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 467 | Audio VAE Decode 14 | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 468 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 468 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
 | 469 | Last frame 14 | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
-| 470 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 470 | Save last frame 14 | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
 | 491 | b5 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
 | 480 | b5 s3 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 481 | LTX Img->Video condition 15 | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
@@ -269,9 +269,9 @@ flowchart TB
 | 485 | Separate AV latents 15 | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
 | 486 | VAE Decode 15 | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
 | 487 | Audio VAE Decode 15 | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 488 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 488 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
 | 489 | Last frame 15 | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
-| 490 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 490 | Save last frame 15 | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
 | 511 | b6 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
 | 500 | b6 s1 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 501 | LTX Img->Video condition 16 | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
@@ -281,9 +281,9 @@ flowchart TB
 | 505 | Separate AV latents 16 | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
 | 506 | VAE Decode 16 | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 507 | Audio VAE Decode 16 | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 508 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 508 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
 | 509 | Last frame 16 | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
-| 510 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 510 | Save last frame 16 | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 531 | b6 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
 | 520 | b6 s2 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 521 | LTX Img->Video condition 17 | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
@@ -293,9 +293,9 @@ flowchart TB
 | 525 | Separate AV latents 17 | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
 | 526 | VAE Decode 17 | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 527 | Audio VAE Decode 17 | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 528 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 528 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
 | 529 | Last frame 17 | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
-| 530 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 530 | Save last frame 17 | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 551 | b6 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
 | 540 | b6 s3 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 541 | LTX Img->Video condition 18 | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
@@ -305,9 +305,9 @@ flowchart TB
 | 545 | Separate AV latents 18 | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
 | 546 | VAE Decode 18 | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
 | 547 | Audio VAE Decode 18 | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 548 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 548 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
 | 549 | Last frame 18 | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
-| 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 550 | Save last frame 18 | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 51 | Load identity plate | `LoadImage` | INPUT |
 | 905 | Identity context | `EZSamplePrompt` | 2. LTX models |
@@ -1494,23 +1494,23 @@ Save prefix under the output folder.
 | Instance | Value |
 | --- | --- |
 | Save video (MP4) - open node for preview | `ez_lastlane_b1_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b1_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b1_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b2_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b2_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b2_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b3_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b3_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b3_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b4_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b4_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b4_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b5_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b5_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b5_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b6_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b6_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_lastlane_b6_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b1_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b1_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b2_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b2_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b2_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b3_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b3_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b3_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b4_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b4_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b4_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b5_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b5_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b5_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b6_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b6_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_lastlane_b6_s3_ltx_video` |
 
 #### `format`
 
@@ -1641,23 +1641,23 @@ Save prefix.
 | Instance | Value |
 | --- | --- |
 | Save last frame | `ez_lastlane_b1_s1_last` |
-| Save last frame | `ez_lastlane_b1_s2_last` |
-| Save last frame | `ez_lastlane_b1_s3_last` |
-| Save last frame | `ez_lastlane_b2_s1_last` |
-| Save last frame | `ez_lastlane_b2_s2_last` |
-| Save last frame | `ez_lastlane_b2_s3_last` |
-| Save last frame | `ez_lastlane_b3_s1_last` |
-| Save last frame | `ez_lastlane_b3_s2_last` |
-| Save last frame | `ez_lastlane_b3_s3_last` |
-| Save last frame | `ez_lastlane_b4_s1_last` |
-| Save last frame | `ez_lastlane_b4_s2_last` |
-| Save last frame | `ez_lastlane_b4_s3_last` |
-| Save last frame | `ez_lastlane_b5_s1_last` |
-| Save last frame | `ez_lastlane_b5_s2_last` |
-| Save last frame | `ez_lastlane_b5_s3_last` |
-| Save last frame | `ez_lastlane_b6_s1_last` |
-| Save last frame | `ez_lastlane_b6_s2_last` |
-| Save last frame | `ez_lastlane_b6_s3_last` |
+| Save last frame 2 | `ez_lastlane_b1_s2_last` |
+| Save last frame 3 | `ez_lastlane_b1_s3_last` |
+| Save last frame 4 | `ez_lastlane_b2_s1_last` |
+| Save last frame 5 | `ez_lastlane_b2_s2_last` |
+| Save last frame 6 | `ez_lastlane_b2_s3_last` |
+| Save last frame 7 | `ez_lastlane_b3_s1_last` |
+| Save last frame 8 | `ez_lastlane_b3_s2_last` |
+| Save last frame 9 | `ez_lastlane_b3_s3_last` |
+| Save last frame 10 | `ez_lastlane_b4_s1_last` |
+| Save last frame 11 | `ez_lastlane_b4_s2_last` |
+| Save last frame 12 | `ez_lastlane_b4_s3_last` |
+| Save last frame 13 | `ez_lastlane_b5_s1_last` |
+| Save last frame 14 | `ez_lastlane_b5_s2_last` |
+| Save last frame 15 | `ez_lastlane_b5_s3_last` |
+| Save last frame 16 | `ez_lastlane_b6_s1_last` |
+| Save last frame 17 | `ez_lastlane_b6_s2_last` |
+| Save last frame 18 | `ez_lastlane_b6_s3_last` |
 
 ### `EZFilmDisclosure` - LTX AI-media disclosure
 

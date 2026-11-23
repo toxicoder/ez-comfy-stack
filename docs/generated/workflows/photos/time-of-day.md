@@ -109,13 +109,13 @@ flowchart TB
 | 41 | Check models | `EZModelCheck` | QUALITY |
 | 42 | Negative SHOT DAWN | `EZNegativePromptEnhance` | PROMPT |
 | 43 | Negative SHOT DAWN | `CLIPTextEncode` | PROMPT |
-| 44 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 44 | Negative + identity plate 2 | `ReferenceLatent` | SETTINGS |
 | 45 | Negative SHOT NOON | `EZNegativePromptEnhance` | PROMPT |
 | 46 | Negative SHOT NOON | `CLIPTextEncode` | PROMPT |
-| 47 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 47 | Negative + identity plate 3 | `ReferenceLatent` | SETTINGS |
 | 48 | Negative SHOT NIGHT | `EZNegativePromptEnhance` | PROMPT |
 | 49 | Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
-| 50 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 50 | Negative + identity plate 4 | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
 

@@ -1615,7 +1615,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 2"
     },
     {
       "id": 38,
@@ -1746,7 +1746,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 3"
     }
   ],
   "links": [
