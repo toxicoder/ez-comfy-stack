@@ -54,6 +54,9 @@ TRANSPARENT_ALPHA = (0, 255)
 OPAQUE_ALPHA = (255, 255)
 """Alpha extrema with nothing transparent left to flatten."""
 
+PALETTE_T_TRNS = 1
+"""Palette index a ``P`` image marks see-through with its ``tRNS`` chunk."""
+
 
 class _Alpha:
     """Alpha band stand-in that reports the extrema the loader probes."""
@@ -70,7 +73,9 @@ class _Image:
 
     ``convert`` drops an alpha band the way Pillow does and says so through
     ``dropped_alpha``, so a test can tell a flattened composite apart from the
-    silent drop that feeds the model the RGB stored under the alpha.
+    silent drop that feeds the model the RGB stored under the alpha. A ``P``
+    image carrying ``info["transparency"]`` converts to an RGBA stand-in the
+    way Pillow honours a ``tRNS`` chunk, and records it in ``rgba_views``.
     """
 
     def __init__(
@@ -80,14 +85,19 @@ class _Image:
         alpha: tuple[int, int] = OPAQUE_ALPHA,
         *,
         paste_raises: bool = False,
+        info: dict[str, object] | None = None,
+        convert_raises: bool = False,
     ) -> None:
         self.mode = mode
         self.label = label
         self.alpha = alpha
         self.paste_raises = paste_raises
+        self.convert_raises = convert_raises
+        self.info: dict[str, object] = {} if info is None else dict(info)
         self.size = (8, 6)
         self.channel_reads: list[str] = []
         self.converted: list[str] = []
+        self.rgba_views: list["_Image"] = []
         self.dropped_alpha = False
         self.pasted: list[tuple["_Image", "_Alpha"]] = []
 
@@ -102,6 +112,16 @@ class _Image:
 
     def convert(self, mode: str) -> "_Image":
         self.converted.append(mode)
+        if self.convert_raises:
+            raise OSError("this Pillow cannot expand the palette")
+        if (
+            mode == "RGBA"
+            and self.mode == "P"
+            and self.info.get("transparency") is not None
+        ):
+            view = _Image("RGBA", f"{self.label} as RGBA", self.alpha)
+            self.rgba_views.append(view)
+            return view
         if "A" in self.getbands() and "A" not in tuple(mode):
             self.dropped_alpha = True
         self.mode = mode
@@ -117,6 +137,21 @@ class _Image:
 
     def __exit__(self, *_exc: object) -> None:
         return None
+
+
+class _OddPalette:
+    """Palette image whose ``info`` is not the table the probe reads.
+
+    Real Pillow hands back a dict here; this is the shape a stubbed or forked
+    build could hand back instead, and the flatten must read it as "nothing
+    transparent" rather than lose the still.
+    """
+
+    mode = "P"
+    info: object = "not a table"
+
+    def getbands(self) -> tuple[str, ...]:
+        return ("P",)
 
 
 class _Stage:
@@ -142,7 +177,7 @@ class _Stage:
         self.asarrayed: list[object] = []
         self.new_backdrops: list[tuple[str, object, object]] = []
         self.transposed_out = _Image(
-            self.image.mode, "transposed", self.image.alpha
+            self.image.mode, "transposed", self.image.alpha, info=self.image.info
         )
         self.flat_out = _Image("RGB", "flat", paste_raises=paste_raises)
         self._ndim = ndim
@@ -262,9 +297,7 @@ def test_cutout_png_flattens_its_alpha_onto_white(
     loaded = load_input_still("cutout.png")
 
     assert stage.new_backdrops == [("RGB", stage.transposed_out.size, WHITE)]
-    assert [source for source, _mask in stage.flat_out.pasted] == [
-        stage.transposed_out
-    ]
+    assert [source for source, _mask in stage.flat_out.pasted] == [stage.transposed_out]
     assert [mask.extrema for _source, mask in stage.flat_out.pasted] == [
         TRANSPARENT_ALPHA
     ]
@@ -365,6 +398,97 @@ def test_alpha_survives_a_pillow_build_without_the_image_module(
 
     assert flatten_alpha(stored, WHITE) is stored
     assert stage.new_backdrops == []
+
+
+def test_palette_png_with_a_transparent_index_flattens_onto_white(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A sticker saved as palette PNG flattens even though it has no alpha band.
+
+    A ``P`` image that declares its see-through index in a ``tRNS`` chunk still
+    reports ``getbands() == ("P",)``, so the band probe alone cannot see the
+    transparency and the palette colour stored under it reaches the model.
+    """
+    stored = _Image(
+        "P", "sticker", TRANSPARENT_ALPHA, info={"transparency": PALETTE_T_TRNS}
+    )
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "sticker.png").write_bytes(b"png")
+
+    loaded = load_input_still("sticker.png")
+
+    assert stage.transposed_out.converted == ["RGBA"]
+    assert stage.new_backdrops == [("RGB", stage.transposed_out.size, WHITE)]
+    assert [source for source, _mask in stage.flat_out.pasted] == [
+        stage.transposed_out.rgba_views[0]
+    ]
+    assert [mask.extrema for _source, mask in stage.flat_out.pasted] == [
+        TRANSPARENT_ALPHA
+    ]
+    assert stage.flat_out.converted == ["RGB"]
+    assert stage.asarrayed == [stage.flat_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
+def test_opaque_palette_png_keeps_the_plain_convert_path(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """A palette PNG whose declared index is not transparent earns no composite."""
+    stage = _Stage(monkeypatch, tmp_path)
+    indexed = _Image("P", "poster", OPAQUE_ALPHA, info={"transparency": PALETTE_T_TRNS})
+
+    assert flatten_alpha(indexed, WHITE) is indexed
+    assert indexed.converted == ["RGBA"]
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
+
+
+def test_palette_png_without_a_transparency_chunk_is_returned_unchanged(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    """An indexed PNG that stores no transparency keeps the single convert."""
+    stage = _Stage(monkeypatch, tmp_path)
+    indexed = _Image("P", "poster")
+
+    assert flatten_alpha(indexed, WHITE) is indexed
+    assert indexed.converted == []
+    assert indexed.channel_reads == []
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
+
+
+def test_a_palette_whose_info_is_no_table_is_left_alone(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """An ``info`` that is not a dict reads as no transparency, not a broken still."""
+    stage = _Stage(monkeypatch, tmp_path)
+    odd = _OddPalette()
+
+    assert flatten_alpha(odd, WHITE) is odd
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
+
+
+def test_a_palette_that_cannot_expand_keeps_the_stored_pixels(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A Pillow that refuses the RGBA view is a no-op, not a lost still."""
+    stage = _Stage(monkeypatch, tmp_path)
+    indexed = _Image(
+        "P",
+        "sticker",
+        TRANSPARENT_ALPHA,
+        info={"transparency": PALETTE_T_TRNS},
+        convert_raises=True,
+    )
+
+    assert flatten_alpha(indexed, WHITE) is indexed
+    assert indexed.converted == ["RGBA"]
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
 
 
 def test_heic_pick_reports_an_export_hint(

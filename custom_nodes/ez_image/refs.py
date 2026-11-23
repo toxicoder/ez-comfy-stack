@@ -244,6 +244,30 @@ def _exif_transpose(image: PilImage) -> PilImage:
     return transposed
 
 
+def _has_palette_transparency(image: PilImage, bands: tuple[str, ...]) -> bool:
+    """Say whether an indexed image names a see-through palette entry.
+
+    A ``P`` image that carries a ``tRNS`` chunk still reports
+    ``getbands() == ("P",)``, so the band probe alone cannot see that part of
+    its pixels are only a colour nobody ever saw.
+
+    Args:
+        image: Oriented PIL image.
+        bands: Bands the image reports for itself.
+
+    Returns:
+        ``True`` when this is an indexed image that declares a transparent
+        palette index, ``False`` for anything else, including an image whose
+        ``info`` is not a table this Pillow can read.
+    """
+    if "P" not in bands:
+        return False
+    info: object = getattr(image, "info", None)
+    if not isinstance(info, dict):
+        return False
+    return info.get("transparency") is not None
+
+
 def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
     """Composite a stored alpha band onto a flat backdrop.
 
@@ -253,15 +277,22 @@ def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
     band is fully opaque, is returned untouched: an ordinary JPG or PNG keeps
     exactly the path it had, with no second convert.
 
+    A palette image is alpha-bearing too: a ``P`` image with a ``tRNS`` chunk
+    reports no alpha band at all, so it is composited from the RGBA view
+    ``convert("RGBA")`` builds for it, which is where Pillow applies that
+    transparency. The same RGBA view feeds both the extrema probe and the
+    paste, so a logo or sticker saved as palette PNG lands on ``backdrop``
+    like any other cutout instead of on its palette colour.
+
     Args:
         image: Oriented PIL image.
         backdrop: Opaque RGB the transparent pixels become.
 
     Returns:
         The image with its alpha flattened onto ``backdrop``, or ``image``
-        unchanged when it carries no alpha, when that alpha is fully opaque, or
-        when this Pillow build cannot do the composite (fail-soft, like
-        :func:`_exif_transpose`).
+        unchanged when it carries no alpha and no palette transparency, when
+        that alpha is fully opaque, or when this Pillow build cannot do the
+        composite (fail-soft, like :func:`_exif_transpose`).
     """
     bands: tuple[str, ...] | None = None
     try:
@@ -270,21 +301,23 @@ def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
         bands = None
     if bands is None:
         bands = tuple(str(getattr(image, "mode", "")))
-    if "A" not in bands:
-        return image
+    has_alpha = "A" in bands
     try:
         from PIL import Image
     except Exception:  # noqa: BLE001 - Pillow build without Image
         return image
     try:
-        alpha = image.getchannel("A")
+        if not has_alpha and not _has_palette_transparency(image, bands):
+            return image
+        source: PilImage = image if has_alpha else image.convert("RGBA")
+        alpha = source.getchannel("A")
         extrema = alpha.getextrema()
         if extrema is not None and len(extrema) == 2:
             lowest = extrema[0]
             if isinstance(lowest, int) and lowest >= 255:
                 return image
         flat: PilImage = Image.new("RGB", image.size, backdrop)
-        flat.paste(image, (0, 0), mask=alpha)
+        flat.paste(source, (0, 0), mask=alpha)
     except Exception:  # noqa: BLE001 - stored pixels beat a failed composite
         return image
     return flat
