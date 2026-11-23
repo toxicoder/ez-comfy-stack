@@ -1083,7 +1083,9 @@ def _set_filename_prefix(graph: dict, prefix: str) -> None:
         ntype = node.get("type")
         if ntype == "SaveImage":
             node["widgets_values"] = [prefix]
-            node["title"] = f"Save {prefix}"
+            # The prefix is the widget's business; the title tells a person what
+            # the node writes, and every other saver in the catalog says so.
+            node["title"] = "Save PNG"
         elif ntype == "VHS_VideoCombine":
             widgets = node.get("widgets_values")
             if isinstance(widgets, dict):

@@ -64,7 +64,7 @@ flowchart LR
   N6["Latent 1280x704 batch 1"]
   N7["Sampler"]
   N8["VAE Decode"]
-  N9["Save ez_guide_hero"]
+  N9["Save PNG"]
   N10["Operator note"]
   N11["Load guide still"]
   N12["Klein Prompt Enhance (edit)"]
@@ -107,7 +107,7 @@ flowchart LR
 | 6 | Latent 1280x704 batch 1 | `EmptyFlux2LatentImage` | SETTINGS |
 | 7 | Sampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
-| 9 | Save ez_guide_hero | `SaveImage` | OUTPUT |
+| 9 | Save PNG | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |
 | 11 | Load guide still | `EZDCCLoadGuideStill` | INPUT |
 | 12 | Klein Prompt Enhance (edit) | `EZKleinPromptEnhance` | PROMPT |

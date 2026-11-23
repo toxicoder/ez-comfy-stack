@@ -750,7 +750,7 @@ def video_format_runs_wan(node: Mapping[str, Any] | None) -> bool:
 #: A title someone typed as an identifier: lower-case words joined by
 #: underscores, which is what a builder's title argument looks like before
 #: anyone turned it into words a person would read.
-IDENTIFIER_TITLE_RX = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)+$")
+IDENTIFIER_TITLE_RX = re.compile(r"^[A-Za-z0-9]+(?:_{1,}[A-Za-z0-9]+)+$")
 
 
 def reads_as_identifier(text: str) -> bool:
@@ -760,9 +760,10 @@ def reads_as_identifier(text: str) -> bool:
         text: A node title, already stripped.
 
     Returns:
-        True for lower-case words joined by underscores. Such a string must
-        never become the prefix of an App Mode label: the panel would print the
-        graph's internal slug where it should be asking the operator something.
+        True for words run together with underscores and no space between
+        them, in any case. Such a string must never become the prefix of an App
+        Mode label: the panel would print the graph's internal slug where it
+        should be asking the operator something.
     """
     return bool(IDENTIFIER_TITLE_RX.match(text))
 
@@ -772,8 +773,22 @@ def display_label(
     name: str,
     *,
     collide: bool = False,
+    passes: int = 1,
 ) -> str:
-    """Human App Mode title. Unique when ``collide`` or the node already names it."""
+    """Human App Mode title. Unique when ``collide`` or the node already names it.
+
+    Args:
+        node: The node the row belongs to, or None when only the widget name
+            is known.
+        name: The widget name the graph keeps for ComfyUI's sake.
+        collide: Whether another exposed node carries the same widget name, so
+            the row has to say which node it belongs to.
+        passes: How many ACE-Step enhancers the graph runs. One means a single
+            pass, whose rows carry no pass number.
+
+    Returns:
+        The label to print on the App Mode panel.
+    """
     generic = GENERIC_LABELS.get(name, name.replace("_", " ").capitalize())
     if node is None:
         return generic
@@ -971,10 +986,12 @@ def display_label(
                 "enhance": f"Rewrite pass {number}",
                 "mode": f"Pass {number} vocal / instrumental",
             }.get(name, generic)
-        if collide:
+        if collide and passes > 1:
             # The un-numbered enhancer is the run's first pass: number its rows
             # the way its numbered siblings are, rather than reaching for the
-            # node title and printing an identifier on the panel.
+            # node title and printing an identifier on the panel. A single-pass
+            # graph has no Pass 2 to number against, so its rows keep the plain
+            # wording the sample and mode returns below give.
             return {
                 "sample": "Pass 1 sample",
                 "tags": "Pass 1 tags",
@@ -1248,11 +1265,12 @@ def widget_config(
     spec: Mapping[str, Any] | None = None,
     node: Mapping[str, Any] | None = None,
     collide: bool = False,
+    passes: int = 1,
 ) -> dict[str, Any] | None:
     """Return linearData InputWidgetConfig (description / label / height)."""
     overrides = (spec or {}).get("descriptions") or {}
     text = overrides.get(name) or widget_description(name, node)
-    label = display_label(node, name, collide=collide)
+    label = display_label(node, name, collide=collide, passes=passes)
     height = WIDGET_HEIGHTS.get(name)
     title = str((node or {}).get("title") or "")
     if name == "value" and str((node or {}).get("type") or "") == "PrimitiveNode":
@@ -1282,8 +1300,11 @@ def _input_spec(
     spec: Mapping[str, Any] | None = None,
     node: Mapping[str, Any] | None = None,
     collide: bool = False,
+    passes: int = 1,
 ) -> InputSpec:
-    config = widget_config(name, spec, node=node, collide=collide)
+    config = widget_config(
+        name, spec, node=node, collide=collide, passes=passes
+    )
     if config:
         return (nid, name, config)
     return (nid, name)
@@ -2502,6 +2523,11 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         raw.append((node["id"], "enhance", node))
     counts: Counter[str] = Counter()
     negative_families = 0
+    ace_passes = sum(
+        1
+        for node in graph.get("nodes", [])
+        if str(node.get("type") or "") == "EZAceStepPromptEnhance"
+    )
     for _nid, name, node in raw:
         if name == "enhance" and str(node.get("type") or "") == "EZNegativePromptEnhance":
             negative_families += 1
@@ -2514,7 +2540,8 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         else:
             collide = counts[name] > 1
         inputs.append(
-            _input_spec(nid, name, spec, node=node, collide=collide)
+            _input_spec(nid, name, spec, node=node, collide=collide,
+                        passes=ace_passes)
         )
     quality = _quality_input_specs(graph, spec)
     if quality:
