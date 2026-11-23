@@ -2737,7 +2737,11 @@
       "inputs": [
         [
           2,
-          "image"
+          "image",
+          {
+            "label": "Source still",
+            "description": "The photo of the one subject to print four views from. Already in input/ (the container inputs folder)."
+          }
         ],
         [
           45,
@@ -2749,23 +2753,43 @@
         ],
         [
           8,
-          "sample"
+          "sample",
+          {
+            "label": "Sample prompt",
+            "description": "Pick a lab recipe, or Custom to type your own."
+          }
         ],
         [
           8,
-          "prompt"
+          "prompt",
+          {
+            "label": "Prompt",
+            "description": "What to generate. Rewrite prompt expands this for the model."
+          }
         ],
         [
           35,
-          "upscale"
+          "upscale",
+          {
+            "label": "Upscale",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840)."
+          }
         ],
         [
           8,
-          "style"
+          "style",
+          {
+            "label": "Style",
+            "description": "Optional look. Hidden on I2V - the start image owns look."
+          }
         ],
         [
           8,
-          "enhance"
+          "enhance",
+          {
+            "label": "Rewrite prompt",
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+          }
         ],
         [
           9,
@@ -2777,7 +2801,11 @@
         ],
         [
           14,
-          "seed"
+          "seed",
+          {
+            "label": "Seed",
+            "description": "Fix to iterate; randomize to explore."
+          }
         ]
       ],
       "outputs": [

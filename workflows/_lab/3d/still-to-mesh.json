@@ -1600,7 +1600,11 @@
         ],
         [
           2,
-          "plate"
+          "plate",
+          {
+            "label": "Plate",
+            "description": "Which plate of the still pack the mesh is printed from. The pack slug and the layer stay on the node."
+          }
         ]
       ],
       "outputs": [

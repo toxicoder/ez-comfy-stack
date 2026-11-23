@@ -769,3 +769,31 @@ def test_the_beat_sheet_panel_shows_the_beat_cards() -> None:
     assert len(cards) == 18, cards
     missing = [nid for nid in cards if nid not in outputs]
     assert not missing, f"beat cards absent from the panel: {missing}"
+
+
+def test_the_five_image_prep_and_3d_apps_label_every_row() -> None:
+    """Each App row these five graphs surface carries its own wording.
+
+    A row stamped with only ``(nodeId, widgetName)`` falls back to the chrome's
+    generic table and prints the bare snake_case widget name, so every entry
+    the builders author here carries a label and a description.
+    """
+    for name in (
+        "3d/still-to-mesh.json",
+        "3d/trellis2.json",
+        "photos/background-removal.json",
+        "photos/cutout.json",
+        "photos/multi-view.json",
+    ):
+        rows = _load(name)["extra"]["linearData"]["inputs"]
+        assert rows, name
+        for entry in rows:
+            where = (name, entry)
+            assert len(entry) > 2, where
+            config = entry[2]
+            assert isinstance(config, dict), where
+            label = str(config.get("label") or "").strip()
+            description = str(config.get("description") or "").strip()
+            assert label and label.isascii(), where
+            assert "_" not in label, where
+            assert description and description.isascii(), where

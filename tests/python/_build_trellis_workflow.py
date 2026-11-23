@@ -489,7 +489,21 @@ def build_trellis() -> dict[str, Any]:
     ensure_occupancy_note(graph, "trellis")
     stamp_app_mode(
         graph,
-        inputs=[("Klein still", "image")],
+        inputs=[
+            (
+                "Klein still",
+                "image",
+                {
+                    "label": "Klein still",
+                    "description": (
+                        "Still already in input/ (the container "
+                        "inputs folder). The one plate this asset "
+                        "is printed from - pick the cleanest view "
+                        "you have."
+                    ),
+                },
+            ),
+        ],
         outputs=["Save GLB"],
         lane="3d",
         occupancy="trellis",

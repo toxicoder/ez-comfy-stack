@@ -1585,7 +1585,11 @@
       "inputs": [
         [
           2,
-          "image"
+          "image",
+          {
+            "label": "Klein still",
+            "description": "Still already in input/ (the container inputs folder). The one plate this asset is printed from - pick the cleanest view you have."
+          }
         ],
         [
           23,

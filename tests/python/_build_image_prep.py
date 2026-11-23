@@ -592,11 +592,64 @@ def build_cutout() -> dict[str, Any]:
         graph,
         rel="photos/cutout",
         inputs=[
-            ("Source photo", "image"),
-            ("BiRefNet cutout", "backdrop"),
-            ("BiRefNet cutout", "dilate"),
-            ("BiRefNet cutout", "feather"),
-            (UPSCALE_REF, "upscale"),
+            (
+                "Source photo",
+                "image",
+                {
+                    "label": "Source still",
+                    "description": (
+                        "The photo of the one subject to cut out. "
+                        "Already in input/ (the container inputs "
+                        "folder)."
+                    ),
+                },
+            ),
+            (
+                "BiRefNet cutout",
+                "backdrop",
+                {
+                    "label": "Backdrop",
+                    "description": (
+                        "What the cut subject sits on. A plate "
+                        "going to the mesh printer wants a painted "
+                        "colour, not transparent."
+                    ),
+                },
+            ),
+            (
+                "BiRefNet cutout",
+                "dilate",
+                {
+                    "label": "Dilate",
+                    "description": (
+                        "Pixels grown past the matte edge so hair and fur "
+                        "survive the cut. Clamped 0-32; this graph ships 6."
+                    ),
+                },
+            ),
+            (
+                "BiRefNet cutout",
+                "feather",
+                {
+                    "label": "Feather",
+                    "description": (
+                        "Soft-edge width in pixels so the rim is not a "
+                        "hard cut. Clamped 0-32; this graph ships 4."
+                    ),
+                },
+            ),
+            (
+                UPSCALE_REF,
+                "upscale",
+                {
+                    "label": "Upscale",
+                    "description": (
+                        "none passes the still through. 2x and 4x are "
+                        "lanczos. 4K fits the still in a 3840x2160 box "
+                        "(portrait 2160x3840)."
+                    ),
+                },
+            ),
         ],
         outputs=["Save cutout", "Save matte"],
         occupancy="none",
@@ -717,11 +770,65 @@ def build_background_removal() -> dict[str, Any]:
         graph,
         rel="photos/background-removal",
         inputs=[
-            ("Source photo", "image"),
-            ("Subject cutter", "backdrop"),
-            ("Subject cutter", "dilate"),
-            ("Subject cutter", "feather"),
-            (UPSCALE_REF, "upscale"),
+            (
+                "Source photo",
+                "image",
+                {
+                    "label": "Source still",
+                    "description": (
+                        "The photo to isolate one subject from. "
+                        "Already in input/ (the container inputs "
+                        "folder)."
+                    ),
+                },
+            ),
+            (
+                "Subject cutter",
+                "backdrop",
+                {
+                    "label": "Backdrop",
+                    "description": (
+                        "What fills the pixels the subject leaves. "
+                        "transparent is the only pick that writes "
+                        "real alpha; keep original changes no pixel "
+                        "at all."
+                    ),
+                },
+            ),
+            (
+                "Subject cutter",
+                "dilate",
+                {
+                    "label": "Dilate",
+                    "description": (
+                        "Pixels grown past the matte edge so hair and fur "
+                        "survive the cut. Clamped 0-32; this graph ships 6."
+                    ),
+                },
+            ),
+            (
+                "Subject cutter",
+                "feather",
+                {
+                    "label": "Feather",
+                    "description": (
+                        "Soft-edge width in pixels so the rim is not a "
+                        "hard cut. Clamped 0-32; this graph ships 4."
+                    ),
+                },
+            ),
+            (
+                UPSCALE_REF,
+                "upscale",
+                {
+                    "label": "Upscale",
+                    "description": (
+                        "none passes the still through. 2x and 4x are "
+                        "lanczos. 4K fits the still in a 3840x2160 box "
+                        "(portrait 2160x3840)."
+                    ),
+                },
+            ),
         ],
         outputs=["Save still", "Save matte"],
         occupancy="none",
@@ -789,14 +896,74 @@ def build_multi_view() -> dict[str, Any]:
         graph,
         rel="photos/multi-view",
         inputs=[
-            ("Character or object photo", "image"),
-            ("IDENTITY", "sample"),
-            ("IDENTITY", "prompt"),
-            (UPSCALE_REF, "upscale"),
-            ("IDENTITY", "style"),
-            ("IDENTITY", "enhance"),
+            (
+                "Character or object photo",
+                "image",
+                {
+                    "label": "Source still",
+                    "description": (
+                        "The photo of the one subject to print "
+                        "four views from. Already in input/ (the "
+                        "container inputs folder)."
+                    ),
+                },
+            ),
+            (
+                "IDENTITY",
+                "sample",
+                {
+                    "label": "Sample prompt",
+                    "description": "Pick a lab recipe, or Custom to type your own.",
+                },
+            ),
+            (
+                "IDENTITY",
+                "prompt",
+                {
+                    "label": "Prompt",
+                    "description": "What to generate. Rewrite prompt expands this for the model.",
+                },
+            ),
+            (
+                UPSCALE_REF,
+                "upscale",
+                {
+                    "label": "Upscale",
+                    "description": (
+                        "none passes the still through. 2x and 4x are "
+                        "lanczos. 4K fits the still in a 3840x2160 box "
+                        "(portrait 2160x3840)."
+                    ),
+                },
+            ),
+            (
+                "IDENTITY",
+                "style",
+                {
+                    "label": "Style",
+                    "description": "Optional look. Hidden on I2V - the start image owns look.",
+                },
+            ),
+            (
+                "IDENTITY",
+                "enhance",
+                {
+                    "label": "Rewrite prompt",
+                    "description": (
+                        "On: on-box Qwen3-4B rewrites for this "
+                        "model. Off: use your text as-is."
+                    ),
+                },
+            ),
             ("Negative Prompt Enhance", "enhance"),
-            ("Sampler FRONT", "seed"),
+            (
+                "Sampler FRONT",
+                "seed",
+                {
+                    "label": "Seed",
+                    "description": "Fix to iterate; randomize to explore.",
+                },
+            ),
         ],
         outputs=[str(node["title"]) for node in saves],
         occupancy="klein",
@@ -851,7 +1018,7 @@ def _finish(
     graph: dict[str, Any],
     *,
     rel: str,
-    inputs: list[tuple[int | str, str]],
+    inputs: list[tuple[int | str, str] | tuple[int | str, str, dict[str, str]]],
     outputs: list[str],
     occupancy: str,
     handoff: tuple[str, ...],
@@ -865,7 +1032,8 @@ def _finish(
     Args:
         graph: Graph shell from :meth:`_Canvas.root`.
         rel: ``_lab``-relative id, used for the upscale scope check.
-        inputs: (node title or id, widget name) rows for the App sidebar.
+        inputs: (node title or id, widget name[, config]) rows for the App
+            sidebar.
             :data:`UPSCALE_REF` resolves to the master upscale node.
         outputs: Node titles that write a file.
         occupancy: ``none`` for the cutout, ``klein`` for the view plate.
@@ -881,14 +1049,18 @@ def _finish(
     ensure_occupancy_note(graph, occupancy)
     wire_upscale(graph, rel)
     master = _upscale_master(graph)
-    rows: list[tuple[int | str, str]] = []
-    for ref, widget in inputs:
+    rows: list[tuple[int | str, str] | tuple[int | str, str, dict[str, str]]] = []
+    for spec in inputs:
+        ref, widget = spec[0], spec[1]
         if ref == UPSCALE_REF:
             if master is None:
                 raise ValueError(f"{rel}: no EZImageUpscale node for the App row")
-            rows.append((int(master["id"]), widget))
+            if len(spec) > 2:
+                rows.append((int(master["id"]), widget, dict(spec[2])))
+            else:
+                rows.append((int(master["id"]), widget))
             continue
-        rows.append((ref, widget))
+        rows.append(spec)
     stamp_app_mode(
         graph,
         inputs=rows,
