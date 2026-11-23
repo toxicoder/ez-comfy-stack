@@ -69,15 +69,24 @@ def _terminal_types() -> frozenset[str]:
 
 # Input sockets ComfyUI marks required: the node raises at Queue when one is
 # unwired. Kept to classes whose core semantics are settled, so the gate never
-# needs an optionality debate to stay green.
+# needs an optionality debate to stay green. Saver sockets are read off the
+# pinned ComfyUI v0.45.0 schemas (nodes_audio.py:208 and :237, nodes_images.py:364
+# and :401, nodes_save_3d.py:541) and VHS nodes.py:252, where only images is in
+# required and audio / meta_batch / vae sit in optional.
 REQUIRED_INPUTS: dict[str, frozenset[str]] = {
     "CLIPTextEncode": frozenset({"clip"}),
     "ConditioningZeroOut": frozenset({"conditioning"}),
     "KSampler": frozenset({"model", "positive", "negative", "latent_image"}),
     "ModelSamplingAuraFlow": frozenset({"model"}),
+    "SaveAnimatedPNG": frozenset({"images"}),
+    "SaveAnimatedWEBP": frozenset({"images"}),
+    "SaveAudio": frozenset({"audio"}),
+    "SaveAudioMP3": frozenset({"audio"}),
+    "SaveGLB": frozenset({"mesh"}),
     "SaveImage": frozenset({"images"}),
     "VAEDecode": frozenset({"samples", "vae"}),
     "VAEEncode": frozenset({"pixels", "vae"}),
+    "VHS_VideoCombine": frozenset({"images"}),
 }
 
 # widget_values index per class whose positional widgets gate a Queue-time
@@ -231,10 +240,21 @@ def _slot_bookkeeping_findings(
 
 
 def _required_input_findings(graph: Mapping[str, Any]) -> list[str]:
-    """Flag required sockets (per ComfyUI core semantics) left unwired."""
+    """Flag required sockets (per ComfyUI core semantics) left unwired.
+
+    A graph that ships a writer whose socket stays empty on purpose declares
+    that class in ``extra.lab_optional_unwired`` - the same opt-in
+    ``test_lab_graph_completeness`` reads at
+    ``tests/python/test_workflow_completeness.py:164`` - and the declaration
+    excuses every node of that class here too.
+    """
+    declared = {str(item) for item in (graph.get("extra") or {}).get("lab_optional_unwired") or []}
     problems: list[str] = []
     for node in graph.get("nodes") or []:
-        required = REQUIRED_INPUTS.get(str(node.get("type") or ""))
+        node_type = str(node.get("type") or "")
+        if node_type in declared:
+            continue
+        required = REQUIRED_INPUTS.get(node_type)
         if not required:
             continue
         slots: dict[str, list[Mapping[str, Any]]] = {}
