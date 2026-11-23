@@ -537,7 +537,9 @@ def test_main_seeds_the_bed_when_a_plate_write_fails(
     captured = capsys.readouterr()
     assert "failed: [Errno 13] Permission denied" in captured.err
     assert "cover.png" in captured.err
-    assert "plates ready" in captured.out
+    # The plate stage never ran, so stdout must not claim plates it did not
+    # write; the two stages that did run still say what they wrote.
+    assert "plates ready" not in captured.out
     assert f"wrote {seed.AUDIO_BED_NAME}" in captured.out
 
 
@@ -581,6 +583,54 @@ def test_main_keeps_every_plate_when_the_bed_fails(
     assert "audio bed not seeded" in captured.err
     assert "10 plates ready" in captured.out
     assert f"wrote {seed.AUDIO_BED_NAME}" not in captured.out
+
+
+def test_main_says_nothing_about_plates_when_every_stage_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A run where nothing landed prints no counts it did not earn."""
+    dest = tmp_path / "in"
+
+    def _plate_boom(_path: str | Path) -> list[Path]:
+        raise PermissionError(13, "Permission denied", "cover.png")
+
+    def _file_boom(_path: str | Path) -> Path | None:
+        raise PermissionError(13, "Permission denied", "ez_example.png")
+
+    monkeypatch.setattr(seed, "seed_clay_inputs", _plate_boom)
+    monkeypatch.setattr(seed, "seed_example_input", _file_boom)
+    monkeypatch.setattr(seed, "seed_audio_bed_input", _file_boom)
+
+    assert seed.main([str(dest)]) == 1
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err.count("[seed-clay]") == 3
+
+
+def test_a_bed_that_cannot_be_opened_fails_once(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The WAV writer reports its own OSError, not a garbage-collection traceback.
+
+    ``wave.open`` handed a *path* builds a ``Wave_write`` whose ``_file`` is not
+    set yet when the open is refused, so its ``__del__`` raises on the way out
+    and Python prints "Exception ignored" beside the operator's own error line.
+    Opening the file first keeps the refusal a plain OSError out of this module.
+    """
+    dest = tmp_path / "in"
+    dest.mkdir()
+    bed = dest / seed.AUDIO_BED_NAME
+    bed.mkdir()  # something that can never be opened for writing
+    seen: list[str] = []
+    monkeypatch.setattr(
+        sys, "unraisablehook", lambda report: seen.append(str(report.exc_value))
+    )
+
+    with pytest.raises(IsADirectoryError):
+        seed.write_pcm_wav(bed, b"\0\0", 8000)
+
+    assert seen == []
 
 
 def test_main_still_refuses_a_models_dir_target(

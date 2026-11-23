@@ -470,7 +470,10 @@ def write_pcm_wav(path: Path, frames: bytes, rate: int) -> None:
     if len(frames) % 2:
         raise ValueError(f"16-bit PCM frames need whole samples, got {len(frames)} bytes")
     path.parent.mkdir(parents=True, exist_ok=True)
-    with wave.open(str(path), "wb") as handle:
+    # Opened here rather than handed to ``wave.open`` as a path: a refused open
+    # then surfaces as this module's own OSError, and never as a half-built
+    # ``Wave_write`` whose ``__del__`` raises on the garbage collector's say-so.
+    with path.open("wb") as raw, wave.open(raw, "wb") as handle:
         handle.setnchannels(1)
         handle.setsampwidth(2)
         handle.setframerate(int(rate))
@@ -618,20 +621,28 @@ def main(argv: list[str] | None = None) -> int:
     # The three stages are attempted independently: an unwritable plate must
     # not quietly take the audio bed down with it, so every failure is
     # collected and named rather than short-circuiting the run.
-    written: list[Path] = []
+    # Every clause is earned by the stage that ran: a summary that counts
+    # plates the plate stage never wrote sends the operator looking for a
+    # plate problem in the wrong place, so a failed stage prints nothing on
+    # stdout at all and its reason stands alone on stderr.
+    reports: list[str] = []
     failed = False
     try:
         written = seed_clay_inputs(dest)
     except (OSError, ValueError) as exc:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
         failed = True
-    example: Path | None = None
+    else:
+        reports.append(f"{len(written)} plates ready in {dest}")
+        reports.append(f"{len(PLACEHOLDER_PLATES)} placeholder plates in place")
     try:
         example = seed_example_input(dest)
     except (OSError, ValueError) as exc:
         print(f"[seed-clay] failed: {exc}", file=sys.stderr)
         failed = True
-    bed: Path | None = None
+    else:
+        if example is not None:
+            reports.append(f"wrote {EXAMPLE_NAME}")
     try:
         bed = seed_audio_bed_input(dest)
     except (OSError, ValueError) as exc:
@@ -639,14 +650,11 @@ def main(argv: list[str] | None = None) -> int:
         # and the operator should not be told to go look for a plate problem.
         print(f"[seed-clay] audio bed not seeded: {exc}", file=sys.stderr)
         failed = True
-    seeded = f"; wrote {EXAMPLE_NAME}" if example is not None else ""
-    if bed is not None:
-        seeded += f"; wrote {AUDIO_BED_NAME}"
-    placeholders = len(PLACEHOLDER_PLATES)
-    print(
-        f"[seed-clay] {len(written)} plates ready in {dest}{seeded}; "
-        f"{placeholders} placeholder plates in place"
-    )
+    else:
+        if bed is not None:
+            reports.append(f"wrote {AUDIO_BED_NAME}")
+    if reports:
+        print("[seed-clay] " + "; ".join(reports))
     return 1 if failed else 0
 
 
