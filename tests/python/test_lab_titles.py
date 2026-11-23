@@ -20,7 +20,13 @@ from typing import Any
 import pytest
 
 from _lab_paths import cached_lab_graph_rows
-from _lab_titles import CLASS_TITLES, ensure_node_titles, title_for_class
+from _lab_titles import (
+    CLASS_TITLES,
+    _is_pass_number,
+    ensure_node_titles,
+    title_for_class,
+)
+from _title_lab_graphs import _reset_generated_titles
 
 MAX_TITLE_CHARS = 60
 
@@ -83,6 +89,63 @@ def _title_findings(node: dict[str, Any]) -> list[str]:
     return findings
 
 
+def _is_table_sourced(title: str, bases: set[str]) -> bool:
+    """Whether a title is one the title pass writes for some class.
+
+    Args:
+        title: Title text.
+        bases: Every label the pass can generate in this graph.
+
+    Returns:
+        ``True`` for a label from ``CLASS_TITLES`` and for that label with a
+        plain ASCII counting number on the end; an operator's own wording is
+        never table-sourced, so a hand-written pair is nobody's defect. A
+        leading zero means the operator wrote the number, so that is not
+        table-sourced either. ``_lab_titles._is_table_sourced`` is this
+        predicate, built on the same ``_is_pass_number``, because what the gate
+        may call a duplicate has to be exactly what the pass will renumber -
+        otherwise a rebuild and the shipped graph disagree forever.
+    """
+    if title in bases:
+        return True
+    stem, sep, tail = title.rpartition(" ")
+    if not sep or stem not in bases:
+        return False
+    return _is_pass_number(tail)
+
+
+def _table_sourced_findings(graph: dict[str, Any]) -> list[str]:
+    """Return the generated labels one graph hands to more than one node.
+
+    The pass takes a node's label from ``CLASS_TITLES`` (or, for a class the
+    table does not carry, from a reading of its class name) and numbers a label
+    a sibling already wears. Two nodes reading the same table label - three
+    ``EZImageUpscale`` nodes all reading ``Upscale still`` in
+    ``photos/camera-angles.json`` - is that numbering missing: the operator
+    gets nothing to aim at in the node search box.
+
+    Args:
+        graph: Comfy workflow dict.
+
+    Returns:
+        One message per title the graph repeats; empty when every generated
+        label is worn by exactly one node.
+    """
+    nodes = _nodes_of(graph)
+    bases = set(CLASS_TITLES.values())
+    bases.update(title_for_class(str(node.get("type") or ""), 0, 1) for node in nodes)
+    worn: dict[str, list[Any]] = {}
+    for node in nodes:
+        title = str(node.get("title") or "").strip()
+        if title and _is_table_sourced(title, bases):
+            worn.setdefault(title, []).append(node.get("id"))
+    return [
+        f"title {title!r} is carried by nodes " + ", ".join(str(i) for i in ids)
+        for title, ids in worn.items()
+        if len(ids) > 1
+    ]
+
+
 def _node(node_id: int, ntype: str, title: Any = None) -> dict[str, Any]:
     """Build one node dict, titled only when ``title`` is given.
 
@@ -123,6 +186,7 @@ def test_every_shipped_graph_titles_every_node(
     findings: list[str] = []
     for node in _nodes_of(graph):
         findings.extend(_title_findings(node))
+    findings.extend(_table_sourced_findings(graph))
     assert not findings, f"{lab_rel}: " + "; ".join(findings)
 
 
@@ -215,6 +279,167 @@ def test_a_returned_count_only_covers_changed_titles() -> None:
     """The count is the number of nodes whose title actually moved."""
     graph = _graph(_node(1, "Note", "Operator note"), _node(2, "EZModelCheck"))
     assert ensure_node_titles(graph) == 1
+
+
+def test_repeated_generated_titles_are_numbered() -> None:
+    """Three untitled nodes of one class read ``X`` / ``X 2`` / ``X 3``."""
+    graph = _graph(
+        _node(1, "EZImageUpscale"),
+        _node(2, "EZImageUpscale", "EZImageUpscale"),
+        _node(3, "EZImageUpscale"),
+    )
+    assert ensure_node_titles(graph) == 3
+    titles = [node["title"] for node in graph["nodes"]]
+    assert titles == ["Upscale still", "Upscale still 2", "Upscale still 3"]
+    assert not _table_sourced_findings(graph)
+
+
+def test_a_generated_title_yields_to_an_authored_one() -> None:
+    """The untitled nodes number clear of both labels the operator wrote."""
+    graph = _graph(
+        _node(1, "EZImageUpscale", "Upscale still"),
+        _node(2, "EZImageUpscale"),
+        _node(3, "EZImageUpscale", "Upscale still 2"),
+        _node(4, "EZImageUpscale"),
+    )
+    assert ensure_node_titles(graph) == 2
+    titles = [node["title"] for node in graph["nodes"]]
+    assert titles == [
+        "Upscale still",
+        "Upscale still 3",
+        "Upscale still 2",
+        "Upscale still 4",
+    ]
+    assert not _table_sourced_findings(graph)
+
+
+def test_generated_titles_stay_unique_across_subgraphs() -> None:
+    """A root node and a subgraph node of one class do not read the same."""
+    graph: dict[str, Any] = {
+        "id": "probe",
+        "nodes": [_node(1, "VAEDecode")],
+        "definitions": {"subgraphs": [{"nodes": [_node(2, "VAEDecode")]}]},
+    }
+    assert ensure_node_titles(graph) == 2
+    assert [node["title"] for node in _nodes_of(graph)] == [
+        "VAE Decode",
+        "VAE Decode 2",
+    ]
+    assert not _table_sourced_findings(graph)
+
+
+def test_an_authored_table_label_is_numbered_after_its_sibling() -> None:
+    """Four nodes that arrive wearing ``Upscale still`` rebuild as 1..4.
+
+    ``_wire_upscale`` stamps ``Upscale still`` on every node it inserts, so a
+    builder graph with four of them hands the pass the table's own label four
+    times and the pass is the only place that sees all four.
+    """
+    graph = _graph(
+        *[
+            _node(node_id, "EZImageUpscale", "Upscale still")
+            for node_id in (35, 36, 37, 38)
+        ]
+    )
+    assert ensure_node_titles(graph) == 3
+    titles = [str(node["title"]) for node in graph["nodes"]]
+    assert titles == [
+        "Upscale still",
+        "Upscale still 2",
+        "Upscale still 3",
+        "Upscale still 4",
+    ]
+    assert not _table_sourced_findings(graph)
+
+
+def test_authored_duplicates_number_in_node_id_order() -> None:
+    """The numbering follows the node id, not where the node sits in the file."""
+    graph = _graph(
+        _node(37, "EZImageUpscale", "Upscale still"),
+        _node(35, "EZImageUpscale", "Upscale still"),
+        _node(36, "EZImageUpscale", "Upscale still"),
+    )
+    assert ensure_node_titles(graph) == 2
+    assert {node["id"]: node["title"] for node in graph["nodes"]} == {
+        35: "Upscale still",
+        36: "Upscale still 2",
+        37: "Upscale still 3",
+    }
+
+
+def test_a_hand_written_duplicate_outside_the_table_is_left_alone() -> None:
+    """The ``Negative SHOT WIDE`` pair two shot rows share is prose, not the table."""
+    graph = _graph(
+        _node(1, "EZNegativePromptEnhance", "Negative SHOT WIDE"),
+        _node(2, "EZNegativePromptEnhance", "Negative SHOT WIDE"),
+        _node(3, "Note", "Handoff to wrap"),
+        _node(4, "Note", "Handoff to wrap"),
+    )
+    before = [dict(node) for node in graph["nodes"]]
+    assert ensure_node_titles(graph) == 0
+    assert graph["nodes"] == before
+    assert not _table_sourced_findings(graph)
+
+
+def test_the_gate_flags_a_repeated_generated_title() -> None:
+    """The defect this gate exists for: two nodes wearing one table label."""
+    graph = _graph(
+        _node(9, "EZImageUpscale", "Upscale still"),
+        _node(11, "EZImageUpscale", "Upscale still"),
+    )
+    findings = _table_sourced_findings(graph)
+    assert findings == ["title 'Upscale still' is carried by nodes 9, 11"]
+
+
+def test_the_reset_only_blanks_titles_the_pass_could_have_written() -> None:
+    """The one-shot re-derives its own labels and leaves the operator's alone.
+
+    ``Sampler 01``..``Sampler 06`` is vocabulary the corpus ships with and the
+    pass numbers with ``str(int)``, so a leading zero marks a title that is not
+    the pass's and must survive every re-run untouched.
+    """
+    graph = _graph(
+        _node(1, "KSampler", "Sampler 01"),
+        _node(2, "KSampler", "Sampler 02"),
+        _node(3, "KSampler", "Sampler 2"),
+        _node(4, "EZImageUpscale", "Upscale still"),
+        _node(5, "KSampler", "Sampler CLOSE"),
+    )
+    authored = ["Sampler 01", "Sampler 02", "Sampler CLOSE"]
+
+    _reset_generated_titles(graph)
+    assert [node["title"] for node in graph["nodes"]] == [
+        "Sampler 01",
+        "Sampler 02",
+        "",
+        "",
+        "Sampler CLOSE",
+    ]
+    assert ensure_node_titles(graph) == 2
+    titles = [str(node["title"]) for node in graph["nodes"]]
+    assert titles == [
+        "Sampler 01",
+        "Sampler 02",
+        "Sampler 1",
+        "Upscale still",
+        "Sampler CLOSE",
+    ]
+    assert not _table_sourced_findings(graph)
+
+    _reset_generated_titles(graph)
+    assert [node["title"] for node in graph["nodes"]][:2] == authored[:2]
+    assert [node["title"] for node in graph["nodes"]][4] == authored[2]
+    assert ensure_node_titles(graph) == 2
+    assert [str(node["title"]) for node in graph["nodes"]] == titles
+
+
+def test_the_gate_leaves_an_untabled_duplicate_alone() -> None:
+    """A hand-written label two operators happened to pick is not a defect."""
+    graph = _graph(
+        _node(1, "Note", "Handoff to wrap"),
+        _node(2, "Note", "Handoff to wrap"),
+    )
+    assert not _table_sourced_findings(graph)
 
 
 def test_a_generated_title_never_repeats_the_class_or_a_word() -> None:

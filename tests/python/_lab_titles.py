@@ -19,6 +19,13 @@ Rules, matching what the hand-written corpus already does:
   or checkpoint, not a label for the class).
 - Samplers follow the corpus rule: one sampler in a graph reads ``Sampler``,
   several read ``Sampler 1``..``Sampler N`` in node-id order.
+- No two nodes in one graph carry the same generated title: a label the table
+  already gave a sibling is numbered clear of it, so three untitled
+  ``EZImageUpscale`` nodes read ``Upscale still`` / ``Upscale still 2`` /
+  ``Upscale still 3``. A title that arrives already wearing the table's own
+  label is numbered the same way, which is what makes a builder that stamps
+  ``Upscale still`` on every node it inserts rebuild to the shipped graph; a
+  title outside the table is left exactly as it was written.
 """
 
 from __future__ import annotations
@@ -223,6 +230,13 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
     reads ``Sampler 1`` / ``Sampler 2`` next to the hand-written pair instead
     of continuing a numbering the operator never started.
 
+    Every title this pass writes is numbered clear of the titles the graph
+    already carries, authored ones included, so no two nodes in one graph read
+    the same label. A title the graph arrived wearing is numbered the same way
+    when an earlier node carries it and the table sources it, walking nodes in
+    ``_node_sort_key`` order so the numbering does not depend on where a node
+    sits in the file.
+
     Arguments:
         graph: Comfy workflow dict (mutated).
     Returns:
@@ -244,12 +258,10 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
     position = 0
     for node in samplers:
         if _title_needs_setting(node):
-            title = title_for_class(
-                str(node.get("type") or ""), position, sampler_total
+            title = _unique_title(
+                title_for_class(str(node.get("type") or ""), position, sampler_total),
+                taken,
             )
-            while title in taken:
-                suffix = _next_number(title)
-                title = f"{title.rsplit(' ', 1)[0]} {suffix}"
             node["title"] = title
             taken.add(title)
             position += 1
@@ -264,7 +276,9 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
         if str(node.get("type") or "") in SAMPLER_CLASSES:
             continue
         if _title_needs_setting(node):
-            title = title_for_class(str(node.get("type") or ""), 0, 1)
+            title = _unique_title(
+                title_for_class(str(node.get("type") or ""), 0, 1), taken
+            )
             node["title"] = title
             taken.add(title)
             changed += 1
@@ -274,7 +288,41 @@ def ensure_node_titles(graph: dict[str, object]) -> int:
             node["title"] = repaired
             taken.add(repaired)
             changed += 1
+    bases = set(CLASS_TITLES.values())
+    bases.update(title_for_class(str(node.get("type") or ""), 0, 1) for node in nodes)
+    worn: set[str] = set()
+    for node in sorted(nodes, key=_node_sort_key):
+        title = str(node.get("title") or "").strip()
+        if title and title in worn and _is_table_sourced(title, bases):
+            title = _unique_title(title, taken)
+            node["title"] = title
+            taken.add(title)
+            changed += 1
+        worn.add(title)
     return changed
+
+
+def _is_table_sourced(title: str, bases: set[str]) -> bool:
+    """Whether a title is a label the title pass writes, not an operator's prose.
+
+    ``test_lab_titles._is_table_sourced`` is this predicate verbatim: what this
+    pass is willing to renumber has to be exactly what that gate may call a
+    duplicate, or a rebuild and the shipped graph disagree forever.
+
+    Arguments:
+        title: Title text.
+        bases: Every label the pass can generate in this graph.
+    Returns:
+        ``True`` for a label in the table and for that label with a plain ASCII
+        counting number on the end. A leading zero is the operator's own
+        numbering, so it is not table-sourced.
+    """
+    if title in bases:
+        return True
+    stem, sep, tail = title.rpartition(" ")
+    if not sep or stem not in bases:
+        return False
+    return _is_pass_number(tail)
 
 
 def _title_needs_setting(node: dict[str, object]) -> bool:
@@ -327,11 +375,50 @@ def _node_sort_key(node: dict[str, object]) -> tuple[int, int]:
         return (1, 0)
 
 
+def _unique_title(title: str, taken: set[str]) -> str:
+    """Number a generated title clear of every title the graph already carries.
+
+    Both the sampler path and the plain path take their label from the table,
+    so both have to clear the same set: ``taken`` starts as every title the
+    graph shipped with and grows with every title this pass sets.
+
+    Arguments:
+        title: The label the pass wants for the node.
+        taken: Every other title in the graph.
+    Returns:
+        ``title`` when it is free, else ``title 2``, ``title 3``, ... the first
+        numbered variant nobody else in the graph wears.
+    """
+    unique = title
+    while unique in taken:
+        stem, sep, tail = unique.rpartition(" ")
+        if sep and _is_pass_number(tail):
+            unique = f"{stem} {_next_number(unique)}"
+        else:
+            unique = f"{unique} {_next_number(unique)}"
+    return unique
+
+
+def _is_pass_number(tail: str) -> bool:
+    """Whether a trailing token is a number this pass wrote, not an operator.
+
+    The pass numbers with ``str(int)``, so a leading zero can only be the
+    operator's own numbering (the corpus ships ``Sampler 01``..``Sampler 06``)
+    and is left as authored.
+
+    Arguments:
+        tail: The last whitespace-separated token of a title.
+    Returns:
+        ``True`` for a plain ASCII counting number with no leading zero.
+    """
+    return tail.isdigit() and tail.isascii() and not tail.startswith("0")
+
+
 def _next_number(title: str) -> int:
     """Return the number one past the trailing number of a generated title.
 
     Arguments:
-        title: A ``Sampler N`` style title.
+        title: A ``Sampler N`` or ``Upscale still 2`` style title.
     Returns:
         The next integer in the sequence, or ``2`` when there is none.
     """

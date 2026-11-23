@@ -423,7 +423,7 @@
       "widgets_values": [
         "trellis"
       ],
-      "title": "Occupancy gate"
+      "title": "Occupancy gate 2"
     },
     {
       "id": 12,
@@ -461,7 +461,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [],
-      "title": "Unload models (pass IMAGE)"
+      "title": "Unload models (pass IMAGE) 2"
     },
     {
       "id": 13,
