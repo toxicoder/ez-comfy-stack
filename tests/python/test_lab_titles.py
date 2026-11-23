@@ -105,12 +105,14 @@ def _is_table_sourced(title: str, bases: set[str]) -> bool:
     Returns:
         ``True`` for a label from ``CLASS_TITLES`` and for that label with a
         plain ASCII counting number on the end; an operator's own wording is
-        never table-sourced, so a hand-written pair is nobody's defect. A
-        leading zero means the operator wrote the number, so that is not
-        table-sourced either. ``_lab_titles._is_table_sourced`` is this
-        predicate, built on the same ``_is_pass_number``, because what the gate
-        may call a duplicate has to be exactly what the pass will renumber -
-        otherwise a rebuild and the shipped graph disagree forever.
+        never table-sourced, so a hand-written cross-class pair is nobody's
+        defect. A leading zero means the operator wrote the number, so that is
+        not table-sourced either. ``_lab_titles._is_table_sourced`` is this
+        predicate, built on the same ``_is_pass_number``: it is the cross-class
+        half of the duplicate rule, the half that numbers one table label two
+        classes both wear, so what this gate calls a duplicate here is exactly
+        what the pass renumbers. Repeats inside one class are the wider half,
+        and :func:`_same_class_findings` holds that one.
     """
     if title in bases:
         return True
@@ -182,7 +184,7 @@ def _same_class_findings(graph: dict[str, Any]) -> list[str]:
                 node.get("id")
             )
     return [
-        f"nodes " + ", ".join(str(i) for i in ids) + f" of class {cls!r} all read "
+        "nodes " + ", ".join(str(i) for i in ids) + f" of class {cls!r} all read "
         f"{title!r}"
         for (cls, title), ids in worn.items()
         if len(ids) > 1

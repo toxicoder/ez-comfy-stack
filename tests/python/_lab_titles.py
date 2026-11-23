@@ -322,9 +322,9 @@ def _is_table_sourced(title: str, bases: set[str]) -> bool:
     ``test_lab_titles._is_table_sourced`` is this predicate verbatim: what this
     pass is willing to renumber has to be exactly what that gate may call a
     duplicate, or a rebuild and the shipped graph disagree forever. The pass
-    also numbers a repeat within one class, table-sourced or not; this
-    predicate is the wider half of that rule, the one that numbers a label two
-    nodes of *different* classes both wear.
+    also numbers a repeat inside one class, table-sourced or not; this
+    predicate is the cross-class half of that rule, the one that numbers a
+    table label two nodes of different classes both wear.
 
     Arguments:
         title: Title text.

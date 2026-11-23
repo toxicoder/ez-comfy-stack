@@ -17,6 +17,11 @@ scratch, which is what renumbers a title that collides with a sibling. The run
 is still idempotent: the second pass derives the same titles, the text matches,
 and nothing is written.
 
+A label the operator wrote is never blanked here. The pass numbers a repeat of
+one inside a single class on its own, so 18 ``SaveImage`` nodes all authored
+``Save last frame`` come back ``Save last frame`` .. ``Save last frame 18`` and
+read the same on every later run.
+
 The walk is its own ``rglob`` rather than ``_lab_paths.lab_graph_paths`` so the
 one-shot needs nothing beyond the stdlib and ``_lab_titles`` to run.
 """
