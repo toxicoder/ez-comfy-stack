@@ -391,22 +391,38 @@ case "${1:-}" in
 esac
 case "${local_entry}" in
   test) exit 0 ;;
-  sha256sum)
-    files=()
+  bash)
+    script=""
+    saw_c="false"
     for a in "$@"; do
-      [[ ${a} == docs-site/* ]] && files+=("${a}")
+      if [[ ${saw_c} == "true" ]]; then
+        script="${a}"
+        saw_c="false"
+        continue
+      fi
+      [[ ${a} == "-c" ]] && saw_c="true"
     done
-    if [[ ${#files[@]} -eq 0 ]]; then
+    [[ -n ${script} ]] || exit 1
+    if ! out="$(cd "${STUB_REPO_ROOT}" && bash -c "${script}" </dev/null)"; then
       exit 1
     fi
-    if ! out="$(cd "${STUB_REPO_ROOT}" && sha256sum "${files[@]}")"; then
-      exit 1
-    fi
-    if [[ "${DOCKER_MODE:-match}" != "match" ]]; then
-      # A whole-hash swap: rewriting one hex digit would pass whenever that digit is already 0.
-      out="$(printf '%s\n' "${out}" |
-        sed '1s/^[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]/deadbeef/')"
-    fi
+    case "${DOCKER_MODE:-match}" in
+      match) ;;
+      stale)
+        # A whole-hash swap: rewriting one hex digit would pass whenever that digit is a 0.
+        out="$(printf '%s\n' "${out}" |
+          sed '1s/^[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]/deadbeef/')"
+        ;;
+      stalecontent)
+        # Every config file matches and one page's source does not: the case a probe that
+        # hashes only docs-site config would let through, and the one that moves the pixels.
+        out="$(printf '%s\n' "${out}" |
+          sed 's|^[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].*  docs/index.mdx$|deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef  docs/index.mdx|')"
+        ;;
+      empty)
+        out=""
+        ;;
+    esac
     printf '%s\n' "${out}"
     exit 0
     ;;
@@ -460,8 +476,36 @@ _assert_absent() {
 @test "visual launcher probe runs on the capture path, not only under --check" {
   _run_visual_launcher stale
   [ "${LAUNCHER_STATUS}" -eq 1 ]
-  run grep -q -- '--entrypoint sha256sum' "${LAUNCHER_CALLS}"
+  run grep -q -- '--entrypoint bash' "${LAUNCHER_CALLS}"
   [ "${status}" -eq 0 ]
+  run grep -q -- 'sha256sum' "${LAUNCHER_CALLS}"
+  [ "${status}" -eq 0 ]
+  _cleanup_docker_stub
+}
+
+@test "visual launcher refuses a mount whose page content differs from the checkout" {
+  # The config files match here; only a page the capture renders has drifted.  A probe that
+  # hashes the handful of docs-site config files reports this ready and --update rewrites the
+  # committed set from a rendering nobody reviewed.
+  _run_visual_launcher stalecontent --update
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  [[ ${LAUNCHER_OUTPUT} == *"does not see this checkout at /lab"* ]]
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}
+
+@test "visual launcher refuses a listing too small to tell from an empty mount" {
+  _run_visual_launcher empty
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  [[ ${LAUNCHER_OUTPUT} == *"do not look like this checkout"* ]]
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}
+
+@test "visual launcher --check refuses to swallow --update" {
+  _run_visual_launcher match --check --update
+  [ "${LAUNCHER_STATUS}" -eq 2 ]
+  [[ ${LAUNCHER_OUTPUT} == *"drop --update to compare"* ]]
   _cleanup_docker_stub
 }
 

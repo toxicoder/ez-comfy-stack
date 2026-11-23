@@ -206,6 +206,39 @@ class VisualToolingTests(unittest.TestCase):
                 )
 
 
+    def test_committed_baselines_are_real_frames(self) -> None:
+        """Every committed golden is a full-page frame at its project's viewport.
+
+        The goldens guard above only asks whether a file exists at the path: a 70-byte 1x1 PNG
+        satisfies it, //:owned_files_check is content-blind, and no CI job renders the set to
+        notice, so a blank baseline set is otherwise free to merge.  Reading the IHDR header is
+        enough to tell a screenshot from a placeholder without a decoder.
+        """
+        widths = {"desktop": 1440, "mobile": 390}
+        slugs = re.findall(r"^\s*\[\s*[\"']([\w-]+)[\"']\s*,\s*[\"']/", read(SPEC), re.M)
+        self.assertGreater(len(slugs), 0, "cannot read the captured page list")
+        for project, width in widths.items():
+            for slug in slugs:
+                path = PACKAGE_DIR / "tests" / "visual" / "goldens" / project / f"{slug}.png"
+                blob = path.read_bytes()
+                where = f"{project}/{slug}"
+                self.assertEqual(blob[:8], b"\x89PNG\r\n\x1a\n", f"{where}: not a PNG")
+                self.assertEqual(blob[12:16], b"IHDR", f"{where}: no IHDR header")
+                self.assertEqual(
+                    int.from_bytes(blob[16:20], "big"),
+                    width,
+                    f"{where}: not captured at the {width}px viewport this project shoots",
+                )
+                height = int.from_bytes(blob[20:24], "big")
+                self.assertGreater(
+                    height, 800, f"{where}: {height}px tall is a strip, not a full page"
+                )
+                self.assertGreater(
+                    len(blob),
+                    20000,
+                    f"{where}: {len(blob)} bytes is a placeholder, not a rendered page",
+                )
+
     def test_visual_build_pins_the_published_stamp(self) -> None:
         """The visual export bakes a fixed publish date, on both sides of the comparison.
 
@@ -323,9 +356,27 @@ class VisualToolingTests(unittest.TestCase):
         )
         self.assertRegex(
             script,
-            r"--entrypoint\s+sha256sum\b",
+            r"--entrypoint\s+bash\b",
+            "the probe never lists the capture inputs from inside the container",
+        )
+        self.assertRegex(
+            script,
+            r"sha256sum",
             "the probe only checks that files exist, so a stale copy of the path reports ready",
         )
+        # Hashing the config files alone let a mount that matched them while differing under
+        # docs/ report ready, which is the one difference that changes the pixels.
+        self.assertRegex(
+            script,
+            r'find docs includes docs-site/.*-name "\*\.mdx"',
+            "the probe does not hash the page sources the capture renders",
+        )
+        # An empty listing on both sides matches, so the floor is what stops a phantom mount
+        # from being called ready; and the substitution has to close its stdin or a find that
+        # matches nothing leaves sha256sum waiting on a terminal that never answers.
+        self.assertRegex(script, r"PROBE_MIN_ENTRIES=\d+", "the probe accepts a listing too small to mean anything")
+        self.assertRegex(script, r"PROBE_MIN_ENTRIES\}", "the probe never enforces its own floor")
+        self.assertRegex(script, r"</dev/null", "the probe can block on stdin when the listing comes back empty")
         self.assertRegex(script, r"return 1", "the probe has no failing return")
 
     def test_capture_path_probes_the_mount_before_it_renders(self) -> None:
@@ -350,10 +401,13 @@ class VisualToolingTests(unittest.TestCase):
             calls[0],
             "the launcher reports readiness without running the probe",
         )
+        # Comparing two literals that sit in fixed positions proves nothing; the probe has to
+        # follow the guard that rejects an image which never resolved, or a bad image gets
+        # reported to the operator as a bad mount.
         self.assertLess(
-            script.index("no candidate image starts a"),
-            script.index("visual lane ready"),
-            "the probe runs before the image resolves, so an unresolvable image is blamed on the mount",
+            script.index("[[ -n $IMAGE ]]"),
+            calls[0],
+            "the probe runs before the image is resolved, so an unresolvable image is blamed on the mount",
         )
 
     def test_no_capture_input_overrides_the_pinned_stamp(self) -> None:

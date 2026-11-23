@@ -5,10 +5,11 @@
  * static export served by `scripts/serve_static.mjs`, so what is compared is exactly what
  * GitHub Pages publishes.
  *
- * Goldens are produced on the CI image.  Font metrics differ per platform, so a screenshot
- * taken on a laptop never matches one taken on Linux: refresh baselines in the container
- * that matches CI (`bazelisk run //docs-site:visual-linux -- --update`), never from a
- * workstation, and review the resulting diffs before committing them.
+ * Goldens are produced in the pinned Playwright container the lane captures in
+ * (`bazelisk run //docs-site:visual-linux -- --update`).  Font metrics differ per platform, so
+ * a screenshot taken on a laptop never matches one taken there: refresh them in the container,
+ * never from a workstation, and review the resulting diffs before committing them.  No CI job
+ * renders this comparison; //docs-site:visual_tooling_test is the guard CI does run.
  *
  * A page with no baseline yet gets one written on the spot, so the set bootstraps itself on
  * the first green run instead of failing until somebody remembers to capture it.  That is a
@@ -121,7 +122,7 @@ for (const [slug, route] of KEY_PAGES) {
     await expect(page).toHaveScreenshot(`${slug}.png`, {
       animations: "disabled",
       fullPage: true,
-      // Small tolerance for font-hinting differences between CI images; 0 otherwise.
+      // Small tolerance for subpixel drift between runs of the pinned capture image.
       maxDiffPixelRatio: 0.005,
       // Compared against the path derived above, so the self-bootstrap and the diff agree.
       snapshotPath: golden
