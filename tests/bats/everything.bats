@@ -116,6 +116,13 @@ _place_baseline() {
   [[ "${output}" == *"render-check"* ]]
 }
 
+@test "everything: usage documents the VISUAL_LAUNCHER override" {
+  run bash "${SCRIPT}" --help
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *"VISUAL_LAUNCHER"* ]]
+  [[ "${output}" == *"docs-site/scripts/visual_linux.sh"* ]]
+}
+
 @test "everything: an unknown argument is exit 2, not a silent pass" {
   run bash "${SCRIPT}" --nope
   [ "$status" -eq 2 ]
@@ -337,6 +344,51 @@ _place_baseline() {
   [[ "${output}" == *"SKIP docs-site visual lane (the Docker daemon cannot read this checkout"* ]]
   [[ "${output}" == *"bazelisk run //docs-site:visual-linux -- --update"* ]]
   [ ! -s "${STUB_LOG}" ]
+}
+
+@test "everything: a non-executable VISUAL_LAUNCHER skips with its path named" {
+  # A renamed launcher or a checkout that lost the exec bit is an environment gap
+  # the operator can fix; it has to read as one, not as a bare empty parenthesis.
+  _load_script
+  _stub_docker 0
+  _place_baseline
+  printf '#!/usr/bin/env bash\nexit 0\n' >"${SCRATCH}/visual-launcher-noexec"
+  export VISUAL_LAUNCHER="${SCRATCH}/visual-launcher-noexec"
+  run run_visual_gate
+  [ "$status" -eq 0 ]
+  [[ "${output}" == *"SKIP docs-site visual lane ("* ]]
+  [[ "${output}" == *"not executable"* ]]
+  [[ "${output}" == *"${SCRATCH}/visual-launcher-noexec"* ]]
+  [ ! -s "${STUB_LOG}" ]
+}
+
+@test "everything: a launcher that fails silently still gets a stated reason" {
+  # The probe's own output is the reason when it prints one; when it prints
+  # nothing, the skip must still say what it asked.
+  cat >"${SCRATCH}/visual-launcher-silent" <<'STUB'
+#!/usr/bin/env bash
+exit 1
+STUB
+  chmod +x "${SCRATCH}/visual-launcher-silent"
+  _load_script
+  _stub_docker 0
+  _place_baseline
+  export VISUAL_LAUNCHER="${SCRATCH}/visual-launcher-silent"
+  run run_visual_gate
+  [ "$status" -eq 0 ]
+  local pattern='SKIP docs-site visual lane \((.+)\)'
+  [[ "${output}" =~ ${pattern} ]]
+  [ -n "${BASH_REMATCH[1]}" ]
+  [ ! -s "${STUB_LOG}" ]
+}
+
+@test "everything: the visual lane comment does not claim CI enforces the container" {
+  # Both .github/workflows/ci.yml and //:validate pass --test_tag_filters=-visual,
+  # so no CI job runs the lane; a comment claiming otherwise is the defect here.
+  run grep -F 'CI enforces' "${SCRIPT}"
+  [ "$status" -ne 0 ]
+  run grep -iF 'no CI job runs the lane' "${SCRIPT}"
+  [ "$status" -eq 0 ]
 }
 
 @test "everything: the sweep touches no host-mutating verb" {

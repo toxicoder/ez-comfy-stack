@@ -78,6 +78,9 @@ Usage: everything.sh [--skip-bootstrap]
                    then build and render-check the docs.
   --skip-bootstrap Skip the //:setup-host --check probe (CI, or a host you
                    already know is provisioned).
+  VISUAL_LAUNCHER  Env override for the command //:everything asks whether the
+                   container lane can run; defaults to
+                   docs-site/scripts/visual_linux.sh.
   -h, --help       Show this help.
 EOF
 }
@@ -210,7 +213,7 @@ run_test_gate() {
 #######################################
 # Report whether the container visual lane is runnable here.
 # Globals:
-#   GOLDENS_DIR
+#   GOLDENS_DIR, VISUAL_LAUNCHER
 # Arguments:
 #   None
 # Outputs:
@@ -231,9 +234,17 @@ visual_lane_ready() {
   # The daemon being up is not enough: the lane renders inside a container that bind-mounts
   # this checkout, and a daemon that lives elsewhere (a DinD sidecar, a remote context) mounts
   # an empty /lab rather than refusing. The launcher owns that question, so ask it.
+  if [[ ! -x ${VISUAL_LAUNCHER} ]]; then
+    echo "the visual launcher '${VISUAL_LAUNCHER}' is not executable"
+    return 1
+  fi
   local check_out=""
   if ! check_out=$(${VISUAL_LAUNCHER} --check 2>&1); then
-    printf '%s\n' "${check_out}"
+    if [[ -z ${check_out} ]]; then
+      echo "${VISUAL_LAUNCHER} --check failed without a reason"
+    else
+      printf '%s\n' "${check_out}"
+    fi
     return 1
   fi
   return 0
@@ -258,9 +269,11 @@ run_visual_gate() {
     SKIPPED+=("docs-site visual lane")
     return 0
   fi
-  # The container is the renderer the baselines were captured in and the one CI enforces, so
-  # that is what gets compared. //docs-site:visual-test is the host-browser twin, marked manual
-  # and documented as an escape hatch: a Next build cannot resolve modules through the runfiles
+  # The container is the renderer the committed baselines came from, so that is what
+  # gets compared. No CI job runs the lane: both the CI docs job and //:validate pass
+  # --test_tag_filters=-visual, so //docs-site:visual_tooling_test is the guard CI does
+  # run. //docs-site:visual-test is the host-browser twin, marked manual and documented
+  # as an escape hatch: a Next build cannot resolve modules through the runfiles
   # symlink tree a sandboxed test action hands it.
   # Both halves have to be able to fail the lane: returning the last gate's status would let a
   # broken capture pass as long as the guard stayed green.
