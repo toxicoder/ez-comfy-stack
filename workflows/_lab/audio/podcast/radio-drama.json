@@ -94,7 +94,7 @@
         "radio_drama",
         "audio/podcast/radio-drama"
       ],
-      "title": "ez_radio_script"
+      "title": "Radio script"
     },
     {
       "id": 3,
@@ -177,7 +177,7 @@
         "",
         1.0
       ],
-      "title": "ez_radio_voice"
+      "title": "Radio voice"
     },
     {
       "id": 5,
@@ -246,7 +246,7 @@
         0,
         0.0
       ],
-      "title": "ez_radio_sting"
+      "title": "Radio sting"
     },
     {
       "id": 6,
@@ -315,7 +315,7 @@
         0,
         0.0
       ],
-      "title": "ez_radio_bed"
+      "title": "Radio bed"
     },
     {
       "id": 7,
@@ -906,7 +906,7 @@
         "instrumental",
         "audio/podcast/radio-drama"
       ],
-      "title": "ez_radio_sting enhance"
+      "title": "Radio sting enhance"
     },
     {
       "id": 21,
@@ -958,7 +958,7 @@
         "instrumental",
         "audio/podcast/radio-drama"
       ],
-      "title": "ez_radio_bed enhance"
+      "title": "Radio bed enhance"
     },
     {
       "id": 22,

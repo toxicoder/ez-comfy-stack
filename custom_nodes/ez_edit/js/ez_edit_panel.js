@@ -4,8 +4,9 @@
  * Hand-rolled DOM only (the way the Outputs and Feedback sidebars are): no
  * component library, nothing that can block a queue. Every class is
  * `.ez-edit*`; the stylesheet is `ez_edit.css` with an inline fallback when the
- * static file 404s. The panel docks into the right sidebar through
- * `app.extensionManager` when the frontend offers it and falls back to a
+ * static file 404s. The panel registers a tab in the ComfyUI sidebar rail
+ * through `app.extensionManager` when the frontend offers it - which side that
+ * rail sits on is the user's ComfyUI sidebar setting - and falls back to a
  * right-docked floating aside otherwise, so it survives older frontends.
  *
  * Contract: only the pinned routes are called (/ez_edit/state, /ops, /import,
@@ -3613,7 +3614,7 @@ function addHeaderButton() {
 app.registerExtension({
   name: "ez_edit.panel",
   /**
-   * Dock the panel in the right sidebar and wire the topbar entry point.
+   * Register the Edit sidebar tab and wire the topbar entry point.
    * @returns {Promise<void>} Resolves once registered.
    */
   async setup() {
@@ -3628,7 +3629,6 @@ app.registerExtension({
           tooltip: "Agent chat, timeline, browser render, laptop MCP",
           type: "custom",
           render: mount,
-          desktopSettings: { defaultLocation: "right" },
         });
         state.docked = true;
       } catch (_err) {

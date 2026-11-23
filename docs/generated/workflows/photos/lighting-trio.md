@@ -96,15 +96,15 @@ flowchart TB
 | 29 | Detail | `EZQuality` | QUALITY |
 | 30 | Format / platform | `EZImageFormat` | SETTINGS |
 | 31 | Upscale still | `EZImageUpscale` | SHOT KEY |
-| 32 | Upscale still | `EZImageUpscale` | SHOT WINDOW |
-| 33 | Upscale still | `EZImageUpscale` | SHOT NIGHT LAMP |
+| 32 | Upscale still 2 | `EZImageUpscale` | SHOT WINDOW |
+| 33 | Upscale still 3 | `EZImageUpscale` | SHOT NIGHT LAMP |
 | 34 | Check models | `EZModelCheck` | QUALITY |
 | 35 | Negative SHOT WINDOW | `EZNegativePromptEnhance` | PROMPT |
-| 36 | Negative Negative SHOT WINDOW | `CLIPTextEncode` | PROMPT |
-| 37 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 36 | Negative SHOT WINDOW | `CLIPTextEncode` | PROMPT |
+| 37 | Negative + identity plate 2 | `ReferenceLatent` | SETTINGS |
 | 38 | Negative SHOT NIGHT LAMP | `EZNegativePromptEnhance` | PROMPT |
-| 39 | Negative Negative SHOT NIGHT LAMP | `CLIPTextEncode` | PROMPT |
-| 40 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 39 | Negative SHOT NIGHT LAMP | `CLIPTextEncode` | PROMPT |
+| 40 | Negative + identity plate 3 | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
 
@@ -690,8 +690,8 @@ Prompt encoded by CLIP.
 | Positive KEY | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive WINDOW | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NIGHT LAMP | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
-| Negative Negative SHOT WINDOW | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NIGHT LAMP | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT WINDOW | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NIGHT LAMP | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

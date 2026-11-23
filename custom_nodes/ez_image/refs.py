@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 from .nodes import CATEGORY, snap_dim
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
+
+    from PIL.Image import Image as PilImage
 
     from ez_common import (
         ComfyInputTypes,
@@ -27,6 +30,21 @@ MIN_MAX_REFS = 1
 
 MAX_MAX_REFS = 4
 """Highest accepted ``max_refs`` widget value (Klein reference budget)."""
+
+UNSUPPORTED_STILL_SUFFIXES = frozenset({".heic", ".heif"})
+"""Phone stills Pillow cannot decode here - no HEIF plugin is installed."""
+
+HEIC_STILL_HINT = "HEIC/HEIF is not decodable here, export a JPG or PNG"
+"""One-line repair the operator can act on for an unsupported phone still."""
+
+STILL_FLATTEN_BACKDROP: tuple[int, int, int] = (255, 255, 255)
+"""Flat opaque RGB a stored alpha band is composited onto before the convert.
+
+Opaque white, the same pick ``ez_image.cutout.DEFAULT_BACKDROP`` makes for a
+cutout, so a PNG whose background was cut out reaches the model as the flat
+plate the operator saw rather than as whatever RGB the file keeps under its
+alpha.
+"""
 
 LimitToken: TypeAlias = str | int | float | bool
 """``max_refs`` value ``int()`` can parse before the clamp."""
@@ -148,6 +166,24 @@ def _count_note(count: int) -> str:
     return f"{count} reference stills"
 
 
+def _status_note(count: int, reasons: list[str]) -> tuple[str, ...]:
+    """Return the node's single status line: the count plus any failed pick.
+
+    Args:
+        count: Total frames the node found.
+        reasons: Per-picker reasons from :func:`still_failure_reason`, in
+            picker order; empty entries are dropped.
+
+    Returns:
+        One plain-text line, so a bad pick never hides behind the bare
+        ``no reference still`` the empty case earns.
+    """
+    notes = [reason for reason in reasons if reason]
+    if not notes:
+        return (_count_note(count),)
+    return ("; ".join([_count_note(count), *notes]),)
+
+
 def _filename_str(value: WidgetValue) -> str:
     """Strip a filename widget to a path string.
 
@@ -184,6 +220,195 @@ def input_still_choices() -> list[str]:
     return names
 
 
+def _exif_transpose(image: PilImage) -> PilImage:
+    """Apply the orientation the camera stored in EXIF before anything else.
+
+    A phone photo is saved on its side with an orientation tag telling viewers
+    to rotate it; without that step the reference reaches the model sideways.
+
+    Args:
+        image: Opened PIL image.
+
+    Returns:
+        The oriented image, or ``image`` unchanged when Pillow cannot transpose
+        it (no ImageOps in this build, or odd/absent EXIF).
+    """
+    try:
+        from PIL import ImageOps
+    except Exception:  # noqa: BLE001 - Pillow build without ImageOps
+        return image
+    try:
+        transposed: PilImage = ImageOps.exif_transpose(image)
+    except Exception:  # noqa: BLE001 - junk EXIF keeps the stored pixels
+        return image
+    return transposed
+
+
+def _declares_transparency(image: PilImage) -> bool:
+    """Say whether a band-less image declares some value see-through.
+
+    Neither the mode nor ``getbands()`` can answer this. A ``P`` image with a
+    ``tRNS`` chunk and a grayscale PNG with a transparent gray value both
+    report a single band and no alpha at all, while Pillow's ``convert("RGBA")``
+    hands their ``tRNS`` pixels an alpha of 0. Without this probe the colour
+    (or gray) stored under that transparency is what reaches the model.
+
+    Args:
+        image: Oriented PIL image.
+
+    Returns:
+        ``True`` when Pillow recorded a transparency value for this image,
+        ``False`` otherwise, including for an image whose ``info`` is not a
+        table this Pillow can read.
+    """
+    info = getattr(image, "info", None)
+    if not isinstance(info, dict):
+        return False
+    return info.get("transparency") is not None
+
+
+def _alpha_band(image: PilImage) -> str:
+    """Return the name of this image's alpha band, or ``""`` when it carries none.
+
+    ``getbands()`` cannot answer this: Pillow names the CIELAB green-red axis
+    ``"A"`` too, so a band probe reads a Lab still as alpha-bearing and pastes
+    it onto the backdrop through its own colour. The mode spells its alpha band
+    last - ``RGBA``, ``LA`` and ``PA`` carry a straight ``"A"``, ``RGBa`` and
+    ``La`` a premultiplied ``"a"`` - while ``LAB`` ends on its ``"B"``. A
+    palette image names no alpha band at all, which is what
+    :func:`_declares_transparency` is there to see past.
+
+    Args:
+        image: Oriented PIL image.
+
+    Returns:
+        ``"A"`` or ``"a"`` for a mode that carries alpha, else ``""``.
+    """
+    mode = str(getattr(image, "mode", ""))
+    return mode[-1:] if mode[-1:] in ("A", "a") else ""
+
+
+def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
+    """Composite a stored alpha band onto a flat backdrop.
+
+    ``convert("RGB")`` drops alpha and keeps the RGB triplets stored *under*
+    it, so a cutout PNG with a transparent background would otherwise hand the
+    model pixels nobody ever saw. An image with no alpha band, and one whose
+    band is fully opaque, is returned untouched: an ordinary JPG or PNG keeps
+    exactly the path it had, with no second convert.
+
+    An image with no alpha band is alpha-bearing too when Pillow recorded a
+    transparency value for it: a ``P`` image with a ``tRNS`` chunk and a
+    grayscale PNG with a transparent gray value both report a single band, so
+    neither the mode nor the bands say what ``info`` knows. Those picks are
+    composited from the RGBA view ``convert("RGBA")`` builds, which is where
+    Pillow applies that transparency. The same RGBA view feeds both the extrema
+    probe and the paste, so a logo or sticker saved as palette PNG lands on
+    ``backdrop`` like any other cutout instead of on its palette colour. A
+    premultiplied ``RGBa`` pick reaches for that view for the same reason.
+
+    Alpha presence comes from the mode, never the band names: Pillow calls the
+    CIELAB green-red axis ``"A"``, and a ``LAB`` still has to be read as the
+    opaque colour it is. See :func:`_alpha_band`.
+
+    Args:
+        image: Oriented PIL image.
+        backdrop: Opaque RGB the transparent pixels become.
+
+    Returns:
+        The image with its alpha flattened onto ``backdrop``, or ``image``
+        unchanged when it carries no alpha and no palette transparency, when
+        that alpha is fully opaque, or when this Pillow build cannot do the
+        composite (fail-soft, like :func:`_exif_transpose`).
+    """
+    alpha_band = _alpha_band(image)
+    try:
+        from PIL import Image
+    except Exception:  # noqa: BLE001 - Pillow build without Image
+        return image
+    try:
+        if not alpha_band and not _declares_transparency(image):
+            return image
+        # A premultiplied ``a`` band already holds values scaled by their own
+        # alpha, so that composite runs off the RGBA view Pillow un-scales; a
+        # straight ``A`` band is the coverage the paste wants as it stands.
+        source: PilImage = image if alpha_band == "A" else image.convert("RGBA")
+        alpha = source.getchannel("A")
+        extrema = alpha.getextrema()
+        if extrema is not None and len(extrema) == 2:
+            lowest = extrema[0]
+            if isinstance(lowest, int) and lowest >= 255:
+                return image
+        flat: PilImage = Image.new("RGB", image.size, backdrop)
+        flat.paste(source, (0, 0), mask=alpha)
+    except Exception:  # noqa: BLE001 - stored pixels beat a failed composite
+        return image
+    return flat
+
+
+def _still_reason_note(name: str) -> str:
+    """Return the one-line reason a pick that exists cannot be used.
+
+    Args:
+        name: Filename the operator picked.
+
+    Returns:
+        Text naming the file and the repair; a ``.heic``/``.heif`` pick is
+        called out as needing a JPG or PNG export, since no HEIF decoder is
+        installed here.
+    """
+    if Path(name).suffix.lower() in UNSUPPORTED_STILL_SUFFIXES:
+        return f"{name}: {HEIC_STILL_HINT}"
+    return f"{name}: could not be read as an image"
+
+
+def load_input_still_with_reason(
+    filename: WidgetValue,
+) -> tuple[ImageTensor | None, str]:
+    """Load a still from Comfy ``input/``, or say why the pick cannot be used.
+
+    "No pick" and "unreadable pick" are different facts. An empty picker and a
+    name that resolves to nothing leave the reason empty (the node then says
+    ``no reference still``); a pick whose file cannot be opened or decoded gets
+    a reason naming it, so a corrupt plate no longer looks like an empty node.
+
+    Args:
+        filename: Combo value (empty is a no-op).
+
+    Returns:
+        ``(batch, reason)`` - BHWC float batch (never 4-channel, a stored
+        alpha band flattened onto ``STILL_FLATTEN_BACKDROP`` first) or None,
+        plus the one-line reason, empty on success and on "no pick".
+    """
+    name = _filename_str(filename)
+    if not name:
+        return None, ""
+    try:
+        import numpy as np
+        from PIL import Image
+
+        import folder_paths
+    except Exception:  # noqa: BLE001 - hermetic tests / missing deps
+        return None, ""
+    try:
+        path = folder_paths.get_annotated_filepath(name)
+    except Exception:  # noqa: BLE001 - missing helper
+        path = None
+    if not path:
+        return None, ""
+    try:
+        with Image.open(path) as img:
+            oriented = _exif_transpose(img)
+            flat = flatten_alpha(oriented, STILL_FLATTEN_BACKDROP)
+            rgb = flat.convert("RGB")
+            arr = np.asarray(rgb).astype("float32") / 255.0
+    except Exception:  # noqa: BLE001 - unreadable file
+        return None, _still_reason_note(name)
+    if getattr(arr, "ndim", 0) != 3:
+        return None, _still_reason_note(name)
+    return arr[None, ...], ""
+
+
 def load_input_still(filename: WidgetValue) -> ImageTensor | None:
     """Load a still from Comfy ``input/`` when ``filename`` is set.
 
@@ -191,33 +416,23 @@ def load_input_still(filename: WidgetValue) -> ImageTensor | None:
         filename: Combo value (empty is a no-op).
 
     Returns:
-        BHWC float batch, or None when empty/unreadable.
+        BHWC float batch, or None when empty/unreadable. Ask
+        :func:`load_input_still_with_reason` for the reason behind a None.
     """
-    name = _filename_str(filename)
-    if not name:
-        return None
-    try:
-        import numpy as np
-        from PIL import Image
+    return load_input_still_with_reason(filename)[0]
 
-        import folder_paths
-    except Exception:  # noqa: BLE001 - hermetic tests / missing deps
-        return None
-    try:
-        path = folder_paths.get_annotated_filepath(name)
-    except Exception:  # noqa: BLE001 - missing helper
-        path = None
-    if not path:
-        return None
-    try:
-        with Image.open(path) as img:
-            rgb = img.convert("RGB")
-            arr = (np.asarray(rgb).astype("float32") / 255.0)
-    except Exception:  # noqa: BLE001 - unreadable file
-        return None
-    if getattr(arr, "ndim", 0) != 3:
-        return None
-    return arr[None, ...]
+
+def still_failure_reason(filename: WidgetValue) -> str:
+    """Return why a picked still could not be used, or ``""``.
+
+    Args:
+        filename: Combo value.
+
+    Returns:
+        One line naming the file and the repair; empty for an empty picker or
+        a name with no file behind it, which stay the "no still" case.
+    """
+    return load_input_still_with_reason(filename)[1]
 
 
 def _concat_frames(frames: list[ImageTensor]) -> ImageTensor:
@@ -345,11 +560,12 @@ class EZOptionalImage:
 
         Returns:
             Dict with the still (or None), the frame count, the has_image
-            flag, and a ui note.
+            flag, and a ui note that names a pick it could not read.
         """
         if not _as_bool(use_references):
             return {"ui": {"text": ("references off",)}, "result": (None, 0, False)}
         frames: list[ImageTensor] = []
+        reasons: list[str] = []
         count = 0
         if _image_present(image):
             frames.append(image)
@@ -364,6 +580,8 @@ class EZOptionalImage:
             if _image_present(loaded):
                 frames.append(loaded)
                 count += _batch_len(loaded)
+            else:
+                reasons.append(still_failure_reason(name))
         first: ImageTensor | None = None
         if len(frames) == 1:
             first = frames[0]
@@ -371,7 +589,7 @@ class EZOptionalImage:
             first = _concat_frames(frames)
         has_image = count > 0
         return {
-            "ui": {"text": (_count_note(count),)},
+            "ui": {"text": _status_note(count, reasons)},
             "result": (first, count, has_image),
         }
 

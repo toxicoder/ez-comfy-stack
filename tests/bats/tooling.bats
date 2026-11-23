@@ -299,3 +299,220 @@ teardown() {
   [[ ${output} == *'exited with status 1'* ]]
   [ "${hints}" -eq 1 ]
 }
+
+# A Bazel sh_test names $0 after the target and passes the npm script as $1, so the runner
+# has to resolve the script from the argument whenever the target name is not itself a
+# command. //docs-site:visual-test was unreachable for exactly this reason: it ran "npm
+# visual" and npm answered "Unknown command".
+_make_npm_stub() {
+  local pkg="$1"
+  mkdir -p "${pkg}/bin" "${pkg}/node_modules/.bin"
+  cat >"${pkg}/bin/npm" <<'STUB'
+#!/usr/bin/env bash
+printf '%s\n' "$@"
+STUB
+  chmod +x "${pkg}/bin/npm"
+  : >"${pkg}/node_modules/.bin/next"
+  : >"${pkg}/node_modules/.bin/vitest"
+  chmod +x "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+}
+
+@test "npm runner maps a gate target onto its npm script" {
+  local pkg
+  pkg="$(mktemp -d)"
+  _make_npm_stub "${pkg}"
+  cp "${REPO_ROOT}/docs-site/run_npm.sh" "${pkg}/visual-test"
+  run env PATH="${pkg}/bin:${PATH}" bash "${pkg}/visual-test" visual
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
+  [ "${lines[0]}" = "run" ]
+  [ "${lines[1]}" = "visual" ]
+  rm -f "${pkg}/bin/npm" "${pkg}/visual-test" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+  rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
+}
+
+@test "npm runner still resolves a target named after its script" {
+  local pkg
+  pkg="$(mktemp -d)"
+  _make_npm_stub "${pkg}"
+  cp "${REPO_ROOT}/docs-site/run_npm.sh" "${pkg}/typecheck"
+  run env PATH="${pkg}/bin:${PATH}" bash "${pkg}/typecheck" typecheck
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
+  [ "${lines[0]}" = "run" ]
+  [ "${lines[1]}" = "typecheck" ]
+  rm -f "${pkg}/bin/npm" "${pkg}/typecheck" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+  rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
+}
+
+@test "npm runner generic escape hatch forwards every argument" {
+  local pkg
+  pkg="$(mktemp -d)"
+  _make_npm_stub "${pkg}"
+  cp "${REPO_ROOT}/docs-site/run_npm.sh" "${pkg}/npm"
+  run env PATH="${pkg}/bin:${PATH}" bash "${pkg}/npm" ci --force
+  [ "$status" -eq 0 ]
+  [ "${#lines[@]}" -eq 2 ]
+  [ "${lines[0]}" = "ci" ]
+  [ "${lines[1]}" = "--force" ]
+  rm -f "${pkg}/bin/npm" "${pkg}/npm" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
+  rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
+}
+
+# ---- docs-site visual launcher: the mount probe ------------------------------------------
+#
+# The lane renders inside a container that bind-mounts the checkout.  A daemon that lives
+# elsewhere (a DinD sidecar, a remote context) accepts a --volume whose source it cannot see and
+# mounts an empty /lab, and a daemon handed a stale copy of the path passes a presence check, so
+# --update would rewrite the committed baselines from a rendering that is not the tree under
+# review.  Only a started container discovers either, so the probe is driven here with a stubbed
+# docker rather than a real daemon.
+
+_make_docker_stub() {
+  local dir="$1"
+  mkdir -p "${dir}/bin"
+  cat >"${dir}/bin/docker" <<'STUB'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"${DOCKER_CALLS}"
+local_entry=""
+saw_entrypoint="false"
+for a in "$@"; do
+  if [[ ${saw_entrypoint} == "true" ]]; then
+    local_entry="${a}"
+    saw_entrypoint="false"
+    continue
+  fi
+  [[ ${a} == "--entrypoint" ]] && saw_entrypoint="true"
+done
+case "${1:-}" in
+  info | pull) exit 0 ;;
+  run) ;;
+  *) exit 0 ;;
+esac
+case "${local_entry}" in
+  test) exit 0 ;;
+  bash)
+    script=""
+    saw_c="false"
+    for a in "$@"; do
+      if [[ ${saw_c} == "true" ]]; then
+        script="${a}"
+        saw_c="false"
+        continue
+      fi
+      [[ ${a} == "-c" ]] && saw_c="true"
+    done
+    [[ -n ${script} ]] || exit 1
+    if ! out="$(cd "${STUB_REPO_ROOT}" && bash -c "${script}" </dev/null)"; then
+      exit 1
+    fi
+    case "${DOCKER_MODE:-match}" in
+      match) ;;
+      stale)
+        # A whole-hash swap: rewriting one hex digit would pass whenever that digit is a 0.
+        out="$(printf '%s\n' "${out}" |
+          sed '1s/^[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]/deadbeef/')"
+        ;;
+      stalecontent)
+        # Every config file matches and one page's source does not: the case a probe that
+        # hashes only docs-site config would let through, and the one that moves the pixels.
+        out="$(printf '%s\n' "${out}" |
+          sed 's|^[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].*  docs/index.mdx$|deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef  docs/index.mdx|')"
+        ;;
+      empty)
+        out=""
+        ;;
+    esac
+    printf '%s\n' "${out}"
+    exit 0
+    ;;
+  *) echo "x86_64"; exit 0 ;;
+esac
+STUB
+  chmod +x "${dir}/bin/docker"
+}
+
+_cleanup_docker_stub() {
+  rm -f "${LAUNCHER_STUB}/bin/docker" "${LAUNCHER_CALLS}"
+  rmdir "${LAUNCHER_STUB}/bin" "${LAUNCHER_STUB}"
+}
+
+_run_visual_launcher() {
+  local mode="$1"
+  shift
+  local stub calls
+  stub="$(mktemp -d)"
+  _make_docker_stub "${stub}"
+  calls="${stub}/calls"
+  : >"${calls}"
+  run env -u BUILD_WORKSPACE_DIRECTORY \
+    PATH="${stub}/bin:${PATH}" \
+    DOCKER_CALLS="${calls}" \
+    STUB_REPO_ROOT="${REPO_ROOT}" \
+    DOCKER_MODE="${mode}" \
+    bash "${REPO_ROOT}/docs-site/scripts/visual_linux.sh" "$@"
+  LAUNCHER_CALLS="${calls}"
+  LAUNCHER_STUB="${stub}"
+  LAUNCHER_STATUS="${status}"
+  LAUNCHER_OUTPUT="${output}"
+}
+
+# A leading `!` suppresses errexit in Bats, so `! grep -q ...` can never fail a test; run the
+# lookup and assert on its status instead.
+_assert_absent() {
+  run grep -q -- "$1" "$2"
+  [ "${status}" -ne 0 ]
+}
+
+@test "visual launcher blocks a capture whose mount is a stale copy of the checkout" {
+  _run_visual_launcher stale
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  [[ ${LAUNCHER_OUTPUT} == *"does not see this checkout at /lab"* ]]
+  # The whole point: a capture started from a tree nobody reviewed must never start.
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}
+
+@test "visual launcher probe runs on the capture path, not only under --check" {
+  _run_visual_launcher stale
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  run grep -q -- '--entrypoint bash' "${LAUNCHER_CALLS}"
+  [ "${status}" -eq 0 ]
+  run grep -q -- 'sha256sum' "${LAUNCHER_CALLS}"
+  [ "${status}" -eq 0 ]
+  _cleanup_docker_stub
+}
+
+@test "visual launcher refuses a mount whose page content differs from the checkout" {
+  # The config files match here; only a page the capture renders has drifted.  A probe that
+  # hashes the handful of docs-site config files reports this ready and --update rewrites the
+  # committed set from a rendering nobody reviewed.
+  _run_visual_launcher stalecontent --update
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  [[ ${LAUNCHER_OUTPUT} == *"does not see this checkout at /lab"* ]]
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}
+
+@test "visual launcher refuses a listing too small to tell from an empty mount" {
+  _run_visual_launcher empty
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  [[ ${LAUNCHER_OUTPUT} == *"do not look like this checkout"* ]]
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}
+
+@test "visual launcher --check refuses to swallow --update" {
+  _run_visual_launcher match --check --update
+  [ "${LAUNCHER_STATUS}" -eq 2 ]
+  [[ ${LAUNCHER_OUTPUT} == *"drop --update to compare"* ]]
+  _cleanup_docker_stub
+}
+
+@test "visual launcher --check reports ready when the container sees this checkout" {
+  _run_visual_launcher match --check
+  [ "${LAUNCHER_STATUS}" -eq 0 ]
+  [[ ${LAUNCHER_OUTPUT} == *"visual lane ready"* ]]
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}

@@ -138,34 +138,34 @@ flowchart TB
 | 61 | Detail | `EZQuality` | QUALITY |
 | 62 | Format / platform | `EZImageFormat` | SETTINGS |
 | 63 | Upscale still | `EZImageUpscale` | SHOT 01 tower |
-| 64 | Upscale still | `EZImageUpscale` | SHOT 02 foyer |
-| 65 | Upscale still | `EZImageUpscale` | SHOT 03 lounge |
-| 66 | Upscale still | `EZImageUpscale` | SHOT 04 kitchen |
-| 67 | Upscale still | `EZImageUpscale` | SHOT 05 dining |
-| 68 | Upscale still | `EZImageUpscale` | SHOT 06 bedroom |
-| 69 | Upscale still | `EZImageUpscale` | SHOT 07 bath |
-| 70 | Upscale still | `EZImageUpscale` | SHOT 08 terrace |
-| 71 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
-| 72 | Upscale still | `EZImageUpscale` | SHOT 10 study |
+| 64 | Upscale still 2 | `EZImageUpscale` | SHOT 02 foyer |
+| 65 | Upscale still 3 | `EZImageUpscale` | SHOT 03 lounge |
+| 66 | Upscale still 4 | `EZImageUpscale` | SHOT 04 kitchen |
+| 67 | Upscale still 5 | `EZImageUpscale` | SHOT 05 dining |
+| 68 | Upscale still 6 | `EZImageUpscale` | SHOT 06 bedroom |
+| 69 | Upscale still 7 | `EZImageUpscale` | SHOT 07 bath |
+| 70 | Upscale still 8 | `EZImageUpscale` | SHOT 08 terrace |
+| 71 | Upscale still 9 | `EZImageUpscale` | SHOT 09 drone |
+| 72 | Upscale still 10 | `EZImageUpscale` | SHOT 10 study |
 | 73 | Check models | `EZModelCheck` | QUALITY |
 | 74 | Negative SHOT 02 foyer | `EZNegativePromptEnhance` | PROMPT |
-| 75 | Negative Negative SHOT 02 foyer | `CLIPTextEncode` | PROMPT |
+| 75 | Negative SHOT 02 foyer | `CLIPTextEncode` | PROMPT |
 | 76 | Negative SHOT 03 lounge | `EZNegativePromptEnhance` | PROMPT |
-| 77 | Negative Negative SHOT 03 lounge | `CLIPTextEncode` | PROMPT |
+| 77 | Negative SHOT 03 lounge | `CLIPTextEncode` | PROMPT |
 | 78 | Negative SHOT 04 kitchen | `EZNegativePromptEnhance` | PROMPT |
-| 79 | Negative Negative SHOT 04 kitchen | `CLIPTextEncode` | PROMPT |
+| 79 | Negative SHOT 04 kitchen | `CLIPTextEncode` | PROMPT |
 | 80 | Negative SHOT 05 dining | `EZNegativePromptEnhance` | PROMPT |
-| 81 | Negative Negative SHOT 05 dining | `CLIPTextEncode` | PROMPT |
+| 81 | Negative SHOT 05 dining | `CLIPTextEncode` | PROMPT |
 | 82 | Negative SHOT 06 bedroom | `EZNegativePromptEnhance` | PROMPT |
-| 83 | Negative Negative SHOT 06 bedroom | `CLIPTextEncode` | PROMPT |
+| 83 | Negative SHOT 06 bedroom | `CLIPTextEncode` | PROMPT |
 | 84 | Negative SHOT 07 bath | `EZNegativePromptEnhance` | PROMPT |
-| 85 | Negative Negative SHOT 07 bath | `CLIPTextEncode` | PROMPT |
+| 85 | Negative SHOT 07 bath | `CLIPTextEncode` | PROMPT |
 | 86 | Negative SHOT 08 terrace | `EZNegativePromptEnhance` | PROMPT |
-| 87 | Negative Negative SHOT 08 terrace | `CLIPTextEncode` | PROMPT |
+| 87 | Negative SHOT 08 terrace | `CLIPTextEncode` | PROMPT |
 | 88 | Negative SHOT 09 drone | `EZNegativePromptEnhance` | PROMPT |
-| 89 | Negative Negative SHOT 09 drone | `CLIPTextEncode` | PROMPT |
+| 89 | Negative SHOT 09 drone | `CLIPTextEncode` | PROMPT |
 | 90 | Negative SHOT 10 study | `EZNegativePromptEnhance` | PROMPT |
-| 91 | Negative Negative SHOT 10 study | `CLIPTextEncode` | PROMPT |
+| 91 | Negative SHOT 10 study | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -758,15 +758,15 @@ Prompt encoded by CLIP.
 | Positive 08 | `An unoccupied open-air terrace from the outdoor living the bible named; if none...` |
 | Positive 09 | `Overhead looking down at this same place, 24mm, Instagram 4:5. Straight-down pl...` |
 | Positive 10 | `An unoccupied writing room from the study the bible named; if none, a small wri...` |
-| Negative Negative SHOT 02 foyer | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 03 lounge | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 04 kitchen | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 05 dining | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 06 bedroom | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 07 bath | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 08 terrace | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 09 drone | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 10 study | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 02 foyer | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 03 lounge | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 04 kitchen | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 05 dining | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 06 bedroom | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 07 bath | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 08 terrace | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 09 drone | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 10 study | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

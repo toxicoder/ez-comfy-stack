@@ -7,6 +7,7 @@ it never touches the network, ComfyUI, or the GPU.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from _audit_lab_graphs import BANNED_ANYWHERE, BANNED_LOADER, audit_lab_graphs
 from _build_editing_workflows import (
@@ -132,18 +133,27 @@ def test_package_copy_is_byte_identical() -> None:
     assert PACKAGE_GRAPH.read_bytes() == lab_bytes
 
 
-def test_generator_is_idempotent() -> None:
-    """Re-running the builder rewrites both JSON files unchanged."""
-    before = {
-        "lab": lab_json(f"{LAB_REL}.json").read_bytes(),
-        "package": PACKAGE_GRAPH.read_bytes(),
-    }
-    assert build_main() == 0
-    after = {
-        "lab": lab_json(f"{LAB_REL}.json").read_bytes(),
-        "package": PACKAGE_GRAPH.read_bytes(),
-    }
-    assert after == before
+def test_generator_is_idempotent(tmp_path: Path) -> None:
+    """A rebuild into a scratch root reproduces both shipped copies, titled.
+
+    The build targets ``tmp_path`` rather than ``workflows/_lab``: a builder run
+    against the live tree would reset the shipped graph to its pre-title bytes
+    and make the gate in ``test_lab_titles.py`` depend on test order.
+    """
+    assert build_main(out_root=tmp_path) == 0
+    built_lab = tmp_path / "workflows" / "_lab" / f"{LAB_REL}.json"
+    built_package = tmp_path / PACKAGE_SUBPATH
+    assert built_lab.is_file(), built_lab
+    assert built_package.is_file(), built_package
+    lab_bytes = lab_json(f"{LAB_REL}.json").read_bytes()
+    assert built_lab.read_bytes() == lab_bytes
+    assert built_package.read_bytes() == lab_bytes
+    graph = json.loads(built_lab.read_text(encoding="utf-8"))
+    assert graph["nodes"], graph["id"]
+    for node in graph["nodes"]:
+        title = str(node.get("title") or "").strip()
+        assert title, (node["id"], node["type"])
+        assert title != str(node["type"]), (node["id"], node["type"])
 
 
 def test_node_budget_and_chain() -> None:
@@ -245,7 +255,7 @@ def test_prompt_size_and_fps_widgets_are_agent_patchable() -> None:
         "width": ("Video size & length", "width", "row", None, int),
         "height": ("Video size & length", "height", "row", None, int),
         "length": ("Video size & length", "length", "slot", 2, int),
-        "seed": ("KSampler", "seed", "slot", 0, int),
+        "seed": ("Sampler", "seed", "slot", 0, int),
         "fps": (SAVER_TITLE, "frame_rate", "dict", None, int),
         "filename_prefix": (SAVER_TITLE, "filename_prefix", "dict", None, str),
     }

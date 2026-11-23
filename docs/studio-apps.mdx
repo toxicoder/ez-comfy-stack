@@ -139,7 +139,7 @@ this order, and the first one that exists wins:
 | Order | The row reads | Why it wins |
 | --- | --- | --- |
 | 1 | The label the graph stamps | `extra.linearData.inputs` holds `[nodeId, widgetName, config]`, and a `config.label` is written by the graph that knows what this knob is for in this shot |
-| 2 | A word from the chrome's own table | 118 entries map a raw widget name to a label, covering the first-party knobs the shipped graphs leave in `snake_case` (`upscale` reads **Upscale by**, `params_json` reads **Parameters (JSON)**, `speaker_a_ref` reads **Speaker A reference WAV**) plus the core ComfyUI and VHS rows those graphs also leave unlabelled (`sampler_name` -> **Sampler**, `noise_seed` -> **Seed**, `filename_prefix` -> **Output filename**) |
+| 2 | A word from the chrome's own table | 132 entries map a raw widget name to a label, covering the first-party knobs the shipped graphs leave in `snake_case` (`upscale` reads **Upscale by**, `params_json` reads **Parameters (JSON)**, `speaker_a_ref` reads **Speaker A reference WAV**), the input sockets a graph hands in (`latent` -> **Latent**, `vae` -> **VAE**, `bed` -> **Music bed**, `size_src` -> **Size reference**), plus the core ComfyUI and VHS rows those graphs also leave unlabelled (`sampler_name` -> **Sampler**, `noise_seed` -> **Seed**, `filename_prefix` -> **Output filename**) |
 | 3 | The raw widget name | Neither the graph nor the table named it, so the row prints `snake_case`. That is the one case to report: [Troubleshooting](troubleshooting.md#app-chrome-input-plates-tooltips-and-mcp-arguments) |
 
 One built-in case sits between rows 1 and 2: **Rewrite negative** on `EZNegativePromptEnhance`. That
@@ -170,10 +170,10 @@ and fails if the chrome's table has no entry for that widget. A shipped App cann
 
 ## Seeded input plates
 
-Several shipped Apps default a **LoadImage** to a bare filename. This stack remaps Comfy's input
-folder onto the `/inputs` bind and ships no `input/` tree of its own, so those files have to be
-created - otherwise the first **Queue** on a fresh host dies on a missing plate instead of rendering.
-The container seeds each one at start:
+Several shipped Apps default a **LoadImage**, or the one **LoadAudio**, to a bare filename. This
+stack remaps Comfy's input folder onto the `/inputs` bind and ships no `input/` tree of its own, so
+those files have to be created - otherwise the first **Queue** on a fresh host dies on a missing
+plate instead of rendering. The container seeds each one at start:
 
 | Plate | Size | What defaults to it |
 | --- | --- | --- |
@@ -184,13 +184,18 @@ The container seeds each one at start:
 | `canny.png` | 1280x704 | **guides/canny-hero** |
 | `ez_<film>_plate.png` and `ez_<film>_b<N>_s3_last.png`, 28 files | 1280x704 | each film title's plate and the act hand-off frames |
 | `ez_house_clay_01.png` .. `ez_house_clay_10.png` | 1024x1280 | the clay desk Apps, when the host layout dump did not stage them |
+| `ez_a2v_bed.wav` | 8 s, 16 kHz mono | the **Audio file** on **video/av/audio-to-video-8s** |
 
 A placeholder is a real image, not a blank: a tonal gradient with a tinted stripe band along the
 bottom, so two plates at the same size never look alike and the sampler has something to render.
-Swap it whenever you like - **Upload media** on the picker puts your own still there.
+Swap it whenever you like - **Upload media** on the picker puts your own still there. The audio bed
+works the same way: a soft eight-second A-minor pad, faded at both ends so a loop point does not
+click, quiet enough that it never clips. Drop your own `ez_a2v_bed.wav` in and it stays yours.
 
-Seeding never replaces a file that is already a readable PNG, so a plate you uploaded, and the clay
-pack the host staged, survive every restart. It runs in the container's start phase, so the verb that
+Seeding never replaces a file that is already a readable PNG, or - for the bed - any real WAV: 24-bit,
+surround, and float exports from a DAW are all left alone, and only a file with no WAV header at all
+or no frames in it is replaced. So a plate you uploaded, and the clay pack the host staged, survive
+every restart. It runs in the container's start phase, so the verb that
 re-seeds is `bazelisk run //:manage -- start` on a fresh host and `bazelisk run //:manage -- restart`
 after you deliberately delete a plate you want back. A run that worked prints one
 `input plates ready in /inputs` line in `bazelisk run //:manage -- logs`; the failure line and what

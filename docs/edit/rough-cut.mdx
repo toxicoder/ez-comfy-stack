@@ -51,7 +51,9 @@ laptop, forward the port first:
 ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
 ```
 
-The panel docks in the right sidebar. If the button is missing, the frontend bundle is stale:
+The **Edit** tab joins the same sidebar rail as **Outputs** and **Feedback**; which side of the page
+that rail sits on is the user's ComfyUI sidebar setting, default left. If the button is missing, the
+frontend bundle is stale:
 `bazelisk run //:manage -- restart` recopies `custom_nodes/`, then hard-refresh the tab.
 
 Use a **Chromium-based browser** for this lane. Preview and client render both decode through the

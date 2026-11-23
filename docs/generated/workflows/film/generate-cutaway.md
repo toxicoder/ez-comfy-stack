@@ -76,7 +76,7 @@ flowchart LR
   N6["Negative"]
   N7["Video size & length"]
   N8["Shift"]
-  N9["KSampler"]
+  N9["Sampler"]
   N10["VAE Decode"]
   N11["Occupancy gate (wan)"]
   N12["Save cutaway (MP4) - open node for preview"]
@@ -113,7 +113,7 @@ flowchart LR
 | 6 | Negative | `CLIPTextEncode` | PROMPT |
 | 7 | Video size & length | `Wan22ImageToVideoLatent` | SETTINGS |
 | 8 | Shift | `ModelSamplingSD3` | SETTINGS |
-| 9 | KSampler | `KSampler` | SETTINGS |
+| 9 | Sampler | `KSampler` | SETTINGS |
 | 10 | VAE Decode | `VAEDecode` | OUTPUT |
 | 11 | Occupancy gate (wan) | `EZDCCOccupancyGate` | INPUT |
 | 12 | Save cutaway (MP4) - open node for prev... | `VHS_VideoCombine` | OUTPUT |

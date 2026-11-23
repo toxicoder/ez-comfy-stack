@@ -62,9 +62,9 @@ flowchart LR
   N4["Positive"]
   N5["Negative"]
   N6["Empty LTX latent 1280x704"]
-  N7["LTXVConditioning"]
-  N8["KSampler"]
-  N9["VAEDecode"]
+  N7["LTX frame rate cond"]
+  N8["Sampler"]
+  N9["VAE Decode"]
   N10["Save frames (secondary)"]
   N11["LTX-2.5 audio VAE"]
   N12["Empty LTX audio latent"]
@@ -115,9 +115,9 @@ flowchart LR
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
 | 5 | Negative | `CLIPTextEncode` | PROMPT |
 | 6 | Empty LTX latent 1280x704 | `EmptyLTXVLatentVideo` | SETTINGS |
-| 7 | LTXVConditioning | `LTXVConditioning` | SETTINGS |
-| 8 | KSampler | `KSampler` | SETTINGS |
-| 9 | VAEDecode | `VAEDecode` | OUTPUT |
+| 7 | LTX frame rate cond | `LTXVConditioning` | SETTINGS |
+| 8 | Sampler | `KSampler` | SETTINGS |
+| 9 | VAE Decode | `VAEDecode` | OUTPUT |
 | 10 | Save frames (secondary) | `SaveImage` | OUTPUT |
 | 11 | LTX-2.5 audio VAE | `VAELoader` | MODEL |
 | 12 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | SETTINGS |

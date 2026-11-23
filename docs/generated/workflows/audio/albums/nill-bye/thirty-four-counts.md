@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -229,7 +229,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -637,7 +637,7 @@ minutes stand
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1075,7 +1075,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1470,7 +1470,7 @@ college stands
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1898,7 +1898,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2303,7 +2303,7 @@ appraisal holds
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2697,7 +2697,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3138,7 +3138,7 @@ aid unpaused
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3558,7 +3558,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3987,7 +3987,7 @@ matches due
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4405,7 +4405,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4834,7 +4834,7 @@ celsius moves
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5242,7 +5242,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5643,7 +5643,7 @@ returns closed
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6067,7 +6067,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6398,7 +6398,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 1 | `1024` |
 | 2 | `1` |
 
-**KSampler** (`KSampler`)
+**Sampler** (`KSampler`)
 
 | Slot | Value |
 | --- | --- |
@@ -6764,21 +6764,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap voc...` |
-| ez_rap_prompt | `boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no auto...` |
-| ez_rap_prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
-| ez_rap_prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, ...` |
-| ez_rap_prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
-| ez_rap_prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
-| ez_rap_prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap voc...` |
+| Rap prompt | `boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no auto...` |
+| Rap prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
+| Rap prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
+| Rap prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
+| Rap prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, ...` |
+| Rap prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
+| Rap prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
+| Rap prompt | `gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
+| Rap prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
 
 #### `lyrics`
 
@@ -6790,21 +6790,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[chorus] Thirty four counts Nill Bye on the reimbursement Trump labeled a legal...` |
-| ez_rap_prompt | `[spoken word] One ten p.m. Ellipse Four seventeen the video One hundred eighty-...` |
-| ez_rap_prompt | `[intro] tape hiss Nill Bye transcribing [verse] January two, a Saturday pressur...` |
-| ez_rap_prompt | `[verse] Arizona, Georgia, Michigan, Nevada New Mexico, Pennsylvania, Wisconsin ...` |
-| ez_rap_prompt | `[intro] brass sting Nill Bye inventorying [verse] Boxes in a bath, boxes on a s...` |
-| ez_rap_prompt | `[verse] A statement of financial condition is a tool, engoron Banks and insurer...` |
-| ez_rap_prompt | `[verse] Up to thirty-five thousand for a mentorship Three-day tickets in the fi...` |
-| ez_rap_prompt | `[intro] blues harp bite Nill Bye tracing aid [verse] Three hundred ninety-one m...` |
-| ez_rap_prompt | `[intro] lo-fi rhodes Nill Bye reading the roster [verse] January twenty-seven, ...` |
-| ez_rap_prompt | `[intro] soft snare Nill Bye reading memos [verse] Spring twenty-eighteen, a pro...` |
-| ez_rap_prompt | `[verse] A census is a count, not a trapdoor Adding a citizenship box late is a ...` |
-| ez_rap_prompt | `[intro] analog neon Nill Bye reading accords [verse] June twenty-seventeen, a R...` |
-| ez_rap_prompt | `[chorus] Emoluments suite Nill Bye on the DC hotel Trump kept a lease while he ...` |
-| ez_rap_prompt | `[intro] cinematic timpani Nill Bye reading returns [verse] The New York Times s...` |
-| ez_rap_prompt | `[intro] live-kit stomp Nill Bye reading verdicts [verse] A civil jury found lia...` |
+| Rap prompt | `[chorus] Thirty four counts Nill Bye on the reimbursement Trump labeled a legal...` |
+| Rap prompt | `[spoken word] One ten p.m. Ellipse Four seventeen the video One hundred eighty-...` |
+| Rap prompt | `[intro] tape hiss Nill Bye transcribing [verse] January two, a Saturday pressur...` |
+| Rap prompt | `[verse] Arizona, Georgia, Michigan, Nevada New Mexico, Pennsylvania, Wisconsin ...` |
+| Rap prompt | `[intro] brass sting Nill Bye inventorying [verse] Boxes in a bath, boxes on a s...` |
+| Rap prompt | `[verse] A statement of financial condition is a tool, engoron Banks and insurer...` |
+| Rap prompt | `[verse] Up to thirty-five thousand for a mentorship Three-day tickets in the fi...` |
+| Rap prompt | `[intro] blues harp bite Nill Bye tracing aid [verse] Three hundred ninety-one m...` |
+| Rap prompt | `[intro] lo-fi rhodes Nill Bye reading the roster [verse] January twenty-seven, ...` |
+| Rap prompt | `[intro] soft snare Nill Bye reading memos [verse] Spring twenty-eighteen, a pro...` |
+| Rap prompt | `[verse] A census is a count, not a trapdoor Adding a citizenship box late is a ...` |
+| Rap prompt | `[intro] analog neon Nill Bye reading accords [verse] June twenty-seventeen, a R...` |
+| Rap prompt | `[chorus] Emoluments suite Nill Bye on the DC hotel Trump kept a lease while he ...` |
+| Rap prompt | `[intro] cinematic timpani Nill Bye reading returns [verse] The New York Times s...` |
+| Rap prompt | `[intro] live-kit stomp Nill Bye reading verdicts [verse] A civil jury found lia...` |
 
 #### `enhance`
 
@@ -6843,21 +6843,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/01-thirty-four-counts` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/02-one-eighty-seven` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/04-fake-electors` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/05-bathroom-boxes` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/07-university-tab` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/09-travel-memo` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/11-census-question` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/13-emoluments-suite` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty` |
-| ez_rap_prompt | `audio/albums/nill-bye/thirty-four-counts/15-carroll-tab` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/01-thirty-four-counts` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/02-one-eighty-seven` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/04-fake-electors` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/05-bathroom-boxes` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/07-university-tab` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/09-travel-memo` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/11-census-question` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/13-emoluments-suite` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty` |
+| Rap prompt | `audio/albums/nill-bye/thirty-four-counts/15-carroll-tab` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
@@ -7306,7 +7306,7 @@ Random seed for the noise tensor.
 | ACE sampler | `439` |
 | ACE sampler | `443` |
 | ACE sampler | `449` |
-| KSampler | `42` |
+| Sampler | `42` |
 
 #### `control_after_generate`
 

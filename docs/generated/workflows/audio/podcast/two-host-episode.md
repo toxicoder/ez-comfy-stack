@@ -57,20 +57,20 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ```mermaid
 flowchart LR
   N1["ACE-Step 1.5 turbo AIO"]
-  N2["ez_podcast_script"]
+  N2["Podcast script"]
   N3["Disclosure bumper"]
-  N4["ez_podcast_voice"]
-  N5["ez_podcast_bed"]
+  N4["Podcast voice"]
+  N5["Podcast bed"]
   N6["ACE negative"]
   N7["Bed length (seconds)"]
   N8["ACE sampler"]
   N9["ACE decode"]
   N10["Duck bed -15 dB"]
-  N11["ez_podcast_mix overlay"]
+  N11["Podcast mix overlay"]
   N12["FLAC master"]
   N13["MP3 320k"]
   N14["Operator note"]
-  N15["ez_podcast_bed enhance"]
+  N15["Podcast bed enhance"]
   N16["Detail"]
   N17["Check models"]
   N1 --> N8
@@ -97,20 +97,20 @@ flowchart LR
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
 | 1 | ACE-Step 1.5 turbo AIO | `CheckpointLoaderSimple` | MODEL |
-| 2 | ez_podcast_script | `EZPodcastScript` | PROMPT |
+| 2 | Podcast script | `EZPodcastScript` | PROMPT |
 | 3 | Disclosure bumper | `EZPodcastDisclosure` | PROMPT |
-| 4 | ez_podcast_voice | `EZKokoroTTS` | PROMPT |
-| 5 | ez_podcast_bed | `TextEncodeAceStepAudio1.5` | MODEL |
+| 4 | Podcast voice | `EZKokoroTTS` | PROMPT |
+| 5 | Podcast bed | `TextEncodeAceStepAudio1.5` | MODEL |
 | 6 | ACE negative | `TextEncodeAceStepAudio1.5` | MODEL |
 | 7 | Bed length (seconds) | `EmptyAceStep1.5LatentAudio` | SETTINGS |
 | 8 | ACE sampler | `KSampler` | SETTINGS |
 | 9 | ACE decode | `VAEDecodeAudio` | SETTINGS |
 | 10 | Duck bed -15 dB | `AudioAdjustVolume` | SETTINGS |
-| 11 | ez_podcast_mix overlay | `AudioMerge` | OUTPUT |
+| 11 | Podcast mix overlay | `AudioMerge` | OUTPUT |
 | 12 | FLAC master | `SaveAudio` | OUTPUT |
 | 13 | MP3 320k | `SaveAudioMP3` | OUTPUT |
 | 14 | Operator note | `Note` | NOTE |
-| 15 | ez_podcast_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 15 | Podcast bed enhance | `EZAceStepPromptEnhance` | PROMPT |
 | 16 | Detail | `EZQuality` | QUALITY |
 | 17 | Check models | `EZModelCheck` | QUALITY |
 
@@ -348,7 +348,7 @@ Genre-first tags, BPM last.
 
 | Instance | Value |
 | --- | --- |
-| ez_podcast_bed | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
+| Podcast bed | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
 | ACE negative | `vocals, singing, choir, rap` |
 
 #### `lyrics`
@@ -369,7 +369,7 @@ ACE encoder seed (audio-codes LLM).
 
 | Instance | Value |
 | --- | --- |
-| ez_podcast_bed | `42` |
+| Podcast bed | `42` |
 | ACE negative | `7` |
 
 #### `control_after_generate`
@@ -440,7 +440,7 @@ Lyric language.
 
 | Instance | Value |
 | --- | --- |
-| ez_podcast_bed | `unknown` |
+| Podcast bed | `unknown` |
 | ACE negative | `en` |
 
 **Other choices**

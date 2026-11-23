@@ -408,7 +408,7 @@ def test_music_edm_drive_through_graphs() -> None:
             )
             assert ace_enc["widgets_values"][7] == "unknown"
         ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
-        assert ace["title"] == "ez_edm_prompt"
+        assert ace["title"] == "EDM prompt"
         rel = lab_json(stem).relative_to(LAB_ROOT)
         assert rel.parts[:4] == ("audio", "albums", "drive-through", ex["album_slug"])
 
@@ -485,7 +485,17 @@ def test_music_apps_expose_duration_and_vocal_mode() -> None:
             for entry in graph["extra"]["linearData"]["inputs"]
         ]
         assert "Duration (seconds)" in labels, stem
-        assert "Vocal / instrumental" in labels, stem
+        # A take renders one ACE pass per enhancer node, and the panel numbers
+        # each pass's row, so the expected wording follows the node count.
+        passes = sum(
+            1 for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance"
+        )
+        if passes == 1:
+            expected_modes = ["Vocal / instrumental"]
+        else:
+            expected_modes = [f"Pass {i} vocal / instrumental" for i in range(1, passes + 1)]
+        for mode_label in expected_modes:
+            assert mode_label in labels, (stem, mode_label)
         assert "Album art" in labels, stem
         assert "Cover image" not in labels, stem
         assert "image" not in names, stem

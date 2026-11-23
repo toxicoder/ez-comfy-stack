@@ -67,7 +67,7 @@ flowchart LR
   N7["Negative"]
   N8["Video size & length"]
   N9["Shift"]
-  N10["KSampler"]
+  N10["Sampler"]
   N11["VAE Decode"]
   N12["Save frames (secondary)"]
   N13["Save video (MP4) - open node for preview"]
@@ -116,7 +116,7 @@ flowchart LR
 | 7 | Negative | `CLIPTextEncode` | DRAFT Wan 5s |
 | 8 | Video size & length | `Wan22ImageToVideoLatent` | DRAFT Wan 5s |
 | 9 | Shift | `ModelSamplingSD3` | DRAFT Wan 5s |
-| 10 | KSampler | `KSampler` | DRAFT Wan 5s |
+| 10 | Sampler | `KSampler` | DRAFT Wan 5s |
 | 11 | VAE Decode | `VAEDecode` | DRAFT Wan 5s |
 | 12 | Save frames (secondary) | `SaveImage` | DRAFT Wan 5s |
 | 13 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | DRAFT Wan 5s |

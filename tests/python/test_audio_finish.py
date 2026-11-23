@@ -205,6 +205,22 @@ def test_queue_is_not_how_the_app_is_run() -> None:
     assert "--dest" not in note
 
 
+def test_the_note_does_not_promise_a_silent_queue() -> None:
+    """Queue on this canvas has one honest outcome, and the note says which.
+
+    The graph used to tell the operator that an empty Queue "writes nothing".
+    SaveAudio's ``audio`` socket is required and unwired, so a Queue can stop
+    there with a missing-input error instead, and an operator who was told
+    nothing happens reads that stop as a broken graph and goes hunting for a
+    wire that is meant to stay empty.
+    """
+    folded = " ".join(str(_graph()["extra"]["lab_note"]).split())
+    assert "an empty Queue writes nothing" not in folded
+    assert "nothing reaches disk from it" in folded
+    assert "Save stem mix (host stem-mix.sh)" in folded
+    assert "it is not a step to repair" in folded
+
+
 def test_save_audio_audio_input_stays_honest() -> None:
     """No fake audio source is bolted on; the empty slot is stated, not hidden."""
     graph = _graph()

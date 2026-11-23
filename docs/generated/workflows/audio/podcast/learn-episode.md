@@ -59,21 +59,21 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ```mermaid
 flowchart LR
   N1["ACE-Step 1.5 turbo AIO"]
-  N2["ez_learn_sources"]
+  N2["Learn sources"]
   N3["Disclosure bumper"]
-  N4["ez_learn_voice"]
-  N5["ez_learn_bed"]
+  N4["Learn voice"]
+  N5["Learn bed"]
   N6["ACE negative"]
   N7["Bed length (seconds)"]
   N8["ACE sampler"]
   N9["ACE decode"]
   N10["Loop bed to speech"]
   N11["Duck bed -15 dB"]
-  N12["ez_learn_mix overlay"]
+  N12["Learn mix overlay"]
   N13["FLAC master"]
   N14["MP3 320k"]
   N15["Operator note"]
-  N16["ez_learn_bed enhance"]
+  N16["Learn bed enhance"]
   N17["Detail"]
   N18["Check models"]
   N1 --> N8
@@ -102,21 +102,21 @@ flowchart LR
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
 | 1 | ACE-Step 1.5 turbo AIO | `CheckpointLoaderSimple` | MODEL |
-| 2 | ez_learn_sources | `EZPodcastLearn` | PROMPT |
+| 2 | Learn sources | `EZPodcastLearn` | PROMPT |
 | 3 | Disclosure bumper | `EZPodcastDisclosure` | PROMPT |
-| 4 | ez_learn_voice | `EZKokoroTTS` | PROMPT |
-| 5 | ez_learn_bed | `TextEncodeAceStepAudio1.5` | MODEL |
+| 4 | Learn voice | `EZKokoroTTS` | PROMPT |
+| 5 | Learn bed | `TextEncodeAceStepAudio1.5` | MODEL |
 | 6 | ACE negative | `TextEncodeAceStepAudio1.5` | MODEL |
 | 7 | Bed length (seconds) | `EmptyAceStep1.5LatentAudio` | SETTINGS |
 | 8 | ACE sampler | `KSampler` | SETTINGS |
 | 9 | ACE decode | `VAEDecodeAudio` | SETTINGS |
 | 10 | Loop bed to speech | `EZAudioLoopToMatch` | SETTINGS |
 | 11 | Duck bed -15 dB | `AudioAdjustVolume` | OUTPUT |
-| 12 | ez_learn_mix overlay | `AudioMerge` | OUTPUT |
+| 12 | Learn mix overlay | `AudioMerge` | OUTPUT |
 | 13 | FLAC master | `SaveAudio` | OUTPUT |
 | 14 | MP3 320k | `SaveAudioMP3` | OUTPUT |
 | 15 | Operator note | `Note` | NOTE |
-| 16 | ez_learn_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 16 | Learn bed enhance | `EZAceStepPromptEnhance` | PROMPT |
 | 17 | Detail | `EZQuality` | QUALITY |
 | 18 | Check models | `EZModelCheck` | QUALITY |
 
@@ -389,7 +389,7 @@ Genre-first tags, BPM last.
 
 | Instance | Value |
 | --- | --- |
-| ez_learn_bed | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
+| Learn bed | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
 | ACE negative | `vocals, singing, choir, rap` |
 
 #### `lyrics`
@@ -410,7 +410,7 @@ ACE encoder seed (audio-codes LLM).
 
 | Instance | Value |
 | --- | --- |
-| ez_learn_bed | `42` |
+| Learn bed | `42` |
 | ACE negative | `7` |
 
 #### `control_after_generate`
@@ -481,7 +481,7 @@ Lyric language.
 
 | Instance | Value |
 | --- | --- |
-| ez_learn_bed | `unknown` |
+| Learn bed | `unknown` |
 | ACE negative | `en` |
 
 **Other choices**

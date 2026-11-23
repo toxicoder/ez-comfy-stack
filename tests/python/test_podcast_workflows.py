@@ -45,9 +45,9 @@ def test_audio_first_podcast_graph() -> None:
     assert extra["lab_description"].strip()
     blob = json.dumps(graph)
     for prefix in (
-        "ez_podcast_script",
-        "ez_podcast_voice",
-        "ez_podcast_bed",
+        "Podcast script",
+        "Podcast voice",
+        "Podcast bed",
         "ez_podcast_mix",
         "ez_podcast_ep",
     ):
@@ -101,10 +101,10 @@ def test_radio_drama_graph() -> None:
     assert extra["lab_profile"] == "us-safe-radio"
     blob = json.dumps(graph)
     for prefix in (
-        "ez_radio_script",
-        "ez_radio_voice",
-        "ez_radio_bed",
-        "ez_radio_sting",
+        "Radio script",
+        "Radio voice",
+        "Radio bed",
+        "Radio sting",
         "ez_radio_mix",
         "ez_radio_ep",
     ):
@@ -190,9 +190,9 @@ def test_learn_episode_podcast_graph() -> None:
     assert extra["lab_profile"] == "us-safe-learn-podcast"
     blob = json.dumps(graph)
     for prefix in (
-        "ez_learn_sources",
-        "ez_learn_voice",
-        "ez_learn_bed",
+        "Learn sources",
+        "Learn voice",
+        "Learn bed",
         "ez_learn_mix",
         "ez_learn_ep",
     ):

@@ -56,7 +56,7 @@ flowchart LR
   N4["Positive"]
   N5["Negative"]
   N6["Size 1280x704"]
-  N7["KSampler"]
+  N7["Sampler"]
   N8["VAE Decode"]
   N9["Save PNG"]
   N10["Operator note"]
@@ -101,7 +101,7 @@ flowchart LR
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
 | 5 | Negative | `CLIPTextEncode` | PROMPT |
 | 6 | Size 1280x704 | `EmptyFlux2LatentImage` | SETTINGS |
-| 7 | KSampler | `KSampler` | SETTINGS |
+| 7 | Sampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
 | 10 | Operator note | `Note` | NOTE |

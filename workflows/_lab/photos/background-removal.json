@@ -610,23 +610,43 @@
       "inputs": [
         [
           2,
-          "image"
+          "image",
+          {
+            "label": "Source still",
+            "description": "The photo to isolate one subject from. Already in input/ (the container inputs folder)."
+          }
         ],
         [
           3,
-          "backdrop"
+          "backdrop",
+          {
+            "label": "Backdrop",
+            "description": "What fills the pixels the subject leaves. transparent is the only pick that writes real alpha; keep original changes no pixel at all."
+          }
         ],
         [
           3,
-          "dilate"
+          "dilate",
+          {
+            "label": "Dilate",
+            "description": "Pixels grown past the matte edge so hair and fur survive the cut. Clamped 0-32; this graph ships 6."
+          }
         ],
         [
           3,
-          "feather"
+          "feather",
+          {
+            "label": "Feather",
+            "description": "Soft-edge width in pixels so the rim is not a hard cut. Clamped 0-32; this graph ships 4."
+          }
         ],
         [
           6,
-          "upscale"
+          "upscale",
+          {
+            "label": "Upscale",
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840x2160 box (portrait 2160x3840)."
+          }
         ]
       ],
       "outputs": [

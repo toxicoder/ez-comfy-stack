@@ -1670,7 +1670,7 @@
       "widgets_values": [
         "none"
       ],
-      "title": "Upscale still"
+      "title": "Upscale still 2"
     },
     {
       "id": 39,
@@ -1733,7 +1733,7 @@
       "widgets_values": [
         "none"
       ],
-      "title": "Upscale still"
+      "title": "Upscale still 3"
     },
     {
       "id": 40,
@@ -1796,7 +1796,7 @@
       "widgets_values": [
         "none"
       ],
-      "title": "Upscale still"
+      "title": "Upscale still 4"
     },
     {
       "id": 41,
@@ -1908,7 +1908,7 @@
       "widgets_values": [
         "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
-      "title": "Negative Negative SHOT DAWN"
+      "title": "Negative SHOT DAWN"
     },
     {
       "id": 44,
@@ -1951,7 +1951,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 2"
     },
     {
       "id": 45,
@@ -2039,7 +2039,7 @@
       "widgets_values": [
         "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
-      "title": "Negative Negative SHOT NOON"
+      "title": "Negative SHOT NOON"
     },
     {
       "id": 47,
@@ -2082,7 +2082,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 3"
     },
     {
       "id": 48,
@@ -2170,7 +2170,7 @@
       "widgets_values": [
         "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
-      "title": "Negative Negative SHOT NIGHT"
+      "title": "Negative SHOT NIGHT"
     },
     {
       "id": 50,
@@ -2213,7 +2213,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 4"
     }
   ],
   "links": [

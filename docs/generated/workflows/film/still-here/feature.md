@@ -93,7 +93,7 @@ flowchart TB
 | 201 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
 | 202 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
 | 203 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 204 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 204 | Sampler 1 | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
 | 205 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
 | 206 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
 | 207 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
@@ -102,208 +102,208 @@ flowchart TB
 | 210 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
 | 231 | b1 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 x 5.00s LTX) |
 | 220 | b1 s2 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 221 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
-| 222 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
-| 223 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 224 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
-| 225 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 226 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 227 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 228 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
-| 229 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
-| 230 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 221 | LTX Img->Video condition 2 | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
+| 222 | LTX frame rate cond 2 | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
+| 223 | Concat AV latents 2 | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 224 | Sampler 2 | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 225 | Separate AV latents 2 | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 226 | VAE Decode 2 | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 227 | Audio VAE Decode 2 | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 228 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 229 | Last frame 2 | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
+| 230 | Save last frame 2 | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
 | 251 | b1 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 3. Beat 1 (3 x 5.00s LTX) |
 | 240 | b1 s3 LTX I2V | `CLIPTextEncode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 241 | LTX Img->Video condition | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
-| 242 | LTX frame rate cond | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
-| 243 | Concat AV latents | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 244 | KSampler | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
-| 245 | Separate AV latents | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
-| 246 | VAE Decode | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 247 | Audio VAE Decode | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
-| 248 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
-| 249 | Last frame | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
-| 250 | Save last frame | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
+| 241 | LTX Img->Video condition 3 | `LTXVImgToVideo` | 3. Beat 1 (3 x 5.00s LTX) |
+| 242 | LTX frame rate cond 3 | `LTXVConditioning` | 3. Beat 1 (3 x 5.00s LTX) |
+| 243 | Concat AV latents 3 | `LTXVConcatAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 244 | Sampler 3 | `KSampler` | 3. Beat 1 (3 x 5.00s LTX) |
+| 245 | Separate AV latents 3 | `LTXVSeparateAVLatent` | 3. Beat 1 (3 x 5.00s LTX) |
+| 246 | VAE Decode 3 | `VAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 247 | Audio VAE Decode 3 | `LTXVAudioVAEDecode` | 3. Beat 1 (3 x 5.00s LTX) |
+| 248 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 3. Beat 1 (3 x 5.00s LTX) |
+| 249 | Last frame 3 | `ImageFromBatch` | 3. Beat 1 (3 x 5.00s LTX) |
+| 250 | Save last frame 3 | `SaveImage` | 3. Beat 1 (3 x 5.00s LTX) |
 | 271 | b2 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
 | 260 | b2 s1 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 261 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
-| 262 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
-| 263 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 264 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
-| 265 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 266 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 267 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 268 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
-| 269 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
-| 270 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 261 | LTX Img->Video condition 4 | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
+| 262 | LTX frame rate cond 4 | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
+| 263 | Concat AV latents 4 | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 264 | Sampler 4 | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 265 | Separate AV latents 4 | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 266 | VAE Decode 4 | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 267 | Audio VAE Decode 4 | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 268 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 269 | Last frame 4 | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
+| 270 | Save last frame 4 | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
 | 291 | b2 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
 | 280 | b2 s2 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 281 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
-| 282 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
-| 283 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 284 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
-| 285 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 286 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 287 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 288 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
-| 289 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
-| 290 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 281 | LTX Img->Video condition 5 | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
+| 282 | LTX frame rate cond 5 | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
+| 283 | Concat AV latents 5 | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 284 | Sampler 5 | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 285 | Separate AV latents 5 | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 286 | VAE Decode 5 | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 287 | Audio VAE Decode 5 | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 288 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 289 | Last frame 5 | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
+| 290 | Save last frame 5 | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
 | 311 | b2 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 4. Beat 2 (3 x 5.00s LTX) |
 | 300 | b2 s3 LTX I2V | `CLIPTextEncode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 301 | LTX Img->Video condition | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
-| 302 | LTX frame rate cond | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
-| 303 | Concat AV latents | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 304 | KSampler | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
-| 305 | Separate AV latents | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
-| 306 | VAE Decode | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 307 | Audio VAE Decode | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
-| 308 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
-| 309 | Last frame | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
-| 310 | Save last frame | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
+| 301 | LTX Img->Video condition 6 | `LTXVImgToVideo` | 4. Beat 2 (3 x 5.00s LTX) |
+| 302 | LTX frame rate cond 6 | `LTXVConditioning` | 4. Beat 2 (3 x 5.00s LTX) |
+| 303 | Concat AV latents 6 | `LTXVConcatAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 304 | Sampler 6 | `KSampler` | 4. Beat 2 (3 x 5.00s LTX) |
+| 305 | Separate AV latents 6 | `LTXVSeparateAVLatent` | 4. Beat 2 (3 x 5.00s LTX) |
+| 306 | VAE Decode 6 | `VAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 307 | Audio VAE Decode 6 | `LTXVAudioVAEDecode` | 4. Beat 2 (3 x 5.00s LTX) |
+| 308 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 4. Beat 2 (3 x 5.00s LTX) |
+| 309 | Last frame 6 | `ImageFromBatch` | 4. Beat 2 (3 x 5.00s LTX) |
+| 310 | Save last frame 6 | `SaveImage` | 4. Beat 2 (3 x 5.00s LTX) |
 | 331 | b3 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
 | 320 | b3 s1 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 321 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
-| 322 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
-| 323 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 324 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
-| 325 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 326 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 327 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 328 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
-| 329 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
-| 330 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 321 | LTX Img->Video condition 7 | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
+| 322 | LTX frame rate cond 7 | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
+| 323 | Concat AV latents 7 | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 324 | Sampler 7 | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 325 | Separate AV latents 7 | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 326 | VAE Decode 7 | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 327 | Audio VAE Decode 7 | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 328 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 329 | Last frame 7 | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
+| 330 | Save last frame 7 | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
 | 351 | b3 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
 | 340 | b3 s2 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 341 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
-| 342 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
-| 343 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 344 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
-| 345 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 346 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 347 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 348 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
-| 349 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
-| 350 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 341 | LTX Img->Video condition 8 | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
+| 342 | LTX frame rate cond 8 | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
+| 343 | Concat AV latents 8 | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 344 | Sampler 8 | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 345 | Separate AV latents 8 | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 346 | VAE Decode 8 | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 347 | Audio VAE Decode 8 | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 348 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 349 | Last frame 8 | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
+| 350 | Save last frame 8 | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
 | 371 | b3 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 5. Beat 3 (3 x 5.00s LTX) |
 | 360 | b3 s3 LTX I2V | `CLIPTextEncode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 361 | LTX Img->Video condition | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
-| 362 | LTX frame rate cond | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
-| 363 | Concat AV latents | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 364 | KSampler | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
-| 365 | Separate AV latents | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
-| 366 | VAE Decode | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 367 | Audio VAE Decode | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
-| 368 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
-| 369 | Last frame | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
-| 370 | Save last frame | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
+| 361 | LTX Img->Video condition 9 | `LTXVImgToVideo` | 5. Beat 3 (3 x 5.00s LTX) |
+| 362 | LTX frame rate cond 9 | `LTXVConditioning` | 5. Beat 3 (3 x 5.00s LTX) |
+| 363 | Concat AV latents 9 | `LTXVConcatAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 364 | Sampler 9 | `KSampler` | 5. Beat 3 (3 x 5.00s LTX) |
+| 365 | Separate AV latents 9 | `LTXVSeparateAVLatent` | 5. Beat 3 (3 x 5.00s LTX) |
+| 366 | VAE Decode 9 | `VAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 367 | Audio VAE Decode 9 | `LTXVAudioVAEDecode` | 5. Beat 3 (3 x 5.00s LTX) |
+| 368 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 5. Beat 3 (3 x 5.00s LTX) |
+| 369 | Last frame 9 | `ImageFromBatch` | 5. Beat 3 (3 x 5.00s LTX) |
+| 370 | Save last frame 9 | `SaveImage` | 5. Beat 3 (3 x 5.00s LTX) |
 | 391 | b4 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
 | 380 | b4 s1 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 381 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
-| 382 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
-| 383 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 384 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
-| 385 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 386 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 387 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 388 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
-| 389 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
-| 390 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 381 | LTX Img->Video condition 10 | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
+| 382 | LTX frame rate cond 10 | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
+| 383 | Concat AV latents 10 | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 384 | Sampler 10 | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 385 | Separate AV latents 10 | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 386 | VAE Decode 10 | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 387 | Audio VAE Decode 10 | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 388 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 389 | Last frame 10 | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
+| 390 | Save last frame 10 | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
 | 411 | b4 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
 | 400 | b4 s2 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 401 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
-| 402 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
-| 403 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 404 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
-| 405 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 406 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 407 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 408 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
-| 409 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
-| 410 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 401 | LTX Img->Video condition 11 | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
+| 402 | LTX frame rate cond 11 | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
+| 403 | Concat AV latents 11 | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 404 | Sampler 11 | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 405 | Separate AV latents 11 | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 406 | VAE Decode 11 | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 407 | Audio VAE Decode 11 | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 408 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 409 | Last frame 11 | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
+| 410 | Save last frame 11 | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
 | 431 | b4 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 6. Beat 4 (3 x 5.00s LTX) |
 | 420 | b4 s3 LTX I2V | `CLIPTextEncode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 421 | LTX Img->Video condition | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
-| 422 | LTX frame rate cond | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
-| 423 | Concat AV latents | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 424 | KSampler | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
-| 425 | Separate AV latents | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
-| 426 | VAE Decode | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 427 | Audio VAE Decode | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
-| 428 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
-| 429 | Last frame | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
-| 430 | Save last frame | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
+| 421 | LTX Img->Video condition 12 | `LTXVImgToVideo` | 6. Beat 4 (3 x 5.00s LTX) |
+| 422 | LTX frame rate cond 12 | `LTXVConditioning` | 6. Beat 4 (3 x 5.00s LTX) |
+| 423 | Concat AV latents 12 | `LTXVConcatAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 424 | Sampler 12 | `KSampler` | 6. Beat 4 (3 x 5.00s LTX) |
+| 425 | Separate AV latents 12 | `LTXVSeparateAVLatent` | 6. Beat 4 (3 x 5.00s LTX) |
+| 426 | VAE Decode 12 | `VAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 427 | Audio VAE Decode 12 | `LTXVAudioVAEDecode` | 6. Beat 4 (3 x 5.00s LTX) |
+| 428 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 6. Beat 4 (3 x 5.00s LTX) |
+| 429 | Last frame 12 | `ImageFromBatch` | 6. Beat 4 (3 x 5.00s LTX) |
+| 430 | Save last frame 12 | `SaveImage` | 6. Beat 4 (3 x 5.00s LTX) |
 | 451 | b5 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
 | 440 | b5 s1 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 441 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
-| 442 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
-| 443 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 444 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
-| 445 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 446 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 447 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 448 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
-| 449 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
-| 450 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 441 | LTX Img->Video condition 13 | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
+| 442 | LTX frame rate cond 13 | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
+| 443 | Concat AV latents 13 | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 444 | Sampler 13 | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 445 | Separate AV latents 13 | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 446 | VAE Decode 13 | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 447 | Audio VAE Decode 13 | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 448 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 449 | Last frame 13 | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
+| 450 | Save last frame 13 | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
 | 471 | b5 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
 | 460 | b5 s2 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 461 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
-| 462 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
-| 463 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 464 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
-| 465 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 466 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 467 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 468 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
-| 469 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
-| 470 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 461 | LTX Img->Video condition 14 | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
+| 462 | LTX frame rate cond 14 | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
+| 463 | Concat AV latents 14 | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 464 | Sampler 14 | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 465 | Separate AV latents 14 | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 466 | VAE Decode 14 | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 467 | Audio VAE Decode 14 | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 468 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 469 | Last frame 14 | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
+| 470 | Save last frame 14 | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
 | 491 | b5 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 7. Beat 5 (3 x 5.00s LTX) |
 | 480 | b5 s3 LTX I2V | `CLIPTextEncode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 481 | LTX Img->Video condition | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
-| 482 | LTX frame rate cond | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
-| 483 | Concat AV latents | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 484 | KSampler | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
-| 485 | Separate AV latents | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
-| 486 | VAE Decode | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 487 | Audio VAE Decode | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
-| 488 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
-| 489 | Last frame | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
-| 490 | Save last frame | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
+| 481 | LTX Img->Video condition 15 | `LTXVImgToVideo` | 7. Beat 5 (3 x 5.00s LTX) |
+| 482 | LTX frame rate cond 15 | `LTXVConditioning` | 7. Beat 5 (3 x 5.00s LTX) |
+| 483 | Concat AV latents 15 | `LTXVConcatAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 484 | Sampler 15 | `KSampler` | 7. Beat 5 (3 x 5.00s LTX) |
+| 485 | Separate AV latents 15 | `LTXVSeparateAVLatent` | 7. Beat 5 (3 x 5.00s LTX) |
+| 486 | VAE Decode 15 | `VAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 487 | Audio VAE Decode 15 | `LTXVAudioVAEDecode` | 7. Beat 5 (3 x 5.00s LTX) |
+| 488 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 7. Beat 5 (3 x 5.00s LTX) |
+| 489 | Last frame 15 | `ImageFromBatch` | 7. Beat 5 (3 x 5.00s LTX) |
+| 490 | Save last frame 15 | `SaveImage` | 7. Beat 5 (3 x 5.00s LTX) |
 | 511 | b6 s1 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
 | 500 | b6 s1 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 501 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
-| 502 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
-| 503 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 504 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
-| 505 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 506 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 507 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 508 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
-| 509 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
-| 510 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 501 | LTX Img->Video condition 16 | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
+| 502 | LTX frame rate cond 16 | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
+| 503 | Concat AV latents 16 | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 504 | Sampler 16 | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 505 | Separate AV latents 16 | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 506 | VAE Decode 16 | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 507 | Audio VAE Decode 16 | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 508 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 509 | Last frame 16 | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
+| 510 | Save last frame 16 | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 531 | b6 s2 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
 | 520 | b6 s2 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 521 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
-| 522 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
-| 523 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 524 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
-| 525 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 526 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 527 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 528 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
-| 529 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
-| 530 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 521 | LTX Img->Video condition 17 | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
+| 522 | LTX frame rate cond 17 | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
+| 523 | Concat AV latents 17 | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 524 | Sampler 17 | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 525 | Separate AV latents 17 | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 526 | VAE Decode 17 | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 527 | Audio VAE Decode 17 | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 528 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 529 | Last frame 17 | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
+| 530 | Save last frame 17 | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 551 | b6 s3 LTX I2V enhance | `EZLTXPromptEnhance` | 8. Beat 6 (3 x 5.00s LTX) |
 | 540 | b6 s3 LTX I2V | `CLIPTextEncode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 541 | LTX Img->Video condition | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
-| 542 | LTX frame rate cond | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
-| 543 | Concat AV latents | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 544 | KSampler | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
-| 545 | Separate AV latents | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
-| 546 | VAE Decode | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 547 | Audio VAE Decode | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
-| 548 | Save video (MP4) - open node for preview | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
-| 549 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
-| 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
+| 541 | LTX Img->Video condition 18 | `LTXVImgToVideo` | 8. Beat 6 (3 x 5.00s LTX) |
+| 542 | LTX frame rate cond 18 | `LTXVConditioning` | 8. Beat 6 (3 x 5.00s LTX) |
+| 543 | Concat AV latents 18 | `LTXVConcatAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 544 | Sampler 18 | `KSampler` | 8. Beat 6 (3 x 5.00s LTX) |
+| 545 | Separate AV latents 18 | `LTXVSeparateAVLatent` | 8. Beat 6 (3 x 5.00s LTX) |
+| 546 | VAE Decode 18 | `VAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 547 | Audio VAE Decode 18 | `LTXVAudioVAEDecode` | 8. Beat 6 (3 x 5.00s LTX) |
+| 548 | Save video (MP4) - open node for previe... | `VHS_VideoCombine` | 8. Beat 6 (3 x 5.00s LTX) |
+| 549 | Last frame 18 | `ImageFromBatch` | 8. Beat 6 (3 x 5.00s LTX) |
+| 550 | Save last frame 18 | `SaveImage` | 8. Beat 6 (3 x 5.00s LTX) |
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 51 | Load identity plate | `LoadImage` | INPUT |
 | 905 | Identity context | `EZSamplePrompt` | 2. LTX models |
@@ -1247,24 +1247,24 @@ Random seed for the noise tensor.
 
 | Instance | Value |
 | --- | --- |
-| KSampler | `42` |
-| KSampler | `43` |
-| KSampler | `44` |
-| KSampler | `45` |
-| KSampler | `46` |
-| KSampler | `47` |
-| KSampler | `48` |
-| KSampler | `49` |
-| KSampler | `50` |
-| KSampler | `51` |
-| KSampler | `52` |
-| KSampler | `53` |
-| KSampler | `54` |
-| KSampler | `55` |
-| KSampler | `56` |
-| KSampler | `57` |
-| KSampler | `58` |
-| KSampler | `59` |
+| Sampler 1 | `42` |
+| Sampler 2 | `43` |
+| Sampler 3 | `44` |
+| Sampler 4 | `45` |
+| Sampler 5 | `46` |
+| Sampler 6 | `47` |
+| Sampler 7 | `48` |
+| Sampler 8 | `49` |
+| Sampler 9 | `50` |
+| Sampler 10 | `51` |
+| Sampler 11 | `52` |
+| Sampler 12 | `53` |
+| Sampler 13 | `54` |
+| Sampler 14 | `55` |
+| Sampler 15 | `56` |
+| Sampler 16 | `57` |
+| Sampler 17 | `58` |
+| Sampler 18 | `59` |
 
 #### `control_after_generate`
 
@@ -1486,23 +1486,23 @@ Save prefix under the output folder.
 | Instance | Value |
 | --- | --- |
 | Save video (MP4) - open node for preview | `ez_stillhere_b1_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b1_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b1_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b2_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b2_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b2_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b3_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b3_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b3_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b4_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b4_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b4_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b5_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b5_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b5_s3_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b6_s1_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b6_s2_ltx_video` |
-| Save video (MP4) - open node for preview | `ez_stillhere_b6_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b1_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b1_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b2_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b2_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b2_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b3_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b3_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b3_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b4_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b4_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b4_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b5_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b5_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b5_s3_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b6_s1_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b6_s2_ltx_video` |
+| Save video (MP4) - open node for previe... | `ez_stillhere_b6_s3_ltx_video` |
 
 #### `format`
 
@@ -1633,23 +1633,23 @@ Save prefix.
 | Instance | Value |
 | --- | --- |
 | Save last frame | `ez_stillhere_b1_s1_last` |
-| Save last frame | `ez_stillhere_b1_s2_last` |
-| Save last frame | `ez_stillhere_b1_s3_last` |
-| Save last frame | `ez_stillhere_b2_s1_last` |
-| Save last frame | `ez_stillhere_b2_s2_last` |
-| Save last frame | `ez_stillhere_b2_s3_last` |
-| Save last frame | `ez_stillhere_b3_s1_last` |
-| Save last frame | `ez_stillhere_b3_s2_last` |
-| Save last frame | `ez_stillhere_b3_s3_last` |
-| Save last frame | `ez_stillhere_b4_s1_last` |
-| Save last frame | `ez_stillhere_b4_s2_last` |
-| Save last frame | `ez_stillhere_b4_s3_last` |
-| Save last frame | `ez_stillhere_b5_s1_last` |
-| Save last frame | `ez_stillhere_b5_s2_last` |
-| Save last frame | `ez_stillhere_b5_s3_last` |
-| Save last frame | `ez_stillhere_b6_s1_last` |
-| Save last frame | `ez_stillhere_b6_s2_last` |
-| Save last frame | `ez_stillhere_b6_s3_last` |
+| Save last frame 2 | `ez_stillhere_b1_s2_last` |
+| Save last frame 3 | `ez_stillhere_b1_s3_last` |
+| Save last frame 4 | `ez_stillhere_b2_s1_last` |
+| Save last frame 5 | `ez_stillhere_b2_s2_last` |
+| Save last frame 6 | `ez_stillhere_b2_s3_last` |
+| Save last frame 7 | `ez_stillhere_b3_s1_last` |
+| Save last frame 8 | `ez_stillhere_b3_s2_last` |
+| Save last frame 9 | `ez_stillhere_b3_s3_last` |
+| Save last frame 10 | `ez_stillhere_b4_s1_last` |
+| Save last frame 11 | `ez_stillhere_b4_s2_last` |
+| Save last frame 12 | `ez_stillhere_b4_s3_last` |
+| Save last frame 13 | `ez_stillhere_b5_s1_last` |
+| Save last frame 14 | `ez_stillhere_b5_s2_last` |
+| Save last frame 15 | `ez_stillhere_b5_s3_last` |
+| Save last frame 16 | `ez_stillhere_b6_s1_last` |
+| Save last frame 17 | `ez_stillhere_b6_s2_last` |
+| Save last frame 18 | `ez_stillhere_b6_s3_last` |
 
 ### `EZFilmDisclosure` - LTX AI-media disclosure
 

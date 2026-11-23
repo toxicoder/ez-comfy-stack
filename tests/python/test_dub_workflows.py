@@ -58,7 +58,7 @@ def test_dub_localize_graph() -> None:
     assert extra["lab_app_mode"]["lane"] == "audio"
     assert extra["lab_app_mode"]["default_view"] == "app"
     blob = json.dumps(graph)
-    for prefix in ("ez_dub_mix", "ez_dub_yt", "ez_dub_script", "ez_dub_ingest"):
+    for prefix in ("ez_dub_mix", "ez_dub_yt", "Dub script", "Dub ingest"):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
     assert "I have rights" in blob or "have_rights" in blob

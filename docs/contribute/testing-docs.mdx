@@ -139,6 +139,52 @@ Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) - [dev
   Green `bazelisk run //docs:docs` does not prove the page matches the code. Read `nodes.py` / compose / occupancy before merge.
 </Callout>
 
+---
+
+## Screenshot baselines
+
+`docs-site/tests/visual/site.spec.mjs` photographs ten pages in two viewports and compares them
+with `docs-site/tests/visual/goldens/`. Capture them in the pinned Linux image: font metrics
+differ per platform, so a laptop capture reports every page as changed the next time the lane
+renders on Linux.
+
+```bash
+bazelisk run //docs-site:visual-linux              # compare against the committed set
+bazelisk run //docs-site:visual-linux -- --update  # recapture, then review the diff
+bazelisk run //docs-site:visual-linux -- --check   # why the lane cannot run on this host
+```
+
+`//:everything` runs the lane in that container, which is the renderer the goldens came from, and
+skips it with the reason printed when the daemon, the baselines, or a bind-mountable checkout is
+missing. On a checkout whose daemon lives somewhere else - a DinD sidecar, a remote context - it
+prints `SKIP docs-site visual lane (the Docker daemon cannot read this checkout at <path>; the lane needs a daemon that can bind-mount it)`,
+counts the skip in its summary, and carries on. `bazelisk run //docs-site:visual-linux` with no
+flags stops with that same line and exit 1 rather than rendering an empty `/lab`. `--check` is the
+explicit probe and prints `visual lane ready in <image> (<platform>)` when the lane can run.
+
+**No CI job runs either browser comparison.** The CI docs job takes
+`--test_tag_filters=-visual`, the same filter `//:validate` and gate 3 of `//:everything` use, so
+neither the container capture nor the host twin is what turns a PR red. `//docs-site:visual-test`
+is the host-browser twin; it stays `manual` because a sandboxed test action hands webpack a
+runfiles tree it cannot resolve through, and from a real checkout the same comparison is
+`bazelisk run //docs-site:visual` on a host that has Chromium's system libraries.
+
+Three pins stop a baseline drifting on its own, and `bazelisk test
+//docs-site:visual_tooling_test` holds each of them. That target carries no `visual` tag, so it is
+the half of the lane CI does run: it is in `//docs-site:suite`, which the docs job runs, and it
+also runs under `//:validate` and `//:test-all`:
+
+- the export is built by `npm run build:visual`, which fixes `SOURCE_DATE_EPOCH`, so the
+  last-published chip reads the same date on every machine;
+- the spec rewrites that chip's relative label from the baked `datetime` before it shoots, because
+  the phrase it shows is a function of when the browser ran;
+- every route in `KEY_PAGES` must still resolve to a page under `docs/`, and a navigation that does
+  not return OK fails the run, so a route that rotted out of the corpus cannot be baselined as the
+  404 page.
+
+A new docs page needs no baseline. Adding a page to `KEY_PAGES` does: run the capture, review the
+images, and commit them with the spec change.
+
 ## Related
 
 | Need | Page |

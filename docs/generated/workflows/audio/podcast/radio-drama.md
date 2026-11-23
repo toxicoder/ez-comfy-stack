@@ -55,11 +55,11 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ```mermaid
 flowchart LR
   N1["ACE-Step 1.5 turbo AIO"]
-  N2["ez_radio_script"]
+  N2["Radio script"]
   N3["Disclosure bumper"]
-  N4["ez_radio_voice"]
-  N5["ez_radio_sting"]
-  N6["ez_radio_bed"]
+  N4["Radio voice"]
+  N5["Radio sting"]
+  N6["Radio bed"]
   N7["ACE negative"]
   N8["Sting length"]
   N9["Bed length"]
@@ -73,8 +73,8 @@ flowchart LR
   N17["FLAC master"]
   N18["MP3 320k"]
   N19["Operator note"]
-  N20["ez_radio_sting enhance"]
-  N21["ez_radio_bed enhance"]
+  N20["Radio sting enhance"]
+  N21["Radio bed enhance"]
   N22["Detail"]
   N23["Check models"]
   N1 --> N10
@@ -112,11 +112,11 @@ flowchart LR
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
 | 1 | ACE-Step 1.5 turbo AIO | `CheckpointLoaderSimple` | MODEL |
-| 2 | ez_radio_script | `EZPodcastScript` | PROMPT |
+| 2 | Radio script | `EZPodcastScript` | PROMPT |
 | 3 | Disclosure bumper | `EZPodcastDisclosure` | PROMPT |
-| 4 | ez_radio_voice | `EZKokoroTTS` | PROMPT |
-| 5 | ez_radio_sting | `TextEncodeAceStepAudio1.5` | MODEL |
-| 6 | ez_radio_bed | `TextEncodeAceStepAudio1.5` | MODEL |
+| 4 | Radio voice | `EZKokoroTTS` | PROMPT |
+| 5 | Radio sting | `TextEncodeAceStepAudio1.5` | MODEL |
+| 6 | Radio bed | `TextEncodeAceStepAudio1.5` | MODEL |
 | 7 | ACE negative | `TextEncodeAceStepAudio1.5` | MODEL |
 | 8 | Sting length | `EmptyAceStep1.5LatentAudio` | SETTINGS |
 | 9 | Bed length | `EmptyAceStep1.5LatentAudio` | SETTINGS |
@@ -130,8 +130,8 @@ flowchart LR
 | 17 | FLAC master | `SaveAudio` | OUTPUT |
 | 18 | MP3 320k | `SaveAudioMP3` | OUTPUT |
 | 19 | Operator note | `Note` | NOTE |
-| 20 | ez_radio_sting enhance | `EZAceStepPromptEnhance` | PROMPT |
-| 21 | ez_radio_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 20 | Radio sting enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 21 | Radio bed enhance | `EZAceStepPromptEnhance` | PROMPT |
 | 22 | Detail | `EZQuality` | QUALITY |
 | 23 | Check models | `EZModelCheck` | QUALITY |
 
@@ -371,8 +371,8 @@ Genre-first tags, BPM last.
 
 | Instance | Value |
 | --- | --- |
-| ez_radio_sting | `short instrumental sting, analog keys hit, no vocals, instrumental` |
-| ez_radio_bed | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
+| Radio sting | `short instrumental sting, analog keys hit, no vocals, instrumental` |
+| Radio bed | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
 | ACE negative | `vocals, singing, choir, rap` |
 
 #### `lyrics`
@@ -393,8 +393,8 @@ ACE encoder seed (audio-codes LLM).
 
 | Instance | Value |
 | --- | --- |
-| ez_radio_sting | `11` |
-| ez_radio_bed | `13` |
+| Radio sting | `11` |
+| Radio bed | `13` |
 | ACE negative | `7` |
 
 #### `control_after_generate`
@@ -436,8 +436,8 @@ Seconds (duplicated on the latent).
 
 | Instance | Value |
 | --- | --- |
-| ez_radio_sting | `4.0` |
-| ez_radio_bed | `40.0` |
+| Radio sting | `4.0` |
+| Radio bed | `40.0` |
 | ACE negative | `40.0` |
 
 #### `timesignature`
@@ -469,8 +469,8 @@ Lyric language.
 
 | Instance | Value |
 | --- | --- |
-| ez_radio_sting | `unknown` |
-| ez_radio_bed | `unknown` |
+| Radio sting | `unknown` |
+| Radio bed | `unknown` |
 | ACE negative | `en` |
 
 **Other choices**
@@ -1052,8 +1052,8 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_radio_sting enhance | `short instrumental sting, analog keys hit, no vocals, instrumental` |
-| ez_radio_bed enhance | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
+| Radio sting enhance | `short instrumental sting, analog keys hit, no vocals, instrumental` |
+| Radio bed enhance | `instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental` |
 
 #### `lyrics`
 

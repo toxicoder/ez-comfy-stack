@@ -1083,7 +1083,9 @@ def _set_filename_prefix(graph: dict, prefix: str) -> None:
         ntype = node.get("type")
         if ntype == "SaveImage":
             node["widgets_values"] = [prefix]
-            node["title"] = f"Save {prefix}"
+            # The prefix is the widget's business; the title tells a person what
+            # the node writes, and every other saver in the catalog says so.
+            node["title"] = "Save PNG"
         elif ntype == "VHS_VideoCombine":
             widgets = node.get("widgets_values")
             if isinstance(widgets, dict):
@@ -1202,7 +1204,20 @@ def build_trellis_from_klein_still() -> dict:
     # pack loader's real widgets instead of the image widget build_trellis used.
     stamp_app_mode(
         graph,
-        inputs=[("Load still pack", "plate")],
+        inputs=[
+            (
+                "Load still pack",
+                "plate",
+                {
+                    "label": "Plate",
+                    "description": (
+                        "Which plate of the still pack the mesh is "
+                        "printed from. The pack slug and the layer "
+                        "stay on the node."
+                    ),
+                },
+            ),
+        ],
         outputs=["Save GLB"],
         lane="3d",
         occupancy="trellis",

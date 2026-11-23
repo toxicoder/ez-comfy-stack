@@ -13,13 +13,15 @@ from typing import Any
 
 import pytest
 
-from _lab_paths import lab_json
+from _lab_paths import cached_lab_graph_rows, lab_json
 from _stamp_app_mode import (
     DEFAULT_WIDGET_DESCRIPTIONS,
+    IDENTIFIER_TITLE_RX,
     HIDDEN_APP_WIDGETS,
     STAMP_SPECS,
     display_label,
     format_sets_prefix,
+    reads_as_identifier,
     infer_suite_inputs,
     infer_suite_outputs,
     linear_input_node_id,
@@ -430,6 +432,42 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert display_label(enh, "prompt") == "New lettering"
 
 
+def test_flavor_row_names_what_each_rack_actually_picks() -> None:
+    """One widget name, three meanings, so the stamp follows the class.
+
+    ``flavor`` is the model a prompt is written for on the Cinema Rack, the
+    kind of track on the Audio Rack, and the script shape on the Podcast
+    writer. A single generic word tells the operator nothing on two of the
+    three, and the chrome's class-scoped table cannot save it: a stamped label
+    outranks that table.
+    """
+    assert display_label({"type": "EZCinemaRack"}, "flavor") == "Prompt model"
+    assert display_label({"type": "EZAudioRack"}, "flavor") == "Track type"
+    assert display_label({"type": "EZPodcastScript"}, "flavor") == "Script format"
+    assert display_label({"type": "EZImageFormat"}, "flavor") == "Flavor"
+    assert display_label(None, "flavor") == "Flavor"
+
+
+def test_shipped_rack_flavor_rows_carry_the_class_word() -> None:
+    """The two racks that surface ``flavor`` ship their own word for it."""
+    expected = {
+        "labs/assist/cinema-rack.json": "Prompt model",
+        "labs/assist/audio-rack.json": "Track type",
+    }
+    for rel, label in expected.items():
+        graph = _load(rel)
+        rows = [
+            entry
+            for entry in ((graph.get("extra") or {}).get("linearData") or {}).get(
+                "inputs"
+            )
+            or []
+            if isinstance(entry, list) and len(entry) > 2 and entry[1] == "flavor"
+        ]
+        assert len(rows) == 1, rel
+        assert rows[0][2].get("label") == label, rel
+
+
 def test_background_swap_prompt_help_and_describe_default() -> None:
     graph = _load("photos/background-swap.json")
     enh = next(
@@ -769,3 +807,160 @@ def test_the_beat_sheet_panel_shows_the_beat_cards() -> None:
     assert len(cards) == 18, cards
     missing = [nid for nid in cards if nid not in outputs]
     assert not missing, f"beat cards absent from the panel: {missing}"
+
+
+def test_the_five_image_prep_and_3d_apps_label_every_row() -> None:
+    """Each App row these five graphs surface carries its own wording.
+
+    A row stamped with only ``(nodeId, widgetName)`` falls back to the chrome's
+    generic table and prints the bare snake_case widget name, so every entry
+    the builders author here carries a label and a description.
+    """
+    for name in (
+        "3d/still-to-mesh.json",
+        "3d/trellis2.json",
+        "photos/background-removal.json",
+        "photos/cutout.json",
+        "photos/multi-view.json",
+    ):
+        rows = _load(name)["extra"]["linearData"]["inputs"]
+        assert rows, name
+        for entry in rows:
+            where = (name, entry)
+            assert len(entry) > 2, where
+            config = entry[2]
+            assert isinstance(config, dict), where
+            label = str(config.get("label") or "").strip()
+            description = str(config.get("description") or "").strip()
+            assert label and label.isascii(), where
+            assert "_" not in label, where
+            assert description and description.isascii(), where
+
+
+#: A widget filename inside a label is the one place an underscore earns its
+#: keep: it names the file the operator is meant to drop into ``input/``.
+_FILENAME_TOKEN_RX = re.compile(r"[A-Za-z0-9_.=*-]*_[A-Za-z0-9_.=*-]*\.[A-Za-z0-9]+")
+
+
+def test_reads_as_identifier_sorts_titles_a_person_could_have_typed() -> None:
+    """The guard separates an internal name from a label an operator reads."""
+    assert reads_as_identifier("ez_edm_prompt")
+    assert reads_as_identifier("ez_dub_ingest")
+    assert reads_as_identifier("Dub_Ingest")
+    assert reads_as_identifier("foo__bar")
+    assert not reads_as_identifier("EDM prompt")
+    assert not reads_as_identifier("Podcast bed enhance")
+    assert not reads_as_identifier("Rap prompt")
+    assert not reads_as_identifier("")
+    assert not reads_as_identifier("sampler")
+
+
+def test_display_label_drops_an_identifier_title_before_naming_a_row() -> None:
+    """A slug node title never reaches the App Mode panel.
+
+    The builders once titled the ACE enhancer ``ez_edm_prompt``, which made the
+    panel read ``ez_edm_prompt - Tags``. The title has to fall away so the
+    row keeps the table's own wording.
+    """
+    enhancer = {"type": "EZAceStepPromptEnhance", "title": "ez_edm_prompt"}
+    # One pass, so nothing to number against: the row keeps the plain wording
+    # even when a sibling node shares the widget name and collide is on.
+    assert display_label(enhancer, "sample", collide=True) == "Sample prompt"
+    assert display_label(enhancer, "mode", collide=True) == "Vocal / instrumental"
+    assert display_label(enhancer, "tags", collide=True) == "Tags"
+    assert display_label(enhancer, "tags") == "Tags"
+    # A widget the enhancer branch does not know still gets the generic table.
+    assert display_label(enhancer, "bpm", collide=True) == "Bpm"
+    # A multi-pass take numbers its un-numbered enhancer as the first pass.
+    assert display_label(enhancer, "tags", collide=True, passes=4) == "Pass 1 tags"
+    assert (
+        display_label(enhancer, "mode", collide=True, passes=4)
+        == "Pass 1 vocal / instrumental"
+    )
+    assert display_label(enhancer, "lyrics", collide=True, passes=4) == "Pass 1 lyrics"
+    assert display_label(enhancer, "enhance", collide=True, passes=4) == "Rewrite pass 1"
+    assert display_label(enhancer, "sample", collide=True, passes=4) == "Pass 1 sample"
+    # A title a person typed still wins, numbered sibling included.
+    typed = {"type": "EZAceStepPromptEnhance", "title": "EDM prompt pass 3"}
+    assert display_label(typed, "tags", collide=True, passes=4) == "Pass 3 tags"
+
+
+def test_no_lab_graph_prints_an_internal_name() -> None:
+    """Canvas titles and App rows stay in words an operator can act on.
+
+    A graph authored by a builder can carry the slug that names it in code.
+    Left on a node title it prints on the canvas, and left in an App row label
+    it prints where the panel should be asking a question, so neither is
+    allowed anywhere in the shipped corpus.
+    """
+    rows = cached_lab_graph_rows()
+    assert len(rows) >= 700, "the corpus sweep read almost nothing"
+    graph_ids = {
+        str((g.get("extra") or {}).get("lab_rel") or rel) for rel, _path, g in rows
+    }
+    assert len(graph_ids) >= 700, "the corpus sweep read duplicate graphs"
+    checked_rows = 0
+    for rel, _path, graph in rows:
+        nodes = {int(n["id"]): n for n in graph.get("nodes", []) if "id" in n}
+        for node in graph.get("nodes", []):
+            title = str(node.get("title") or "").strip()
+            on_canvas = (rel, node.get("id"), title)
+            assert not IDENTIFIER_TITLE_RX.match(title), on_canvas
+            assert not title.lower().startswith(("ez_", "ez-")), on_canvas
+        entries = ((graph.get("extra") or {}).get("linearData", {}) or {}).get(
+            "inputs"
+        ) or []
+        seen_labels: list[str] = []
+        for entry in entries:
+            node = nodes.get(int(entry[0]))
+            assert node is not None, (rel, entry)
+            # A row that ships no config prints whatever the chrome guesses, so
+            # every authored row carries its own wording.
+            assert len(entry) > 2, (rel, entry)
+            config = entry[2]
+            assert isinstance(config, dict), (rel, entry)
+            label = str(config.get("label") or "").strip()
+            assert label, (rel, node.get("id"), entry[1])
+            checked_rows += 1
+            on_panel = (rel, node.get("id"), entry[1], label)
+            assert not IDENTIFIER_TITLE_RX.match(label), on_panel
+            assert label != str(entry[1]), on_panel
+            assert "_" not in _FILENAME_TOKEN_RX.sub("", label), on_panel
+            seen_labels.append(label.lower())
+        assert len(set(seen_labels)) == len(seen_labels), (
+            rel,
+            [lab for lab in seen_labels if seen_labels.count(lab) > 1],
+        )
+    assert checked_rows >= 9000, "the corpus sweep read almost no labelled rows"
+
+def test_shipped_app_rows_are_what_the_stamper_derives() -> None:
+    """Every labelled row on disk is the row ``infer_suite_inputs`` produces.
+
+    The graphs are authored by the stamper, so a rule change in
+    ``display_label`` that the shipped JSON has not caught up with reads green
+    here and rewrites the graph the next time a builder runs. Comparing the two
+    is the only way the panel wording is pinned rather than assumed.
+    """
+    compared = 0
+    for rel, _path, graph in cached_lab_graph_rows():
+        spec = STAMP_SPECS.get(rel)
+        if spec is None:
+            continue
+        shipped = {
+            (int(entry[0]), str(entry[1])): str(
+                ((entry[2] if len(entry) > 2 else {}) or {}).get("label") or ""
+            )
+            for entry in (graph.get("extra") or {}).get("linearData", {}).get(
+                "inputs"
+            )
+            or []
+        }
+        for derived in infer_suite_inputs(graph, spec):
+            widget = str(derived[1])
+            want = str(
+                ((derived[2] if len(derived) > 2 else {}) or {}).get("label") or ""
+            )
+            got = shipped.get((int(derived[0]), widget))
+            assert got == want, (rel, derived[0], widget, got, want)
+            compared += 1
+    assert compared >= 9000, f"the label comparison read only {compared} rows"

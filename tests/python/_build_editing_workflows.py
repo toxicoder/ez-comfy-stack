@@ -13,11 +13,14 @@ Run from repo root:
 
 from __future__ import annotations
 
-import json
+from collections.abc import Iterator
+from contextlib import contextmanager
+from pathlib import Path
 from typing import Any
 
+import _lab_paths
 from _lab_layout import finalize_layout
-from _lab_paths import ROOT, apply_lab_identity, lab_dest
+from _lab_paths import ROOT, apply_lab_identity, lab_dest, write_lab_graph
 from _stamp_app_mode import (
     apply_lab_completeness_flags,
     ensure_occupancy_note,
@@ -55,7 +58,9 @@ NEGATIVE_TITLE = "Negative"
 ENHANCE_TITLE = "Wan Prompt Enhance"
 NEG_ENHANCE_TITLE = "Negative Prompt Enhance"
 LATENT_TITLE = "Video size & length"
-SAMPLER_TITLE = "KSampler"
+# Not the class name: ensure_node_titles reads a title equal to the type as
+# missing and renames the node, so the builder states the shipped title.
+SAMPLER_TITLE = "Sampler"
 SAVER_TITLE = "Save cutaway (MP4) - open node for preview"
 
 PROMPT = (
@@ -516,31 +521,58 @@ def build_generate_cutaway() -> dict[str, Any]:
     return graph
 
 
-def _write(graph: dict[str, Any], dest: Any) -> None:
-    """Write ``graph`` as pretty JSON with a trailing newline.
+def _lab_root(root: Path) -> Path:
+    """The lab tree a build under ``root`` writes into.
 
     Args:
-        graph: Serialized Comfy graph.
-        dest: Destination path.
+        root: Output root (the repo root for a live build, a scratch dir
+            otherwise).
 
     Returns:
-        None.
+        The ``workflows/_lab`` directory under ``root``.
     """
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+    return Path(root) / "workflows" / "_lab"
 
 
-def main() -> int:
+@contextmanager
+def _lab_root_override(root: Path) -> Iterator[None]:
+    """Point ``_lab_paths`` at the lab tree under ``root`` for one build.
+
+    ``write_lab_graph`` derives ``extra.lab_rel`` from the destination relative
+    to ``_lab_paths.LAB_ROOT``, so a scratch-root build has to move that anchor
+    while it writes; the shipped value goes back on the way out.
+
+    Args:
+        root: Output root to build under.
+
+    Yields:
+        Nothing.
+    """
+    shipped = _lab_paths.LAB_ROOT
+    _lab_paths.LAB_ROOT = _lab_root(root)
+    try:
+        yield
+    finally:
+        _lab_paths.LAB_ROOT = shipped
+
+
+def main(out_root: Path | None = None) -> int:
     """Write the lab graph and its byte-identical package copy.
+
+    Args:
+        out_root: Output root. Defaults to the repo root; a test passes a scratch
+            dir so a rebuild never rewrites the shipped graph.
 
     Returns:
         Process exit code.
     """
+    root = ROOT if out_root is None else Path(out_root)
     graph = build_generate_cutaway()
-    lab_path = lab_dest(LAB_REL, lane="film")
-    _write(graph, lab_path)
-    package_path = ROOT / PACKAGE_SUBPATH
-    _write(graph, package_path)
+    with _lab_root_override(root):
+        lab_path = write_lab_graph(lab_dest(LAB_REL, lane="film"), graph)
+    package_path = root / PACKAGE_SUBPATH
+    package_path.parent.mkdir(parents=True, exist_ok=True)
+    package_path.write_bytes(lab_path.read_bytes())
     if lab_path.read_bytes() != package_path.read_bytes():
         raise SystemExit(f"{package_path} is not byte-identical to {lab_path}")
     print(f"wrote {lab_path}")

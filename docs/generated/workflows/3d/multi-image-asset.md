@@ -81,16 +81,16 @@ flowchart TB
 | 8 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
 | 9 | Conditioning (front) | `Trellis2Conditioning` | PROMPT |
 | 10 | Side view | `LoadImage` | INPUT |
-| 11 | Occupancy gate | `EZDCCOccupancyGate` | INPUT |
-| 12 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
+| 11 | Occupancy gate 2 | `EZDCCOccupancyGate` | INPUT |
+| 12 | Unload models (pass IMAGE) 2 | `EZUnloadModels` | SETTINGS |
 | 13 | Conditioning (side) | `Trellis2Conditioning` | PROMPT |
 | 14 | Back view | `LoadImage` | INPUT |
-| 15 | Occupancy gate | `EZDCCOccupancyGate` | INPUT |
-| 16 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
+| 15 | Occupancy gate 3 | `EZDCCOccupancyGate` | INPUT |
+| 16 | Unload models (pass IMAGE) 3 | `EZUnloadModels` | SETTINGS |
 | 17 | Conditioning (back) | `Trellis2Conditioning` | PROMPT |
 | 18 | Top-down view | `LoadImage` | INPUT |
-| 19 | Occupancy gate | `EZDCCOccupancyGate` | INPUT |
-| 20 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
+| 19 | Occupancy gate 4 | `EZDCCOccupancyGate` | INPUT |
+| 20 | Unload models (pass IMAGE) 4 | `EZUnloadModels` | SETTINGS |
 | 21 | Conditioning (top-down) | `Trellis2Conditioning` | PROMPT |
 | 22 | Empty structure x1 | `EmptyTrellis2LatentStructure` | SETTINGS |
 | 23 | KSampler (structure) | `KSampler` | SETTINGS |

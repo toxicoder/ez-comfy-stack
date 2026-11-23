@@ -45,7 +45,7 @@
         "episode",
         ""
       ],
-      "title": "ez_dub_ingest"
+      "title": "Dub ingest"
     },
     {
       "id": 2,
@@ -89,7 +89,7 @@
         0,
         "all"
       ],
-      "title": "ez_dub_script"
+      "title": "Dub script"
     },
     {
       "id": 3,
@@ -139,7 +139,7 @@
         -1.0,
         0.5
       ],
-      "title": "ez_dub_voice"
+      "title": "Dub voice"
     },
     {
       "id": 4,

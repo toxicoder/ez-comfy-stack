@@ -18,6 +18,7 @@
 #   bazelisk run //docs-site:visual-linux              # compare against committed baselines
 #   bazelisk run //docs-site:visual-linux -- --update  # rewrite baselines, then review diffs
 #   bazelisk run //docs-site:visual-linux -- --project desktop
+#   bazelisk run //docs-site:visual-linux -- --check     # report why the lane cannot run here
 #
 # Baselines land in docs-site/tests/visual/goldens/ in the checkout; review the image diff
 # before committing them.
@@ -33,15 +34,17 @@ if [[ -n ${BUILD_WORKSPACE_DIRECTORY:-} && -d "${BUILD_WORKSPACE_DIRECTORY}/docs
 fi
 
 usage() {
-  sed -n '3,25p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  sed -n '3,26p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
   exit "${1:-0}"
 }
 
+CHECK="false"
 UPDATE="false"
 PLAYWRIGHT_ARGS=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --update) UPDATE="true" ;;
+    --check) CHECK="true" ;;
     --help | -h) usage 0 ;;
     --)
       shift
@@ -56,6 +59,11 @@ while [[ $# -gt 0 ]]; do
 done
 if [[ $# -gt 0 ]]; then
   PLAYWRIGHT_ARGS="$*"
+fi
+
+if [[ ${CHECK} == "true" && ${UPDATE} == "true" ]]; then
+  echo "--check only answers whether the lane can run; drop --update to compare, or drop --check to rewrite the baselines" >&2
+  exit 2
 fi
 
 command -v docker >/dev/null || {
@@ -112,6 +120,72 @@ done
   echo "baselines from the wrong renderer would fail the docs CI job, so this run stopped" >&2
   exit 1
 }
+
+# Ask the container whether the checkout really arrived, and whether what arrived is this
+# checkout.  A daemon that lives somewhere else - a DinD sidecar, a remote context - accepts a
+# --volume whose source it cannot see and silently mounts an empty /lab, so the capture would
+# build nothing and every baseline would come back as the same blank frame.  A daemon handed a
+# stale copy of the path passes a presence check, and --update would then rewrite the committed
+# set from a rendering that is not the tree under review, so the probe compares content as well
+# as existence.  Nothing else in this script distinguishes those daemons, which is why the
+# capture path runs it too: leaving it to --check left the ordinary run dying as rc=127 on a
+# mount that holds nothing.
+# What a capture actually renders from: every page source plus the files that shape one.  A
+# mount that matches the handful of config files while differing under docs/ is the interesting
+# failure, because that is the one that moves the pixels.  One literal, so the host side and the
+# container side cannot drift apart.
+PROBE_SNAPSHOT='find docs includes docs-site/app docs-site/components docs-site/lib docs-site/scripts docs-site/tests/visual -type f \( -name "*.md" -o -name "*.mdx" -o -name "*.json" -o -name "*.mjs" -o -name "*.ts" -o -name "*.tsx" \) -print0 | LC_ALL=C sort -z | xargs -0 sha256sum'
+
+# A listing this short is not this checkout.  Without the floor an empty host listing and an
+# empty container listing match each other and report a phantom mount as ready.
+PROBE_MIN_ENTRIES=400
+
+#######################################
+# Ask a container started from the capture image whether /lab holds this exact checkout.
+# Globals:
+#   IMAGE, PLATFORM, REPO_ROOT, PROBE_FILES
+# Arguments:
+#   None
+# Outputs:
+#   The reason the lane cannot run here, on stdout, when it returns non-zero
+# Returns:
+#   0 when the mounted /lab carries the same bytes as this checkout, 1 otherwise
+#######################################
+checkout_reachable() {
+  if ! docker run --rm --platform "$PLATFORM" --volume "${REPO_ROOT}:/lab" \
+    --entrypoint test "$IMAGE" -f /lab/docs-site/scripts/visual_linux_in_container.sh \
+    >/dev/null 2>&1; then
+    echo "the Docker daemon cannot read this checkout at ${REPO_ROOT}; the lane needs a daemon that can bind-mount it"
+    return 1
+  fi
+
+  # Relative paths on both sides, so the two listings are the same text and any difference in
+  # what the capture would render shows up: a file missing on either side changes the line
+  # count, not just a hash.  Input comes from /dev/null, because a find that matches nothing
+  # would leave xargs calling sha256sum with no files, waiting on a terminal that never answers.
+  local host="" guest="" host_count=0 guest_count=0
+  host="$(cd "${REPO_ROOT}" && bash -c "${PROBE_SNAPSHOT}" </dev/null)" || host=""
+  guest="$(docker run --rm --platform "$PLATFORM" --volume "${REPO_ROOT}:/lab" \
+    --workdir /lab --entrypoint bash "$IMAGE" -c "${PROBE_SNAPSHOT}" </dev/null)" || guest=""
+  host_count="$(printf '%s\n' "${host}" | grep -c . || true)"
+  guest_count="$(printf '%s\n' "${guest}" | grep -c . || true)"
+  if [[ ${host_count} -lt ${PROBE_MIN_ENTRIES} || ${guest_count} -lt ${PROBE_MIN_ENTRIES} ]]; then
+    echo "the capture inputs under ${REPO_ROOT} do not look like this checkout (${host_count} host / ${guest_count} container files, wanted at least ${PROBE_MIN_ENTRIES}); refusing to call a mount ready on a snapshot too small to tell it from an empty one"
+    return 1
+  fi
+  if [[ -z $host || -z $guest || $host != "$guest" ]]; then
+    echo "the container does not see this checkout at /lab (${REPO_ROOT}); the daemon mounted a stale or unrelated copy, and a capture from it would baseline the wrong rendering"
+    return 1
+  fi
+  return 0
+}
+
+checkout_reachable || exit 1
+
+if [[ ${CHECK} == "true" ]]; then
+  echo "visual lane ready in ${IMAGE} (${PLATFORM})"
+  exit 0
+fi
 
 echo "-> baselines render in ${IMAGE} (${PLATFORM}), matching the docs CI job"
 

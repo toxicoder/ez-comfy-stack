@@ -92,13 +92,13 @@ flowchart TB
 | 28 | Detail | `EZQuality` | QUALITY |
 | 29 | Format / platform | `EZImageFormat` | SETTINGS |
 | 30 | Upscale still | `EZImageUpscale` | SHOT MEDIUM |
-| 31 | Upscale still | `EZImageUpscale` | SHOT WIDE |
-| 32 | Upscale still | `EZImageUpscale` | SHOT CLOSE |
+| 31 | Upscale still 2 | `EZImageUpscale` | SHOT WIDE |
+| 32 | Upscale still 3 | `EZImageUpscale` | SHOT CLOSE |
 | 33 | Check models | `EZModelCheck` | QUALITY |
 | 34 | Negative SHOT WIDE | `EZNegativePromptEnhance` | PROMPT |
-| 35 | Negative Negative SHOT WIDE | `CLIPTextEncode` | PROMPT |
+| 35 | Negative SHOT WIDE | `CLIPTextEncode` | PROMPT |
 | 36 | Negative SHOT CLOSE | `EZNegativePromptEnhance` | PROMPT |
-| 37 | Negative Negative SHOT CLOSE | `CLIPTextEncode` | PROMPT |
+| 37 | Negative SHOT CLOSE | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -684,8 +684,8 @@ Prompt encoded by CLIP.
 | Positive MEDIUM | `35mm medium of this identity; subject fills the middle third. YouTube 16:9. Sam...` |
 | Positive WIDE | `24mm wide establishing of this identity and place. YouTube 16:9. Same building,...` |
 | Positive CLOSE | `50mm close on face, hands, or signature materials from the bible. YouTube 16:9....` |
-| Negative Negative SHOT WIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT WIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

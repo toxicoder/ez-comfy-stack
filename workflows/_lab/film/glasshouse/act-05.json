@@ -849,7 +849,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 1"
     },
     {
       "id": 205,
@@ -1284,7 +1284,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 2"
     },
     {
       "id": 222,
@@ -1336,7 +1336,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 2"
     },
     {
       "id": 223,
@@ -1378,7 +1378,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 2"
     },
     {
       "id": 224,
@@ -1438,7 +1438,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 2"
     },
     {
       "id": 225,
@@ -1483,7 +1483,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 2"
     },
     {
       "id": 226,
@@ -1526,7 +1526,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 2"
     },
     {
       "id": 227,
@@ -1568,7 +1568,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 2"
     },
     {
       "id": 228,
@@ -1634,7 +1634,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 2"
     },
     {
       "id": 229,
@@ -1676,7 +1676,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 2"
     },
     {
       "id": 230,
@@ -1706,7 +1706,7 @@
       "widgets_values": [
         "ez_glasshouse_b25_s2_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 2"
     },
     {
       "id": 251,
@@ -1873,7 +1873,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 3"
     },
     {
       "id": 242,
@@ -1925,7 +1925,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 3"
     },
     {
       "id": 243,
@@ -1967,7 +1967,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 3"
     },
     {
       "id": 244,
@@ -2027,7 +2027,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 3"
     },
     {
       "id": 245,
@@ -2072,7 +2072,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 3"
     },
     {
       "id": 246,
@@ -2115,7 +2115,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 3"
     },
     {
       "id": 247,
@@ -2157,7 +2157,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 3"
     },
     {
       "id": 248,
@@ -2223,7 +2223,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 3"
     },
     {
       "id": 249,
@@ -2265,7 +2265,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 3"
     },
     {
       "id": 250,
@@ -2295,7 +2295,7 @@
       "widgets_values": [
         "ez_glasshouse_b25_s3_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 3"
     },
     {
       "id": 271,
@@ -2462,7 +2462,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 4"
     },
     {
       "id": 262,
@@ -2514,7 +2514,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 4"
     },
     {
       "id": 263,
@@ -2556,7 +2556,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 4"
     },
     {
       "id": 264,
@@ -2616,7 +2616,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 4"
     },
     {
       "id": 265,
@@ -2661,7 +2661,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 4"
     },
     {
       "id": 266,
@@ -2704,7 +2704,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 4"
     },
     {
       "id": 267,
@@ -2746,7 +2746,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 4"
     },
     {
       "id": 268,
@@ -2812,7 +2812,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 4"
     },
     {
       "id": 269,
@@ -2854,7 +2854,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 4"
     },
     {
       "id": 270,
@@ -2884,7 +2884,7 @@
       "widgets_values": [
         "ez_glasshouse_b26_s1_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 4"
     },
     {
       "id": 291,
@@ -3051,7 +3051,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 5"
     },
     {
       "id": 282,
@@ -3103,7 +3103,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 5"
     },
     {
       "id": 283,
@@ -3145,7 +3145,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 5"
     },
     {
       "id": 284,
@@ -3205,7 +3205,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 5"
     },
     {
       "id": 285,
@@ -3250,7 +3250,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 5"
     },
     {
       "id": 286,
@@ -3293,7 +3293,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 5"
     },
     {
       "id": 287,
@@ -3335,7 +3335,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 5"
     },
     {
       "id": 288,
@@ -3401,7 +3401,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 5"
     },
     {
       "id": 289,
@@ -3443,7 +3443,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 5"
     },
     {
       "id": 290,
@@ -3473,7 +3473,7 @@
       "widgets_values": [
         "ez_glasshouse_b26_s2_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 5"
     },
     {
       "id": 311,
@@ -3640,7 +3640,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 6"
     },
     {
       "id": 302,
@@ -3692,7 +3692,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 6"
     },
     {
       "id": 303,
@@ -3734,7 +3734,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 6"
     },
     {
       "id": 304,
@@ -3794,7 +3794,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 6"
     },
     {
       "id": 305,
@@ -3839,7 +3839,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 6"
     },
     {
       "id": 306,
@@ -3882,7 +3882,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 6"
     },
     {
       "id": 307,
@@ -3924,7 +3924,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 6"
     },
     {
       "id": 308,
@@ -3990,7 +3990,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 6"
     },
     {
       "id": 309,
@@ -4032,7 +4032,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 6"
     },
     {
       "id": 310,
@@ -4062,7 +4062,7 @@
       "widgets_values": [
         "ez_glasshouse_b26_s3_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 6"
     },
     {
       "id": 331,
@@ -4229,7 +4229,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 7"
     },
     {
       "id": 322,
@@ -4281,7 +4281,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 7"
     },
     {
       "id": 323,
@@ -4323,7 +4323,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 7"
     },
     {
       "id": 324,
@@ -4383,7 +4383,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 7"
     },
     {
       "id": 325,
@@ -4428,7 +4428,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 7"
     },
     {
       "id": 326,
@@ -4471,7 +4471,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 7"
     },
     {
       "id": 327,
@@ -4513,7 +4513,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 7"
     },
     {
       "id": 328,
@@ -4579,7 +4579,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 7"
     },
     {
       "id": 329,
@@ -4621,7 +4621,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 7"
     },
     {
       "id": 330,
@@ -4651,7 +4651,7 @@
       "widgets_values": [
         "ez_glasshouse_b27_s1_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 7"
     },
     {
       "id": 351,
@@ -4818,7 +4818,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 8"
     },
     {
       "id": 342,
@@ -4870,7 +4870,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 8"
     },
     {
       "id": 343,
@@ -4912,7 +4912,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 8"
     },
     {
       "id": 344,
@@ -4972,7 +4972,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 8"
     },
     {
       "id": 345,
@@ -5017,7 +5017,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 8"
     },
     {
       "id": 346,
@@ -5060,7 +5060,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 8"
     },
     {
       "id": 347,
@@ -5102,7 +5102,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 8"
     },
     {
       "id": 348,
@@ -5168,7 +5168,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 8"
     },
     {
       "id": 349,
@@ -5210,7 +5210,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 8"
     },
     {
       "id": 350,
@@ -5240,7 +5240,7 @@
       "widgets_values": [
         "ez_glasshouse_b27_s2_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 8"
     },
     {
       "id": 371,
@@ -5407,7 +5407,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 9"
     },
     {
       "id": 362,
@@ -5459,7 +5459,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 9"
     },
     {
       "id": 363,
@@ -5501,7 +5501,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 9"
     },
     {
       "id": 364,
@@ -5561,7 +5561,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 9"
     },
     {
       "id": 365,
@@ -5606,7 +5606,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 9"
     },
     {
       "id": 366,
@@ -5649,7 +5649,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 9"
     },
     {
       "id": 367,
@@ -5691,7 +5691,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 9"
     },
     {
       "id": 368,
@@ -5757,7 +5757,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 9"
     },
     {
       "id": 369,
@@ -5799,7 +5799,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 9"
     },
     {
       "id": 370,
@@ -5829,7 +5829,7 @@
       "widgets_values": [
         "ez_glasshouse_b27_s3_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 9"
     },
     {
       "id": 391,
@@ -5996,7 +5996,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 10"
     },
     {
       "id": 382,
@@ -6048,7 +6048,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 10"
     },
     {
       "id": 383,
@@ -6090,7 +6090,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 10"
     },
     {
       "id": 384,
@@ -6150,7 +6150,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 10"
     },
     {
       "id": 385,
@@ -6195,7 +6195,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 10"
     },
     {
       "id": 386,
@@ -6238,7 +6238,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 10"
     },
     {
       "id": 387,
@@ -6280,7 +6280,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 10"
     },
     {
       "id": 388,
@@ -6346,7 +6346,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 10"
     },
     {
       "id": 389,
@@ -6388,7 +6388,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 10"
     },
     {
       "id": 390,
@@ -6418,7 +6418,7 @@
       "widgets_values": [
         "ez_glasshouse_b28_s1_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 10"
     },
     {
       "id": 411,
@@ -6585,7 +6585,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 11"
     },
     {
       "id": 402,
@@ -6637,7 +6637,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 11"
     },
     {
       "id": 403,
@@ -6679,7 +6679,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 11"
     },
     {
       "id": 404,
@@ -6739,7 +6739,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 11"
     },
     {
       "id": 405,
@@ -6784,7 +6784,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 11"
     },
     {
       "id": 406,
@@ -6827,7 +6827,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 11"
     },
     {
       "id": 407,
@@ -6869,7 +6869,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 11"
     },
     {
       "id": 408,
@@ -6935,7 +6935,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 11"
     },
     {
       "id": 409,
@@ -6977,7 +6977,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 11"
     },
     {
       "id": 410,
@@ -7007,7 +7007,7 @@
       "widgets_values": [
         "ez_glasshouse_b28_s2_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 11"
     },
     {
       "id": 431,
@@ -7174,7 +7174,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 12"
     },
     {
       "id": 422,
@@ -7226,7 +7226,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 12"
     },
     {
       "id": 423,
@@ -7268,7 +7268,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 12"
     },
     {
       "id": 424,
@@ -7328,7 +7328,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 12"
     },
     {
       "id": 425,
@@ -7373,7 +7373,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 12"
     },
     {
       "id": 426,
@@ -7416,7 +7416,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 12"
     },
     {
       "id": 427,
@@ -7458,7 +7458,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 12"
     },
     {
       "id": 428,
@@ -7524,7 +7524,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 12"
     },
     {
       "id": 429,
@@ -7566,7 +7566,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 12"
     },
     {
       "id": 430,
@@ -7596,7 +7596,7 @@
       "widgets_values": [
         "ez_glasshouse_b28_s3_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 12"
     },
     {
       "id": 451,
@@ -7763,7 +7763,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 13"
     },
     {
       "id": 442,
@@ -7815,7 +7815,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 13"
     },
     {
       "id": 443,
@@ -7857,7 +7857,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 13"
     },
     {
       "id": 444,
@@ -7917,7 +7917,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 13"
     },
     {
       "id": 445,
@@ -7962,7 +7962,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 13"
     },
     {
       "id": 446,
@@ -8005,7 +8005,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 13"
     },
     {
       "id": 447,
@@ -8047,7 +8047,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 13"
     },
     {
       "id": 448,
@@ -8113,7 +8113,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 13"
     },
     {
       "id": 449,
@@ -8155,7 +8155,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 13"
     },
     {
       "id": 450,
@@ -8185,7 +8185,7 @@
       "widgets_values": [
         "ez_glasshouse_b29_s1_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 13"
     },
     {
       "id": 471,
@@ -8352,7 +8352,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 14"
     },
     {
       "id": 462,
@@ -8404,7 +8404,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 14"
     },
     {
       "id": 463,
@@ -8446,7 +8446,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 14"
     },
     {
       "id": 464,
@@ -8506,7 +8506,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 14"
     },
     {
       "id": 465,
@@ -8551,7 +8551,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 14"
     },
     {
       "id": 466,
@@ -8594,7 +8594,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 14"
     },
     {
       "id": 467,
@@ -8636,7 +8636,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 14"
     },
     {
       "id": 468,
@@ -8702,7 +8702,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 14"
     },
     {
       "id": 469,
@@ -8744,7 +8744,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 14"
     },
     {
       "id": 470,
@@ -8774,7 +8774,7 @@
       "widgets_values": [
         "ez_glasshouse_b29_s2_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 14"
     },
     {
       "id": 491,
@@ -8941,7 +8941,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 15"
     },
     {
       "id": 482,
@@ -8993,7 +8993,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 15"
     },
     {
       "id": 483,
@@ -9035,7 +9035,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 15"
     },
     {
       "id": 484,
@@ -9095,7 +9095,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 15"
     },
     {
       "id": 485,
@@ -9140,7 +9140,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 15"
     },
     {
       "id": 486,
@@ -9183,7 +9183,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 15"
     },
     {
       "id": 487,
@@ -9225,7 +9225,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 15"
     },
     {
       "id": 488,
@@ -9291,7 +9291,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 15"
     },
     {
       "id": 489,
@@ -9333,7 +9333,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 15"
     },
     {
       "id": 490,
@@ -9363,7 +9363,7 @@
       "widgets_values": [
         "ez_glasshouse_b29_s3_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 15"
     },
     {
       "id": 511,
@@ -9530,7 +9530,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 16"
     },
     {
       "id": 502,
@@ -9582,7 +9582,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 16"
     },
     {
       "id": 503,
@@ -9624,7 +9624,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 16"
     },
     {
       "id": 504,
@@ -9684,7 +9684,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 16"
     },
     {
       "id": 505,
@@ -9729,7 +9729,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 16"
     },
     {
       "id": 506,
@@ -9772,7 +9772,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 16"
     },
     {
       "id": 507,
@@ -9814,7 +9814,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 16"
     },
     {
       "id": 508,
@@ -9880,7 +9880,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 16"
     },
     {
       "id": 509,
@@ -9922,7 +9922,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 16"
     },
     {
       "id": 510,
@@ -9952,7 +9952,7 @@
       "widgets_values": [
         "ez_glasshouse_b30_s1_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 16"
     },
     {
       "id": 531,
@@ -10119,7 +10119,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 17"
     },
     {
       "id": 522,
@@ -10171,7 +10171,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 17"
     },
     {
       "id": 523,
@@ -10213,7 +10213,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 17"
     },
     {
       "id": 524,
@@ -10273,7 +10273,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 17"
     },
     {
       "id": 525,
@@ -10318,7 +10318,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 17"
     },
     {
       "id": 526,
@@ -10361,7 +10361,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 17"
     },
     {
       "id": 527,
@@ -10403,7 +10403,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 17"
     },
     {
       "id": 528,
@@ -10469,7 +10469,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 17"
     },
     {
       "id": 529,
@@ -10511,7 +10511,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 17"
     },
     {
       "id": 530,
@@ -10541,7 +10541,7 @@
       "widgets_values": [
         "ez_glasshouse_b30_s2_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 17"
     },
     {
       "id": 551,
@@ -10708,7 +10708,7 @@
         121,
         1
       ],
-      "title": "LTX Img->Video condition"
+      "title": "LTX Img->Video condition 18"
     },
     {
       "id": 542,
@@ -10760,7 +10760,7 @@
       "widgets_values": [
         24.0
       ],
-      "title": "LTX frame rate cond"
+      "title": "LTX frame rate cond 18"
     },
     {
       "id": 543,
@@ -10802,7 +10802,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 18"
     },
     {
       "id": 544,
@@ -10862,7 +10862,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler 18"
     },
     {
       "id": 545,
@@ -10907,7 +10907,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 18"
     },
     {
       "id": 546,
@@ -10950,7 +10950,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 18"
     },
     {
       "id": 547,
@@ -10992,7 +10992,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 18"
     },
     {
       "id": 548,
@@ -11058,7 +11058,7 @@
         "pingpong": false,
         "save_output": true
       },
-      "title": "Save video (MP4) - open node for preview"
+      "title": "Save video (MP4) - open node for preview 18"
     },
     {
       "id": 549,
@@ -11099,7 +11099,7 @@
         120,
         1
       ],
-      "title": "Last frame"
+      "title": "Last frame 18"
     },
     {
       "id": 550,
@@ -11129,7 +11129,7 @@
       "widgets_values": [
         "ez_glasshouse_b30_s3_last"
       ],
-      "title": "Save last frame"
+      "title": "Save last frame 18"
     },
     {
       "id": 901,

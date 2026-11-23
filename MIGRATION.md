@@ -120,5 +120,12 @@ build artefacts and can be removed - they are gitignored.
 
 No gate was dropped: each MkDocs-era target was retargeted onto the Next app, and the CI
 `docs-and-render` job runs the same checks in the same order (fast gates, then export).
-Playwright visual goldens exist as a manual `//docs-site:visual-linux` path; they are not
-part of `docs-and-render` until a Linux baseline set is committed.
+Playwright visual goldens are committed as a Linux-captured set, and gate 4 of `//:everything`
+compares against them in the pinned container with `bazelisk run //docs-site:visual-linux` - but
+only when the host can supply that environment. With no reachable Docker daemon, no committed `.png`
+under `docs-site/tests/visual/goldens/`, or a daemon that cannot bind-mount this checkout, gate 4
+prints `SKIP docs-site visual lane (<reason>)`, counts the skip in its summary, and carries on. No
+CI job runs that comparison: `docs-and-render` passes `--test_tag_filters=-visual`, the host twin
+`//docs-site:visual-test` is `manual`, and the container capture `//docs-site:visual-linux` is an
+`sh_binary` no test invocation reaches. The visual-lane check CI does pay for is the tagless guard
+`bazelisk test //docs-site:visual_tooling_test`, which sits in `//docs-site:suite`.

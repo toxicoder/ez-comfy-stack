@@ -108,7 +108,7 @@ Graph: **audio/dub/clone-translate** (`extra.lab_profile` `us-safe-dub`). Occupa
 
 | Widget | Role |
 | --- | --- |
-| **Source file** | Dropdown of wav/mp4/mkv/mp3 already in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). Default `(none)` |
+| **Source file** | Dropdown of every wav / mp4 / mkv / mp3 / mov / m4a / aac / webm under `${COMFY_OUTPUT_DIR}/input` (container `/inputs`), subfolders included, so a clip that already sits in a folder is pickable without a move and a rename. Entries are folder-relative and re-resolved at Queue. Default `(none)` |
 | **Upload media** | Choose a local file; Comfy stores it in `input/`. Button only - it does not occupy a `widgets_values` slot |
 | **Source URL** | Optional http(s) you have rights to fetch. Overrides Source file when set |
 | **I have rights** | Required. Off refuses Queue |

@@ -92,13 +92,13 @@ flowchart TB
 | 28 | Detail | `EZQuality` | QUALITY |
 | 29 | Format / platform | `EZImageFormat` | SETTINGS |
 | 30 | Upscale still | `EZImageUpscale` | SHOT LEFT |
-| 31 | Upscale still | `EZImageUpscale` | SHOT CENTER |
-| 32 | Upscale still | `EZImageUpscale` | SHOT RIGHT |
+| 31 | Upscale still 2 | `EZImageUpscale` | SHOT CENTER |
+| 32 | Upscale still 3 | `EZImageUpscale` | SHOT RIGHT |
 | 33 | Check models | `EZModelCheck` | QUALITY |
 | 34 | Negative SHOT CENTER | `EZNegativePromptEnhance` | PROMPT |
-| 35 | Negative Negative SHOT CENTER | `CLIPTextEncode` | PROMPT |
+| 35 | Negative SHOT CENTER | `CLIPTextEncode` | PROMPT |
 | 36 | Negative SHOT RIGHT | `EZNegativePromptEnhance` | PROMPT |
-| 37 | Negative Negative SHOT RIGHT | `CLIPTextEncode` | PROMPT |
+| 37 | Negative SHOT RIGHT | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -684,8 +684,8 @@ Prompt encoded by CLIP.
 | Positive LEFT | `Left grid tile. Subject on the right third of this square. Same building, rooms...` |
 | Positive CENTER | `Center grid tile. Subject centered, same light. Same building, rooms, furniture...` |
 | Positive RIGHT | `Right grid tile. Subject on the left third of this square. Same building, rooms...` |
-| Negative Negative SHOT CENTER | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT RIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT CENTER | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT RIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

@@ -56,9 +56,15 @@ const LABELS = {
   engine: "Clone engine",
   keep_bed: "Keep original bed",
   spoken_disclosure: "Spoken disclosure",
-  // First-party widgets that used to render as their raw snake_case name.
+  // First-party widgets that used to render as their raw snake_case name,
+  // and the input sockets a graph hands in (latent, vae, bed). The
+  // single-letter EZContextJoin sockets stay out of the map: a one-letter
+  // key would relabel an unrelated node's widget.
   act: "Act",
   assets: "Assets",
+  audio_01: "Audio 1",
+  backend: "Voice engine",
+  bed: "Music bed",
   bpm: "Tempo (BPM)",
   brief: "Brief",
   camera_fov: "Camera FOV",
@@ -67,15 +73,20 @@ const LABELS = {
   cap_seconds: "Max length (seconds)",
   catalog: "Catalog",
   cfg_weight: "Guidance (CFG)",
+  conditioning: "Conditioning",
   context: "Context",
+  cover: "Album cover",
   crossover_hz: "Crossover (Hz)",
   dilate: "Matte expand (px)",
   disclosure: "Disclosure",
   enable: "Describe image",
   exaggeration: "Exaggeration",
+  family: "Model family",
   feather: "Matte feather (px)",
   fetch_links: "Follow links",
   filename: "Choose image",
+  filename_2: "Choose image 2",
+  filename_3: "Choose image 3",
   has_image: "Use image",
   hdri: "HDRI lighting",
   identity: "Identity",
@@ -88,6 +99,9 @@ const LABELS = {
   label_b: "Context label B",
   label_c: "Context label C",
   label_d: "Context label D",
+  latent: "Latent",
+  layer: "Render layer",
+  lock: "Keep constant",
   max_refs: "Max reference stills",
   overlap_bars: "Beat overlap (bars)",
   overwrite: "Overwrite existing",
@@ -100,8 +114,10 @@ const LABELS = {
   script: "Script",
   shot: "Shot",
   shot_id: "Shot id",
+  size_src: "Size reference",
   slug: "Slug",
   sources: "Source files",
+  speech: "Speech",
   speaker_a_ref: "Speaker A reference WAV",
   speaker_b_ref: "Speaker B reference WAV",
   status: "Model status",
@@ -111,6 +127,7 @@ const LABELS = {
   use_references: "Use reference stills",
   xfade_cs: "Crossfade (centiseconds)",
   upscale: "Upscale by",
+  vae: "VAE",
   backdrop: "Cutout backdrop",
   // Core ComfyUI and VHS widgets the graphs leave unlabelled.
   sampler_name: "Sampler",
@@ -301,6 +318,18 @@ function nodeClass(node) {
 }
 
 /**
+ * Widget labels that depend on the node class, keyed "Class:widget". A name
+ * three shipped classes share for three different things cannot live in the
+ * class-agnostic LABELS map without lying about two of them.
+ * @type {Record<string, string>}
+ */
+const CLASS_LABELS = {
+  "EZPodcastScript:flavor": "Script format",
+  "EZCinemaRack:flavor": "Prompt model",
+  "EZAudioRack:flavor": "Track type",
+};
+
+/**
  * Apply stamped or generic labels onto a node's widgets.
  * @param {EzNode} node
  * @returns {void}
@@ -319,6 +348,11 @@ function relabelWidgets(node) {
     }
     if (ntype === "EZNegativePromptEnhance" && widget.name === "enhance") {
       widget.label = "Rewrite negative";
+      continue;
+    }
+    const scoped = CLASS_LABELS[`${ntype}:${widget.name}`];
+    if (scoped) {
+      widget.label = scoped;
       continue;
     }
     const generic = LABELS[widget.name];

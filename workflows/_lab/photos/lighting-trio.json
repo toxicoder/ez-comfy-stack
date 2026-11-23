@@ -1397,7 +1397,7 @@
       "widgets_values": [
         "none"
       ],
-      "title": "Upscale still"
+      "title": "Upscale still 2"
     },
     {
       "id": 33,
@@ -1460,7 +1460,7 @@
       "widgets_values": [
         "none"
       ],
-      "title": "Upscale still"
+      "title": "Upscale still 3"
     },
     {
       "id": 34,
@@ -1572,7 +1572,7 @@
       "widgets_values": [
         "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
-      "title": "Negative Negative SHOT WINDOW"
+      "title": "Negative SHOT WINDOW"
     },
     {
       "id": 37,
@@ -1615,7 +1615,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 2"
     },
     {
       "id": 38,
@@ -1703,7 +1703,7 @@
       "widgets_values": [
         "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
-      "title": "Negative Negative SHOT NIGHT LAMP"
+      "title": "Negative SHOT NIGHT LAMP"
     },
     {
       "id": 40,
@@ -1746,7 +1746,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 3"
     }
   ],
   "links": [

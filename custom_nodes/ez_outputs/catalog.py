@@ -401,6 +401,32 @@ def delete_many(root: Path, rels: list[str]) -> tuple[list[str], list[BatchError
     return deleted, errors
 
 
+def _free_dest(dest_dir: Path, name: str) -> Path:
+    """Return a path in ``dest_dir`` that holds no file yet.
+
+    The input directory is shared: every graph defaults to a seeded plate
+    such as ``example.png``, so a staged generation must never land on a
+    name another graph already reads.
+
+    Args:
+        dest_dir: Destination directory (already created).
+        name: Preferred file name.
+
+    Returns:
+        ``dest_dir / name`` when it is free, else ``<stem>-2<ext>``,
+        ``<stem>-3<ext>``, and up.
+    """
+    dest = dest_dir / name
+    if not dest.exists():
+        return dest
+    index = 2
+    while True:
+        candidate = dest_dir / f"{dest.stem}-{index}{dest.suffix}"
+        if not candidate.exists():
+            return candidate
+        index += 1
+
+
 def copy_to_input(
     output_dir: Path,
     rel: str,
@@ -412,13 +438,16 @@ def copy_to_input(
     A 3D mesh, a MIDI sequence, and a QC report are listed but never staged:
     no LoadImage / LoadAudio input reads any of them.
 
+    The copy never overwrites: a name the input directory already holds
+    becomes ``<stem>-2<ext>``, then ``-3``, and that is what is returned.
+
     Args:
         output_dir: Output root.
         rel: Relative path under ``output_dir``.
         input_dir: Destination directory; default :func:`input_root`.
 
     Returns:
-        Destination path.
+        Destination path actually written.
 
     Raises:
         CatalogError: same refuses as :func:`resolve_under`, plus a kind no
@@ -430,7 +459,7 @@ def copy_to_input(
         raise CatalogError(f"{NOT_INPUT_KINDS[kind]} is not a LoadImage input")
     dest_dir = Path(input_dir) if input_dir is not None else input_root()
     dest_dir.mkdir(parents=True, exist_ok=True)
-    dest = dest_dir / src.name
+    dest = _free_dest(dest_dir, src.name)
     shutil.copy2(src, dest)
     return dest
 

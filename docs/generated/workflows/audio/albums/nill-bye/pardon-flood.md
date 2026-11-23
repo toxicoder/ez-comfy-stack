@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -254,7 +254,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -697,7 +697,7 @@ statute stands
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1101,7 +1101,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1496,7 +1496,7 @@ ticker ticks
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1936,7 +1936,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2357,7 +2357,7 @@ orders stand
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2785,7 +2785,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3204,7 +3204,7 @@ name stays
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3632,7 +3632,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4041,7 +4041,7 @@ lock holds
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4441,7 +4441,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4866,7 +4866,7 @@ counsel stands
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5260,7 +5260,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5689,7 +5689,7 @@ calendar waits
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6093,7 +6093,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6416,7 +6416,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 1 | `1024` |
 | 2 | `1` |
 
-**KSampler** (`KSampler`)
+**Sampler** (`KSampler`)
 
 | Slot | Value |
 | --- | --- |
@@ -6782,21 +6782,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a...` |
-| ez_rap_prompt | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b...` |
-| ez_rap_prompt | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry ...` |
-| ez_rap_prompt | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo...` |
-| ez_rap_prompt | `techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no aut...` |
-| ez_rap_prompt | `UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune,...` |
-| ez_rap_prompt | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,...` |
-| ez_rap_prompt | `festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 15...` |
+| Rap prompt | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a...` |
+| Rap prompt | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b...` |
+| Rap prompt | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry boot...` |
+| Rap prompt | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry ...` |
+| Rap prompt | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo...` |
+| Rap prompt | `techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no aut...` |
+| Rap prompt | `UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no ...` |
+| Rap prompt | `hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune,...` |
+| Rap prompt | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,...` |
+| Rap prompt | `festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 15...` |
 
 #### `lyrics`
 
@@ -6808,21 +6808,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[spoken word] January twenty, twenty-twenty-five A proclamation Full, complete,...` |
-| ez_rap_prompt | `[intro] rage 808 Nill Bye reading IEEPA [verse] February twenty, twenty-twenty-...` |
-| ez_rap_prompt | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c...` |
-| ez_rap_prompt | `[verse] Three days before the oath, a social post as a launch CIC Digital and F...` |
-| ez_rap_prompt | `[intro] house four Nill Bye measuring wings [verse] October twenty, twenty-twen...` |
-| ez_rap_prompt | `[intro] dnb amen Nill Bye reading the wave [verse] CNN sat with hundreds of pag...` |
-| ez_rap_prompt | `[intro] jersey chops Nill Bye reading withholding [verse] March fifteen, twenty...` |
-| ez_rap_prompt | `[verse] The Center's organic statute names a president who was killed in office...` |
-| ez_rap_prompt | `[intro] techno dry Nill Bye reading the Fourteenth [verse] Day one, an order ai...` |
-| ez_rap_prompt | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach...` |
-| ez_rap_prompt | `[intro] electro analog Nill Bye reading the IGA [verse] Inspectors general are ...` |
-| ez_rap_prompt | `[intro] garage shuffle Nill Bye reading counsel EOs [verse] A republic that pun...` |
-| ez_rap_prompt | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr...` |
-| ez_rap_prompt | `[intro] trance gates Nill Bye counting applications [verse] More than thirty em...` |
-| ez_rap_prompt | `[verse] July twenty-twenty-four, Trump v. United States A former president is n...` |
+| Rap prompt | `[spoken word] January twenty, twenty-twenty-five A proclamation Full, complete,...` |
+| Rap prompt | `[intro] rage 808 Nill Bye reading IEEPA [verse] February twenty, twenty-twenty-...` |
+| Rap prompt | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c...` |
+| Rap prompt | `[verse] Three days before the oath, a social post as a launch CIC Digital and F...` |
+| Rap prompt | `[intro] house four Nill Bye measuring wings [verse] October twenty, twenty-twen...` |
+| Rap prompt | `[intro] dnb amen Nill Bye reading the wave [verse] CNN sat with hundreds of pag...` |
+| Rap prompt | `[intro] jersey chops Nill Bye reading withholding [verse] March fifteen, twenty...` |
+| Rap prompt | `[verse] The Center's organic statute names a president who was killed in office...` |
+| Rap prompt | `[intro] techno dry Nill Bye reading the Fourteenth [verse] Day one, an order ai...` |
+| Rap prompt | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach...` |
+| Rap prompt | `[intro] electro analog Nill Bye reading the IGA [verse] Inspectors general are ...` |
+| Rap prompt | `[intro] garage shuffle Nill Bye reading counsel EOs [verse] A republic that pun...` |
+| Rap prompt | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr...` |
+| Rap prompt | `[intro] trance gates Nill Bye counting applications [verse] More than thirty em...` |
+| Rap prompt | `[verse] July twenty-twenty-four, Trump v. United States A former president is n...` |
 
 #### `enhance`
 
@@ -6861,21 +6861,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/01-pardon-flood` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/03-gold-card` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/06-metro-surge` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/07-due-process` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/09-birthright-order` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/10-cook-firing` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/11-inspector-purge` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/12-law-firm-order` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/13-visa-ticket` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/14-shadow-docket` |
-| ez_rap_prompt | `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/01-pardon-flood` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/03-gold-card` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/06-metro-surge` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/07-due-process` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/09-birthright-order` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/10-cook-firing` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/11-inspector-purge` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/12-law-firm-order` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/13-visa-ticket` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/14-shadow-docket` |
+| Rap prompt | `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
@@ -7308,7 +7308,7 @@ Random seed for the noise tensor.
 | ACE sampler | `541` |
 | ACE sampler | `547` |
 | ACE sampler | `557` |
-| KSampler | `42` |
+| Sampler | `42` |
 
 #### `control_after_generate`
 

@@ -65,7 +65,7 @@ flowchart LR
   N7["Negative"]
   N8["GIF size and length (49 frames)"]
   N9["Shift"]
-  N10["KSampler"]
+  N10["Sampler"]
   N11["VAE Decode"]
   N12["Save frames (secondary)"]
   N13["Infinite loop (ping-pong) - open for preview"]
@@ -109,7 +109,7 @@ flowchart LR
 | 7 | Negative | `CLIPTextEncode` | PROMPT |
 | 8 | GIF size and length (49 frames) | `Wan22ImageToVideoLatent` | SETTINGS |
 | 9 | Shift | `ModelSamplingSD3` | SETTINGS |
-| 10 | KSampler | `KSampler` | SETTINGS |
+| 10 | Sampler | `KSampler` | SETTINGS |
 | 11 | VAE Decode | `VAEDecode` | OUTPUT |
 | 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
 | 13 | Infinite loop (ping-pong) - open for pr... | `VHS_VideoCombine` | OUTPUT |

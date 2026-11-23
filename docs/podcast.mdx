@@ -42,10 +42,10 @@ Graph: **audio/podcast/two-host-episode** (`extra.lab_profile` `us-safe-podcast`
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **off** so `Speaker A:` / `Speaker B:` stay parser input). Missing GGUF passes the widget through | `ez_podcast_script` |
+| SCRIPT | App **Script** + **Rewrite script**. In-tree `EZPodcastScript` (enhance **off** so `Speaker A:` / `Speaker B:` stay parser input). Missing GGUF passes the widget through | `Podcast script` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
-| VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
-| BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |
+| VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `Podcast voice` |
+| BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `Podcast bed` |
 | MIX | Duck -15 dB + overlay. FLAC master + 320 kbps MP3 | `ez_podcast_ep` / `ez_podcast_mix` |
 | COVER | Queue **photos/podcast-cover** separately (1024^2, `ez_podcast`) | `ez_podcast` |
 
@@ -69,10 +69,10 @@ Paste a lazy blob of notes, `https://` links, captioned video URLs, or local `.t
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
-| SOURCES | App **Sources**, **Format**, **Duration**, **Fetch links**, **Rewrite**. `EZPodcastLearn` writes a deduped digest then a Speaker A/B (or solo) script | `ez_learn_sources` |
+| SOURCES | App **Sources**, **Format**, **Duration**, **Fetch links**, **Rewrite**. `EZPodcastLearn` writes a deduped digest then a Speaker A/B (or solo) script | `Learn sources` |
 | DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
-| VOICES | App **Speaker A / B**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M built-ins | `ez_learn_voice` |
-| BEDS | App **Bed tags**. Native ACE-Step 1.5, **30 s** instrumental, looped under the speech (`EZAudioLoopToMatch`). Duck -15 dB | `ez_learn_bed` |
+| VOICES | App **Speaker A / B**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M built-ins | `Learn voice` |
+| BEDS | App **Bed tags**. Native ACE-Step 1.5, **30 s** instrumental, looped under the speech (`EZAudioLoopToMatch`). Duck -15 dB | `Learn bed` |
 | MIX | Overlay. FLAC master + 320 kbps MP3 | `ez_learn_ep` / `ez_learn_mix` |
 | COVER | Queue **photos/podcast-cover** separately (1024^2, `ez_podcast`) | `ez_podcast` |
 

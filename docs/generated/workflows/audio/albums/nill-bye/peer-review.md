@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -242,7 +242,7 @@ lab coat on
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -669,7 +669,7 @@ red pen down
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1110,7 +1110,7 @@ soft out
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1522,7 +1522,7 @@ Nill Bye out
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1916,7 +1916,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2343,7 +2343,7 @@ baseline on
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2741,7 +2741,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3172,7 +3172,7 @@ sham filed
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3572,7 +3572,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3968,7 +3968,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4411,7 +4411,7 @@ door latch
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4840,7 +4840,7 @@ stamp down
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5281,7 +5281,7 @@ swab done
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5695,7 +5695,7 @@ mask on
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6123,7 +6123,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6482,7 +6482,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 1 | `1024` |
 | 2 | `1` |
 
-**KSampler** (`KSampler`)
+**Sampler** (`KSampler`)
 
 | Slot | Value |
 | --- | --- |
@@ -6848,21 +6848,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
-| ez_rap_prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| Rap prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 8...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, u...` |
 
 #### `lyrics`
 
@@ -6874,21 +6874,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
-| ez_rap_prompt | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
-| ez_rap_prompt | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
-| ez_rap_prompt | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
-| ez_rap_prompt | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
-| ez_rap_prompt | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
-| ez_rap_prompt | `[verse] Rake built a study from a single night Called it proof with the club in...` |
-| ez_rap_prompt | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
-| ez_rap_prompt | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
-| ez_rap_prompt | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
-| ez_rap_prompt | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
-| ez_rap_prompt | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
-| ez_rap_prompt | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
-| ez_rap_prompt | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
-| ez_rap_prompt | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
+| Rap prompt | `[intro] yeah lab coat on Nill Bye talking [verse] Rake walks in with a club rep...` |
+| Rap prompt | `[spoken word] Peer review time Rake submitted feelings Zero citations Rejected ...` |
+| Rap prompt | `[intro] soft drums hard facts Nill Bye here [verse] Rake in his feels like a fu...` |
+| Rap prompt | `[chorus] Talk that club talk That ain't a method Nill Bye on facts Rake on a le...` |
+| Rap prompt | `[intro] H-zero up Nill Bye checking [verse] Hypothesis: Rake is cool Lab notes ...` |
+| Rap prompt | `[intro] yeah control on Nill Bye splitting [verse] Rake walks in as the wild ca...` |
+| Rap prompt | `[verse] Rake built a study from a single night Called it proof with the club in...` |
+| Rap prompt | `[intro] 808 sugar pill Nill Bye dosing [verse] Rake popped a glow like a sugar ...` |
+| Rap prompt | `[verse] Rake talks sure like the bar is thin Error huge on a tiny peak, kid, gr...` |
+| Rap prompt | `[verse] Rake cites a night with no line item Screenshot lore from a vanished ti...` |
+| Rap prompt | `[intro] quiet drums door open Nill Bye waiting [verse] Rake booked the slot, th...` |
+| Rap prompt | `[spoken word] Grant review Rake requested feelings Budget zero Denied [intro] r...` |
+| Rap prompt | `[intro] 808 sample spoiled Nill Bye bagging [verse] Rake cracked the seal with ...` |
+| Rap prompt | `[verse] Rake peeled the sticker on the hidden key Wanted a hint like a gossip s...` |
+| Rap prompt | `[intro] run it twice Nill Bye repeating [verse] Rake did the night like a one-t...` |
 
 #### `enhance`
 
@@ -6927,21 +6927,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/01-lab-coat` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/02-peer-review` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/03-feels` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/04-fake-cool` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/05-hypothesis` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/06-control-group` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/07-sample-size` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/08-placebo` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/09-error-bars` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/10-lab-notebook` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/11-office-hours` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/12-grant-denied` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/13-contamination` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/14-double-blind` |
-| ez_rap_prompt | `audio/albums/nill-bye/peer-review/15-replicate` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/01-lab-coat` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/02-peer-review` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/03-feels` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/04-fake-cool` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/05-hypothesis` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/06-control-group` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/07-sample-size` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/08-placebo` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/09-error-bars` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/10-lab-notebook` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/11-office-hours` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/12-grant-denied` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/13-contamination` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/14-double-blind` |
+| Rap prompt | `audio/albums/nill-bye/peer-review/15-replicate` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
@@ -7390,7 +7390,7 @@ Random seed for the noise tensor.
 | ACE sampler | `31` |
 | ACE sampler | `37` |
 | ACE sampler | `7` |
-| KSampler | `42` |
+| Sampler | `42` |
 
 #### `control_after_generate`
 

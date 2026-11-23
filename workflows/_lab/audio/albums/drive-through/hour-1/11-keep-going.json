@@ -226,7 +226,7 @@
         "instrumental",
         "audio/albums/drive-through/hour-1/11-keep-going"
       ],
-      "title": "ez_edm_prompt"
+      "title": "EDM prompt"
     },
     {
       "id": 6,
@@ -739,7 +739,7 @@
         "instrumental",
         "audio/albums/drive-through/hour-1/11-keep-going"
       ],
-      "title": "ez_edm_prompt pass 2"
+      "title": "EDM prompt pass 2"
     },
     {
       "id": 23,
@@ -1080,7 +1080,7 @@
         "instrumental",
         "audio/albums/drive-through/hour-1/11-keep-going"
       ],
-      "title": "ez_edm_prompt pass 3"
+      "title": "EDM prompt pass 3"
     },
     {
       "id": 30,
@@ -1421,7 +1421,7 @@
         "instrumental",
         "audio/albums/drive-through/hour-1/11-keep-going"
       ],
-      "title": "ez_edm_prompt pass 4"
+      "title": "EDM prompt pass 4"
     },
     {
       "id": 37,
@@ -2415,7 +2415,7 @@
           "tags",
           {
             "description": "Genre-first ACE-Step tags.",
-            "label": "ez_edm_prompt - Tags",
+            "label": "Pass 1 tags",
             "height": 80
           }
         ],
@@ -2451,7 +2451,7 @@
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
-            "label": "ez_edm_prompt - Lyrics",
+            "label": "Pass 1 lyrics",
             "height": 140
           }
         ],
@@ -2487,7 +2487,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "ez_edm_prompt - Rewrite prompt"
+            "label": "Rewrite pass 1"
           }
         ],
         [
@@ -2519,7 +2519,7 @@
           "mode",
           {
             "description": "Vocal vs instrumental. Instrumental forces no-vocals tags and [inst] lyrics.",
-            "label": "Vocal / instrumental"
+            "label": "Pass 1 vocal / instrumental"
           }
         ],
         [

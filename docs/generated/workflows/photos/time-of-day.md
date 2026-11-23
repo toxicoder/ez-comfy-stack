@@ -103,19 +103,19 @@ flowchart TB
 | 35 | Detail | `EZQuality` | QUALITY |
 | 36 | Format / platform | `EZImageFormat` | SETTINGS |
 | 37 | Upscale still | `EZImageUpscale` | SHOT GOLDEN |
-| 38 | Upscale still | `EZImageUpscale` | SHOT DAWN |
-| 39 | Upscale still | `EZImageUpscale` | SHOT NOON |
-| 40 | Upscale still | `EZImageUpscale` | SHOT NIGHT |
+| 38 | Upscale still 2 | `EZImageUpscale` | SHOT DAWN |
+| 39 | Upscale still 3 | `EZImageUpscale` | SHOT NOON |
+| 40 | Upscale still 4 | `EZImageUpscale` | SHOT NIGHT |
 | 41 | Check models | `EZModelCheck` | QUALITY |
 | 42 | Negative SHOT DAWN | `EZNegativePromptEnhance` | PROMPT |
-| 43 | Negative Negative SHOT DAWN | `CLIPTextEncode` | PROMPT |
-| 44 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 43 | Negative SHOT DAWN | `CLIPTextEncode` | PROMPT |
+| 44 | Negative + identity plate 2 | `ReferenceLatent` | SETTINGS |
 | 45 | Negative SHOT NOON | `EZNegativePromptEnhance` | PROMPT |
-| 46 | Negative Negative SHOT NOON | `CLIPTextEncode` | PROMPT |
-| 47 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 46 | Negative SHOT NOON | `CLIPTextEncode` | PROMPT |
+| 47 | Negative + identity plate 3 | `ReferenceLatent` | SETTINGS |
 | 48 | Negative SHOT NIGHT | `EZNegativePromptEnhance` | PROMPT |
-| 49 | Negative Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
-| 50 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
+| 49 | Negative SHOT NIGHT | `CLIPTextEncode` | PROMPT |
+| 50 | Negative + identity plate 4 | `ReferenceLatent` | SETTINGS |
 
 ## Node parameter reference
 
@@ -702,9 +702,9 @@ Prompt encoded by CLIP.
 | Positive DAWN | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NOON | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
 | Positive NIGHT | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An...` |
-| Negative Negative SHOT DAWN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NOON | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT NIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT DAWN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NOON | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT NIGHT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

@@ -302,7 +302,8 @@
       },
       "widgets_values": [
         24.0
-      ]
+      ],
+      "title": "LTX frame rate cond"
     },
     {
       "id": 8,
@@ -362,7 +363,7 @@
         "simple",
         1.0
       ],
-      "title": "KSampler"
+      "title": "Sampler"
     },
     {
       "id": 9,
@@ -404,7 +405,8 @@
       "properties": {
         "Node name for S&R": "VAEDecode"
       },
-      "widgets_values": []
+      "widgets_values": [],
+      "title": "VAE Decode"
     },
     {
       "id": 10,

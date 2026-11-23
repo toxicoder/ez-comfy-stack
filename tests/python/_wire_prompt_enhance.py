@@ -1640,6 +1640,22 @@ def _append_node(graph: dict[str, Any], node: dict[str, Any]) -> dict[str, Any]:
     return node
 
 
+_NEGATIVE_TITLE_PREFIX = "Negative "
+
+
+def _negative_title(source_title: object) -> str:
+    """Title a negative-side clone after the positive node it mirrors.
+
+    Prefixing is idempotent: a source already titled ``Negative SHOT 02``
+    keeps its title, so re-running this pass over its own output cannot write
+    ``Negative Negative SHOT 02``.
+    """
+    text = str(source_title or "").strip() or "shot"
+    if text.startswith(_NEGATIVE_TITLE_PREFIX):
+        return text
+    return f"{_NEGATIVE_TITLE_PREFIX}{text}"
+
+
 def _clone_negative_enhance(
     graph: dict[str, Any], template: dict[str, Any], pos_src: dict[str, Any]
 ) -> dict[str, Any]:
@@ -1669,7 +1685,7 @@ def _clone_negative_enhance(
             ],
             "properties": {"Node name for S&R": "EZNegativePromptEnhance"},
             "widgets_values": values,
-            "title": f"Negative {pos_src.get('title') or 'shot'}",
+            "title": _negative_title(pos_src.get("title")),
         },
     )
     _relink_named(graph, node, "positive", pos_src, 0, "STRING")
@@ -1703,7 +1719,7 @@ def _clone_negative_clip(
                 template.get("properties") or {"Node name for S&R": "CLIPTextEncode"}
             ),
             "widgets_values": list(template.get("widgets_values") or [""]),
-            "title": f"Negative {text_src.get('title') or 'shot'}",
+            "title": _negative_title(text_src.get("title")),
         },
     )
     links = _graph_links(graph)

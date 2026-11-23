@@ -23,6 +23,7 @@ from _build_image_prep import BACKDROP, BUILDERS, DILATE, FEATHER, NEGATIVE
 from _lab_families import graph_stacks, stack_violations
 from _lab_layout import ensure_node_spacing, finalize_layout
 from _lab_paths import LAB_ROOT, apply_lab_identity, load_lab_graph
+from _lab_titles import ensure_node_titles
 from _wire_upscale import UPSCALE_COMBO_TYPE, wire_upscale
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -160,6 +161,9 @@ def _regenerated(rel: str) -> dict[str, Any]:
     finalize_layout(graph)
     apply_lab_identity(graph, rel)
     ensure_node_spacing(graph)
+    # Same chain write_lab_graph runs, titles included: an authored title the
+    # pass numbers must be numbered here too, or the comparison below drifts.
+    ensure_node_titles(graph)
     return graph
 
 

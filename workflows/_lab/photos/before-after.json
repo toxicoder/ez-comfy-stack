@@ -1124,7 +1124,7 @@
       "widgets_values": [
         "none"
       ],
-      "title": "Upscale still"
+      "title": "Upscale still 2"
     },
     {
       "id": 27,
@@ -1236,7 +1236,7 @@
       "widgets_values": [
         "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
       ],
-      "title": "Negative Negative SHOT AFTER"
+      "title": "Negative SHOT AFTER"
     },
     {
       "id": 30,
@@ -1279,7 +1279,7 @@
         "Node name for S&R": "ReferenceLatent"
       },
       "widgets_values": [],
-      "title": "Negative + identity plate"
+      "title": "Negative + identity plate 2"
     }
   ],
   "links": [

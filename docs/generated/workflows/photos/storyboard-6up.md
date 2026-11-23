@@ -110,22 +110,22 @@ flowchart TB
 | 46 | Detail | `EZQuality` | QUALITY |
 | 47 | Format / platform | `EZImageFormat` | SETTINGS |
 | 48 | Upscale still | `EZImageUpscale` | SHOT 01 |
-| 49 | Upscale still | `EZImageUpscale` | SHOT 02 |
-| 50 | Upscale still | `EZImageUpscale` | SHOT 03 |
-| 51 | Upscale still | `EZImageUpscale` | SHOT 04 |
-| 52 | Upscale still | `EZImageUpscale` | SHOT 05 |
-| 53 | Upscale still | `EZImageUpscale` | SHOT 06 |
+| 49 | Upscale still 2 | `EZImageUpscale` | SHOT 02 |
+| 50 | Upscale still 3 | `EZImageUpscale` | SHOT 03 |
+| 51 | Upscale still 4 | `EZImageUpscale` | SHOT 04 |
+| 52 | Upscale still 5 | `EZImageUpscale` | SHOT 05 |
+| 53 | Upscale still 6 | `EZImageUpscale` | SHOT 06 |
 | 54 | Check models | `EZModelCheck` | QUALITY |
 | 55 | Negative SHOT 02 | `EZNegativePromptEnhance` | PROMPT |
-| 56 | Negative Negative SHOT 02 | `CLIPTextEncode` | PROMPT |
+| 56 | Negative SHOT 02 | `CLIPTextEncode` | PROMPT |
 | 57 | Negative SHOT 03 | `EZNegativePromptEnhance` | PROMPT |
-| 58 | Negative Negative SHOT 03 | `CLIPTextEncode` | PROMPT |
+| 58 | Negative SHOT 03 | `CLIPTextEncode` | PROMPT |
 | 59 | Negative SHOT 04 | `EZNegativePromptEnhance` | PROMPT |
-| 60 | Negative Negative SHOT 04 | `CLIPTextEncode` | PROMPT |
+| 60 | Negative SHOT 04 | `CLIPTextEncode` | PROMPT |
 | 61 | Negative SHOT 05 | `EZNegativePromptEnhance` | PROMPT |
-| 62 | Negative Negative SHOT 05 | `CLIPTextEncode` | PROMPT |
+| 62 | Negative SHOT 05 | `CLIPTextEncode` | PROMPT |
 | 63 | Negative SHOT 06 | `EZNegativePromptEnhance` | PROMPT |
-| 64 | Negative Negative SHOT 06 | `CLIPTextEncode` | PROMPT |
+| 64 | Negative SHOT 06 | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -714,11 +714,11 @@ Prompt encoded by CLIP.
 | Positive 04 | `Insert: a material or prop detail named in the bible, 50mm. Unmarked surfaces, ...` |
 | Positive 05 | `Exit: turning toward the way out of this scene, 35mm. Unmarked surfaces, empty ...` |
 | Positive 06 | `Closer hook of the same scene, 24mm. Unmarked surfaces, empty of lettering. Sam...` |
-| Negative Negative SHOT 02 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 03 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 04 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 05 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT 06 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 02 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 03 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 04 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 05 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT 06 | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 

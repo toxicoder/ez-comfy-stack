@@ -287,8 +287,99 @@ def test_a_second_slot_with_a_link_satisfies_the_requirement() -> None:
     assert wiring_findings(graph) == []
 
 
-# --- terminals --------------------------------------------------------------
+_SAVER_SOCKETS: tuple[tuple[str, str, str], ...] = (
+    ("SaveAnimatedPNG", "images", "IMAGE"),
+    ("SaveAnimatedWEBP", "images", "IMAGE"),
+    ("SaveAudio", "audio", "AUDIO"),
+    ("SaveGLB", "mesh", "MESH"),
+    ("VHS_VideoCombine", "images", "IMAGE"),
+)
 
+
+def _writer_graph(ntype: str, socket: str, link_type: str, *, wired: bool) -> dict[str, Any]:
+    """Build a one-writer graph whose media socket is or is not fed.
+
+    Args:
+        ntype: Saver class under test.
+        socket: Name of the required media socket.
+        link_type: Link type of that socket.
+        wired: When True, feed the socket from a Note stand-in.
+
+    Returns:
+        A graph dict shaped for :func:`wiring_findings`.
+    """
+    if not wired:
+        writer = _node(1, ntype, inputs=[_in(name=socket, type=link_type, link=None)])
+        return {"nodes": [_author_combine_widgets(writer, ntype)], "links": []}
+    writer = _node(1, ntype, inputs=[_in(name=socket, type=link_type, link=5)])
+    return {
+        "nodes": [
+            _author_combine_widgets(writer, ntype),
+            _node(2, "Note", outputs=[_slot(name=link_type, type=link_type, links=[5])]),
+        ],
+        "links": [_link(5, 2, 0, 1, 0, link_type)],
+    }
+
+
+def _author_combine_widgets(node: dict[str, Any], ntype: str) -> dict[str, Any]:
+    """Give a VHS combine node the widgets its own gate demands.
+
+    Args:
+        node: The writer node under test.
+        ntype: Class it claims.
+
+    Returns:
+        The same node, so a combine node is not also reported for an unauthored
+        ``filename_prefix`` while its socket is what the test is about.
+    """
+    if ntype == "VHS_VideoCombine":
+        node["widgets_values"] = {
+            "filename_prefix": "ez_clip",
+            "format": "video/h264-mp4",
+            "frame_rate": "24",
+        }
+    return node
+
+
+@pytest.mark.parametrize(("ntype", "socket", "link_type"), _SAVER_SOCKETS)
+def test_an_unwired_required_saver_socket_is_a_finding(
+    ntype: str, socket: str, link_type: str
+) -> None:
+    """A writer with no media to write dies at Queue, so the gate says so."""
+    graph = _writer_graph(ntype, socket, link_type, wired=False)
+    assert wiring_findings(graph) == [f"node 1 ({ntype}): required input '{socket}' is unwired"]
+
+
+@pytest.mark.parametrize(("ntype", "socket", "link_type"), _SAVER_SOCKETS)
+def test_a_wired_required_saver_socket_is_clean(
+    ntype: str, socket: str, link_type: str
+) -> None:
+    graph = _writer_graph(ntype, socket, link_type, wired=True)
+    assert wiring_findings(graph) == []
+
+
+def test_a_declared_optional_writer_is_excused() -> None:
+    """``extra.lab_optional_unwired`` is the graph's own word that the socket
+    stays empty on purpose, so it excuses the class here as it does the
+    completeness auditor."""
+    graph = _writer_graph("SaveAudio", "audio", "AUDIO", wired=False)
+    graph["extra"] = {"lab_optional_unwired": ["SaveAudio"]}
+    assert wiring_findings(graph) == []
+
+
+def test_a_declaration_excuses_only_its_own_class() -> None:
+    graph = _writer_graph("SaveAudio", "audio", "AUDIO", wired=False)
+    graph["nodes"].append(
+        _author_combine_widgets(
+            _node(3, "VHS_VideoCombine", inputs=[_in(name="images", type="IMAGE", link=None)]),
+            "VHS_VideoCombine",
+        )
+    )
+    graph["extra"] = {"lab_optional_unwired": ["SaveAudio"]}
+    assert wiring_findings(graph) == ["node 3 (VHS_VideoCombine): required input 'images' is unwired"]
+
+
+# --- terminals --------------------------------------------------------------
 
 def test_a_graph_with_no_output_node_is_a_finding() -> None:
     graph = {

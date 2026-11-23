@@ -2,18 +2,23 @@
 """Guards for the visual-golden pipeline.
 
 Committed screenshot baselines are only meaningful when they come from the same rendering
-stack CI uses.  This repo has been bitten by baselines captured on a laptop: font metrics
-differ per platform, so a Linux run then reports every page as changed.  These tests keep
-the three facts that make that mistake impossible to repeat in sync:
+stack the lane pins.  This repo has been bitten by baselines captured on a laptop: font
+metrics differ per platform, so a Linux run then reports every page as changed.  These
+tests keep the three facts that make that mistake impossible to repeat in sync:
 
 1. the container image pins the same Playwright version the suite depends on, so the
    browser that produces a golden is the browser that compares against it;
-2. the container runs the same OS/architecture as the CI job that enforces the gate;
+2. the container reports the OS/architecture the committed set was captured on, so a
+   comparison reproduces that rendering rather than arguing with it;
 3. the suite never invents a baseline while running in CI, where a silent self-bootstrap
    would commit an unreviewed image.
 
 Run: bazelisk test //docs-site:visual_tooling_test
      (or: python3 -m unittest -v test_visual_tooling.py)
+
+This is the half of the visual lane CI actually runs.  It reads text out of the checkout
+and starts no container, so //:validate, //:test-all and the docs job reach it without the
+--test_tag_filters=-visual that holds both browser targets back.
 """
 
 from __future__ import annotations
@@ -32,6 +37,7 @@ PACKAGE_DIR = pathlib.Path(__file__).resolve().parent
 SCRIPT = PACKAGE_DIR / "scripts" / "visual_linux.sh"
 CONTAINER_SCRIPT = PACKAGE_DIR / "scripts" / "visual_linux_in_container.sh"
 SPEC = PACKAGE_DIR / "tests" / "visual" / "site.spec.mjs"
+PACKAGE_JSON = PACKAGE_DIR / "package.json"
 
 sys.path.insert(0, str(PACKAGE_DIR / "scripts"))
 
@@ -170,9 +176,17 @@ class VisualToolingTests(unittest.TestCase):
         """
         spec = read(SPEC)
         self.assertRegex(spec, r"\bCI\b", "the spec does not consult the CI environment")
-        # The write branch has to be guarded, otherwise CI still invents baselines.
-        guarded = re.search(r"(?:if\s*\(\s*!?CI\s*\)|CI\s*\?|&&\s*!CI|if\s*\(\s*CI\s*\))", spec)
-        self.assertIsNotNone(guarded, "baseline self-bootstrap is not disabled under CI")
+        # A polarity-blind alternation here let `if (CI) { writeFileSync(golden) }` pass while
+        # doing exactly what this guard exists to stop, so pin the shape instead: the CI arm has
+        # to fail the run and get out before the self-bootstrap write is ever reached.
+        arm = re.search(r"\bif\s*\(\s*CI\s*\)\s*\{", spec)
+        self.assertIsNotNone(arm, "baseline self-bootstrap is not disabled under CI")
+        write_at = spec.find("writeFileSync(golden")
+        self.assertNotEqual(write_at, -1, "the spec no longer creates a missing baseline itself")
+        self.assertGreater(write_at, arm.end(), "the CI arm sits after the write it should prevent")
+        between = spec[arm.end() : write_at]
+        self.assertRegex(between, r"testInfo\.fail|\bthrow\b|process\.exit", "the CI arm does not fail the run")
+        self.assertIn("return", between, "the CI arm falls through into the baseline write")
 
     def test_goldens_are_committed_for_every_captured_page(self) -> None:
         """Every page the spec captures has a baseline in both projects.
@@ -192,7 +206,233 @@ class VisualToolingTests(unittest.TestCase):
                 )
 
 
+    def test_committed_baselines_are_real_frames(self) -> None:
+        """Every committed golden is a full-page frame at its project's viewport.
+
+        The goldens guard above only asks whether a file exists at the path: a 70-byte 1x1 PNG
+        satisfies it, //:owned_files_check is content-blind, and no CI job renders the set to
+        notice, so a blank baseline set is otherwise free to merge.  Reading the IHDR header is
+        enough to tell a screenshot from a placeholder without a decoder.
+        """
+        widths = {"desktop": 1440, "mobile": 390}
+        slugs = re.findall(r"^\s*\[\s*[\"']([\w-]+)[\"']\s*,\s*[\"']/", read(SPEC), re.M)
+        self.assertGreater(len(slugs), 0, "cannot read the captured page list")
+        for project, width in widths.items():
+            for slug in slugs:
+                path = PACKAGE_DIR / "tests" / "visual" / "goldens" / project / f"{slug}.png"
+                blob = path.read_bytes()
+                where = f"{project}/{slug}"
+                self.assertEqual(blob[:8], b"\x89PNG\r\n\x1a\n", f"{where}: not a PNG")
+                self.assertEqual(blob[12:16], b"IHDR", f"{where}: no IHDR header")
+                self.assertEqual(
+                    int.from_bytes(blob[16:20], "big"),
+                    width,
+                    f"{where}: not captured at the {width}px viewport this project shoots",
+                )
+                height = int.from_bytes(blob[20:24], "big")
+                self.assertGreater(
+                    height, 800, f"{where}: {height}px tall is a strip, not a full page"
+                )
+                self.assertGreater(
+                    len(blob),
+                    20000,
+                    f"{where}: {len(blob)} bytes is a placeholder, not a rendered page",
+                )
+
+    def test_visual_build_pins_the_published_stamp(self) -> None:
+        """The visual export bakes a fixed publish date, on both sides of the comparison.
+
+        Every page renders a last-published chip, and the date behind it resolves from git
+        HEAD when nothing pins it.  A container without a checkout resolves no stamp at all,
+        so a captured baseline and a later comparison would disagree about whether the chip
+        exists, let alone what it says.  One pinned SOURCE_DATE_EPOCH, shared by the capture
+        and the compare, is what makes the two agree.
+        """
+        scripts = json.loads(read(PACKAGE_JSON))["scripts"]
+        build = scripts.get("build:visual", "")
+        pinned = re.search(r"SOURCE_DATE_EPOCH=(\d+)\b", build)
+        self.assertIsNotNone(pinned, "build:visual does not pin SOURCE_DATE_EPOCH")
+        self.assertIn("next build", build, "build:visual no longer builds the export")
+        for name in ("visual", "visual:update"):
+            self.assertTrue(
+                scripts.get(name, "").startswith("npm run build:visual &&"),
+                f"{name} compares against an export nobody stamped with the pinned date",
+            )
+        # An assertIn("npm run build") here was satisfied by the substring inside build:visual
+        # and by a passing comment, so it proved nothing.  Every build the container runs has to
+        # be the stamped one, or the capture and the comparison disagree about the chip.
+        container_builds = re.findall(r"npm run (build[\w:.-]*)", read(CONTAINER_SCRIPT))
+        self.assertTrue(container_builds, "the capture container no longer builds the export")
+        self.assertEqual(
+            set(container_builds),
+            {"build:visual"},
+            "the capture container runs an unstamped build, so a baseline can carry a live date",
+        )
+
+    def test_spec_freezes_the_relative_published_label(self) -> None:
+        """The suite overwrites the relative label before it screenshots.
+
+        The chip rewrites itself from Date.now() after hydration, so the phrase it shows is
+        a function of when the browser ran.  Without this the same page reports a changed
+        baseline every day the golden ages.
+        """
+        spec = read(SPEC)
+        self.assertRegex(
+            spec,
+            r"ez-published-chip time\[datetime]",
+            "the spec does not retarget the published chip's time element",
+        )
+        self.assertIn("getUTCDate", spec, "the frozen label is not the absolute UTC date")
+    def test_captured_routes_exist_in_the_docs_tree(self) -> None:
+        """Every page the suite captures maps to a real page under ``docs/``.
+
+        The captured page list was ported from the MkDocs site and rotted quietly: a route the
+        export does not have is served as the 404 page, which still carries an h1, so every
+        wait in the spec passed and the suite baselined a blank frame. The goldens guard only
+        asks whether a file exists, so it stayed green. Cross-checking the list against the
+        source tree catches that without building the site.
+        """
+        spec = read(SPEC)
+        routes = re.findall(r'^\s*\[\s*"[^"]+"\s*,\s*"(/[^"]*)"'  , spec, re.M)
+        self.assertGreaterEqual(len(routes), 8, "the suite captures too few pages to gate anything")
+        docs = PACKAGE_DIR.parent / "docs"
+        for route in routes:
+            stem = route.strip("/") or "index"
+            candidates = [
+                docs / (stem + ".mdx"),
+                docs / (stem + ".md"),
+                docs / stem / "index.mdx",
+                docs / stem / "index.md",
+            ]
+            self.assertTrue(
+                any(path.is_file() for path in candidates),
+                f"the suite captures {route!r}, which has no page under {docs}",
+            )
+
+    def test_spec_refuses_to_baseline_a_failed_navigation(self) -> None:
+        """A route that does not resolve fails the run instead of baselining the 404 page.
+
+        Without a status check a stale route is indistinguishable from a real page, because
+        the export serves a 404 document that satisfies the h1 wait.
+        """
+        spec = read(SPEC)
+        self.assertRegex(spec, r"page\.goto\(", "the spec does not navigate to the page list")
+        # Matching the bare literal `response?.ok()` accepted `if (false && !response?.ok())` and
+        # rejected the stricter `if (!response || !response.ok())`, so pin the control flow: a
+        # failed navigation has to reach a throw.
+        self.assertRegex(
+            spec,
+            r"if\s*\(\s*!\s*response\s*(?:\?\.|\.|\s*\|\|\s*!\s*response\.)ok\(\)\s*\)\s*\{[^{}]*\bthrow\b",
+            "a failed navigation never reaches a throw, so a rotted route baselines the 404 page",
+        )
+
+    def test_launcher_offers_a_readiness_probe(self) -> None:
+        """The launcher can answer "can this host run the lane" without starting a capture.
+
+        ``//:everything`` gates the lane on that answer, and a daemon that lives elsewhere (a
+        DinD sidecar, a remote context) accepts a --volume whose source it cannot see and mounts
+        an empty /lab. Only a container started from the image discovers that, so the probe has
+        to ask the container rather than the client.
+        """
+        script = read(SCRIPT)
+        self.assertRegex(script, r"--check\)", "the launcher has no --check option")
+        self.assertIn("/lab", script, "the readiness probe does not use the capture mount point")
+        self.assertRegex(
+            script,
+            r"visual_linux_in_container\.sh",
+            "the readiness probe does not check that the checkout really arrived",
+        )
+        # The three assertions above all survived a neutered `--check) exit 0 ;;`, because /lab
+        # and the helper name also occur on the capture mount.  Pin what the probe has to do.
+        self.assertRegex(
+            script,
+            r"\bcheckout_reachable\(\)\s*\{",
+            "the mount probe is not a named function the capture path can also call",
+        )
+        self.assertRegex(
+            script,
+            r"--entrypoint\s+test\b",
+            "the probe never asks a container whether the checkout arrived at /lab",
+        )
+        self.assertRegex(
+            script,
+            r"--entrypoint\s+bash\b",
+            "the probe never lists the capture inputs from inside the container",
+        )
+        self.assertRegex(
+            script,
+            r"sha256sum",
+            "the probe only checks that files exist, so a stale copy of the path reports ready",
+        )
+        # Hashing the config files alone let a mount that matched them while differing under
+        # docs/ report ready, which is the one difference that changes the pixels.
+        self.assertRegex(
+            script,
+            r'find docs includes docs-site/.*-name "\*\.mdx"',
+            "the probe does not hash the page sources the capture renders",
+        )
+        # An empty listing on both sides matches, so the floor is what stops a phantom mount
+        # from being called ready; and the substitution has to close its stdin or a find that
+        # matches nothing leaves sha256sum waiting on a terminal that never answers.
+        self.assertRegex(script, r"PROBE_MIN_ENTRIES=\d+", "the probe accepts a listing too small to mean anything")
+        self.assertRegex(script, r"PROBE_MIN_ENTRIES\}", "the probe never enforces its own floor")
+        self.assertRegex(script, r"</dev/null", "the probe can block on stdin when the listing comes back empty")
+        self.assertRegex(script, r"return 1", "the probe has no failing return")
+
+    def test_capture_path_probes_the_mount_before_it_renders(self) -> None:
+        """The capture itself refuses a mount it cannot see; --check is not the only caller.
+
+        On a daemon that mounts nothing the lane died as `bash: /lab/...: No such file or
+        directory` with rc=127, and a --update against a stale-but-complete mount would rewrite
+        the committed baselines from rendering that is not the tree under review.  The probe has
+        to sit on the path every operator takes, and after the image resolves, or an
+        unresolvable image gets reported as a bad mount.
+        """
+        script = read(SCRIPT)
+        calls = [m.start() for m in re.finditer(r"^ *checkout_reachable(?! *\(\))", script, re.M)]
+        self.assertTrue(calls, "nothing calls the mount probe")
+        capture = script.index("bash /lab/docs-site/scripts/visual_linux_in_container.sh")
+        self.assertLess(calls[0], capture, "the capture starts before the mount is verified")
+        check_arm = re.search(r"--check\)[^;]*;;", script)
+        self.assertIsNotNone(check_arm, "the --check option is not a case arm")
+        self.assertNotIn("docker", check_arm.group(0), "the probe lives in the --check arm only")
+        self.assertGreater(
+            script.index("visual lane ready"),
+            calls[0],
+            "the launcher reports readiness without running the probe",
+        )
+        # Comparing two literals that sit in fixed positions proves nothing; the probe has to
+        # follow the guard that rejects an image which never resolved, or a bad image gets
+        # reported to the operator as a bad mount.
+        self.assertLess(
+            script.index("[[ -n $IMAGE ]]"),
+            calls[0],
+            "the probe runs before the image is resolved, so an unresolvable image is blamed on the mount",
+        )
+
+    def test_no_capture_input_overrides_the_pinned_stamp(self) -> None:
+        """Nothing on the capture path sets the variable that outranks the pinned epoch.
+
+        ``publishedAt`` reads EZ_DOCS_PUBLISHED_AT first and SOURCE_DATE_EPOCH second, so a
+        deploy-time value reaching the capture would move every baseline again and the stamp pin
+        above would be decoration.  The deploy job sets it on purpose; the visual lane must not.
+        """
+        published = read(PACKAGE_DIR / "lib" / "published.ts")
+        self.assertLess(
+            published.index("EZ_DOCS_PUBLISHED_AT"),
+            published.index("SOURCE_DATE_EPOCH"),
+            "publishedAt no longer prefers EZ_DOCS_PUBLISHED_AT, so this precedence check is stale",
+        )
+        for path in (SCRIPT, CONTAINER_SCRIPT, PACKAGE_JSON):
+            self.assertNotIn(
+                "EZ_DOCS_PUBLISHED_AT",
+                read(path),
+                f"{path.name} sets EZ_DOCS_PUBLISHED_AT, which outranks the pinned SOURCE_DATE_EPOCH",
+            )
+
 class ImageResolutionTests(unittest.TestCase):
+
+
     """The helper that names the capture image resolves it from the checkout, not from Docker."""
 
     @staticmethod

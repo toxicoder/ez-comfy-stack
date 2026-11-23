@@ -121,7 +121,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `78.56` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -331,7 +331,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -524,7 +524,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 0 | `93.08` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -760,7 +760,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -986,7 +986,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1179,7 +1179,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 0 | `78.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1356,7 +1356,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1549,7 +1549,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | 0 | `93.08` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1785,7 +1785,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1979,7 +1979,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2140,7 +2140,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2301,7 +2301,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2501,7 +2501,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `88.56` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2727,7 +2727,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2888,7 +2888,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 0 | `88.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3081,7 +3081,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ori
 | 0 | `77.16` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3297,7 +3297,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3523,7 +3523,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3684,7 +3684,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3877,7 +3877,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4038,7 +4038,7 @@ color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4238,7 +4238,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4432,7 +4432,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4593,7 +4593,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4793,7 +4793,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4987,7 +4987,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original com
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5148,7 +5148,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original com
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5348,7 +5348,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `62.72` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5542,7 +5542,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 0 | `62.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5703,7 +5703,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 0 | `62.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5903,7 +5903,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `85.52` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6129,7 +6129,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 0 | `85.52` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6322,7 +6322,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 0 | `85.52` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6515,7 +6515,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 0 | `85.52` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6708,7 +6708,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | 0 | `88.28` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6944,7 +6944,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -7138,7 +7138,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -7299,7 +7299,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -7460,7 +7460,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -7621,7 +7621,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, 8
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -7821,7 +7821,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -8015,7 +8015,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -8176,7 +8176,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -8337,7 +8337,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, 8
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -8537,7 +8537,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -8731,7 +8731,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -8892,7 +8892,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -9053,7 +9053,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | 0 | `93.08` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -9289,7 +9289,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -9483,7 +9483,7 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -9644,7 +9644,7 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -9805,7 +9805,7 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808, 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -10005,7 +10005,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -10199,7 +10199,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 0 | `88.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -10392,7 +10392,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 0 | `77.16` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -10569,7 +10569,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 0 | `88.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -10762,7 +10762,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, or
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -10962,7 +10962,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `84.56` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -11188,7 +11188,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 0 | `84.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -11381,7 +11381,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 0 | `84.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -11574,7 +11574,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 0 | `84.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -11767,7 +11767,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, origi
 | 0 | `87.28` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -12003,7 +12003,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -12197,7 +12197,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, o
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -12358,7 +12358,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, o
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -12558,7 +12558,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -12752,7 +12752,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 0 | `78.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -12929,7 +12929,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -13122,7 +13122,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -13315,7 +13315,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808,
 | 0 | `93.08` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -13551,7 +13551,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -13745,7 +13745,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -13906,7 +13906,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -14067,7 +14067,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, ori
 | 0 | `65.72` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -14267,7 +14267,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -14493,7 +14493,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -14686,7 +14686,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -14879,7 +14879,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 | 0 | `78.56` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -15056,7 +15056,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808,
 | 0 | `66.92` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -15256,7 +15256,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt** (`EZAceStepPromptEnhance`)
+**EDM prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -15482,7 +15482,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 2** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 2** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -15675,7 +15675,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 3** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 3** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -15868,7 +15868,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | 0 | `90.2` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 4** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 4** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -16061,7 +16061,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | 0 | `93.08` |
 | 1 | `1` |
 
-**ez_edm_prompt pass 5** (`EZAceStepPromptEnhance`)
+**EDM prompt pass 5** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -16339,7 +16339,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 1 | `1024` |
 | 2 | `1` |
 
-**KSampler** (`KSampler`)
+**Sampler** (`KSampler`)
 
 | Slot | Value |
 | --- | --- |
@@ -16762,90 +16762,90 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
-| ez_edm_prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
-| ez_edm_prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
-| ez_edm_prompt pass 4 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
-| ez_edm_prompt pass 5 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
-| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt pass 2 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt pass 3 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt pass 4 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
-| ez_edm_prompt pass 2 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
-| ez_edm_prompt pass 3 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
-| ez_edm_prompt pass 4 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
-| ez_edm_prompt | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
-| ez_edm_prompt pass 2 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
-| ez_edm_prompt pass 3 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
-| ez_edm_prompt pass 4 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
-| ez_edm_prompt pass 5 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
-| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b...` |
-| ez_edm_prompt pass 2 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b...` |
-| ez_edm_prompt pass 3 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b...` |
-| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co...` |
-| ez_edm_prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co...` |
-| ez_edm_prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co...` |
-| ez_edm_prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt pass 2 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt pass 3 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
-| ez_edm_prompt pass 2 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
-| ez_edm_prompt pass 3 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
-| ez_edm_prompt pass 4 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
-| ez_edm_prompt pass 5 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
-| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt pass 4 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt pass 5 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
-| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
-| ez_edm_prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
-| ez_edm_prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
-| ez_edm_prompt pass 4 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
-| ez_edm_prompt | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
-| ez_edm_prompt pass 2 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
-| ez_edm_prompt pass 3 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
-| ez_edm_prompt pass 4 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
-| ez_edm_prompt | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
-| ez_edm_prompt pass 2 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
-| ez_edm_prompt pass 3 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
-| ez_edm_prompt pass 4 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
-| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
-| ez_edm_prompt pass 2 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
-| ez_edm_prompt pass 3 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
-| ez_edm_prompt pass 4 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
-| ez_edm_prompt pass 5 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
-| ez_edm_prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt pass 2 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt pass 3 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt pass 4 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt pass 5 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
-| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, ...` |
-| ez_edm_prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, ...` |
-| ez_edm_prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, ...` |
-| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
-| ez_edm_prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
-| ez_edm_prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
-| ez_edm_prompt pass 4 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
-| ez_edm_prompt pass 5 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
-| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt pass 2 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt pass 3 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt pass 4 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
-| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
-| ez_edm_prompt pass 2 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
-| ez_edm_prompt pass 3 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
-| ez_edm_prompt pass 4 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
-| ez_edm_prompt pass 5 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
-| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
-| ez_edm_prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
-| ez_edm_prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
-| ez_edm_prompt pass 4 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
-| ez_edm_prompt pass 5 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
+| EDM prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| EDM prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| EDM prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| EDM prompt pass 4 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| EDM prompt pass 5 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8...` |
+| EDM prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt pass 2 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt pass 3 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt pass 4 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| EDM prompt pass 2 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| EDM prompt pass 3 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| EDM prompt pass 4 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, or...` |
+| EDM prompt | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
+| EDM prompt pass 2 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
+| EDM prompt pass 3 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
+| EDM prompt pass 4 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
+| EDM prompt pass 5 | `color bass, low-mid bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass,...` |
+| EDM prompt | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b...` |
+| EDM prompt pass 2 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b...` |
+| EDM prompt pass 3 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b...` |
+| EDM prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co...` |
+| EDM prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co...` |
+| EDM prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, 808, original co...` |
+| EDM prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt pass 2 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt pass 3 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
+| EDM prompt pass 2 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
+| EDM prompt pass 3 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
+| EDM prompt pass 4 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
+| EDM prompt pass 5 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped ...` |
+| EDM prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt pass 4 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt pass 5 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, ...` |
+| EDM prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
+| EDM prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
+| EDM prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
+| EDM prompt pass 4 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, ...` |
+| EDM prompt | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
+| EDM prompt pass 2 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
+| EDM prompt pass 3 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
+| EDM prompt pass 4 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, ...` |
+| EDM prompt | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
+| EDM prompt pass 2 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
+| EDM prompt pass 3 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
+| EDM prompt pass 4 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, 808,...` |
+| EDM prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| EDM prompt pass 2 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| EDM prompt pass 3 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| EDM prompt pass 4 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| EDM prompt pass 5 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, o...` |
+| EDM prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt pass 2 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt pass 3 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt pass 4 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt pass 5 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, 808, orig...` |
+| EDM prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, ...` |
+| EDM prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, ...` |
+| EDM prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, ...` |
+| EDM prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
+| EDM prompt pass 2 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
+| EDM prompt pass 3 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
+| EDM prompt pass 4 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
+| EDM prompt pass 5 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, 808...` |
+| EDM prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt pass 2 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt pass 3 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt pass 4 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, 808, or...` |
+| EDM prompt | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| EDM prompt pass 2 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| EDM prompt pass 3 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| EDM prompt pass 4 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| EDM prompt pass 5 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, 808...` |
+| EDM prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
+| EDM prompt pass 2 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
+| EDM prompt pass 3 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
+| EDM prompt pass 4 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
+| EDM prompt pass 5 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, ...` |
 
 #### `lyrics`
 
@@ -16857,90 +16857,90 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, ghost snar...` |
-| ez_edm_prompt pass 2 | `[build-up - bitcrushed 808, sub anchored, mids orbit, kick only on downbeats, 2...` |
-| ez_edm_prompt pass 3 | `[build-up - phase-distorted sub, sub anchored, mids orbit, kick tightens, wide ...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, wide 3D bass field, kick tightens, low-mid stack ti...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, wide 3D bass field, kick tightens, beat stutter, ...` |
-| ez_edm_prompt pass 3 | `[build-up - octave sub pulse, 3D low-mid orbit, kick tightens, stutter gate, ri...` |
-| ez_edm_prompt pass 4 | `[build-up - octave sub pulse, panning low-mid sweep, kick tightens, kick run, t...` |
-| ez_edm_prompt pass 5 | `[build-up - wavy phase sub, 3D low-mid orbit, kick tightens, bass melody climbs...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, low-mid from every angle, sparse four-on-floor kick...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, sub swel...` |
-| ez_edm_prompt pass 3 | `[build-up - chest-sub, layers surround the ear, kick tightens, triplet hats, ri...` |
-| ez_edm_prompt pass 4 | `[build-up - octave sub pulse, sub anchored, mids orbit, kick tightens, bass mel...` |
-| ez_edm_prompt | `[build-up - bitcrushed 808, panning low-mid sweep, kick tightens, bass pressure...` |
-| ez_edm_prompt pass 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, sub swell, accelerating...` |
-| ez_edm_prompt pass 3 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, bass pressure b...` |
-| ez_edm_prompt pass 4 | `[build-up - wavy phase sub, bass circles the low-mid, downbeat sub pulse, 2 bar...` |
-| ez_edm_prompt | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, kick ti...` |
-| ez_edm_prompt pass 2 | `[build-up - wavy phase sub, low-mid orbits the sub, kick tightens, stutter gate...` |
-| ez_edm_prompt pass 3 | `[build-up - octave sub pulse, low-mid from every angle, kick tightens, rolling ...` |
-| ez_edm_prompt pass 4 | `[build-up - phase-distorted sub, low-mid orbits the sub, downbeat kick, 2 bars]...` |
-| ez_edm_prompt pass 5 | `[build-up - wavy phase sub, low-mid from every angle, downbeat sub pulse, 2 bar...` |
-| ez_edm_prompt | `[build-up - chest-sub, wide 3D bass field, kick tightens, low-end pressure buil...` |
-| ez_edm_prompt pass 2 | `[build-up - FM warp sub, wide 3D bass field, kick tightens, beat stutter, accel...` |
-| ez_edm_prompt pass 3 | `[build-up - phase-distorted sub, 3D low-mid orbit, kick tightens, bass melody c...` |
-| ez_edm_prompt | `[build-up - FM warp sub, wide 3D bass field, kick tightens, ghost snare, accele...` |
-| ez_edm_prompt pass 2 | `[build-up - phase-distorted sub, 3D low-mid orbit, kick tightens, low-mid orbit...` |
-| ez_edm_prompt pass 3 | `[build-up - bitcrushed 808, panning low-mid sweep, kick tightens, parallel low-...` |
-| ez_edm_prompt | `[build-up - phase-distorted sub, sub anchored, mids orbit, kick tightens, low-m...` |
-| ez_edm_prompt pass 2 | `[build-up - wavy phase sub, wide 3D bass field, sparse four-on-floor kick, 2 ba...` |
-| ez_edm_prompt pass 3 | `[build-up - FM warp sub, sub anchored, mids orbit, downbeat sub pulse, 2 bars] ...` |
-| ez_edm_prompt | `[build-up - bitcrushed 808, sub center, low-mid moves wide, downbeat sub pulse,...` |
-| ez_edm_prompt pass 2 | `[build-up - phase-distorted sub, sub center, low-mid moves wide, kick tightens,...` |
-| ez_edm_prompt pass 3 | `[build-up - FM warp sub, bass pans wide behind, sparse four-on-floor kick, 2 ba...` |
-| ez_edm_prompt pass 4 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, beat stutter, t...` |
-| ez_edm_prompt pass 5 | `[build-up - wavy phase sub, low-mid orbits the sub, kick tightens, parallel low...` |
-| ez_edm_prompt | `[build-up - neuro wobble sub, panning low-mid sweep, kick tightens, mono kick p...` |
-| ez_edm_prompt pass 2 | `[build-up - chest-sub, bass circles the low-mid, downbeat sub pulse, 2 bars] [d...` |
-| ez_edm_prompt pass 3 | `[build-up - octave sub pulse, panning low-mid sweep, downbeat kick, 2 bars] [dr...` |
-| ez_edm_prompt pass 4 | `[build-up - chest-sub, panning low-mid sweep, kick tightens, low-mid orbit wide...` |
-| ez_edm_prompt pass 5 | `[build-up - bitcrushed 808, bass circles the low-mid, kick tightens, energy sur...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, sub swell,...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, bass circles the low-mid, kick only on downbeats,...` |
-| ez_edm_prompt pass 3 | `[build-up - bitcrushed 808, bass circles the low-mid, kick only on downbeats, 2...` |
-| ez_edm_prompt pass 4 | `[build-up - FM warp sub, bass pans wide behind, kick tightens, bass melody clim...` |
-| ez_edm_prompt | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, kick tig...` |
-| ez_edm_prompt pass 2 | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, rolling ha...` |
-| ez_edm_prompt pass 3 | `[build-up - FM warp sub, panning low-mid sweep, kick tightens, stutter gate, ac...` |
-| ez_edm_prompt pass 4 | `[build-up - phase-distorted sub, bass circles the low-mid, kick tightens, wide ...` |
-| ez_edm_prompt | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, gated bass, risi...` |
-| ez_edm_prompt pass 2 | `[build-up - FM warp sub, 3D low-mid orbit, downbeat sub pulse, 2 bars] [drop - ...` |
-| ez_edm_prompt pass 3 | `[build-up - chest-sub, panning low-mid sweep, downbeat kick, 2 bars] [drop - bi...` |
-| ez_edm_prompt pass 4 | `[build-up - FM warp sub, panning low-mid sweep, downbeat kick, 2 bars] [drop - ...` |
-| ez_edm_prompt | `[build-up - phase-distorted sub, 3D low-mid orbit, kick tightens, sub energy li...` |
-| ez_edm_prompt pass 2 | `[build-up - octave sub pulse, 3D low-mid orbit, kick tightens, stutter gate, ri...` |
-| ez_edm_prompt pass 3 | `[build-up - wavy phase sub, sub center, low-mid moves wide, downbeat sub pulse,...` |
-| ez_edm_prompt pass 4 | `[build-up - wavy phase sub, bass circles the low-mid, kick only on downbeats, 2...` |
-| ez_edm_prompt pass 5 | `[build-up - phase-distorted sub, sub center, low-mid moves wide, kick tightens,...` |
-| ez_edm_prompt | `[build-up - chest-sub, low-mid from every angle, kick tightens, sub energy lift...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, sub anchored, mids orbit, kick tightens, beat stu...` |
-| ez_edm_prompt pass 3 | `[build-up - bitcrushed 808, layers surround the ear, sparse four-on-floor kick,...` |
-| ez_edm_prompt pass 4 | `[build-up - phase-distorted sub, sub anchored, mids orbit, kick tightens, beat ...` |
-| ez_edm_prompt pass 5 | `[build-up - octave sub pulse, sub anchored, mids orbit, downbeat sub pulse, 2 b...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, sub center, low-mid moves wide, kick tightens, mono...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, lo...` |
-| ez_edm_prompt pass 3 | `[build-up - chest-sub, bass pans wide behind, kick tightens, energy surge, acce...` |
-| ez_edm_prompt | `[build-up - bitcrushed 808, sub center, low-mid moves wide, kick tightens, low-...` |
-| ez_edm_prompt pass 2 | `[build-up - FM warp sub, bass pans wide behind, downbeat kick, 2 bars] [drop - ...` |
-| ez_edm_prompt pass 3 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, octave 808 stac...` |
-| ez_edm_prompt pass 4 | `[build-up - neuro wobble sub, low-mid orbits the sub, kick tightens, beat stutt...` |
-| ez_edm_prompt pass 5 | `[build-up - bitcrushed 808, low-mid orbits the sub, sparse four-on-floor kick, ...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, sub center, low-mid moves wide, kick tightens, ghos...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, downbeat sub puls...` |
-| ez_edm_prompt pass 3 | `[build-up - chest-sub, bass pans wide behind, downbeat kick, 2 bars] [drop - wa...` |
-| ez_edm_prompt pass 4 | `[build-up - octave sub pulse, low-mid orbits the sub, downbeat sub pulse, 2 bar...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, 3D low-mid orbit, kick tightens, kick tightens, tem...` |
-| ez_edm_prompt pass 2 | `[build-up - neuro wobble sub, 3D low-mid orbit, kick tightens, low-mid orbit wi...` |
-| ez_edm_prompt pass 3 | `[build-up - bitcrushed 808, 3D low-mid orbit, kick tightens, stutter gate, risi...` |
-| ez_edm_prompt pass 4 | `[build-up - chest-sub, bass circles the low-mid, kick only on downbeats, 2 bars...` |
-| ez_edm_prompt pass 5 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, low-mid climbs,...` |
-| ez_edm_prompt | `[build-up - wavy phase sub, bass pans wide behind, kick tightens, offbeat push,...` |
-| ez_edm_prompt pass 2 | `[build-up - phase-distorted sub, low-mid from every angle, sparse four-on-floor...` |
-| ez_edm_prompt pass 3 | `[build-up - octave sub pulse, low-mid from every angle, kick tightens, kick run...` |
-| ez_edm_prompt pass 4 | `[build-up - FM warp sub, low-mid from every angle, kick tightens, stutter gate,...` |
-| ez_edm_prompt pass 5 | `[build-up - FM warp sub, low-mid from every angle, kick tightens, energy surge,...` |
+| EDM prompt | `[build-up - wavy phase sub, sub anchored, mids orbit, kick tightens, ghost snar...` |
+| EDM prompt pass 2 | `[build-up - bitcrushed 808, sub anchored, mids orbit, kick only on downbeats, 2...` |
+| EDM prompt pass 3 | `[build-up - phase-distorted sub, sub anchored, mids orbit, kick tightens, wide ...` |
+| EDM prompt | `[build-up - wavy phase sub, wide 3D bass field, kick tightens, low-mid stack ti...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, wide 3D bass field, kick tightens, beat stutter, ...` |
+| EDM prompt pass 3 | `[build-up - octave sub pulse, 3D low-mid orbit, kick tightens, stutter gate, ri...` |
+| EDM prompt pass 4 | `[build-up - octave sub pulse, panning low-mid sweep, kick tightens, kick run, t...` |
+| EDM prompt pass 5 | `[build-up - wavy phase sub, 3D low-mid orbit, kick tightens, bass melody climbs...` |
+| EDM prompt | `[build-up - wavy phase sub, low-mid from every angle, sparse four-on-floor kick...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, low-mid from every angle, kick tightens, sub swel...` |
+| EDM prompt pass 3 | `[build-up - chest-sub, layers surround the ear, kick tightens, triplet hats, ri...` |
+| EDM prompt pass 4 | `[build-up - octave sub pulse, sub anchored, mids orbit, kick tightens, bass mel...` |
+| EDM prompt | `[build-up - bitcrushed 808, panning low-mid sweep, kick tightens, bass pressure...` |
+| EDM prompt pass 2 | `[build-up - chest-sub, 3D low-mid orbit, kick tightens, sub swell, accelerating...` |
+| EDM prompt pass 3 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, bass pressure b...` |
+| EDM prompt pass 4 | `[build-up - wavy phase sub, bass circles the low-mid, downbeat sub pulse, 2 bar...` |
+| EDM prompt | `[build-up - FM warp sub, sub center, low-mid moves wide, kick tightens, kick ti...` |
+| EDM prompt pass 2 | `[build-up - wavy phase sub, low-mid orbits the sub, kick tightens, stutter gate...` |
+| EDM prompt pass 3 | `[build-up - octave sub pulse, low-mid from every angle, kick tightens, rolling ...` |
+| EDM prompt pass 4 | `[build-up - phase-distorted sub, low-mid orbits the sub, downbeat kick, 2 bars]...` |
+| EDM prompt pass 5 | `[build-up - wavy phase sub, low-mid from every angle, downbeat sub pulse, 2 bar...` |
+| EDM prompt | `[build-up - chest-sub, wide 3D bass field, kick tightens, low-end pressure buil...` |
+| EDM prompt pass 2 | `[build-up - FM warp sub, wide 3D bass field, kick tightens, beat stutter, accel...` |
+| EDM prompt pass 3 | `[build-up - phase-distorted sub, 3D low-mid orbit, kick tightens, bass melody c...` |
+| EDM prompt | `[build-up - FM warp sub, wide 3D bass field, kick tightens, ghost snare, accele...` |
+| EDM prompt pass 2 | `[build-up - phase-distorted sub, 3D low-mid orbit, kick tightens, low-mid orbit...` |
+| EDM prompt pass 3 | `[build-up - bitcrushed 808, panning low-mid sweep, kick tightens, parallel low-...` |
+| EDM prompt | `[build-up - phase-distorted sub, sub anchored, mids orbit, kick tightens, low-m...` |
+| EDM prompt pass 2 | `[build-up - wavy phase sub, wide 3D bass field, sparse four-on-floor kick, 2 ba...` |
+| EDM prompt pass 3 | `[build-up - FM warp sub, sub anchored, mids orbit, downbeat sub pulse, 2 bars] ...` |
+| EDM prompt | `[build-up - bitcrushed 808, sub center, low-mid moves wide, downbeat sub pulse,...` |
+| EDM prompt pass 2 | `[build-up - phase-distorted sub, sub center, low-mid moves wide, kick tightens,...` |
+| EDM prompt pass 3 | `[build-up - FM warp sub, bass pans wide behind, sparse four-on-floor kick, 2 ba...` |
+| EDM prompt pass 4 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, beat stutter, t...` |
+| EDM prompt pass 5 | `[build-up - wavy phase sub, low-mid orbits the sub, kick tightens, parallel low...` |
+| EDM prompt | `[build-up - neuro wobble sub, panning low-mid sweep, kick tightens, mono kick p...` |
+| EDM prompt pass 2 | `[build-up - chest-sub, bass circles the low-mid, downbeat sub pulse, 2 bars] [d...` |
+| EDM prompt pass 3 | `[build-up - octave sub pulse, panning low-mid sweep, downbeat kick, 2 bars] [dr...` |
+| EDM prompt pass 4 | `[build-up - chest-sub, panning low-mid sweep, kick tightens, low-mid orbit wide...` |
+| EDM prompt pass 5 | `[build-up - bitcrushed 808, bass circles the low-mid, kick tightens, energy sur...` |
+| EDM prompt | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, sub swell,...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, bass circles the low-mid, kick only on downbeats,...` |
+| EDM prompt pass 3 | `[build-up - bitcrushed 808, bass circles the low-mid, kick only on downbeats, 2...` |
+| EDM prompt pass 4 | `[build-up - FM warp sub, bass pans wide behind, kick tightens, bass melody clim...` |
+| EDM prompt | `[build-up - phase-distorted sub, panning low-mid sweep, kick tightens, kick tig...` |
+| EDM prompt pass 2 | `[build-up - wavy phase sub, bass circles the low-mid, kick tightens, rolling ha...` |
+| EDM prompt pass 3 | `[build-up - FM warp sub, panning low-mid sweep, kick tightens, stutter gate, ac...` |
+| EDM prompt pass 4 | `[build-up - phase-distorted sub, bass circles the low-mid, kick tightens, wide ...` |
+| EDM prompt | `[build-up - bitcrushed 808, wide 3D bass field, kick tightens, gated bass, risi...` |
+| EDM prompt pass 2 | `[build-up - FM warp sub, 3D low-mid orbit, downbeat sub pulse, 2 bars] [drop - ...` |
+| EDM prompt pass 3 | `[build-up - chest-sub, panning low-mid sweep, downbeat kick, 2 bars] [drop - bi...` |
+| EDM prompt pass 4 | `[build-up - FM warp sub, panning low-mid sweep, downbeat kick, 2 bars] [drop - ...` |
+| EDM prompt | `[build-up - phase-distorted sub, 3D low-mid orbit, kick tightens, sub energy li...` |
+| EDM prompt pass 2 | `[build-up - octave sub pulse, 3D low-mid orbit, kick tightens, stutter gate, ri...` |
+| EDM prompt pass 3 | `[build-up - wavy phase sub, sub center, low-mid moves wide, downbeat sub pulse,...` |
+| EDM prompt pass 4 | `[build-up - wavy phase sub, bass circles the low-mid, kick only on downbeats, 2...` |
+| EDM prompt pass 5 | `[build-up - phase-distorted sub, sub center, low-mid moves wide, kick tightens,...` |
+| EDM prompt | `[build-up - chest-sub, low-mid from every angle, kick tightens, sub energy lift...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, sub anchored, mids orbit, kick tightens, beat stu...` |
+| EDM prompt pass 3 | `[build-up - bitcrushed 808, layers surround the ear, sparse four-on-floor kick,...` |
+| EDM prompt pass 4 | `[build-up - phase-distorted sub, sub anchored, mids orbit, kick tightens, beat ...` |
+| EDM prompt pass 5 | `[build-up - octave sub pulse, sub anchored, mids orbit, downbeat sub pulse, 2 b...` |
+| EDM prompt | `[build-up - wavy phase sub, sub center, low-mid moves wide, kick tightens, mono...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, kick tightens, lo...` |
+| EDM prompt pass 3 | `[build-up - chest-sub, bass pans wide behind, kick tightens, energy surge, acce...` |
+| EDM prompt | `[build-up - bitcrushed 808, sub center, low-mid moves wide, kick tightens, low-...` |
+| EDM prompt pass 2 | `[build-up - FM warp sub, bass pans wide behind, downbeat kick, 2 bars] [drop - ...` |
+| EDM prompt pass 3 | `[build-up - FM warp sub, low-mid orbits the sub, kick tightens, octave 808 stac...` |
+| EDM prompt pass 4 | `[build-up - neuro wobble sub, low-mid orbits the sub, kick tightens, beat stutt...` |
+| EDM prompt pass 5 | `[build-up - bitcrushed 808, low-mid orbits the sub, sparse four-on-floor kick, ...` |
+| EDM prompt | `[build-up - wavy phase sub, sub center, low-mid moves wide, kick tightens, ghos...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, sub center, low-mid moves wide, downbeat sub puls...` |
+| EDM prompt pass 3 | `[build-up - chest-sub, bass pans wide behind, downbeat kick, 2 bars] [drop - wa...` |
+| EDM prompt pass 4 | `[build-up - octave sub pulse, low-mid orbits the sub, downbeat sub pulse, 2 bar...` |
+| EDM prompt | `[build-up - wavy phase sub, 3D low-mid orbit, kick tightens, kick tightens, tem...` |
+| EDM prompt pass 2 | `[build-up - neuro wobble sub, 3D low-mid orbit, kick tightens, low-mid orbit wi...` |
+| EDM prompt pass 3 | `[build-up - bitcrushed 808, 3D low-mid orbit, kick tightens, stutter gate, risi...` |
+| EDM prompt pass 4 | `[build-up - chest-sub, bass circles the low-mid, kick only on downbeats, 2 bars...` |
+| EDM prompt pass 5 | `[build-up - chest-sub, bass circles the low-mid, kick tightens, low-mid climbs,...` |
+| EDM prompt | `[build-up - wavy phase sub, bass pans wide behind, kick tightens, offbeat push,...` |
+| EDM prompt pass 2 | `[build-up - phase-distorted sub, low-mid from every angle, sparse four-on-floor...` |
+| EDM prompt pass 3 | `[build-up - octave sub pulse, low-mid from every angle, kick tightens, kick run...` |
+| EDM prompt pass 4 | `[build-up - FM warp sub, low-mid from every angle, kick tightens, stutter gate,...` |
+| EDM prompt pass 5 | `[build-up - FM warp sub, low-mid from every angle, kick tightens, energy surge,...` |
 
 #### `enhance`
 
@@ -16979,90 +16979,90 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/01-hush-lane` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/01-hush-lane` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/01-hush-lane` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/05-fog-vault` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/06-dummy-light` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/06-dummy-light` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/06-dummy-light` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/08-off-ledger` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/08-off-ledger` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/08-off-ledger` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/09-back-alley` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/09-back-alley` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/09-back-alley` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/09-back-alley` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/09-back-alley` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/12-coded-sub` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/16-night-cipher` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/16-night-cipher` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/16-night-cipher` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/19-cold-cache` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
-| ez_edm_prompt | `audio/albums/drive-through/secret-homage/20-secret-homage` |
-| ez_edm_prompt pass 2 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
-| ez_edm_prompt pass 3 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
-| ez_edm_prompt pass 4 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
-| ez_edm_prompt pass 5 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/01-hush-lane` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/01-hush-lane` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/01-hush-lane` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/02-cipher-lock` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/03-ghost-dock` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/04-sealed-ramp` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/05-fog-vault` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/05-fog-vault` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/06-dummy-light` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/06-dummy-light` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/06-dummy-light` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/07-quiet-wreck` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/08-off-ledger` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/08-off-ledger` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/08-off-ledger` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/09-back-alley` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/09-back-alley` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/09-back-alley` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/09-back-alley` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/09-back-alley` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/10-cellar-kick` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/11-hidden-booth` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/12-coded-sub` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/12-coded-sub` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/13-shadow-coil` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/14-mute-pyro` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/15-unlisted-row` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/16-night-cipher` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/16-night-cipher` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/16-night-cipher` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/17-blank-stencil` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/18-blind-stamp` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/19-cold-cache` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/19-cold-cache` |
+| EDM prompt | `audio/albums/drive-through/secret-homage/20-secret-homage` |
+| EDM prompt pass 2 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
+| EDM prompt pass 3 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
+| EDM prompt pass 4 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
+| EDM prompt pass 5 | `audio/albums/drive-through/secret-homage/20-secret-homage` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
@@ -17978,7 +17978,7 @@ Random seed for the noise tensor.
 | ACE sampler (pass 3) | `709` |
 | ACE sampler (pass 4) | `709` |
 | ACE sampler (pass 5) | `709` |
-| KSampler | `42` |
+| Sampler | `42` |
 
 #### `control_after_generate`
 

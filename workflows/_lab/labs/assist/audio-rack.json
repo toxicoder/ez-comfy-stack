@@ -386,7 +386,7 @@
           "flavor",
           {
             "description": "ace_vocal / ace_instrumental / podcast_bed. Instrumental omits vocal identity and forces no-vocals tags.",
-            "label": "Family"
+            "label": "Track type"
           }
         ],
         [

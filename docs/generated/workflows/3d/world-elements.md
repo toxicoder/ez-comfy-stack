@@ -85,8 +85,8 @@ flowchart TB
 | 8 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
 | 9 | Conditioning (prop) | `Trellis2Conditioning` | PROMPT |
 | 10 | Ground plate | `LoadImage` | INPUT |
-| 11 | Occupancy gate | `EZDCCOccupancyGate` | INPUT |
-| 12 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
+| 11 | Occupancy gate 2 | `EZDCCOccupancyGate` | INPUT |
+| 12 | Unload models (pass IMAGE) 2 | `EZUnloadModels` | SETTINGS |
 | 13 | Conditioning (ground plate) | `Trellis2Conditioning` | PROMPT |
 | 14 | Empty structure x1 | `EmptyTrellis2LatentStructure` | SETTINGS |
 | 15 | KSampler (structure) | `KSampler` | SETTINGS |

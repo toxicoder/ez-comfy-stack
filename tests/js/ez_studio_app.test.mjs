@@ -82,6 +82,61 @@ describe("widget labels", () => {
     await ext.nodeCreated(node);
     assert.equal(node.widgets[0].label, "Repeat");
   });
+
+  test("a selector or input socket the graph left in snake_case reads as a word", async () => {
+    // LABELS is class-agnostic, so one node carries the widget names the
+    // shipped graphs use across several first-party classes, plus one entry
+    // the map has covered all along.
+    const node = makeNode("EZPromptJoin", [
+      makeWidget("family", "klein"),
+      makeWidget("filename_2", ""),
+      makeWidget("bed", ""),
+      makeWidget("lock", "view"),
+      makeWidget("backend", "kokoro"),
+      makeWidget("layer", "clay"),
+      makeWidget("size_src", ""),
+      makeWidget("duration_hint", "wide 8s"),
+    ]);
+    const { ext } = await chrome([node]);
+    await ext.nodeCreated(node);
+    const labels = Object.fromEntries(
+      node.widgets.map((widget) => [widget.name, widget.label]),
+    );
+    assert.deepEqual(labels, {
+      family: "Model family",
+      filename_2: "Choose image 2",
+      bed: "Music bed",
+      lock: "Keep constant",
+      backend: "Voice engine",
+      layer: "Render layer",
+      size_src: "Size reference",
+      duration_hint: "Duration / framing",
+    });
+  });
+
+  test("a widget name two classes share is labelled by class", async () => {
+    // flavor names the script form on the podcast writer and the target
+    // model on the cinema rack, so it stays out of the class-agnostic map:
+    // only the writer gets a word, the rack keeps its raw name.
+    const writer = makeNode("EZPodcastScript", [
+      makeWidget("flavor", "podcast_two_host"),
+    ]);
+    const cinema = makeNode("EZCinemaRack", [makeWidget("flavor", "klein")]);
+    const music = makeNode("EZAudioRack", [makeWidget("flavor", "ace_vocal")]);
+    const stranger = makeNode("EZSomeOtherNode", [makeWidget("flavor", "x")]);
+    const { ext } = await chrome([writer, cinema, music, stranger]);
+    for (const node of [writer, cinema, music, stranger]) {
+      await ext.nodeCreated(node);
+    }
+    assert.equal(writer.widgets[0].label, "Script format");
+    assert.equal(cinema.widgets[0].label, "Prompt model");
+    assert.equal(music.widgets[0].label, "Track type");
+    assert.equal(
+      stranger.widgets[0].label,
+      undefined,
+      "a class with no case of its own keeps its raw name rather than wear another's word",
+    );
+  });
 });
 
 describe("node titles", () => {

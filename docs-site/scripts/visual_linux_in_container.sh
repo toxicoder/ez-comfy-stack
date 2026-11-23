@@ -53,7 +53,7 @@ rm -rf "$EXPORT_DIR" .next
 # The build directory is shared with the host, so whatever this Linux build leaves behind is
 # removed on the way out rather than being left for a host build to pick up.
 trap 'rm -rf .next "$EXPORT_DIR"' EXIT
-NEXT_DIST_DIR="$EXPORT_DIR" npm run build
+NEXT_DIST_DIR="$EXPORT_DIR" npm run build:visual
 
 if [[ ${UPDATE:-false} == "true" ]]; then
   echo "-> discarding the committed baselines to capture a fresh set"

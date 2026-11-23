@@ -55,7 +55,7 @@ flowchart LR
   N3["Song Duration"]
   N4["Latent length (seconds)"]
   N15["Rap lyrics"]
-  N5["ez_rap_prompt"]
+  N5["Rap prompt"]
   N6["ACE tags + lyrics"]
   N7["Negative (zero)"]
   N8["ACE sampler"]
@@ -246,7 +246,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -664,7 +664,7 @@ plan holds
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1078,7 +1078,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1503,7 +1503,7 @@ log dated
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -1897,7 +1897,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2326,7 +2326,7 @@ row resolves
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -2730,7 +2730,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3125,7 +3125,7 @@ slope holds
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3565,7 +3565,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -3986,7 +3986,7 @@ URL sits
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4414,7 +4414,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -4833,7 +4833,7 @@ door open, unitfunding
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5261,7 +5261,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -5670,7 +5670,7 @@ clause stands, slowdoor
 cut
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6070,7 +6070,7 @@ cut
 yeah
 ```
 
-**ez_rap_prompt** (`EZAceStepPromptEnhance`)
+**Rap prompt** (`EZAceStepPromptEnhance`)
 
 | Slot | Value |
 | --- | --- |
@@ -6449,7 +6449,7 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | 1 | `1024` |
 | 2 | `1` |
 
-**KSampler** (`KSampler`)
+**Sampler** (`KSampler`)
 
 | Slot | Value |
 | --- | --- |
@@ -6815,21 +6815,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap voc...` |
-| ez_rap_prompt | `boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no auto...` |
-| ez_rap_prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
-| ez_rap_prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
-| ez_rap_prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
-| ez_rap_prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot...` |
-| ez_rap_prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, ...` |
-| ez_rap_prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
-| ez_rap_prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
-| ez_rap_prompt | `gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotun...` |
-| ez_rap_prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
-| ez_rap_prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
+| Rap prompt | `boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap voc...` |
+| Rap prompt | `boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no auto...` |
+| Rap prompt | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot...` |
+| Rap prompt | `industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry boot...` |
+| Rap prompt | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, ...` |
+| Rap prompt | `folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot...` |
+| Rap prompt | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no ...` |
+| Rap prompt | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, ...` |
+| Rap prompt | `neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 10...` |
+| Rap prompt | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no ...` |
+| Rap prompt | `gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotun...` |
+| Rap prompt | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune...` |
+| Rap prompt | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot...` |
 
 #### `lyrics`
 
@@ -6841,21 +6841,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[intro] yeah flange kit Nill Bye weatherizing [verse] Uri taught the isolated b...` |
-| ez_rap_prompt | `[spoken word] Preregister the plan Then run the plan Results cannot un-write th...` |
-| ez_rap_prompt | `[intro] brushed snare, intervalband Nill Bye intervaling [verse] A mean is a lo...` |
-| ez_rap_prompt | `[intro] metal clamp Nill Bye compartmenting [verse] Need-to-know is a geometry,...` |
-| ez_rap_prompt | `[verse] A withholding is a court-shaped shield already on the file, withholdfla...` |
-| ez_rap_prompt | `[intro] folk scrape, caseidrow Nill Bye matching files [verse] A prosecutorial ...` |
-| ez_rap_prompt | `[verse] A census is a map of who is here Money and seats ride the map. So the m...` |
-| ez_rap_prompt | `[verse] An accord is a nationally determined contribution You can argue the con...` |
-| ez_rap_prompt | `[intro] rhodes wash, usc208 Nill Bye boxing the till [verse] 18 U.S.C. 208 is a...` |
-| ez_rap_prompt | `[intro] soft keys Nill Bye stacking PDFs [verse] Candidates release so the publ...` |
-| ez_rap_prompt | `[intro] 8-bit tick Nill Bye casing the file [verse] A security method names a p...` |
-| ez_rap_prompt | `[verse] A public door has to take every child who shows up That is the job. The...` |
-| ez_rap_prompt | `[intro] organ rise Nill Bye drafting the roll [verse] A homestead story that sk...` |
-| ez_rap_prompt | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the ...` |
-| ez_rap_prompt | `[intro] live-kit stomp, governorseal Nill Bye certifying one slate [verse] Dec ...` |
+| Rap prompt | `[intro] yeah flange kit Nill Bye weatherizing [verse] Uri taught the isolated b...` |
+| Rap prompt | `[spoken word] Preregister the plan Then run the plan Results cannot un-write th...` |
+| Rap prompt | `[intro] brushed snare, intervalband Nill Bye intervaling [verse] A mean is a lo...` |
+| Rap prompt | `[intro] metal clamp Nill Bye compartmenting [verse] Need-to-know is a geometry,...` |
+| Rap prompt | `[verse] A withholding is a court-shaped shield already on the file, withholdfla...` |
+| Rap prompt | `[intro] folk scrape, caseidrow Nill Bye matching files [verse] A prosecutorial ...` |
+| Rap prompt | `[verse] A census is a map of who is here Money and seats ride the map. So the m...` |
+| Rap prompt | `[verse] An accord is a nationally determined contribution You can argue the con...` |
+| Rap prompt | `[intro] rhodes wash, usc208 Nill Bye boxing the till [verse] 18 U.S.C. 208 is a...` |
+| Rap prompt | `[intro] soft keys Nill Bye stacking PDFs [verse] Candidates release so the publ...` |
+| Rap prompt | `[intro] 8-bit tick Nill Bye casing the file [verse] A security method names a p...` |
+| Rap prompt | `[verse] A public door has to take every child who shows up That is the job. The...` |
+| Rap prompt | `[intro] organ rise Nill Bye drafting the roll [verse] A homestead story that sk...` |
+| Rap prompt | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the ...` |
+| Rap prompt | `[intro] live-kit stomp, governorseal Nill Bye certifying one slate [verse] Dec ...` |
 
 #### `enhance`
 
@@ -6894,21 +6894,21 @@ Sample-catalog id.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/01-winterize-wells` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/02-registered-report` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/03-named-uncertainty` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/04-scif-only` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/05-hearing-first` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/06-keep-the-match` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/07-honest-census` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/08-paris-seat` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/09-qualified-divest` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/10-return-pdf` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/11-casework-screen` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/12-district-door` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/13-levy-in-code` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` |
-| ez_rap_prompt | `audio/albums/nill-bye/winterize-wells/15-one-college` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/01-winterize-wells` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/02-registered-report` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/03-named-uncertainty` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/04-scif-only` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/05-hearing-first` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/06-keep-the-match` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/07-honest-census` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/08-paris-seat` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/09-qualified-divest` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/10-return-pdf` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/11-casework-screen` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/12-district-door` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/13-levy-in-code` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` |
+| Rap prompt | `audio/albums/nill-bye/winterize-wells/15-one-college` |
 
 ### `TextEncodeAceStepAudio1.5` - ACE-Step 1.5 Text Encode
 
@@ -7357,7 +7357,7 @@ Random seed for the noise tensor.
 | ACE sampler | `631` |
 | ACE sampler | `641` |
 | ACE sampler | `643` |
-| KSampler | `42` |
+| Sampler | `42` |
 
 #### `control_after_generate`
 

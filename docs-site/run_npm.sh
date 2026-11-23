@@ -25,9 +25,17 @@ fi
 
 # Map the bazel target name (via $0 or first arg) to an npm script.
 # sh_test passes the subcommand as $1 (e.g. args = ["unit"]), not as $0.
+# Every subcommand this runner implements. A Bazel target is named after the gate it guards
+# (:visual-test) while its args name the npm script ("visual"), so the target name is only
+# authoritative when it is itself a command; for any other name the first argument is. Without
+# this rule //docs-site:visual-test fell through to the generic escape hatch and ran "npm
+# visual", which npm rejects as an unknown command.  "npm" is listed so the //docs-site:npm
+# escape hatch forwards every argument verbatim instead of swallowing its first.
+KNOWN_SUBCOMMANDS=" install dev build build-latest build-development serve typecheck unit visual visual-update nav npm "
+
 TARGET_NAME="$(basename "${0:-npm}")"
 SUBCMD="$TARGET_NAME"
-if [[ $SUBCMD == "run_npm.sh" || $SUBCMD == "npm" ]] && [[ $# -gt 0 ]]; then
+if [[ ${KNOWN_SUBCOMMANDS} != *" ${SUBCMD} "* ]] && [[ $# -gt 0 ]]; then
   SUBCMD="$1"
   shift
 fi

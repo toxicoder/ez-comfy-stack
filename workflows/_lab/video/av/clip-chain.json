@@ -1820,7 +1820,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img->Video condition",
+      "title": "LTX Img->Video condition 2",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -1875,7 +1875,7 @@
           "slot_index": 1
         }
       ],
-      "title": "LTX frame rate cond",
+      "title": "LTX frame rate cond 2",
       "properties": {
         "Node name for S&R": "LTXVConditioning"
       },
@@ -1923,7 +1923,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 2"
     },
     {
       "id": 144,
@@ -2036,7 +2036,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 2"
     },
     {
       "id": 145,
@@ -2079,7 +2079,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 2"
     },
     {
       "id": 150,
@@ -2121,7 +2121,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 2"
     },
     {
       "id": 148,
@@ -2541,7 +2541,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img->Video condition",
+      "title": "LTX Img->Video condition 3",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -2596,7 +2596,7 @@
           "slot_index": 1
         }
       ],
-      "title": "LTX frame rate cond",
+      "title": "LTX frame rate cond 3",
       "properties": {
         "Node name for S&R": "LTXVConditioning"
       },
@@ -2644,7 +2644,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 3"
     },
     {
       "id": 184,
@@ -2757,7 +2757,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 3"
     },
     {
       "id": 185,
@@ -2800,7 +2800,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 3"
     },
     {
       "id": 190,
@@ -2842,7 +2842,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 3"
     },
     {
       "id": 188,
@@ -3262,7 +3262,7 @@
           "slot_index": 2
         }
       ],
-      "title": "LTX Img->Video condition",
+      "title": "LTX Img->Video condition 4",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
@@ -3317,7 +3317,7 @@
           "slot_index": 1
         }
       ],
-      "title": "LTX frame rate cond",
+      "title": "LTX frame rate cond 4",
       "properties": {
         "Node name for S&R": "LTXVConditioning"
       },
@@ -3365,7 +3365,7 @@
         "Node name for S&R": "LTXVConcatAVLatent"
       },
       "widgets_values": [],
-      "title": "Concat AV latents"
+      "title": "Concat AV latents 4"
     },
     {
       "id": 224,
@@ -3478,7 +3478,7 @@
         "Node name for S&R": "LTXVSeparateAVLatent"
       },
       "widgets_values": [],
-      "title": "Separate AV latents"
+      "title": "Separate AV latents 4"
     },
     {
       "id": 225,
@@ -3521,7 +3521,7 @@
         "Node name for S&R": "VAEDecode"
       },
       "widgets_values": [],
-      "title": "VAE Decode"
+      "title": "VAE Decode 4"
     },
     {
       "id": 230,
@@ -3563,7 +3563,7 @@
         "Node name for S&R": "LTXVAudioVAEDecode"
       },
       "widgets_values": [],
-      "title": "Audio VAE Decode"
+      "title": "Audio VAE Decode 4"
     },
     {
       "id": 228,

@@ -110,22 +110,22 @@ flowchart TB
 | 46 | Detail | `EZQuality` | QUALITY |
 | 47 | Format / platform | `EZImageFormat` | SETTINGS |
 | 48 | Upscale still | `EZImageUpscale` | SHOT HERO |
-| 49 | Upscale still | `EZImageUpscale` | SHOT WIDE |
-| 50 | Upscale still | `EZImageUpscale` | SHOT DETAIL |
-| 51 | Upscale still | `EZImageUpscale` | SHOT PROP |
-| 52 | Upscale still | `EZImageUpscale` | SHOT PLACE |
-| 53 | Upscale still | `EZImageUpscale` | SHOT CLOSE |
+| 49 | Upscale still 2 | `EZImageUpscale` | SHOT WIDE |
+| 50 | Upscale still 3 | `EZImageUpscale` | SHOT DETAIL |
+| 51 | Upscale still 4 | `EZImageUpscale` | SHOT PROP |
+| 52 | Upscale still 5 | `EZImageUpscale` | SHOT PLACE |
+| 53 | Upscale still 6 | `EZImageUpscale` | SHOT CLOSE |
 | 54 | Check models | `EZModelCheck` | QUALITY |
 | 55 | Negative SHOT WIDE | `EZNegativePromptEnhance` | PROMPT |
-| 56 | Negative Negative SHOT WIDE | `CLIPTextEncode` | PROMPT |
+| 56 | Negative SHOT WIDE | `CLIPTextEncode` | PROMPT |
 | 57 | Negative SHOT DETAIL | `EZNegativePromptEnhance` | PROMPT |
-| 58 | Negative Negative SHOT DETAIL | `CLIPTextEncode` | PROMPT |
+| 58 | Negative SHOT DETAIL | `CLIPTextEncode` | PROMPT |
 | 59 | Negative SHOT PROP | `EZNegativePromptEnhance` | PROMPT |
-| 60 | Negative Negative SHOT PROP | `CLIPTextEncode` | PROMPT |
+| 60 | Negative SHOT PROP | `CLIPTextEncode` | PROMPT |
 | 61 | Negative SHOT PLACE | `EZNegativePromptEnhance` | PROMPT |
-| 62 | Negative Negative SHOT PLACE | `CLIPTextEncode` | PROMPT |
+| 62 | Negative SHOT PLACE | `CLIPTextEncode` | PROMPT |
 | 63 | Negative SHOT CLOSE | `EZNegativePromptEnhance` | PROMPT |
-| 64 | Negative Negative SHOT CLOSE | `CLIPTextEncode` | PROMPT |
+| 64 | Negative SHOT CLOSE | `CLIPTextEncode` | PROMPT |
 
 ## Node parameter reference
 
@@ -714,11 +714,11 @@ Prompt encoded by CLIP.
 | Positive PROP | `Prop still. Data-staff and glyph rings, 50mm. Same building, rooms, furniture p...` |
 | Positive PLACE | `Place still. Terrace palms, no person, 24mm. Same building, rooms, furniture pl...` |
 | Positive CLOSE | `Portrait close. 85mm, same identity. Same building, rooms, furniture placement,...` |
-| Negative Negative SHOT WIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT DETAIL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT PROP | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT PLACE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
-| Negative Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT WIDE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT DETAIL | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT PROP | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT PLACE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
+| Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt...` |
 
 ### `EmptyFlux2LatentImage` - Empty Flux.2 Latent
 
