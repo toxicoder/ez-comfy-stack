@@ -643,9 +643,13 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         last_saves = [
             n
             for n in graph["nodes"]
-            if n.get("type") == "SaveImage" and n.get("title") == "Save last frame"
+            if n.get("type") == "SaveImage"
+            and re.fullmatch(r"Save last frame(?: \d+)?", str(n.get("title") or ""))
         ]
         assert len(last_saves) == 18
+        # Each shot's writer has to read apart on the canvas: the graph numbers
+        # the repeats, so 18 nodes means 18 distinct titles.
+        assert len({str(n.get("title") or "") for n in last_saves}) == 18, path.name
         note = next(n for n in graph["nodes"] if n.get("type") == "Note")
         body = note["widgets_values"][0]
         assert f"Queue **{PLATES[film]}** once" in body
