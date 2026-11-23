@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import Any
 
 from _lab_paths import cached_lab_graph_rows
 
@@ -823,18 +824,64 @@ def _generic_labels() -> set[str]:
     return {match.group(1) for match in _LABELLED_KEY.finditer(block)}
 
 
+_SCOPED_LABEL_KEY = re.compile(
+    r'^\s*"([A-Za-z_][A-Za-z0-9_]*:[A-Za-z_][A-Za-z0-9_]*)"\s*:\s*"', re.MULTILINE
+)
+"""One `"Class:widget": "..."` entry of the CLASS_LABELS table."""
+
+MIN_APP_ROWS = 1000  # a walk that finds fewer rows is not reading the corpus.
+
+
+def _class_scoped_labels() -> set[str]:
+    """Return the ``Class:widget`` keys the chrome labels by class.
+
+    Returns:
+        Every key of the shipped CLASS_LABELS table.
+    """
+    body = APP_MODE_JS.read_text(encoding="utf-8")
+    start = body.index("const CLASS_LABELS = {")
+    block = body[start : body.index("\n};", start)]
+    return {match.group(1) for match in _SCOPED_LABEL_KEY.finditer(block)}
+
+
+def _node_classes(graph: dict[str, Any]) -> dict[str, str]:
+    """Return each node's class, keyed by its id as text.
+
+    Args:
+        graph: One parsed lab graph.
+
+    Returns:
+        ``node id -> class name`` for every node row the graph carries.
+    """
+    nodes = graph.get("nodes") or []
+    rows = nodes if isinstance(nodes, list) else list(nodes.values())
+    classes: dict[str, str] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        classes[str(row.get("id"))] = str(
+            row.get("type") or row.get("comfyClass") or ""
+        )
+    return classes
+
+
 def test_app_mode_labels_cover_every_input_the_shipped_graphs_surface() -> None:
     """No App Mode panel may hand the operator a raw widget name.
 
-    An entry in ``extra.linearData.inputs`` is one knob the panel shows. When
-    the graph stamps its own ``label`` the operator reads that; otherwise the
-    chrome falls back to its LABELS table, and a name missing from that table
-    reaches the screen as ``snake_case``.
+    An entry in ``extra.linearData.inputs`` is one knob the panel shows, and
+    the chrome takes its label from the first source that answers: the label
+    the graph stamps, then a ``Class:widget`` row, then the generic table. A
+    row no source answers prints ``snake_case`` on the canvas, so every row of
+    every shipped graph has to land on one of the three. The walk itself is
+    bounded too: a sweep that stops reading the corpus would pass an empty
+    ``raw`` the same way a clean corpus does.
     """
     labels = _generic_labels()
-    surfaced: set[str] = set()
+    scoped = _class_scoped_labels()
+    seen = 0
     raw: set[str] = set()
     for _rel, _path, graph in cached_lab_graph_rows():
+        classes = _node_classes(graph)
         linear = (graph.get("extra") or {}).get("linearData") or {}
         for entry in linear.get("inputs") or []:
             if not isinstance(entry, list) or len(entry) < 2:
@@ -842,19 +889,15 @@ def test_app_mode_labels_cover_every_input_the_shipped_graphs_surface() -> None:
             name = entry[1]
             if not isinstance(name, str):
                 continue
+            seen += 1
             config = entry[2] if len(entry) > 2 and isinstance(entry[2], dict) else {}
             if config.get("label"):
                 continue
-            surfaced.add(name)
-            if name not in labels:
-                raw.add(name)
+            node_class = classes.get(str(entry[0]), "")
+            if name in labels or f"{node_class}:{name}" in scoped:
+                continue
+            raw.add(f"{node_class}:{name}")
+    assert seen > MIN_APP_ROWS, (
+        f"the sweep found {seen} App Mode rows; it is not reading the corpus"
+    )
     assert not raw, f"App Mode shows a raw widget name: {sorted(raw)}"
-    # Two honest outcomes: the sweep saw unlabelled rows and proved the chrome
-    # relabels every one of them, or the corpus labels each row itself.
-    assert surfaced or any(
-        isinstance(config, dict) and bool(config.get("label"))
-        for _rel, _path, graph in cached_lab_graph_rows()
-        for rows in [(graph.get("extra") or {}).get("linearData") or {}]
-        for row in rows.get("inputs") or []
-        for config in [row[2] if isinstance(row, list) and len(row) > 2 else None]
-    ), "no shipped graph surfaced an unlabelled input; sweep is vacuous"
