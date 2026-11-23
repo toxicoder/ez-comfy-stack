@@ -87,7 +87,6 @@ const LABELS = {
   filename: "Choose image",
   filename_2: "Choose image 2",
   filename_3: "Choose image 3",
-  flavor: "Script style",
   has_image: "Use image",
   hdri: "HDRI lighting",
   identity: "Identity",
@@ -102,7 +101,7 @@ const LABELS = {
   label_d: "Context label D",
   latent: "Latent",
   layer: "Render layer",
-  lock: "Shot lock",
+  lock: "Keep constant",
   max_refs: "Max reference stills",
   overlap_bars: "Beat overlap (bars)",
   overwrite: "Overwrite existing",
@@ -319,6 +318,18 @@ function nodeClass(node) {
 }
 
 /**
+ * Widget labels that depend on the node class, keyed "Class:widget". A name
+ * three shipped classes share for three different things cannot live in the
+ * class-agnostic LABELS map without lying about two of them.
+ * @type {Record<string, string>}
+ */
+const CLASS_LABELS = {
+  "EZPodcastScript:flavor": "Script format",
+  "EZCinemaRack:flavor": "Prompt model",
+  "EZAudioRack:flavor": "Track type",
+};
+
+/**
  * Apply stamped or generic labels onto a node's widgets.
  * @param {EzNode} node
  * @returns {void}
@@ -337,6 +348,11 @@ function relabelWidgets(node) {
     }
     if (ntype === "EZNegativePromptEnhance" && widget.name === "enhance") {
       widget.label = "Rewrite negative";
+      continue;
+    }
+    const scoped = CLASS_LABELS[`${ntype}:${widget.name}`];
+    if (scoped) {
+      widget.label = scoped;
       continue;
     }
     const generic = LABELS[widget.name];

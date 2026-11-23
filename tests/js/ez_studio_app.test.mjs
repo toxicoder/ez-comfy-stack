@@ -93,7 +93,6 @@ describe("widget labels", () => {
       makeWidget("bed", ""),
       makeWidget("lock", "view"),
       makeWidget("backend", "kokoro"),
-      makeWidget("flavor", "podcast_two_host"),
       makeWidget("layer", "clay"),
       makeWidget("size_src", ""),
       makeWidget("duration_hint", "wide 8s"),
@@ -107,13 +106,36 @@ describe("widget labels", () => {
       family: "Model family",
       filename_2: "Choose image 2",
       bed: "Music bed",
-      lock: "Shot lock",
+      lock: "Keep constant",
       backend: "Voice engine",
-      flavor: "Script style",
       layer: "Render layer",
       size_src: "Size reference",
       duration_hint: "Duration / framing",
     });
+  });
+
+  test("a widget name two classes share is labelled by class", async () => {
+    // flavor names the script form on the podcast writer and the target
+    // model on the cinema rack, so it stays out of the class-agnostic map:
+    // only the writer gets a word, the rack keeps its raw name.
+    const writer = makeNode("EZPodcastScript", [
+      makeWidget("flavor", "podcast_two_host"),
+    ]);
+    const cinema = makeNode("EZCinemaRack", [makeWidget("flavor", "klein")]);
+    const music = makeNode("EZAudioRack", [makeWidget("flavor", "ace_vocal")]);
+    const stranger = makeNode("EZSomeOtherNode", [makeWidget("flavor", "x")]);
+    const { ext } = await chrome([writer, cinema, music, stranger]);
+    for (const node of [writer, cinema, music, stranger]) {
+      await ext.nodeCreated(node);
+    }
+    assert.equal(writer.widgets[0].label, "Script format");
+    assert.equal(cinema.widgets[0].label, "Prompt model");
+    assert.equal(music.widgets[0].label, "Track type");
+    assert.equal(
+      stranger.widgets[0].label,
+      undefined,
+      "a class with no case of its own keeps its raw name rather than wear another's word",
+    );
   });
 });
 
