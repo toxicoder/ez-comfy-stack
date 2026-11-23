@@ -20,6 +20,7 @@ from ez_outputs.catalog import (
     MIDI_SUFFIXES,
     REPORT_FILENAMES,
     CatalogError,
+    CopyRow,
     OutputRow,
     bounded_rels,
     classify,
@@ -768,11 +769,11 @@ def test_to_input_reports_the_name_actually_written(tmp_path: Path) -> None:
 
     first = handle_to_input({"rel": "cover.png"}, root=root, input_dir=inputs)
     assert first[0] == 200
-    assert first[1]["name"] == "cover.png"
+    assert first[1].get("name") == "cover.png"
 
     again = handle_to_input({"rel": "cover.png"}, root=root, input_dir=inputs)
     assert again[0] == 200
-    assert again[1]["name"] == "cover-2.png"
+    assert again[1].get("name") == "cover-2.png"
     assert (inputs / "cover.png").read_bytes() == b"first"
     assert (inputs / "cover-2.png").read_bytes() == b"first"
 
@@ -780,8 +781,9 @@ def test_to_input_reports_the_name_actually_written(tmp_path: Path) -> None:
         {"rels": ["a/plate.png", "b/plate.png"]}, root=root, input_dir=inputs
     )
     assert bulk[0] == 200
-    assert [row["name"] for row in bulk[1]["copied"]] == ["plate.png", "plate-2.png"]
-    assert [row["rel"] for row in bulk[1]["copied"]] == ["a/plate.png", "b/plate.png"]
+    rows: list[CopyRow] = bulk[1].get("copied", [])
+    assert [row["name"] for row in rows] == ["plate.png", "plate-2.png"]
+    assert [row["rel"] for row in rows] == ["a/plate.png", "b/plate.png"]
     assert (inputs / "plate.png").read_bytes() == b"from-a"
     assert (inputs / "plate-2.png").read_bytes() == b"from-b"
 
@@ -881,7 +883,7 @@ def test_rels_from_args_and_bulk_handlers(tmp_path: Path) -> None:
     assert (inputs / "still.png").is_file()
     one = handle_to_input({"rels": ["still.png"]}, root=root, input_dir=inputs)
     assert one[0] == 200
-    assert one[1]["name"] == "still-2.png"
+    assert one[1].get("name") == "still-2.png"
     fail_copy = handle_to_input({"rels": ["nope.png", "no2.png"]}, root=root, input_dir=inputs)
     assert fail_copy[0] == 400
 

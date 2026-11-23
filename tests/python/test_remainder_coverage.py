@@ -1770,8 +1770,22 @@ def test_remaining_one_liners(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     assert any(item.startswith("### Orphan") for item in docs)
     gloss = _load_docs("ez_gloss_gap", ROOT / "docs" / "glossary.py")
     assert gloss._page_url(types.SimpleNamespace(url="learn/")) == "learn/"
-    import importlib
-    import sitecustomize as sc
+    # Load the lab sitecustomize by path. The interpreter caches the distro's
+    # own /usr/lib/python3.x/sitecustomize.py under that name at startup, so a
+    # plain import only reaches the lab module when another test file has
+    # already popped it out of sys.modules.
+    sc_spec = importlib.util.spec_from_file_location(
+        "ez_lab_sitecustomize_rem", ROOT / "docker" / "pythonpath" / "sitecustomize.py"
+    )
+    assert sc_spec is not None and sc_spec.loader is not None
+    sc = importlib.util.module_from_spec(sc_spec)
+    # Importing it registers a sys.meta_path finder the shim below does not
+    # need, so hand the rest of the suite back the finders it had.
+    finders = list(sys.meta_path)
+    try:
+        sc_spec.loader.exec_module(sc)
+    finally:
+        sys.meta_path[:] = finders
 
     lora = types.ModuleType("diffusers.models.lora")
     sys.modules["torch.nn"] = None  # type: ignore[assignment]
