@@ -262,7 +262,7 @@ def _has_palette_transparency(image: PilImage, bands: tuple[str, ...]) -> bool:
     """
     if "P" not in bands:
         return False
-    info: object = getattr(image, "info", None)
+    info = getattr(image, "info", None)
     if not isinstance(info, dict):
         return False
     return info.get("transparency") is not None
