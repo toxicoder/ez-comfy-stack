@@ -485,6 +485,24 @@ def test_audio_bed_replaces_a_wav_with_no_frames(tmp_path: Path) -> None:
     assert seed.wav_valid(stub)
 
 
+def test_has_wave_magic_is_false_for_an_unreadable_path(tmp_path: Path) -> None:
+    """A path that will not open has no header, so it is not a bed."""
+    assert seed._has_wave_magic(tmp_path) is False  # noqa: SLF001 - a directory
+
+
+def test_wav_valid_is_false_for_a_file_that_cannot_be_read(tmp_path: Path) -> None:
+    """An unreadable bed is not evidence of audio; the seed takes its own."""
+    dest = tmp_path / "input"
+    dest.mkdir()
+    bed = dest / seed.AUDIO_BED_NAME
+    _raw_wav(bed)
+    bed.chmod(0o000)
+    try:
+        assert seed.wav_valid(bed) is False
+    finally:
+        bed.chmod(0o644)
+
+
 def test_main_reports_plates_when_only_the_bed_fails(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:

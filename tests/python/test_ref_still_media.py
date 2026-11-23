@@ -20,6 +20,7 @@ if str(CUSTOM) not in sys.path:
 from ez_image.refs import (  # noqa: E402
     HEIC_STILL_HINT,
     EZOptionalImage,
+    flatten_alpha,
     load_input_still,
     load_input_still_with_reason,
     still_failure_reason,
@@ -128,6 +129,7 @@ class _Stage:
         image: _Image | None = None,
         *,
         with_image_ops: bool = True,
+        with_image: bool = True,
         transpose_raises: bool = False,
         open_raises: bool = False,
         paste_raises: bool = False,
@@ -173,7 +175,8 @@ class _Stage:
         image_module.open = _open  # type: ignore[attr-defined]
         image_module.new = _new  # type: ignore[attr-defined]
         package = types.ModuleType("PIL")
-        package.Image = image_module  # type: ignore[attr-defined]
+        if with_image:
+            package.Image = image_module  # type: ignore[attr-defined]
         if with_image_ops:
             ops = types.ModuleType("PIL.ImageOps")
             ops.exif_transpose = _transpose  # type: ignore[attr-defined]
@@ -182,7 +185,10 @@ class _Stage:
             get_annotated_filepath=lambda name: str(root / str(name))
         )
         monkeypatch.setitem(sys.modules, "PIL", package)
-        monkeypatch.setitem(sys.modules, "PIL.Image", image_module)
+        if with_image:
+            monkeypatch.setitem(sys.modules, "PIL.Image", image_module)
+        else:
+            monkeypatch.delitem(sys.modules, "PIL.Image", raising=False)
         if with_image_ops:
             monkeypatch.setitem(
                 sys.modules, "PIL.ImageOps", sys.modules["PIL"].ImageOps
@@ -343,6 +349,22 @@ def test_alpha_flattens_without_imageops(
     assert stage.asarrayed == [stage.flat_out]
     assert loaded is not None
     assert loaded.channels == 3
+
+
+def test_alpha_survives_a_pillow_build_without_the_image_module(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A Pillow that cannot hand back ``Image`` keeps the stored pixels.
+
+    The composite needs ``Image.new`` to lay the backdrop down. When that
+    import fails the flatten is a no-op and the operator still gets a still,
+    exactly as :func:`_exif_transpose` falls back on junk EXIF.
+    """
+    stored = _Image("RGBA", "stored", TRANSPARENT_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored, with_image=False)
+
+    assert flatten_alpha(stored, WHITE) is stored
+    assert stage.new_backdrops == []
 
 
 def test_heic_pick_reports_an_export_hint(
