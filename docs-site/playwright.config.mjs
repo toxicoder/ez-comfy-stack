@@ -8,9 +8,10 @@ import { defineConfig } from "@playwright/test";
  * that breaks layout, theming or one of the ported widgets fails the suite instead of
  * being noticed by a reader.
  *
- * Goldens are produced on the CI image.  Screenshots taken on another platform differ in
- * font metrics, so refresh them from Linux (or in the same container CI uses) rather than
- * from a laptop - see MIGRATION.md at the repo root.
+ * Goldens come from the pinned Playwright container the lane captures in: `bazelisk run
+ * //docs-site:visual-linux`.  Screenshots taken on another platform differ in font
+ * metrics, so refresh them there rather than from a laptop.  No CI job renders this
+ * comparison; the guard named in MIGRATION.md at the repo root is what CI pays for.
  */
 const PORT = process.env.PLAYWRIGHT_PORT ?? "3135";
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORT}`;

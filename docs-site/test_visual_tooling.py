@@ -2,18 +2,23 @@
 """Guards for the visual-golden pipeline.
 
 Committed screenshot baselines are only meaningful when they come from the same rendering
-stack CI uses.  This repo has been bitten by baselines captured on a laptop: font metrics
-differ per platform, so a Linux run then reports every page as changed.  These tests keep
-the three facts that make that mistake impossible to repeat in sync:
+stack the lane pins.  This repo has been bitten by baselines captured on a laptop: font
+metrics differ per platform, so a Linux run then reports every page as changed.  These
+tests keep the three facts that make that mistake impossible to repeat in sync:
 
 1. the container image pins the same Playwright version the suite depends on, so the
    browser that produces a golden is the browser that compares against it;
-2. the container runs the same OS/architecture as the CI job that enforces the gate;
+2. the container reports the OS/architecture the committed set was captured on, so a
+   comparison reproduces that rendering rather than arguing with it;
 3. the suite never invents a baseline while running in CI, where a silent self-bootstrap
    would commit an unreviewed image.
 
 Run: bazelisk test //docs-site:visual_tooling_test
      (or: python3 -m unittest -v test_visual_tooling.py)
+
+This is the half of the visual lane CI actually runs.  It reads text out of the checkout
+and starts no container, so //:validate, //:test-all and the docs job reach it without the
+--test_tag_filters=-visual that holds both browser targets back.
 """
 
 from __future__ import annotations

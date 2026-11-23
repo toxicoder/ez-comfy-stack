@@ -110,7 +110,7 @@ bazelisk run //:fix                                 # rewrite shfmt/buildifier f
 
 | Gate | What it runs | Needs |
 | --- | --- | --- |
-| `//:everything` | the six gates in order: `//:setup-host -- --check`, `bazelisk build //... --nobuild`, `//:test-all` (visual lane held back), the `docs-site` visual lane, `//docs:docs`, `//docs:render-check` | bazelisk, plus everything `//:test-all` needs; Docker and committed baselines for gate 4 |
+| `//:everything` | the six gates in order: `//:setup-host -- --check`, `bazelisk build //... --nobuild`, `//:test-all` (visual lane held back), the `docs-site` visual lane, `//docs:docs`, `//docs:render-check` | bazelisk, plus everything `//:test-all` needs; gate 4 also wants Docker, committed baselines, and a daemon that can bind-mount this checkout, and reports a printed skip when the host cannot supply them |
 | `//:test-fast` | `//scripts:manage_help_test`, `//tests:bats`, `//tests:bazel_docs_check`, `//tests:build_quality_js_check`, `//tests:js`, `//tests:owned_files_check`, `//tests:pytest` (100% first-party coverage, `pytest-xdist -n auto` when installed), `//tests:typecheck` (Pyright + mypy), `//tests:shell_inventory` | nothing beyond the checkout |
 | `//:test` | `//:test-fast` + `//docs:test_docs_site_render` | docs-site npm tree |
 | `//:test-all` | `//:test` + `//docker:compose_config`, `//docs-site:suite`, `//:manage`, `//docs` | host linters, `docs-site` npm tree, a Docker CLI |
@@ -153,7 +153,7 @@ bazelisk run //:everything -- --skip-bootstrap  # same, without the toolchain pr
 | 1 | `//:setup-host -- --check` | the host toolchain the lint and docs gates shell out to is installed |
 | 2 | `bazelisk build //... --nobuild` | every package loads and every target analyzes |
 | 3 | `bazelisk test //:test-all --test_tag_filters=-visual` | every test gate a plain host can run, manual linters and compose config included |
-| 4 | `bazelisk run //docs-site:visual-linux`, then `bazelisk test //docs-site:visual_tooling_test` | the docs-site screenshots match the committed baselines, rendered in the pinned container, and the capture pipeline still holds |
+| 4 | `bazelisk run //docs-site:visual-linux`, then `bazelisk test //docs-site:visual_tooling_test` | the docs-site screenshots, rendered in the pinned container, still match the committed baselines, and the capture pipeline still holds: a baseline exists for every captured page, every captured route resolves, the publish stamp is pinned, and the readiness probe works. The container run is skipped with a printed reason when the host has no reachable daemon, no committed baselines, or a daemon that cannot bind-mount this checkout; the guard is not lost with it, because it carries no `visual` tag and gate 3 runs it as part of `//:test-all` |
 | 5 | `bazelisk run //docs:docs` | the generators plus the full static export build |
 | 6 | `bazelisk run //docs:render-check` | the built docs-site tree satisfies the render contract |
 
@@ -161,12 +161,23 @@ Gate 4 is the one gate that needs a container runtime, so it is probed before it
 with no reachable Docker daemon, with no `.png` committed under
 `docs-site/tests/visual/goldens/`, or with a daemon that cannot bind-mount this checkout (a
 DinD sidecar or a remote context, which mounts an empty `/lab` rather than refusing), the
-sweep prints
-`SKIP docs-site visual lane (<reason>)`, names the refresh command, counts the skip in its
-summary, and carries on. An environment the host cannot provide is reported as a skip; a
-baseline that actually differs fails gate 4 by name. `bazelisk test //:test-all` stays the
-unfiltered form that runs both visual targets whatever the host looks like, and
-`//:test-fast` leaves them out entirely.
+sweep prints `SKIP docs-site visual lane (<reason>)`, names the refresh command, counts the skip
+in its summary, and carries on. The bind-mount reason reads
+`the Docker daemon cannot read this checkout at <path>; the lane needs a daemon that can bind-mount it`.
+`bazelisk run //docs-site:visual-linux -- --check` reports that verdict on its own, and prints
+`visual lane ready in <image> (<platform>)` when the lane can run. An environment the host cannot
+provide is reported as a skip; a baseline that actually differs fails gate 4 by name.
+`bazelisk test //:test-all` stays the unfiltered form that runs both visual targets whatever the
+host looks like, and `//:test-fast` leaves them out entirely.
+
+No CI job pays for either browser comparison: the docs job, `//:validate`, and gate 3 of
+`//:everything` all pass `--test_tag_filters=-visual`, which is what holds the `manual` host twin
+`//docs-site:visual-test` out of those runs (`//:test-all` names it), while the container capture
+`//docs-site:visual-linux` is an `sh_binary` no test invocation reaches. What CI does run is the
+pure-Python guard `bazelisk test //docs-site:visual_tooling_test`, which carries no `visual` tag
+and so stays inside `//docs-site:suite`. Use the host twin only from a checkout that can build the
+site and has Chromium's system libraries; the working host form is `bazelisk run
+//docs-site:visual`, since a sandboxed test action cannot resolve the export.
 
 Two flags: `--skip-bootstrap` drops gate 1, which is what CI or a host you already provisioned
 wants, and `-h` / `--help` prints the usage. Exit codes: `0` when every gate passed, `1` when a
@@ -350,7 +361,7 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 | Job | When | What |
 | --- | --- | --- |
 | **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint --test_tag_filters=manual` (shellcheck/shfmt/buildifier) |
-| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + the pinned `tests/requirements.txt` Python lane (the docs-site python gates measure coverage with pytest-cov) + `//docs:test_docs_site_render` + `//docs-site:suite` with `--test_tag_filters=-visual`, then `bazelisk shutdown` and the static export outside Bazel. Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
+| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + the pinned `tests/requirements.txt` Python lane (the docs-site python gates measure coverage with pytest-cov) + `//docs:test_docs_site_render` + `//docs-site:suite` with `--test_tag_filters=-visual` (no CI job renders a screenshot: the host twin `//docs-site:visual-test` is `manual` and the container capture `//docs-site:visual-linux` is an `sh_binary`, so neither is reachable from that invocation, while the tagless guard `//docs-site:visual_tooling_test` is in the suite and does run here), then `bazelisk shutdown` and the static export outside Bazel. Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
 | **validate-gate** | always | `bash scripts/ci_check_only.sh` (CI-only script; no Bazel target - see the note below) |
 
 Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys
