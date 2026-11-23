@@ -1,4 +1,4 @@
-"""Real-world stills on the input side: EXIF orientation and honest reasons.
+"""Real-world stills on the input side: EXIF, alpha, and honest reasons.
 
 Hermetic: numpy, Pillow, and folder_paths are faked here, so the lane runs on a
 host with none of the image stack installed.
@@ -44,16 +44,72 @@ class _Arr:
         return _Arr(self.ndim + 1, self.channels, index)
 
 
-class _Image:
-    """PIL image stand-in that reports the mode it was last converted to."""
+WHITE = (255, 255, 255)
+"""The flat backdrop the loader promises to composite a stored alpha onto."""
 
-    def __init__(self, mode: str = "RGBA", label: str = "stored") -> None:
+TRANSPARENT_ALPHA = (0, 255)
+"""Alpha extrema with see-through pixels stored under the RGB."""
+
+OPAQUE_ALPHA = (255, 255)
+"""Alpha extrema with nothing transparent left to flatten."""
+
+
+class _Alpha:
+    """Alpha band stand-in that reports the extrema the loader probes."""
+
+    def __init__(self, extrema: tuple[int, int]) -> None:
+        self.extrema = extrema
+
+    def getextrema(self) -> tuple[int, int]:
+        return self.extrema
+
+
+class _Image:
+    """PIL image stand-in that reports its bands and records what was done.
+
+    ``convert`` drops an alpha band the way Pillow does and says so through
+    ``dropped_alpha``, so a test can tell a flattened composite apart from the
+    silent drop that feeds the model the RGB stored under the alpha.
+    """
+
+    def __init__(
+        self,
+        mode: str = "RGBA",
+        label: str = "stored",
+        alpha: tuple[int, int] = OPAQUE_ALPHA,
+        *,
+        paste_raises: bool = False,
+    ) -> None:
         self.mode = mode
         self.label = label
+        self.alpha = alpha
+        self.paste_raises = paste_raises
+        self.size = (8, 6)
+        self.channel_reads: list[str] = []
+        self.converted: list[str] = []
+        self.dropped_alpha = False
+        self.pasted: list[tuple["_Image", "_Alpha"]] = []
+
+    def getbands(self) -> tuple[str, ...]:
+        return tuple(self.mode)
+
+    def getchannel(self, band: str) -> _Alpha:
+        self.channel_reads.append(band)
+        if band not in self.getbands():
+            raise ValueError(f"no {band} band in {self.mode}")
+        return _Alpha(self.alpha)
 
     def convert(self, mode: str) -> "_Image":
+        self.converted.append(mode)
+        if "A" in self.getbands() and "A" not in tuple(mode):
+            self.dropped_alpha = True
         self.mode = mode
         return self
+
+    def paste(self, source: "_Image", box: object, mask: "_Alpha") -> None:
+        if self.paste_raises:
+            raise OSError("paste refused")
+        self.pasted.append((source, mask))
 
     def __enter__(self) -> "_Image":
         return self
@@ -74,6 +130,7 @@ class _Stage:
         with_image_ops: bool = True,
         transpose_raises: bool = False,
         open_raises: bool = False,
+        paste_raises: bool = False,
         ndim: int = 3,
     ) -> None:
         self.root = root
@@ -81,7 +138,11 @@ class _Stage:
         self.opened: list[str] = []
         self.transposed: list[object] = []
         self.asarrayed: list[object] = []
-        self.transposed_out = _Image("RGB", "transposed")
+        self.new_backdrops: list[tuple[str, object, object]] = []
+        self.transposed_out = _Image(
+            self.image.mode, "transposed", self.image.alpha
+        )
+        self.flat_out = _Image("RGB", "flat", paste_raises=paste_raises)
         self._ndim = ndim
 
         def _open(path: object) -> _Image:
@@ -104,8 +165,13 @@ class _Stage:
             mode = getattr(presented, "mode", "RGB")
             return _Arr(self._ndim, 3 if mode == "RGB" else 4)
 
+        def _new(mode: str, size: object, color: object) -> _Image:
+            self.new_backdrops.append((mode, size, color))
+            return self.flat_out
+
         image_module = types.ModuleType("PIL.Image")
         image_module.open = _open  # type: ignore[attr-defined]
+        image_module.new = _new  # type: ignore[attr-defined]
         package = types.ModuleType("PIL")
         package.Image = image_module  # type: ignore[attr-defined]
         if with_image_ops:
@@ -175,6 +241,106 @@ def test_still_loads_when_exif_transpose_raises(
     loaded = load_input_still("phone.jpg")
 
     assert stage.asarrayed == [stored]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
+def test_cutout_png_flattens_its_alpha_onto_white(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A transparent PNG loads as the flat white plate, not the stored RGB."""
+    stored = _Image("RGBA", "stored", TRANSPARENT_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "cutout.png").write_bytes(b"png")
+
+    loaded = load_input_still("cutout.png")
+
+    assert stage.new_backdrops == [("RGB", stage.transposed_out.size, WHITE)]
+    assert [source for source, _mask in stage.flat_out.pasted] == [
+        stage.transposed_out
+    ]
+    assert [mask.extrema for _source, mask in stage.flat_out.pasted] == [
+        TRANSPARENT_ALPHA
+    ]
+    assert stage.transposed_out.dropped_alpha is False
+    assert stage.flat_out.converted == ["RGB"]
+    assert stage.asarrayed == [stage.flat_out]
+    assert loaded is not None
+    assert loaded.ndim == 4
+    assert loaded.channels == 3
+
+
+def test_fully_opaque_alpha_keeps_the_plain_convert_path(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """An alpha band with nothing transparent in it earns no composite."""
+    stored = _Image("RGBA", "stored", OPAQUE_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "flat.png").write_bytes(b"png")
+
+    loaded = load_input_still("flat.png")
+
+    assert stage.transposed_out.channel_reads == ["A"]
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
+    assert stage.transposed_out.converted == ["RGB"]
+    assert stage.transposed_out.dropped_alpha is True
+    assert stage.asarrayed == [stage.transposed_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
+def test_rgb_still_never_reaches_the_composite(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """An ordinary JPG is not probed for a band it cannot carry."""
+    stored = _Image("RGB", "stored")
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "hero.jpg").write_bytes(b"jpeg")
+
+    loaded = load_input_still("hero.jpg")
+
+    assert stage.transposed_out.channel_reads == []
+    assert stage.new_backdrops == []
+    assert stage.flat_out.pasted == []
+    assert stage.transposed_out.converted == ["RGB"]
+    assert stage.transposed_out.dropped_alpha is False
+    assert stage.asarrayed == [stage.transposed_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
+def test_a_failed_composite_still_loads_the_still(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A composite this Pillow cannot run keeps the still instead of failing."""
+    stored = _Image("RGBA", "stored", TRANSPARENT_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored, paste_raises=True)
+    (tmp_path / "cutout.png").write_bytes(b"png")
+
+    loaded, reason = load_input_still_with_reason("cutout.png")
+
+    assert reason == ""
+    assert stage.transposed_out.converted == ["RGB"]
+    assert stage.asarrayed == [stage.transposed_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
+def test_alpha_flattens_without_imageops(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """The flatten does not ride on the EXIF step: no ImageOps still flattens."""
+    stored = _Image("RGBA", "stored", TRANSPARENT_ALPHA)
+    stage = _Stage(monkeypatch, tmp_path, stored, with_image_ops=False)
+    (tmp_path / "cutout.png").write_bytes(b"png")
+
+    loaded = load_input_still("cutout.png")
+
+    assert stage.transposed == []
+    assert stage.new_backdrops == [("RGB", stored.size, WHITE)]
+    assert [source for source, _mask in stage.flat_out.pasted] == [stored]
+    assert stage.asarrayed == [stage.flat_out]
     assert loaded is not None
     assert loaded.channels == 3
 

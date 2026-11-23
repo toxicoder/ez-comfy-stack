@@ -37,6 +37,15 @@ UNSUPPORTED_STILL_SUFFIXES = frozenset({".heic", ".heif"})
 HEIC_STILL_HINT = "HEIC/HEIF is not decodable here, export a JPG or PNG"
 """One-line repair the operator can act on for an unsupported phone still."""
 
+STILL_FLATTEN_BACKDROP: tuple[int, int, int] = (255, 255, 255)
+"""Flat opaque RGB a stored alpha band is composited onto before the convert.
+
+Opaque white, the same pick ``ez_image.cutout.DEFAULT_BACKDROP`` makes for a
+cutout, so a PNG whose background was cut out reaches the model as the flat
+plate the operator saw rather than as whatever RGB the file keeps under its
+alpha.
+"""
+
 LimitToken: TypeAlias = str | int | float | bool
 """``max_refs`` value ``int()`` can parse before the clamp."""
 
@@ -235,6 +244,52 @@ def _exif_transpose(image: PilImage) -> PilImage:
     return transposed
 
 
+def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
+    """Composite a stored alpha band onto a flat backdrop.
+
+    ``convert("RGB")`` drops alpha and keeps the RGB triplets stored *under*
+    it, so a cutout PNG with a transparent background would otherwise hand the
+    model pixels nobody ever saw. An image with no alpha band, and one whose
+    band is fully opaque, is returned untouched: an ordinary JPG or PNG keeps
+    exactly the path it had, with no second convert.
+
+    Args:
+        image: Oriented PIL image.
+        backdrop: Opaque RGB the transparent pixels become.
+
+    Returns:
+        The image with its alpha flattened onto ``backdrop``, or ``image``
+        unchanged when it carries no alpha, when that alpha is fully opaque, or
+        when this Pillow build cannot do the composite (fail-soft, like
+        :func:`_exif_transpose`).
+    """
+    bands: tuple[str, ...] | None = None
+    try:
+        bands = tuple(image.getbands())
+    except Exception:  # noqa: BLE001 - odd image falls back to the mode
+        bands = None
+    if bands is None:
+        bands = tuple(str(getattr(image, "mode", "")))
+    if "A" not in bands:
+        return image
+    try:
+        from PIL import Image
+    except Exception:  # noqa: BLE001 - Pillow build without Image
+        return image
+    try:
+        alpha = image.getchannel("A")
+        extrema = alpha.getextrema()
+        if extrema is not None and len(extrema) == 2:
+            lowest = extrema[0]
+            if isinstance(lowest, int) and lowest >= 255:
+                return image
+        flat: PilImage = Image.new("RGB", image.size, backdrop)
+        flat.paste(image, (0, 0), mask=alpha)
+    except Exception:  # noqa: BLE001 - stored pixels beat a failed composite
+        return image
+    return flat
+
+
 def _still_reason_note(name: str) -> str:
     """Return the one-line reason a pick that exists cannot be used.
 
@@ -265,8 +320,9 @@ def load_input_still_with_reason(
         filename: Combo value (empty is a no-op).
 
     Returns:
-        ``(batch, reason)`` - BHWC float batch (never 4-channel) or None, plus
-        the one-line reason, empty on success and on "no pick".
+        ``(batch, reason)`` - BHWC float batch (never 4-channel, a stored
+        alpha band flattened onto ``STILL_FLATTEN_BACKDROP`` first) or None,
+        plus the one-line reason, empty on success and on "no pick".
     """
     name = _filename_str(filename)
     if not name:
@@ -286,7 +342,9 @@ def load_input_still_with_reason(
         return None, ""
     try:
         with Image.open(path) as img:
-            rgb = _exif_transpose(img).convert("RGB")
+            oriented = _exif_transpose(img)
+            flat = flatten_alpha(oriented, STILL_FLATTEN_BACKDROP)
+            rgb = flat.convert("RGB")
             arr = np.asarray(rgb).astype("float32") / 255.0
     except Exception:  # noqa: BLE001 - unreadable file
         return None, _still_reason_note(name)
