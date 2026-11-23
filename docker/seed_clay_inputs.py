@@ -614,9 +614,15 @@ def main(argv: list[str] | None = None) -> int:
         argv: Optional args without program name. Default ``/inputs``.
 
     Returns:
-        0 on success; 1 when any stage refused or hit an IO error.
+        0 on success; 1 when the directory is empty (which would mean the
+        current one) or any stage refused or hit an IO error.
     """
     args = list(sys.argv[1:] if argv is None else argv)
+    if args and not args[0].strip():
+        # ``Path("")`` is the current directory, so a blank expansion in the
+        # entrypoint would seed forty-four plates into whatever the workdir is.
+        print("[seed-clay] refusing an empty input directory", file=sys.stderr)
+        return 1
     dest = Path(args[0] if args else "/inputs")
     # The three stages are attempted independently: an unwritable plate must
     # not quietly take the audio bed down with it, so every failure is

@@ -119,6 +119,23 @@ def test_main_default_root(
     assert "plates ready" in capsys.readouterr().out
 
 
+def test_main_refuses_an_empty_input_dir(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A blank directory argument means the current one, and that is never meant.
+
+    ``Path("")`` is ``.``, so one blank expansion in the entrypoint would seed
+    every plate into the workdir; the seeder refuses it instead of guessing.
+    """
+    monkeypatch.chdir(tmp_path)
+
+    assert seed.main([""]) == 1
+    assert seed.main(["   "]) == 1
+
+    assert capsys.readouterr().err.count("refusing an empty input directory") == 2
+    assert list(tmp_path.iterdir()) == []
+
+
 def test_module_main_entrypoint(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
