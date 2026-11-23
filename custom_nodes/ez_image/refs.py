@@ -244,24 +244,23 @@ def _exif_transpose(image: PilImage) -> PilImage:
     return transposed
 
 
-def _has_palette_transparency(image: PilImage, bands: tuple[str, ...]) -> bool:
-    """Say whether an indexed image names a see-through palette entry.
+def _declares_transparency(image: PilImage) -> bool:
+    """Say whether a band-less image declares some value see-through.
 
-    A ``P`` image that carries a ``tRNS`` chunk still reports
-    ``getbands() == ("P",)``, so the band probe alone cannot see that part of
-    its pixels are only a colour nobody ever saw.
+    Neither the mode nor ``getbands()`` can answer this. A ``P`` image with a
+    ``tRNS`` chunk and a grayscale PNG with a transparent gray value both
+    report a single band and no alpha at all, while Pillow's ``convert("RGBA")``
+    hands their ``tRNS`` pixels an alpha of 0. Without this probe the colour
+    (or gray) stored under that transparency is what reaches the model.
 
     Args:
         image: Oriented PIL image.
-        bands: Bands the image reports for itself.
 
     Returns:
-        ``True`` when this is an indexed image that declares a transparent
-        palette index, ``False`` for anything else, including an image whose
-        ``info`` is not a table this Pillow can read.
+        ``True`` when Pillow recorded a transparency value for this image,
+        ``False`` otherwise, including for an image whose ``info`` is not a
+        table this Pillow can read.
     """
-    if "P" not in bands:
-        return False
     info = getattr(image, "info", None)
     if not isinstance(info, dict):
         return False
@@ -277,7 +276,7 @@ def _alpha_band(image: PilImage) -> str:
     last - ``RGBA``, ``LA`` and ``PA`` carry a straight ``"A"``, ``RGBa`` and
     ``La`` a premultiplied ``"a"`` - while ``LAB`` ends on its ``"B"``. A
     palette image names no alpha band at all, which is what
-    :func:`_has_palette_transparency` is there to see past.
+    :func:`_declares_transparency` is there to see past.
 
     Args:
         image: Oriented PIL image.
@@ -298,13 +297,15 @@ def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
     band is fully opaque, is returned untouched: an ordinary JPG or PNG keeps
     exactly the path it had, with no second convert.
 
-    A palette image is alpha-bearing too: a ``P`` image with a ``tRNS`` chunk
-    reports no alpha band at all, so it is composited from the RGBA view
-    ``convert("RGBA")`` builds for it, which is where Pillow applies that
-    transparency. The same RGBA view feeds both the extrema probe and the
-    paste, so a logo or sticker saved as palette PNG lands on ``backdrop``
-    like any other cutout instead of on its palette colour. A premultiplied
-    ``RGBa`` pick reaches for that view for the same reason.
+    An image with no alpha band is alpha-bearing too when Pillow recorded a
+    transparency value for it: a ``P`` image with a ``tRNS`` chunk and a
+    grayscale PNG with a transparent gray value both report a single band, so
+    neither the mode nor the bands say what ``info`` knows. Those picks are
+    composited from the RGBA view ``convert("RGBA")`` builds, which is where
+    Pillow applies that transparency. The same RGBA view feeds both the extrema
+    probe and the paste, so a logo or sticker saved as palette PNG lands on
+    ``backdrop`` like any other cutout instead of on its palette colour. A
+    premultiplied ``RGBa`` pick reaches for that view for the same reason.
 
     Alpha presence comes from the mode, never the band names: Pillow calls the
     CIELAB green-red axis ``"A"``, and a ``LAB`` still has to be read as the
@@ -320,20 +321,13 @@ def flatten_alpha(image: PilImage, backdrop: tuple[int, int, int]) -> PilImage:
         that alpha is fully opaque, or when this Pillow build cannot do the
         composite (fail-soft, like :func:`_exif_transpose`).
     """
-    bands: tuple[str, ...] | None = None
-    try:
-        bands = tuple(image.getbands())
-    except Exception:  # noqa: BLE001 - odd image falls back to the mode
-        bands = None
-    if bands is None:
-        bands = tuple(str(getattr(image, "mode", "")))
     alpha_band = _alpha_band(image)
     try:
         from PIL import Image
     except Exception:  # noqa: BLE001 - Pillow build without Image
         return image
     try:
-        if not alpha_band and not _has_palette_transparency(image, bands):
+        if not alpha_band and not _declares_transparency(image):
             return image
         # A premultiplied ``a`` band already holds values scaled by their own
         # alpha, so that composite runs off the RGBA view Pillow un-scales; a

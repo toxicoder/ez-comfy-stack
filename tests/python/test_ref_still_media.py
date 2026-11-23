@@ -491,6 +491,34 @@ def test_a_palette_that_cannot_expand_keeps_the_stored_pixels(
     assert stage.flat_out.pasted == []
 
 
+def test_a_grayscale_png_that_declares_transparency_flattens_onto_white(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """A gray PNG with a ``tRNS`` value is a cutout too, not a solid tile.
+
+    Such a file reports ``mode == "L"`` and ``getbands() == ("L",)``: the
+    see-through value lives in ``info`` alone. Real Pillow gives its RGBA view
+    alpha 0 wherever a pixel equals that value, so an un-flattened pick hands
+    the model the gray stored under transparency instead of the white the
+    operator saw.
+    """
+    stored = _Image("L", "ghost", TRANSPARENT_ALPHA, info={"transparency": 60})
+    stage = _Stage(monkeypatch, tmp_path, stored)
+    (tmp_path / "ghost.png").write_bytes(b"png")
+
+    loaded = load_input_still("ghost.png")
+
+    assert stage.transposed_out.converted == ["RGBA"]
+    assert stage.transposed_out.channel_reads == ["A"]
+    assert stage.new_backdrops == [("RGB", stage.transposed_out.size, WHITE)]
+    assert [mask.extrema for _source, mask in stage.flat_out.pasted] == [
+        TRANSPARENT_ALPHA
+    ]
+    assert stage.asarrayed == [stage.flat_out]
+    assert loaded is not None
+    assert loaded.channels == 3
+
+
 def test_a_lab_still_is_never_composited_through_its_colour(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
