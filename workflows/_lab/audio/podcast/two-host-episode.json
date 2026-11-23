@@ -90,7 +90,7 @@
         "podcast_two_host",
         "audio/podcast/two-host-episode"
       ],
-      "title": "ez_podcast_script"
+      "title": "Podcast script"
     },
     {
       "id": 3,
@@ -173,7 +173,7 @@
         "",
         1.0
       ],
-      "title": "ez_podcast_voice"
+      "title": "Podcast voice"
     },
     {
       "id": 5,
@@ -242,7 +242,7 @@
         0,
         0.0
       ],
-      "title": "ez_podcast_bed"
+      "title": "Podcast bed"
     },
     {
       "id": 6,
@@ -515,7 +515,7 @@
       "widgets_values": [
         "overlay"
       ],
-      "title": "ez_podcast_mix overlay"
+      "title": "Podcast mix overlay"
     },
     {
       "id": 12,
@@ -652,7 +652,7 @@
         "instrumental",
         "audio/podcast/two-host-episode"
       ],
-      "title": "ez_podcast_bed enhance"
+      "title": "Podcast bed enhance"
     },
     {
       "id": 16,

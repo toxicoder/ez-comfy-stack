@@ -60,9 +60,9 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart LR
-  N1["ez_dub_ingest"]
-  N2["ez_dub_script"]
-  N3["ez_dub_voice"]
+  N1["Dub ingest"]
+  N2["Dub script"]
+  N3["Dub voice"]
   N4["FLAC master"]
   N5["YouTube preview MP3"]
   N6["Operator note"]
@@ -78,9 +78,9 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | ez_dub_ingest | `EZDubIngest` | INPUT |
-| 2 | ez_dub_script | `EZDubScript` | PROMPT |
-| 3 | ez_dub_voice | `EZDubRender` | PROMPT |
+| 1 | Dub ingest | `EZDubIngest` | INPUT |
+| 2 | Dub script | `EZDubScript` | PROMPT |
+| 3 | Dub voice | `EZDubRender` | PROMPT |
 | 4 | FLAC master | `SaveAudio` | OUTPUT |
 | 5 | YouTube preview MP3 | `SaveAudioMP3` | OUTPUT |
 | 6 | Operator note | `Note` | NOTE |

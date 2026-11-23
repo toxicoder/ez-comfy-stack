@@ -99,7 +99,7 @@
         true,
         "audio/podcast/learn-episode"
       ],
-      "title": "ez_learn_sources"
+      "title": "Learn sources"
     },
     {
       "id": 3,
@@ -183,7 +183,7 @@
         "",
         1.0
       ],
-      "title": "ez_learn_voice"
+      "title": "Learn voice"
     },
     {
       "id": 5,
@@ -252,7 +252,7 @@
         0,
         0.0
       ],
-      "title": "ez_learn_bed"
+      "title": "Learn bed"
     },
     {
       "id": 6,
@@ -567,7 +567,7 @@
       "widgets_values": [
         "overlay"
       ],
-      "title": "ez_learn_mix overlay"
+      "title": "Learn mix overlay"
     },
     {
       "id": 13,
@@ -704,7 +704,7 @@
         "instrumental",
         "audio/podcast/learn-episode"
       ],
-      "title": "ez_learn_bed enhance"
+      "title": "Learn bed enhance"
     },
     {
       "id": 17,

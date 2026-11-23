@@ -13,13 +13,15 @@ from typing import Any
 
 import pytest
 
-from _lab_paths import lab_json
+from _lab_paths import cached_lab_graph_rows, lab_json
 from _stamp_app_mode import (
     DEFAULT_WIDGET_DESCRIPTIONS,
+    IDENTIFIER_TITLE_RX,
     HIDDEN_APP_WIDGETS,
     STAMP_SPECS,
     display_label,
     format_sets_prefix,
+    reads_as_identifier,
     infer_suite_inputs,
     infer_suite_outputs,
     linear_input_node_id,
@@ -833,3 +835,83 @@ def test_the_five_image_prep_and_3d_apps_label_every_row() -> None:
             assert label and label.isascii(), where
             assert "_" not in label, where
             assert description and description.isascii(), where
+
+
+#: A widget filename inside a label is the one place an underscore earns its
+#: keep: it names the file the operator is meant to drop into ``input/``.
+_FILENAME_TOKEN_RX = re.compile(r"[A-Za-z0-9_.=*-]*_[A-Za-z0-9_.=*-]*\.[A-Za-z0-9]+")
+
+
+def test_reads_as_identifier_sorts_titles_a_person_could_have_typed() -> None:
+    """The guard separates an internal name from a label an operator reads."""
+    assert reads_as_identifier("ez_edm_prompt")
+    assert reads_as_identifier("ez_dub_ingest")
+    assert not reads_as_identifier("EDM prompt")
+    assert not reads_as_identifier("Podcast bed enhance")
+    assert not reads_as_identifier("Rap prompt")
+    assert not reads_as_identifier("")
+    assert not reads_as_identifier("sampler")
+
+
+def test_display_label_drops_an_identifier_title_before_naming_a_row() -> None:
+    """A slug node title never reaches the App Mode panel.
+
+    The builders once titled the ACE enhancer ``ez_edm_prompt``, which made the
+    panel read ``ez_edm_prompt - Tags``. The title has to fall away so the
+    row keeps the table's own wording.
+    """
+    node = {"type": "EZAceStepPromptEnhance", "title": "ez_edm_prompt"}
+    assert display_label(node, "tags", collide=True) == "Pass 1 tags"
+    assert display_label(node, "mode", collide=True) == "Pass 1 vocal / instrumental"
+    assert display_label(node, "lyrics", collide=True) == "Pass 1 lyrics"
+    assert display_label(node, "enhance", collide=True) == "Rewrite pass 1"
+    assert display_label(node, "sample", collide=True) == "Pass 1 sample"
+    # A widget the enhancer branch does not know still gets the generic table.
+    assert display_label(node, "bpm", collide=True) == "Bpm"
+    # A single un-numbered enhancer keeps the plain wording.
+    assert display_label(node, "tags") == "Tags"
+    # A title a person typed still wins, numbered sibling included.
+    typed = {"type": "EZAceStepPromptEnhance", "title": "EDM prompt pass 3"}
+    assert display_label(typed, "tags", collide=True) == "Pass 3 tags"
+
+
+def test_no_lab_graph_prints_an_internal_name() -> None:
+    """Canvas titles and App rows stay in words an operator can act on.
+
+    A graph authored by a builder can carry the slug that names it in code.
+    Left on a node title it prints on the canvas, and left in an App row label
+    it prints where the panel should be asking a question, so neither is
+    allowed anywhere in the shipped corpus.
+    """
+    rows = cached_lab_graph_rows()
+    assert len(rows) >= 700, "the corpus sweep read almost nothing"
+    graph_ids = {
+        str((g.get("extra") or {}).get("lab_rel") or rel) for rel, _path, g in rows
+    }
+    assert len(graph_ids) >= 700, "the corpus sweep read duplicate graphs"
+    checked_rows = 0
+    for rel, _path, graph in rows:
+        nodes = {int(n["id"]): n for n in graph.get("nodes", []) if "id" in n}
+        for node in graph.get("nodes", []):
+            title = str(node.get("title") or "").strip()
+            on_canvas = (rel, node.get("id"), title)
+            assert not IDENTIFIER_TITLE_RX.match(title), on_canvas
+            assert not title.lower().startswith(("ez_", "ez-")), on_canvas
+        entries = ((graph.get("extra") or {}).get("linearData", {}) or {}).get(
+            "inputs"
+        ) or []
+        for entry in entries:
+            node = nodes.get(int(entry[0]))
+            assert node is not None, (rel, entry)
+            config = entry[2] if len(entry) > 2 else None
+            if not isinstance(config, dict):
+                continue
+            label = str(config.get("label") or "").strip()
+            if not label:
+                continue
+            checked_rows += 1
+            on_panel = (rel, node.get("id"), entry[1], label)
+            assert not IDENTIFIER_TITLE_RX.match(label), on_panel
+            assert label != str(entry[1]), on_panel
+            assert "_" not in _FILENAME_TOKEN_RX.sub("", label), on_panel
+    assert checked_rows >= 9000, "the corpus sweep read almost no labelled rows"
