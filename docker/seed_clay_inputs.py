@@ -121,13 +121,17 @@ here."""
 # Audio bed the audio-to-video App defaults its LoadAudio to. Same story as the
 # plates: nothing in the repo wrote it, so Queue failed on a missing file.
 AUDIO_BED_NAME = "ez_a2v_bed.wav"
+"""The filename video/av/audio-to-video-8s defaults its LoadAudio to."""
 AUDIO_BED_RATE = 16000
+"""Samples per second; mono 16-bit keeps the seeded file under 300 KB."""
 AUDIO_BED_SECONDS = 8
+"""Length that matches the eight-second clip this App renders."""
 AUDIO_BED_PEAK = 20000
 """Peak sample amplitude; kept under int16 so the bed never clips."""
 AUDIO_BED_TONES = (110.0, 165.0, 220.0)
 """A2, E3, A3: a soft pad rather than a test tone."""
 AUDIO_BED_SWELL_HZ = 0.25
+"""Slow amplitude swell so the pad reads as a bed and not a test tone."""
 AUDIO_BED_FADE_SECONDS = 0.12
 """Edge fade so a loop point does not click."""
 

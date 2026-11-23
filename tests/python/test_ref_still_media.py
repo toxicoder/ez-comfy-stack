@@ -9,7 +9,6 @@ from __future__ import annotations
 import sys
 import types
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -322,5 +321,5 @@ def test_node_line_untouched_without_a_reason(
     monkeypatch.setattr("ez_image.refs.load_input_still", lambda _name: fake)
     monkeypatch.setattr("ez_image.refs.still_failure_reason", lambda _name: "unused")
 
-    out: dict[str, Any] = EZOptionalImage().run(filename="hero.png")
+    out = EZOptionalImage().run(filename="hero.png")
     assert out["ui"]["text"] == ("1 reference still",)
