@@ -8,6 +8,7 @@
 
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { loadExtension, REPO_ROOT } from "./harness.mjs";
 
@@ -17,6 +18,14 @@ const PANEL_JS = path.join(
   "ez_outputs",
   "js",
   "ez_outputs.js",
+);
+
+const PANEL_CSS = path.join(
+  REPO_ROOT,
+  "custom_nodes",
+  "ez_outputs",
+  "js",
+  "ez_outputs.css",
 );
 
 // The wait registerTabWithRetry takes between attempts (ez_outputs.js:215
@@ -417,6 +426,17 @@ function fallbackDock() {
 }
 
 /**
+ * The docked pane's rule as it ships in the sheet.
+ * @returns {string} The `.ez-out-fallback` declaration block.
+ */
+function fallbackCssRule() {
+  const css = readFileSync(PANEL_CSS, "utf8");
+  const at = css.indexOf(".ez-out-fallback {");
+  assert.notEqual(at, -1, "the sheet must style the class the dock carries");
+  return css.slice(at, css.indexOf("}", at));
+}
+
+/**
  * Record every timer the panel schedules while it is installed.
  * @param {((ms: number) => void)=} onTimer Called with each delay as it is asked for.
  * @returns {{delays: Array<number>, stop: () => void}} Recorded delays and the restore.
@@ -443,10 +463,27 @@ function watchTimers(onTimer) {
 describe("ez_outputs tab", () => {
   test("registers the sidebar tab the frontend asks for", async () => {
     const { tab } = await mountOutputs();
-    assert.equal(tab.id, "ez-outputs");
-    assert.equal(tab.title, "Outputs");
-    assert.equal(tab.type, "custom");
-    assert.equal(typeof tab.render, "function");
+    // Frontend 1.58.5 accepts exactly these keys for a custom tab, so a key it
+    // never reads fails the suite instead of riding along unnoticed.
+    assert.deepStrictEqual(Object.keys(tab), [
+      "id",
+      "icon",
+      "title",
+      "tooltip",
+      "type",
+      "render",
+    ]);
+    assert.deepStrictEqual(
+      { ...tab, render: typeof tab.render },
+      {
+        id: "ez-outputs",
+        icon: "pi pi-images",
+        title: "Outputs",
+        tooltip: "Browse saved generations",
+        type: "custom",
+        render: "function",
+      },
+    );
   });
 
   test("a frontend without the sidebar API is not an error", async () => {
@@ -629,6 +666,32 @@ describe("ez_outputs tab", () => {
     assert.equal(fallbackDock(), null, "dismissing removes the dock from the page");
     await ext.setup();
     assert.ok(fallbackDock(), "a later failure can dock again once it was dismissed");
+  });
+
+  test("the docked pane is a left column under the top bar", async () => {
+    installDom();
+    stubFetch();
+    const { ext, app } = await loadExtension(PANEL_JS, "ez.outputs");
+    app.extensionManager = {};
+    await ext.setup();
+    const dock = fallbackDock();
+    assert.ok(dock, "the explorer docks when the API never appears");
+    // The inline anchor is the copy that lands when the sheet never loaded,
+    // which is the failure that makes the dock matter at all.
+    assert.equal(dock.style.getPropertyValue("position"), "fixed");
+    assert.equal(dock.style.getPropertyValue("left"), "16px", "the pane anchors left");
+    assert.equal(dock.style.getPropertyValue("right"), "", "the pane is no corner popover");
+    assert.equal(dock.style.getPropertyValue("top"), "56px", "it starts under the top bar");
+    assert.equal(dock.style.getPropertyValue("bottom"), "16px", "and runs the full height");
+    assert.equal(dock.style.getPropertyValue("width"), "min(420px, 92vw)");
+    // The sheet carries the same geometry for everything the inline copy drops.
+    const rule = fallbackCssRule();
+    assert.match(rule, /left:\s*16px/, `.ez-out-fallback must anchor left: ${rule}`);
+    assert.match(rule, /top:\s*56px/, "the sheet starts the column under the top bar");
+    assert.match(rule, /bottom:\s*16px/, "the sheet runs it the full height");
+    assert.match(rule, /width:\s*min\(420px,\s*92vw\)/, "the sheet matches the inline width");
+    assert.doesNotMatch(rule, /(^|[\s;])right:/m, "the sheet anchors it left only");
+    assert.doesNotMatch(rule, /max-height/, "the anchors set the height, so no cap fights them");
   });
 
   test("the tab taking over takes the docked panel down", async () => {
@@ -1220,6 +1283,66 @@ describe("ez_outputs results that fit the output type", () => {
     await settle();
     assert.deepEqual(written, ["/outputs/ez_still_hero_00001_.png"]);
     assert.match(el.querySelector(".ez-out-status").textContent, /Copied 1 path/);
+  });
+
+  test("one Copy to input reads the single-rel reply the route answers with", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    /** @type {Array<{url: string, body: string}>} */
+    const posts = [];
+    globalThis.fetch = async (url, init) => {
+      posts.push({ url: String(url), body: String((init && init.body) || "") });
+      // The single-rel route answers {ok, name, rel} with no `copied` array,
+      // and `rel` is the name it wrote rather than the source.
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          ok: true,
+          name: "ez_still_hero_00001_-2.png",
+          rel: "ez_still_hero_00001_-2.png",
+        }),
+      };
+    };
+    cardFor(el, "ez_still_hero_00001_.png").click();
+    await settle();
+    el.querySelectorAll("button")
+      .find((node) => node.textContent.trim() === "Copy to input")
+      .click();
+    await settle();
+    assert.equal(posts.length, 1, "one selected file posts one request");
+    assert.equal(posts[0].url, "/ez_outputs/to-input");
+    // One rel goes out in the single form, which is the reply shape under test.
+    assert.match(posts[0].body, /"rel":"ez_still_hero_00001_\.png"/);
+    const status = el.querySelector(".ez-out-status").textContent;
+    // The single-rel reply has no `copied` array, so the pane must read `name`:
+    // that is also the value it hands the LoadImage widget.
+    assert.equal(status, "Copied ez_still_hero_00001_-2.png to input");
+  });
+
+  test("a bulk Copy to input counts the rows the route staged", async () => {
+    const { el } = await mountOutputs({ items: detailRows() });
+    globalThis.fetch = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        ok: true,
+        copied: [
+          { rel: "ez_still_hero_00001_.png", name: "ez_still_hero_00001_.png" },
+          { rel: "ez_still_hero_00002_.png", name: "ez_still_hero_00002_-2.png" },
+        ],
+        errors: [],
+      }),
+    });
+    cardFor(el, "ez_still_hero_00001_.png").click();
+    await settle();
+    el.querySelectorAll("button")
+      .find((node) => node.textContent.trim() === "Copy to input")
+      .click();
+    await settle();
+    assert.match(
+      el.querySelector(".ez-out-status").textContent,
+      /Copied 2 to input/,
+    );
   });
 
   test("a row with no probed lines still renders without them", async () => {

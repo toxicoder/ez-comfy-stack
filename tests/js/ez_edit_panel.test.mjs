@@ -313,7 +313,7 @@ async function settle() {
  * Mount the panel against a stubbed route surface.
  * @param {object} [opts] Options.
  * @param {object|null} [opts.project] Project the state route returns.
- * @returns {Promise<object>} `{el, calls, project, failRoutes}`.
+ * @returns {Promise<object>} `{el, tab, calls, project, failRoutes}`.
  */
 async function mountPanel(opts = {}) {
   const { project = makeProject() } = opts;
@@ -373,6 +373,7 @@ async function mountPanel(opts = {}) {
   await settle();
   return {
     el,
+    tab: tabs[0],
     calls,
     project: current,
     failRoutes: () => {
@@ -530,7 +531,28 @@ function statusText(el) {
 
 describe("ez_edit panel tab", () => {
   test("registers the sidebar tab the frontend asks for", async () => {
-    const { el } = await mountPanel();
+    const { el, tab } = await mountPanel();
+    // Frontend 1.58.5 accepts exactly these keys for a custom tab, so a key it
+    // never reads fails the suite instead of riding along unnoticed.
+    assert.deepStrictEqual(Object.keys(tab), [
+      "id",
+      "icon",
+      "title",
+      "tooltip",
+      "type",
+      "render",
+    ]);
+    assert.deepStrictEqual(
+      { ...tab, render: typeof tab.render },
+      {
+        id: "ez-edit",
+        icon: "pi pi-video",
+        title: "Edit",
+        tooltip: "Agent chat, timeline, browser render, laptop MCP",
+        type: "custom",
+        render: "function",
+      },
+    );
     assert.ok(el.classList.contains("ez-edit"), "panel class");
     assert.ok(statusText(el).includes("Rough cut"), "status names the project");
   });

@@ -1519,17 +1519,20 @@
 /* Docked fallback pane.
 
  * When the frontend never gives us a sidebar tab (no extensionManager, a
- * registerSidebarTab that throws, or a render that throws) the JS docks the
- * same mount() here so the file manager is always reachable. The JS also
- * carries these properties inline, because this sheet 404s in the exact
- * failure that makes the dock matter; the inline copy wins when both are
+ * registerSidebarTab that throws, or the tab's render throws) the JS docks the
+ * same mount() here so the file manager is always reachable. It is a left dock
+ * column, not a corner popover: the tab it stands in for lives in the sidebar
+ * rail, so the pane has to read as one. The JS carries the anchor, the width,
+ * and the readable-text properties inline, because this sheet 404s in the
+ * exact failure that makes the dock matter; the inline copy wins when both are
  * present, and this rule is what keeps the class from shipping unstyled. */
 .ez-out-fallback {
   position: fixed;
-  right: 16px;
+  left: 16px;
+  /* Clears the ComfyUI top bar by the offset the Feedback bar clears it by. */
+  top: 56px;
   bottom: 16px;
-  width: min(560px, calc(100vw - 32px));
-  max-height: min(80vh, 720px);
+  width: min(420px, 92vw);
   z-index: 1200;
   display: flex;
   flex-direction: column;

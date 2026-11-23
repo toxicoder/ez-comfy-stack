@@ -3562,10 +3562,12 @@ function undock() {
 }
 
 /**
- * Dock the explorer in a page-level container so it is never unreachable.
- * The container carries inline styles because it has to stay visible when
- * ez_outputs.css never loaded; the panel inside is the same mount() the
- * sidebar tab renders, so there is only one file manager.
+ * Dock the explorer in a page-level left column so it is never unreachable.
+ * The container carries the anchor and the readable-text properties inline,
+ * because it has to stay on screen when ez_outputs.css never loaded; the rest
+ * of the geometry lives in `.ez-out-fallback`, where the pane's styling lives.
+ * The panel inside is the same mount() the sidebar tab renders, so there is
+ * only one file manager.
  * @param {string} reason Why no sidebar tab exists.
  * @returns {boolean} True only when the panel is actually in the page.
  */
@@ -3582,19 +3584,19 @@ function dockFallback(reason) {
   holder.className = FALLBACK_CLASS;
   holder.setAttribute("role", "complementary");
   holder.setAttribute("aria-label", "Outputs");
+  // Left-anchored under the top bar: the tab this stands in for lives in the
+  // sidebar rail, so the pane the operator falls back to reads as a dock
+  // column, not as a popover in a corner of the canvas.
   holder.style.setProperty("position", "fixed");
-  holder.style.setProperty("right", "16px");
+  holder.style.setProperty("left", "16px");
+  holder.style.setProperty("top", "56px");
   holder.style.setProperty("bottom", "16px");
-  holder.style.setProperty("width", "min(560px, calc(100vw - 32px))");
-  holder.style.setProperty("max-height", "min(80vh, 720px)");
+  holder.style.setProperty("width", "min(420px, 92vw)");
   holder.style.setProperty("z-index", "1200");
   holder.style.setProperty("display", "flex");
   holder.style.setProperty("flex-direction", "column");
   holder.style.setProperty("background", "var(--comfy-menu-bg, #1e1e1e)");
   holder.style.setProperty("color", "var(--fg-color, #e8e8e8)");
-  holder.style.setProperty("border", "1px solid var(--border-color, rgba(255,255,255,0.18))");
-  holder.style.setProperty("border-radius", "8px");
-  holder.style.setProperty("box-shadow", "0 8px 28px rgba(0,0,0,0.45)");
   holder.style.setProperty("overflow", "hidden");
 
   const note = document.createElement("div");
