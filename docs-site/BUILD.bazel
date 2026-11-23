@@ -270,8 +270,14 @@ sh_test(
 )
 
 # Golden-pipeline guards: the Linux capture image stays pinned to the Playwright release the
-# suite imports, the container matches the CI platform, and the spec never invents a baseline
-# under CI.  These are the checks that keep a laptop-captured screenshot from being committed.
+# suite imports, the container matches the CI platform, a committed baseline exists for every
+# captured page, every captured route still resolves to a page under //docs, the export is
+# stamped with a fixed publish date, and the spec never invents a baseline under CI.  These are
+# the checks that keep a laptop-captured screenshot from being committed, and the only part of
+# the visual lane CI runs: they read text from the checkout and start no container, so they
+# carry no `visual` tag and the --test_tag_filters=-visual used by //:validate, //:test-all and
+# the docs job does not hold them back.  Tagging this target `visual` is what let a blank or
+# wrong-arch baseline set merge green.
 sh_test(
     name = "visual_tooling_test",
     size = "small",
@@ -284,7 +290,6 @@ sh_test(
     tags = [
         "local",
         "no-sandbox",
-        "visual",
     ],
     visibility = ["//visibility:public"],
 )

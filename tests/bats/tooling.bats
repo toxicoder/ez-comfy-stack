@@ -358,3 +358,117 @@ STUB
   rm -f "${pkg}/bin/npm" "${pkg}/npm" "${pkg}/node_modules/.bin/next" "${pkg}/node_modules/.bin/vitest"
   rmdir "${pkg}/node_modules/.bin" "${pkg}/node_modules" "${pkg}/bin" "${pkg}"
 }
+
+# ---- docs-site visual launcher: the mount probe ------------------------------------------
+#
+# The lane renders inside a container that bind-mounts the checkout.  A daemon that lives
+# elsewhere (a DinD sidecar, a remote context) accepts a --volume whose source it cannot see and
+# mounts an empty /lab, and a daemon handed a stale copy of the path passes a presence check, so
+# --update would rewrite the committed baselines from a rendering that is not the tree under
+# review.  Only a started container discovers either, so the probe is driven here with a stubbed
+# docker rather than a real daemon.
+
+_make_docker_stub() {
+  local dir="$1"
+  mkdir -p "${dir}/bin"
+  cat >"${dir}/bin/docker" <<'STUB'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"${DOCKER_CALLS}"
+local_entry=""
+saw_entrypoint="false"
+for a in "$@"; do
+  if [[ ${saw_entrypoint} == "true" ]]; then
+    local_entry="${a}"
+    saw_entrypoint="false"
+    continue
+  fi
+  [[ ${a} == "--entrypoint" ]] && saw_entrypoint="true"
+done
+case "${1:-}" in
+  info | pull) exit 0 ;;
+  run) ;;
+  *) exit 0 ;;
+esac
+case "${local_entry}" in
+  test) exit 0 ;;
+  sha256sum)
+    files=()
+    for a in "$@"; do
+      [[ ${a} == docs-site/* ]] && files+=("${a}")
+    done
+    if [[ ${#files[@]} -eq 0 ]]; then
+      exit 1
+    fi
+    if ! out="$(cd "${STUB_REPO_ROOT}" && sha256sum "${files[@]}")"; then
+      exit 1
+    fi
+    if [[ "${DOCKER_MODE:-match}" != "match" ]]; then
+      # A whole-hash swap: rewriting one hex digit would pass whenever that digit is already 0.
+      out="$(printf '%s\n' "${out}" |
+        sed '1s/^[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]/deadbeef/')"
+    fi
+    printf '%s\n' "${out}"
+    exit 0
+    ;;
+  *) echo "x86_64"; exit 0 ;;
+esac
+STUB
+  chmod +x "${dir}/bin/docker"
+}
+
+_cleanup_docker_stub() {
+  rm -f "${LAUNCHER_STUB}/bin/docker" "${LAUNCHER_CALLS}"
+  rmdir "${LAUNCHER_STUB}/bin" "${LAUNCHER_STUB}"
+}
+
+_run_visual_launcher() {
+  local mode="$1"
+  shift
+  local stub calls
+  stub="$(mktemp -d)"
+  _make_docker_stub "${stub}"
+  calls="${stub}/calls"
+  : >"${calls}"
+  run env -u BUILD_WORKSPACE_DIRECTORY \
+    PATH="${stub}/bin:${PATH}" \
+    DOCKER_CALLS="${calls}" \
+    STUB_REPO_ROOT="${REPO_ROOT}" \
+    DOCKER_MODE="${mode}" \
+    bash "${REPO_ROOT}/docs-site/scripts/visual_linux.sh" "$@"
+  LAUNCHER_CALLS="${calls}"
+  LAUNCHER_STUB="${stub}"
+  LAUNCHER_STATUS="${status}"
+  LAUNCHER_OUTPUT="${output}"
+}
+
+# A leading `!` suppresses errexit in Bats, so `! grep -q ...` can never fail a test; run the
+# lookup and assert on its status instead.
+_assert_absent() {
+  run grep -q -- "$1" "$2"
+  [ "${status}" -ne 0 ]
+}
+
+@test "visual launcher blocks a capture whose mount is a stale copy of the checkout" {
+  _run_visual_launcher stale
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  [[ ${LAUNCHER_OUTPUT} == *"does not see this checkout at /lab"* ]]
+  # The whole point: a capture started from a tree nobody reviewed must never start.
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}
+
+@test "visual launcher probe runs on the capture path, not only under --check" {
+  _run_visual_launcher stale
+  [ "${LAUNCHER_STATUS}" -eq 1 ]
+  run grep -q -- '--entrypoint sha256sum' "${LAUNCHER_CALLS}"
+  [ "${status}" -eq 0 ]
+  _cleanup_docker_stub
+}
+
+@test "visual launcher --check reports ready when the container sees this checkout" {
+  _run_visual_launcher match --check
+  [ "${LAUNCHER_STATUS}" -eq 0 ]
+  [[ ${LAUNCHER_OUTPUT} == *"visual lane ready"* ]]
+  _assert_absent 'bash /lab/docs-site/scripts/visual_linux_in_container.sh' "${LAUNCHER_CALLS}"
+  _cleanup_docker_stub
+}

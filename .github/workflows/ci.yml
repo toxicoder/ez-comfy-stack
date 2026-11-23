@@ -157,8 +157,10 @@ jobs:
 
       - name: Docs gates (no browser)
         # //docs-site:suite is the umbrella, so a gate added to the suite lands in
-        # CI without editing this workflow. -visual holds back the Playwright
-        # guard, the same filter //:everything uses for the same reason.
+        # CI without editing this workflow. -visual holds back the host Playwright
+        # target, the same filter //:everything uses: it needs a browser and the
+        # committed baselines. The golden-pipeline guard //docs-site:visual_tooling_test
+        # carries no visual tag precisely so this job does run it.
         run: |
           bazelisk test \
             //docs:test_docs_site_render \

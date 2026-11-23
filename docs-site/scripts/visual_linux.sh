@@ -110,26 +110,66 @@ for candidate in "${REFERENCES[@]}"; do
   fi
   echo "-> ${candidate} reported '${reported:-nothing}'; wanted ${EXPECTED_MACHINE}" >&2
 done
-if [[ ${CHECK} == "true" ]]; then
-  # Ask the container whether the checkout really arrived.  A daemon that lives somewhere else
-  # - a DinD sidecar, a remote context - accepts a --volume whose source it cannot see and
-  # silently mounts an empty /lab, so the capture would build nothing and every baseline would
-  # be the same blank frame.  Nothing else in this script distinguishes those two daemons.
-  if ! docker run --rm --platform "$PLATFORM" --volume "${REPO_ROOT}:/lab" \
-    --entrypoint test "$IMAGE" -f /lab/docs-site/scripts/visual_linux_in_container.sh \
-    >/dev/null 2>&1; then
-    echo "the Docker daemon cannot read this checkout at ${REPO_ROOT}; the lane needs a daemon that can bind-mount it"
-    exit 1
-  fi
-  echo "visual lane ready in ${IMAGE} (${PLATFORM})"
-  exit 0
-fi
-
 [[ -n $IMAGE ]] || {
   echo "no candidate image starts a ${PLATFORM} container (${EXPECTED_MACHINE})" >&2
   echo "baselines from the wrong renderer would fail the docs CI job, so this run stopped" >&2
   exit 1
 }
+
+# Ask the container whether the checkout really arrived, and whether what arrived is this
+# checkout.  A daemon that lives somewhere else - a DinD sidecar, a remote context - accepts a
+# --volume whose source it cannot see and silently mounts an empty /lab, so the capture would
+# build nothing and every baseline would come back as the same blank frame.  A daemon handed a
+# stale copy of the path passes a presence check, and --update would then rewrite the committed
+# set from a rendering that is not the tree under review, so the probe compares content as well
+# as existence.  Nothing else in this script distinguishes those daemons, which is why the
+# capture path runs it too: leaving it to --check left the ordinary run dying as rc=127 on a
+# mount that holds nothing.
+PROBE_FILES=(
+  docs-site/package.json
+  docs-site/playwright.config.mjs
+  docs-site/scripts/visual_linux_in_container.sh
+  docs-site/tests/visual/site.spec.mjs
+)
+
+#######################################
+# Ask a container started from the capture image whether /lab holds this exact checkout.
+# Globals:
+#   IMAGE, PLATFORM, REPO_ROOT, PROBE_FILES
+# Arguments:
+#   None
+# Outputs:
+#   The reason the lane cannot run here, on stdout, when it returns non-zero
+# Returns:
+#   0 when the mounted /lab carries the same bytes as this checkout, 1 otherwise
+#######################################
+checkout_reachable() {
+  if ! docker run --rm --platform "$PLATFORM" --volume "${REPO_ROOT}:/lab" \
+    --entrypoint test "$IMAGE" -f /lab/docs-site/scripts/visual_linux_in_container.sh \
+    >/dev/null 2>&1; then
+    echo "the Docker daemon cannot read this checkout at ${REPO_ROOT}; the lane needs a daemon that can bind-mount it"
+    return 1
+  fi
+
+  # Relative paths on both sides, so sha256sum prints the same names and the two listings are
+  # comparable whole: a file missing on either side changes the line count, not just a hash.
+  local host="" guest=""
+  host="$(cd "${REPO_ROOT}" && sha256sum "${PROBE_FILES[@]}" 2>/dev/null)" || host=""
+  guest="$(docker run --rm --platform "$PLATFORM" --volume "${REPO_ROOT}:/lab" \
+    --workdir /lab --entrypoint sha256sum "$IMAGE" "${PROBE_FILES[@]}" 2>/dev/null)" || guest=""
+  if [[ -z $host || -z $guest || $host != "$guest" ]]; then
+    echo "the container does not see this checkout at /lab (${REPO_ROOT}); the daemon mounted a stale or unrelated copy, and a capture from it would baseline the wrong rendering"
+    return 1
+  fi
+  return 0
+}
+
+checkout_reachable || exit 1
+
+if [[ ${CHECK} == "true" ]]; then
+  echo "visual lane ready in ${IMAGE} (${PLATFORM})"
+  exit 0
+fi
 
 echo "-> baselines render in ${IMAGE} (${PLATFORM}), matching the docs CI job"
 

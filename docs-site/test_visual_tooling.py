@@ -171,9 +171,17 @@ class VisualToolingTests(unittest.TestCase):
         """
         spec = read(SPEC)
         self.assertRegex(spec, r"\bCI\b", "the spec does not consult the CI environment")
-        # The write branch has to be guarded, otherwise CI still invents baselines.
-        guarded = re.search(r"(?:if\s*\(\s*!?CI\s*\)|CI\s*\?|&&\s*!CI|if\s*\(\s*CI\s*\))", spec)
-        self.assertIsNotNone(guarded, "baseline self-bootstrap is not disabled under CI")
+        # A polarity-blind alternation here let `if (CI) { writeFileSync(golden) }` pass while
+        # doing exactly what this guard exists to stop, so pin the shape instead: the CI arm has
+        # to fail the run and get out before the self-bootstrap write is ever reached.
+        arm = re.search(r"\bif\s*\(\s*CI\s*\)\s*\{", spec)
+        self.assertIsNotNone(arm, "baseline self-bootstrap is not disabled under CI")
+        write_at = spec.find("writeFileSync(golden")
+        self.assertNotEqual(write_at, -1, "the spec no longer creates a missing baseline itself")
+        self.assertGreater(write_at, arm.end(), "the CI arm sits after the write it should prevent")
+        between = spec[arm.end() : write_at]
+        self.assertRegex(between, r"testInfo\.fail|\bthrow\b|process\.exit", "the CI arm does not fail the run")
+        self.assertIn("return", between, "the CI arm falls through into the baseline write")
 
     def test_goldens_are_committed_for_every_captured_page(self) -> None:
         """Every page the spec captures has a baseline in both projects.
@@ -212,10 +220,15 @@ class VisualToolingTests(unittest.TestCase):
                 scripts.get(name, "").startswith("npm run build:visual &&"),
                 f"{name} compares against an export nobody stamped with the pinned date",
             )
-        self.assertIn(
-            "npm run build:visual",
-            read(CONTAINER_SCRIPT),
-            "the capture container builds with a different stamp than the comparison does",
+        # An assertIn("npm run build") here was satisfied by the substring inside build:visual
+        # and by a passing comment, so it proved nothing.  Every build the container runs has to
+        # be the stamped one, or the capture and the comparison disagree about the chip.
+        container_builds = re.findall(r"npm run (build[\w:.-]*)", read(CONTAINER_SCRIPT))
+        self.assertTrue(container_builds, "the capture container no longer builds the export")
+        self.assertEqual(
+            set(container_builds),
+            {"build:visual"},
+            "the capture container runs an unstamped build, so a baseline can carry a live date",
         )
 
     def test_spec_freezes_the_relative_published_label(self) -> None:
@@ -246,10 +259,13 @@ class VisualToolingTests(unittest.TestCase):
         self.assertGreaterEqual(len(routes), 8, "the suite captures too few pages to gate anything")
         docs = PACKAGE_DIR.parent / "docs"
         for route in routes:
-            if route.startswith("/generated/"):
-                continue  # rendered from the workflow corpus, not from a checked-in page
             stem = route.strip("/") or "index"
-            candidates = [docs / (stem + ".mdx"), docs / (stem + ".md")]
+            candidates = [
+                docs / (stem + ".mdx"),
+                docs / (stem + ".md"),
+                docs / stem / "index.mdx",
+                docs / stem / "index.md",
+            ]
             self.assertTrue(
                 any(path.is_file() for path in candidates),
                 f"the suite captures {route!r}, which has no page under {docs}",
@@ -262,12 +278,15 @@ class VisualToolingTests(unittest.TestCase):
         the export serves a 404 document that satisfies the h1 wait.
         """
         spec = read(SPEC)
+        self.assertRegex(spec, r"page\.goto\(", "the spec does not navigate to the page list")
+        # Matching the bare literal `response?.ok()` accepted `if (false && !response?.ok())` and
+        # rejected the stricter `if (!response || !response.ok())`, so pin the control flow: a
+        # failed navigation has to reach a throw.
         self.assertRegex(
             spec,
-            r"response\?\.ok\(\)",
-            "the spec never checks that the navigation succeeded",
+            r"if\s*\(\s*!\s*response\s*(?:\?\.|\.|\s*\|\|\s*!\s*response\.)ok\(\)\s*\)\s*\{[^{}]*\bthrow\b",
+            "a failed navigation never reaches a throw, so a rotted route baselines the 404 page",
         )
-        self.assertRegex(spec, r"page\.goto\(", "the spec does not navigate to the page list")
 
     def test_launcher_offers_a_readiness_probe(self) -> None:
         """The launcher can answer "can this host run the lane" without starting a capture.
@@ -285,6 +304,72 @@ class VisualToolingTests(unittest.TestCase):
             r"visual_linux_in_container\.sh",
             "the readiness probe does not check that the checkout really arrived",
         )
+        # The three assertions above all survived a neutered `--check) exit 0 ;;`, because /lab
+        # and the helper name also occur on the capture mount.  Pin what the probe has to do.
+        self.assertRegex(
+            script,
+            r"\bcheckout_reachable\(\)\s*\{",
+            "the mount probe is not a named function the capture path can also call",
+        )
+        self.assertRegex(
+            script,
+            r"--entrypoint\s+test\b",
+            "the probe never asks a container whether the checkout arrived at /lab",
+        )
+        self.assertRegex(
+            script,
+            r"--entrypoint\s+sha256sum\b",
+            "the probe only checks that files exist, so a stale copy of the path reports ready",
+        )
+        self.assertRegex(script, r"return 1", "the probe has no failing return")
+
+    def test_capture_path_probes_the_mount_before_it_renders(self) -> None:
+        """The capture itself refuses a mount it cannot see; --check is not the only caller.
+
+        On a daemon that mounts nothing the lane died as `bash: /lab/...: No such file or
+        directory` with rc=127, and a --update against a stale-but-complete mount would rewrite
+        the committed baselines from rendering that is not the tree under review.  The probe has
+        to sit on the path every operator takes, and after the image resolves, or an
+        unresolvable image gets reported as a bad mount.
+        """
+        script = read(SCRIPT)
+        calls = [m.start() for m in re.finditer(r"^ *checkout_reachable(?! *\(\))", script, re.M)]
+        self.assertTrue(calls, "nothing calls the mount probe")
+        capture = script.index("bash /lab/docs-site/scripts/visual_linux_in_container.sh")
+        self.assertLess(calls[0], capture, "the capture starts before the mount is verified")
+        check_arm = re.search(r"--check\)[^;]*;;", script)
+        self.assertIsNotNone(check_arm, "the --check option is not a case arm")
+        self.assertNotIn("docker", check_arm.group(0), "the probe lives in the --check arm only")
+        self.assertGreater(
+            script.index("visual lane ready"),
+            calls[0],
+            "the launcher reports readiness without running the probe",
+        )
+        self.assertLess(
+            script.index("no candidate image starts a"),
+            script.index("visual lane ready"),
+            "the probe runs before the image resolves, so an unresolvable image is blamed on the mount",
+        )
+
+    def test_no_capture_input_overrides_the_pinned_stamp(self) -> None:
+        """Nothing on the capture path sets the variable that outranks the pinned epoch.
+
+        ``publishedAt`` reads EZ_DOCS_PUBLISHED_AT first and SOURCE_DATE_EPOCH second, so a
+        deploy-time value reaching the capture would move every baseline again and the stamp pin
+        above would be decoration.  The deploy job sets it on purpose; the visual lane must not.
+        """
+        published = read(PACKAGE_DIR / "lib" / "published.ts")
+        self.assertLess(
+            published.index("EZ_DOCS_PUBLISHED_AT"),
+            published.index("SOURCE_DATE_EPOCH"),
+            "publishedAt no longer prefers EZ_DOCS_PUBLISHED_AT, so this precedence check is stale",
+        )
+        for path in (SCRIPT, CONTAINER_SCRIPT, PACKAGE_JSON):
+            self.assertNotIn(
+                "EZ_DOCS_PUBLISHED_AT",
+                read(path),
+                f"{path.name} sets EZ_DOCS_PUBLISHED_AT, which outranks the pinned SOURCE_DATE_EPOCH",
+            )
 
 class ImageResolutionTests(unittest.TestCase):
 
