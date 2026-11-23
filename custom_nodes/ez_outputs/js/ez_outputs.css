@@ -1523,9 +1523,10 @@
  * same mount() here so the file manager is always reachable. It is a left dock
  * column, not a corner popover: the tab it stands in for lives in the sidebar
  * rail, so the pane has to read as one. The JS carries the anchor, the width,
- * and the readable-text properties inline, because this sheet 404s in the
- * exact failure that makes the dock matter; the inline copy wins when both are
- * present, and this rule is what keeps the class from shipping unstyled. */
+ * the readable-text properties, and the edge (border, radius, shadow) inline,
+ * because this sheet 404s in the exact failure that makes the dock matter; the
+ * inline copy wins when both are present, and this rule is what keeps the class
+ * from shipping unstyled. */
 .ez-out-fallback {
   position: fixed;
   left: 16px;

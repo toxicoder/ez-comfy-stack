@@ -684,6 +684,19 @@ describe("ez_outputs tab", () => {
     assert.equal(dock.style.getPropertyValue("top"), "56px", "it starts under the top bar");
     assert.equal(dock.style.getPropertyValue("bottom"), "16px", "and runs the full height");
     assert.equal(dock.style.getPropertyValue("width"), "min(420px, 92vw)");
+    // The edge is inline for the same reason the anchor is: with the sheet 404
+    // the pane still has to read as a column, not a frameless list of files.
+    assert.equal(
+      dock.style.getPropertyValue("border"),
+      "1px solid var(--border-color, rgba(255, 255, 255, 0.18))",
+      "the pane keeps a readable edge with no sheet at all",
+    );
+    assert.equal(dock.style.getPropertyValue("border-radius"), "8px", "rounded like the sheet");
+    assert.equal(
+      dock.style.getPropertyValue("box-shadow"),
+      "0 8px 28px rgba(0, 0, 0, 0.45)",
+      "and lifted off the canvas like the sheet",
+    );
     // The sheet carries the same geometry for everything the inline copy drops.
     const rule = fallbackCssRule();
     assert.match(rule, /left:\s*16px/, `.ez-out-fallback must anchor left: ${rule}`);
@@ -692,6 +705,17 @@ describe("ez_outputs tab", () => {
     assert.match(rule, /width:\s*min\(420px,\s*92vw\)/, "the sheet matches the inline width");
     assert.doesNotMatch(rule, /(^|[\s;])right:/m, "the sheet anchors it left only");
     assert.doesNotMatch(rule, /max-height/, "the anchors set the height, so no cap fights them");
+    // Both copies must spell the edge the same way, or a sheet that finally
+    // loads repaints the border out from under the operator.
+    for (const prop of ["border", "border-radius", "box-shadow"]) {
+      const declared = rule.match(new RegExp("(?:^|[\\s;])" + prop + ":\\s*([^;]+);", "m"));
+      assert.ok(declared, `.ez-out-fallback must declare ${prop}: ${rule}`);
+      assert.equal(
+        dock.style.getPropertyValue(prop),
+        declared[1].trim(),
+        `the inline ${prop} must match the sheet`,
+      );
+    }
   });
 
   test("the tab taking over takes the docked panel down", async () => {
